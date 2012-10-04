@@ -1,0 +1,139 @@
+package com.our.android.ouracademy;
+
+import android.app.Activity;
+import android.content.ContextWrapper;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+
+
+/**
+ * 
+ * @author JiHoon, Moon on NTS
+ *
+ */
+public class OurPreferenceManager {
+	private static OurPreferenceManager mSelfInstance = null;
+	private SharedPreferences mPreference = null;
+	
+	public final static String PREFERENCE_KEY = "our";
+	
+	private OurPreferenceManager() {
+	}
+	
+	public static synchronized OurPreferenceManager getInstance() {
+		if (mSelfInstance == null) {
+			mSelfInstance = new OurPreferenceManager();
+		}
+		return mSelfInstance;
+	}
+
+	public void initPreferenceData(ContextWrapper ctxWrapper) {
+		mPreference = ctxWrapper.getSharedPreferences(PREFERENCE_KEY, Activity.MODE_PRIVATE);
+	}
+	
+	public int getIntValue(String prefKey) {
+		if (mPreference != null) {
+			return mPreference.getInt(prefKey, 0);
+		}
+		return 0;
+	}
+
+	public int getIntValue(String prefKey, int value) {
+		if (mPreference != null) {
+			return mPreference.getInt(prefKey, value);
+		}
+		return value;
+	}
+
+	public boolean setIntValue(String prefKey, int value) {
+		if (mPreference != null) {
+			SharedPreferences.Editor editor = mPreference.edit();
+			editor.putInt(prefKey, value);
+			return editor.commit();
+		}
+		return false;
+	}
+
+	public long getLongValue(String prefKey) {
+		if (mPreference != null) {
+			return mPreference.getLong(prefKey, 0);
+		}
+		return 0;
+	}
+
+	public boolean setLongValue(String prefKey, long value) {
+		if (mPreference != null) {
+			SharedPreferences.Editor editor = mPreference.edit();
+			editor.putLong(prefKey, value);
+			return editor.commit();
+		}
+		return false;
+	}
+
+	/**
+	 * Sets the String value in given key.
+	 */
+	public boolean setStringValue(String key, String value) {
+		if (mPreference != null) {
+			Editor editor = mPreference.edit();
+			editor.putString(key, value);
+			return editor.commit();
+		}
+		return false;
+	}
+
+	/**
+	 * Sets the boolean value in given key.
+	 */
+	public boolean setBooleanValue(String key, Boolean value) {
+		if (mPreference != null) {
+			Editor editor = mPreference.edit();
+			editor.putBoolean(key, value);
+			return editor.commit();
+		}
+		return false;
+	}
+
+	/**
+	 * Gets the boolean value in given key.
+	 */
+	public boolean getBooleanValue(String key, boolean defValue) {
+		if (mPreference != null) {
+			return mPreference.getBoolean(key, defValue);
+		}
+		return defValue;
+	}
+
+	/**
+	 * Gets the String value in given key.
+	 */
+	public String getStringValue(String key, String defValue) {
+		if (mPreference != null) {
+			return mPreference.getString(key, defValue);
+		}
+		return defValue;
+	}
+
+	/**
+	 * Check the value availability of the data for the given key.
+	 */
+	public boolean containsValue(String key) {
+		if (mPreference != null) {
+			return mPreference.contains(key);
+		}
+		return false;
+	}
+
+	/**
+	 * 키와 값을 지운다
+	 */
+	public boolean setRemoveValue(String key) {
+		if (mPreference != null) {
+			Editor editor = mPreference.edit();
+			editor.remove(key);
+			return editor.commit();
+		}
+		return false;
+	}
+
+}
