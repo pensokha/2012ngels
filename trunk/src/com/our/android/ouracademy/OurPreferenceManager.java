@@ -12,18 +12,18 @@ import android.content.SharedPreferences.Editor;
  *
  */
 public class OurPreferenceManager {
-	private static OurPreferenceManager mSelfInstance = null;
+	private static OurPreferenceManager mSelfInstance = new OurPreferenceManager();
 	private SharedPreferences mPreference = null;
 	
 	public final static String PREFERENCE_KEY = "our";
+	private static final String MODE = "MODE";
+	
+	private static enum Mode { TEACHER, STUDENT };
 	
 	private OurPreferenceManager() {
 	}
 	
-	public static synchronized OurPreferenceManager getInstance() {
-		if (mSelfInstance == null) {
-			mSelfInstance = new OurPreferenceManager();
-		}
+	public static OurPreferenceManager getInstance() {
 		return mSelfInstance;
 	}
 
@@ -136,4 +136,32 @@ public class OurPreferenceManager {
 		return false;
 	}
 
+	public boolean isTeacher(){
+		int ordinal = getIntValue(MODE, Mode.STUDENT.ordinal());
+		Mode mode = Mode.values()[ordinal];
+		
+		return (mode == Mode.TEACHER ? true : false);
+	}
+	
+	public boolean isStudent(){
+		int ordinal = getIntValue(MODE, Mode.STUDENT.ordinal());
+		Mode mode = Mode.values()[ordinal];
+		
+		return (mode == Mode.STUDENT ? true : false);
+	}
+	
+	public boolean isSettingMode(){
+		int empty = -1;
+		int ordinal = getIntValue(MODE, empty);
+		
+		return (ordinal != empty ? true : false );
+	}
+	
+	public boolean setTeacherMode(){
+		return setIntValue(MODE, Mode.TEACHER.ordinal());
+	}
+	
+	public boolean setStudentMode(){
+		return setIntValue(MODE, Mode.STUDENT.ordinal());
+	}
 }
