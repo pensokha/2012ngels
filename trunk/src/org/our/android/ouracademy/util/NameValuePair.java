@@ -4,7 +4,7 @@
  * Copyright 2010 NHN Corp. All rights Reserved. 
  * NHN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
-package com.our.android.ouracademy.util;
+package org.our.android.ouracademy.util;
 
 /** 
  * String Pair object 

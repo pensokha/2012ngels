@@ -1,4 +1,4 @@
-package com.our.android.ouracademy.wifidirect;
+package org.our.android.ouracademy.wifidirect;
 
 import java.util.Collection;
 

@@ -1,4 +1,4 @@
-package com.our.android.ouracademy.wifidirect;
+package org.our.android.ouracademy.wifidirect;
 
 import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.Channel;

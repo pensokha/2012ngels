@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.our.android.ouracademy"
+    package="org.our.android.ouracademy"
     android:versionCode="1"
     android:versionName="1.0" >
     

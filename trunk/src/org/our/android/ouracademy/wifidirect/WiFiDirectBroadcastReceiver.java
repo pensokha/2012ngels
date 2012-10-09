@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.our.android.ouracademy.wifidirect;
+package org.our.android.ouracademy.wifidirect;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

@@ -1,4 +1,6 @@
-package com.our.android.ouracademy.wifidirect;
+package org.our.android.ouracademy.wifidirect;
+
+import org.our.android.ouracademy.OurPreferenceManager;
 
 import android.content.Context;
 import android.content.IntentFilter;
@@ -7,7 +9,6 @@ import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.net.wifi.p2p.WifiP2pManager.ChannelListener;
 import android.widget.Toast;
 
-import com.our.android.ouracademy.OurPreferenceManager;
 
 public class WifiDirectWrapper {
 	private static WifiDirectWrapper instance = new WifiDirectWrapper();

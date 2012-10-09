@@ -1,4 +1,4 @@
-package com.our.android.ouracademy;
+package org.our.android.ouracademy;
 
 import android.app.Activity;
 import android.content.ContextWrapper;

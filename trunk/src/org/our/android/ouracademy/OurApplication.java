@@ -1,10 +1,11 @@
-package com.our.android.ouracademy;
+package org.our.android.ouracademy;
+
+import org.our.android.ouracademy.util.DbManager;
+import org.our.android.ouracademy.util.ScreenInfo;
 
 import android.app.Application;
 import android.util.Log;
 
-import com.our.android.ouracademy.util.DbManager;
-import com.our.android.ouracademy.util.ScreenInfo;
 
 /**
  * 
