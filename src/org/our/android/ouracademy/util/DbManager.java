@@ -1,4 +1,4 @@
-package com.our.android.ouracademy.util;
+package org.our.android.ouracademy.util;
 
 import java.util.Iterator;
 import java.util.Map.Entry;

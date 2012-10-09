@@ -1,16 +1,16 @@
-package com.our.android.ouracademy.ui.main;
+package org.our.android.ouracademy.ui.main;
 
-import android.app.Activity;
+import org.our.android.ouracademy.OurPreferenceManager;
+import org.our.android.ouracademy.R;
+import org.our.android.ouracademy.ui.common.BaseFragmentActivity;
+import org.our.android.ouracademy.wifidirect.WifiDirectWrapper;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.Menu;
 
-import com.our.android.ouracademy.OurPreferenceManager;
-import com.our.android.ouracademy.R;
-import com.our.android.ouracademy.wifidirect.WifiDirectWrapper;
-
-public class MainActivity extends Activity {
+public class MainActivity extends BaseFragmentActivity {
 	private OurPreferenceManager pref;
 	private WifiDirectWrapper wifidirectWrapper;
 

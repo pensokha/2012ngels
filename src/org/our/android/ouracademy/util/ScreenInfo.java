@@ -1,4 +1,4 @@
-package com.our.android.ouracademy.util;
+package org.our.android.ouracademy.util;
 
 import android.content.Context;
 import android.content.res.Configuration;
