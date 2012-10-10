@@ -8,7 +8,7 @@ import android.content.ContentValues;
 /**
  * 
  * @author jyeon
- *
+ * 
  */
 public class OurDownloadManager {
 
@@ -22,7 +22,7 @@ public class OurDownloadManager {
 
 	public OurDownloadManager() {
 		// test code
-//		DbManager.getInstance().dropTable(tableName);
+		// DbManager.getInstance().dropTable(tableName);
 
 		if (!DbManager.getInstance().isTableExist(Table_NAME)) {
 
@@ -36,22 +36,26 @@ public class OurDownloadManager {
 			DbManager.getInstance().createTable(Table_NAME, value);
 		}
 
-//		updateStorage();
+		// updateStorage();
 	}
 
 	public void updateStorage() {
 		String[] list = FileManager.getList();
 		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < list.length; i++) {
-			String fileName = list[i];
-			sb.setLength(0);
-			sb.append(FileManager.STRSAVEPATH);
-			sb.append(fileName);
-			addRow(fileName, FileManager.geFileSize(sb.toString()), -1, fileName, sb.toString());
+		if (list != null) {
+			for (int i = 0; i < list.length; i++) {
+				String fileName = list[i];
+				sb.setLength(0);
+				sb.append(FileManager.STRSAVEPATH);
+				sb.append(fileName);
+				addRow(fileName, FileManager.geFileSize(sb.toString()), -1,
+						fileName, sb.toString());
+			}
 		}
 	}
 
-	public void addRow(String id, long downladedFileSize, long fileSize, String fileName, String filePath) {
+	public void addRow(String id, long downladedFileSize, long fileSize,
+			String fileName, String filePath) {
 		DbRow dbRow = new DbRow();
 		if (id != null) {
 			dbRow.add(KEY_FILE_ID, id);

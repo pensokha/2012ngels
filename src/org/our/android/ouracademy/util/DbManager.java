@@ -53,10 +53,7 @@ public class DbManager {
 	}
 
 	static public DbManager getInstance() {
-		if (mDbManager == null) {
-			mDbManager = new DbManager();
-		}
-		return (mDbManager);
+		return mDbManager;
 	}
 
 	public boolean create(Context ctx, String name) {
@@ -392,5 +389,5 @@ public class DbManager {
 
 	private SQLiteDatabase mDb = null;
 	private DatabaseHelper mDbHelper;
-	static DbManager mDbManager = null;
+	private static DbManager mDbManager = new DbManager();
 }
