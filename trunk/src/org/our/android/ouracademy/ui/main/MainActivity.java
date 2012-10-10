@@ -2,17 +2,24 @@ package org.our.android.ouracademy.ui.main;
 
 import org.our.android.ouracademy.OurPreferenceManager;
 import org.our.android.ouracademy.R;
+import org.our.android.ouracademy.p2p.P2PServerService;
 import org.our.android.ouracademy.ui.common.BaseFragmentActivity;
 import org.our.android.ouracademy.wifidirect.WifiDirectWrapper;
 
 import android.app.AlertDialog;
+import android.content.ComponentName;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 
 public class MainActivity extends BaseFragmentActivity {
+	private static final String TAG = "Main";
+	
 	private OurPreferenceManager pref;
 	private WifiDirectWrapper wifidirectWrapper;
+	private ComponentName serviceName;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -25,23 +32,45 @@ public class MainActivity extends BaseFragmentActivity {
 		wifidirectWrapper.init(this);
 	}
 
-	//tmp method
+	// tmp method
+	private void startP2pService() {
+		if(pref.isTeacher() && serviceName == null){
+			Log.d(TAG, "start service from main!");
+//			serviceName = startService(new Intent(this, P2PServerService.class));
+		}
+	}
+	
+	private void stopP2pService() {
+		if(serviceName != null){
+			Intent intent = new Intent();
+			intent.setComponent(serviceName);
+			
+			if(stopService(intent))
+			{
+				Log.d(TAG, "Stop P2p Service");
+			}
+			serviceName = null;
+		}
+	}
+
+	// tmp method
 	private void alertMode() {
 		new AlertDialog.Builder(this).setTitle("Mode Setting")
 				.setPositiveButton("teacher", modeClickListenr)
 				.setNegativeButton("student", modeClickListenr).show();
 	}
 
-	//tmp method
+	// tmp method
 	private DialogInterface.OnClickListener modeClickListenr = new DialogInterface.OnClickListener() {
 		@Override
 		public void onClick(DialogInterface dialog, int which) {
-			if(which == -1){
+			if (which == -1) {
 				pref.setTeacherMode();
-			}else{
+			} else {
 				pref.setStudentMode();
 			}
 			wifidirectWrapper.register();
+			startP2pService();
 		}
 	};
 
@@ -53,6 +82,7 @@ public class MainActivity extends BaseFragmentActivity {
 			alertMode();
 		} else {
 			wifidirectWrapper.register();
+			startP2pService();
 		}
 	}
 
@@ -61,6 +91,13 @@ public class MainActivity extends BaseFragmentActivity {
 		super.onPause();
 
 		wifidirectWrapper.unregister();
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		
+		stopP2pService();
 	}
 
 	@Override
