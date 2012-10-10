@@ -111,6 +111,10 @@ public class WifiDirectStudentListener extends WifiDirectDefaultListener
 
 	@Override
 	public void onConnectionInfoAvailable(WifiP2pInfo info) {
+		WifiDirectWrapper.getInstance().setInfo(info);
+		
+		Log.d(TAG, "SET INFO");
+		
 		Executor executor = Executors.newSingleThreadExecutor();
 		executor.execute(new P2PClient(context, info.groupOwnerAddress.getHostAddress()));
 	}

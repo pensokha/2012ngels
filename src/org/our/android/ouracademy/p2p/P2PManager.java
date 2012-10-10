@@ -11,7 +11,7 @@ import java.io.*;
 import java.net.*;
 import java.util.concurrent.*;
 
-class P2PManager {
+public class P2PManager {
 
 	public static void runServer() {
 		//추후에 Thread Pooling 방식으로 변경한다. 
