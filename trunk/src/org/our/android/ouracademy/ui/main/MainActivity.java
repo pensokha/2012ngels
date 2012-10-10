@@ -2,7 +2,7 @@ package org.our.android.ouracademy.ui.main;
 
 import org.our.android.ouracademy.OurPreferenceManager;
 import org.our.android.ouracademy.R;
-import org.our.android.ouracademy.p2p.P2PServerService;
+import org.our.android.ouracademy.p2p.P2PService;
 import org.our.android.ouracademy.ui.common.BaseFragmentActivity;
 import org.our.android.ouracademy.wifidirect.WifiDirectWrapper;
 
@@ -36,7 +36,7 @@ public class MainActivity extends BaseFragmentActivity {
 	private void startP2pService() {
 		if(pref.isTeacher() && serviceName == null){
 			Log.d(TAG, "start service from main!");
-//			serviceName = startService(new Intent(this, P2PServerService.class));
+			serviceName = startService(new Intent(this, P2PService.class));
 		}
 	}
 	

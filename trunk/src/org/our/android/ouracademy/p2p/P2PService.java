@@ -1,0 +1,30 @@
+package org.our.android.ouracademy.p2p;
+
+import android.app.*;
+import android.content.*;
+import android.os.*;
+
+public class P2PService extends Service {
+
+	@Override
+	public void onCreate() {
+		super.onCreate();
+	}
+
+	@Override
+	public int onStartCommand(Intent intent, int flags, int startId) {
+		P2PManager.runServer();
+		return START_STICKY;
+	}
+
+	@Override
+	public IBinder onBind(Intent intent) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+	}
+}
