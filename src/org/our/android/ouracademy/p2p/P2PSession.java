@@ -38,9 +38,10 @@ public class P2PSession implements Runnable {
 		try {
 			JSONObject json = new JSONObject(request);
 			String method = json.getJSONObject("header").getString("method");
-			OurP2PAction action = (OurP2PAction)(Class.forName(method).newInstance());
+			OurP2PAction action = (OurP2PAction)(Class.forName("org.our.android.ouracademy.p2p.action."+method).newInstance());
 			
 			action.excute(clientSock, json);
+			
 		//Exception에 따른 적절한 ErrorCode를 Client에 주어야 한다. 추후 작업. 
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -51,5 +52,7 @@ public class P2PSession implements Runnable {
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		}
+		
+		P2PManager.close(clientSock);
 	}	
 }

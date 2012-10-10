@@ -11,16 +11,21 @@ import org.our.android.ouracademy.OurDefine;
 import org.our.android.ouracademy.manager.TestFileDbCreate;
 import org.our.android.ouracademy.model.OurContent;
 import org.our.android.ouracademy.p2p.action.GetNewFileList;
+import org.our.android.ouracademy.ui.main.MainActivity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 public class P2PClient implements Runnable {
 	private static final String TAG = "P2PClient";
 	private String serverAddress;
+	private Context context;
 	
-	public P2PClient(String serverAddress) {
+	public P2PClient(Context context, String serverAddress) {
 		super();
 		this.serverAddress = serverAddress;
+		this.context = context;
 	}
 
 	@Override
@@ -29,6 +34,7 @@ public class P2PClient implements Runnable {
 		if (socket == null) {
 			Log.d(TAG, "Fail Connect Owner");
 		} else {
+			Log.d("P2PClient", "Connect Owner");
 			StringBuilder json =  new StringBuilder();
 			json.append("{ 'header' : { 'method' : '");
 			json.append(GetNewFileList.methodName);
@@ -40,9 +46,11 @@ public class P2PClient implements Runnable {
 				e.printStackTrace();
 			}
 			
+			Log.d("P2PClient", "Send End");
 			ArrayList<OurContent> contents = new ArrayList<OurContent>();
 			try {
 				String jsonString = JSONProtocol.read(socket);
+				Log.d("P2PClient", jsonString);
 				JSONObject jsonContent = new JSONObject(jsonString);
 				JSONArray jsonList = jsonContent.getJSONArray("contents");
 				
@@ -58,6 +66,8 @@ public class P2PClient implements Runnable {
 			}
 			
 			TestFileDbCreate.setAllContents(contents);
+			context.sendBroadcast(new Intent(MainActivity.OUR_CONTENT_DATA_CHANGED));
+			P2PManager.close(socket);
 		}
 	}
 

@@ -3,6 +3,7 @@ package org.our.android.ouracademy.manager;
 import java.io.File;
 
 import android.os.Environment;
+import android.util.Log;
 
 /**
  * 
@@ -20,6 +21,7 @@ public class FileManager {
 	 * @return
 	 */
 	public static String[] getList() {
+		Log.d("test", STRSAVEPATH);
 		File dir = new File(STRSAVEPATH);
 		if (dir != null && dir.exists()) {
 			return dir.list();

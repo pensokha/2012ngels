@@ -29,7 +29,9 @@ public class OurApplication extends Application {
 		DbManager.getInstance().open(getApplicationContext());
 		//테스트할 임시 컨텐츠 테이블을 만든다.
 		TestFileDbCreate.createContentsTable();
-		TestFileDbCreate.setTestContentsData();
+		if(OurPreferenceManager.getInstance().isTeacher()){
+			TestFileDbCreate.setTestContentsData();
+		}
 		
 		OurDownloadManager downloadManager = new OurDownloadManager();
 		downloadManager.updateStorage();

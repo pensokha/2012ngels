@@ -1,5 +1,6 @@
 package org.our.android.ouracademy.wifidirect;
 
+import android.content.Context;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
 
@@ -7,11 +8,13 @@ public abstract class WifiDirectDefaultListener implements WifiDirectListener {
 	private boolean connnect = false;
 	protected WifiP2pManager manager;
 	protected Channel channel;
+	protected Context context;
 	
-	public WifiDirectDefaultListener(WifiP2pManager manager, Channel channel) {
+	public WifiDirectDefaultListener(Context context, WifiP2pManager manager, Channel channel) {
 		super();
 		this.manager = manager;
 		this.channel = channel;
+		this.context = context;
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package org.our.android.ouracademy.wifidirect;
 
+import android.content.Context;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.ActionListener;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
@@ -8,8 +9,8 @@ import android.util.Log;
 public class WifiDirectTeacherListener extends WifiDirectDefaultListener {
 	private static String TAG = "WifiDirectTeacherListener";
 
-	public WifiDirectTeacherListener(WifiP2pManager manager, Channel channel) {
-		super(manager, channel);
+	public WifiDirectTeacherListener(Context context, WifiP2pManager manager, Channel channel) {
+		super(context, manager, channel);
 	}
 
 	@Override
