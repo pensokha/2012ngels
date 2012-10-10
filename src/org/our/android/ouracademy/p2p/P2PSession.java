@@ -7,16 +7,15 @@
 
 package org.our.android.ouracademy.p2p;
 
+
+
 import java.io.*;
 import java.net.*;
-import java.nio.*;
 
-/**
- * @author sy.lee
- */
-public class P2PSession extends Thread {
+public class P2PSession implements Runnable {
 
 	private Socket clientSock;
+	private final String DEFAULT_CHARSET = "UTF-8";
 
 	/**
 	 * 
@@ -26,12 +25,12 @@ public class P2PSession extends Thread {
 	}
 
 	public void run() {
-		InputStream in = null;
+		DataInputStream in = null;
 		try {
-			in = clientSock.getInputStream();
+			in = new DataInputStream(clientSock.getInputStream());
 		} catch (IOException e) {
-			closeInputStream(in);
-			closeSocket(clientSock);
+			P2PManager.close(in);
+			P2PManager.close(clientSock);
 			System.out.println("Getting inputStream failed");
 			return;
 		}
@@ -39,12 +38,11 @@ public class P2PSession extends Thread {
 		// get request string size
 		while (true) {
 			int reqSize = 0;
-			;
 			try {
-				reqSize = getReqSize(in);
+				reqSize = in.readInt();
 			} catch (IOException e) {
-				closeInputStream(in);
-				closeSocket(clientSock);
+				P2PManager.close(in);
+				P2PManager.close(clientSock);
 				return;
 			}
 			System.out.println("Size:" + reqSize);
@@ -53,19 +51,12 @@ public class P2PSession extends Thread {
 			try {
 				request = getRequest(in, reqSize);
 			} catch (IOException e) {
-				closeInputStream(in);
-				closeSocket(clientSock);
+				P2PManager.close(in);
+				P2PManager.close(clientSock);
 				return;
 			}
 			System.out.println("Json String : " + request);
 		}
-	}
-
-	public int getReqSize(InputStream socketIn) throws IOException {
-		byte[] buf = new byte[4];
-		socketIn.read(buf, 0, buf.length);
-		ByteBuffer bb = ByteBuffer.wrap(buf);
-		return bb.getInt();
 	}
 
 	public String getRequest(InputStream in, int size) throws IOException {
@@ -86,28 +77,8 @@ public class P2PSession extends Thread {
 			}
 		}
 
-		return baos.toString("UTF-8");
+		return baos.toString(DEFAULT_CHARSET);
 	}	
-
-	public void closeSocket(Socket sock) {
-		if (sock != null) {
-			try {
-				sock.close();
-			} catch (IOException e) {
-				;
-			}
-		}
-	}
-
-	public void closeInputStream(InputStream in) {
-		if (in != null) {
-			try {
-				in.close();
-			} catch (IOException e) {
-				;
-			}
-		}
-	}
 	
 	
 	// client sample code

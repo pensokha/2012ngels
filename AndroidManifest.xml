@@ -37,7 +37,7 @@
             </intent-filter>
         </activity>
         
-        <service android:enabled="true" android:name=".p2p.P2PServerService" />
+        <service android:enabled="true" android:name=".p2p.P2PService" />
     </application>
 
 </manifest>
