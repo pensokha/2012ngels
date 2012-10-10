@@ -4,6 +4,7 @@ import org.our.android.ouracademy.OurPreferenceManager;
 
 import android.content.Context;
 import android.content.IntentFilter;
+import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.net.wifi.p2p.WifiP2pManager.ChannelListener;
@@ -15,6 +16,7 @@ public class WifiDirectWrapper {
 
 	private final IntentFilter intentFilter = new IntentFilter();
 	private WifiP2pManager manager;
+	private WifiP2pInfo info;
 	private Channel channel;
 	private Context context;
 
@@ -40,6 +42,22 @@ public class WifiDirectWrapper {
 				.getSystemService(Context.WIFI_P2P_SERVICE);
 		channel = manager.initialize(context, context.getMainLooper(),
 				channelListener);
+	}
+
+	public WifiP2pInfo getInfo() {
+		return info;
+	}
+
+	public void setInfo(WifiP2pInfo info) {
+		this.info = info;
+	}
+	
+	public String getOwnerIP(){
+		if(info != null){
+			return info.groupOwnerAddress.getHostAddress();
+		}else{
+			return null;
+		}
 	}
 
 	public void discoverPeers() {

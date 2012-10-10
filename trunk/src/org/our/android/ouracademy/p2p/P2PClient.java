@@ -34,7 +34,6 @@ public class P2PClient implements Runnable {
 		if (socket == null) {
 			Log.d(TAG, "Fail Connect Owner");
 		} else {
-			Log.d("P2PClient", "Connect Owner");
 			StringBuilder json =  new StringBuilder();
 			json.append("{ 'header' : { 'method' : '");
 			json.append(GetNewFileList.methodName);
@@ -46,11 +45,9 @@ public class P2PClient implements Runnable {
 				e.printStackTrace();
 			}
 			
-			Log.d("P2PClient", "Send End");
 			ArrayList<OurContent> contents = new ArrayList<OurContent>();
 			try {
 				String jsonString = JSONProtocol.read(socket);
-				Log.d("P2PClient", jsonString);
 				JSONObject jsonContent = new JSONObject(jsonString);
 				JSONArray jsonList = jsonContent.getJSONArray("contents");
 				
