@@ -1,12 +1,10 @@
 package org.our.android.ouracademy.wifidirect;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.net.Socket;
 import java.util.Collection;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
-import org.our.android.ouracademy.OurDefine;
+import org.our.android.ouracademy.p2p.P2PClient;
 
 import android.net.wifi.WpsInfo;
 import android.net.wifi.p2p.WifiP2pConfig;
@@ -116,38 +114,7 @@ public class WifiDirectStudentListener extends WifiDirectDefaultListener
 	public void onConnectionInfoAvailable(WifiP2pInfo info) {
 		this.info = info;
 
-		Socket socket = connectToOwner();
-		if(socket == null){
-			Log.d(TAG, "Fail Connect Owner");
-		}else{
-			try {
-				OutputStream out = socket.getOutputStream();
-				DataOutputStream dos = new DataOutputStream(out);
-				
-				String json = "{this is json String}";
-                byte [] jsonByte = json.getBytes();
-                dos.writeInt(jsonByte.length);
-                dos.write(jsonByte, 0, jsonByte.length);
-                
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
-	private Socket connectToOwner() {
-		Socket sock = null;
-		int portIdx = 0;
-
-		for (int i = 0; i < OurDefine.P2P_SERVER_PORT.length; i++) {
-			try {
-				sock = new Socket(this.info.groupOwnerAddress.getHostAddress(),
-						OurDefine.P2P_SERVER_PORT[portIdx++]);
-			} catch (IOException e) {
-				continue;
-			}
-			return sock;
-		}
-		return sock;
+		Executor executor = Executors.newSingleThreadExecutor();
+		executor.execute(new P2PClient(this.info.groupOwnerAddress.getHostAddress()));
 	}
 }

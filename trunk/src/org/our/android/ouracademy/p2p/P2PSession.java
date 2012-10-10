@@ -7,15 +7,17 @@
 
 package org.our.android.ouracademy.p2p;
 
+import java.io.IOException;
+import java.net.Socket;
 
-
-import java.io.*;
-import java.net.*;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.our.android.ouracademy.p2p.action.OurP2PAction;
 
 public class P2PSession implements Runnable {
 
 	private Socket clientSock;
-	private final String DEFAULT_CHARSET = "UTF-8";
+	
 
 	/**
 	 * 
@@ -25,84 +27,29 @@ public class P2PSession implements Runnable {
 	}
 
 	public void run() {
-		DataInputStream in = null;
+		String request;
 		try {
-			in = new DataInputStream(clientSock.getInputStream());
+			request = JSONProtocol.read(clientSock);
 		} catch (IOException e) {
-			P2PManager.close(in);
 			P2PManager.close(clientSock);
-			System.out.println("Getting inputStream failed");
 			return;
 		}
 
-		// get request string size
-		while (true) {
-			int reqSize = 0;
-			try {
-				reqSize = in.readInt();
-			} catch (IOException e) {
-				P2PManager.close(in);
-				P2PManager.close(clientSock);
-				return;
-			}
-			System.out.println("Size:" + reqSize);
-
-			String request = "";
-			try {
-				request = getRequest(in, reqSize);
-			} catch (IOException e) {
-				P2PManager.close(in);
-				P2PManager.close(clientSock);
-				return;
-			}
-			System.out.println("Json String : " + request);
+		try {
+			JSONObject json = new JSONObject(request);
+			String method = json.getJSONObject("header").getString("method");
+			OurP2PAction action = (OurP2PAction)(Class.forName(method).newInstance());
+			
+			action.excute(clientSock, json);
+		//Exception에 따른 적절한 ErrorCode를 Client에 주어야 한다. 추후 작업. 
+		} catch (JSONException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
 		}
-	}
-
-	public String getRequest(InputStream in, int size) throws IOException {
-		if (size <= 0) {
-			throw new IOException();
-		}
-
-		int len = 0;
-		int totalLen = 0;
-		byte[] buffer = new byte[size];
-		ByteArrayOutputStream baos = new ByteArrayOutputStream(size);
-
-		while ((len = in.read(buffer)) != -1) {
-			baos.write(buffer, 0, len);
-			totalLen += len;
-			if (totalLen >= size) {
-				break;
-			}
-		}
-
-		return baos.toString(DEFAULT_CHARSET);
 	}	
-	
-	
-	// client sample code
-//	import java.io.DataOutputStream;
-//	import java.io.IOException;
-//	import java.io.OutputStream;
-//	import java.net.Socket;
-//
-//	class ClientTest {
-//	        public static void main(String[] args) throws IOException {
-//	                Socket socket = new Socket("127.0.0.1", 7777);
-//	                OutputStream out = socket.getOutputStream();
-//	                DataOutputStream dos = new DataOutputStream(out);
-//
-//	                String json = "{this is json String}";
-//	                byte [] jsonByte = json.getBytes();
-//	                dos.writeInt(jsonByte.length);
-//	                dos.write(jsonByte, 0, jsonByte.length);
-//
-//	                while(true) {
-//	                        ;
-//	                }
-//	        }
-//	}
-	
-
 }
