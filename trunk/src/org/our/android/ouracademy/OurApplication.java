@@ -3,6 +3,9 @@ package org.our.android.ouracademy;
 import org.our.android.ouracademy.util.DbManager;
 import org.our.android.ouracademy.util.ScreenInfo;
 
+import android.app.Application;
+import android.util.Log;
+
 /**
  * 
  * @author JiHoon, Moon on NTS
@@ -17,7 +20,6 @@ public class OurApplication extends Application {
 		super.onCreate();
 
 		mOurApplication = this;
-		//ㅇㅇs
 
 		OurPreferenceManager.getInstance().initPreferenceData(this);
 
@@ -25,6 +27,8 @@ public class OurApplication extends Application {
 		DbManager.getInstance().open(getApplicationContext());
 
 		ScreenInfo.create(this);
+
+//		OurDownloadManager downloadManager = new OurDownloadManager();
 	}
 
 	public static boolean isTestMode() {
