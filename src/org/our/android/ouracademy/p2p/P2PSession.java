@@ -5,7 +5,7 @@
  * NHN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package org.our.android.ouracadmy.p2p;
+package org.our.android.ouracademy.p2p;
 
 import java.io.*;
 import java.net.*;

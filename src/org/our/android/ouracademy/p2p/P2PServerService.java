@@ -1,15 +1,18 @@
-package org.our.android.ouracadmy.p2p;
+package org.our.android.ouracademy.p2p;
 
-import java.io.*;
-import java.net.*;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 
-import android.app.*;
-import android.content.*;
-import android.os.*;
-import android.util.*;
+import org.our.android.ouracademy.OurDefine;
+
+import android.app.Service;
+import android.content.Intent;
+import android.os.IBinder;
+import android.util.Log;
 
 public class P2PServerService extends Service {
-	private static final int[] PORT = { 7777, 7778, 7779, 7780, 7781 };
+	private static final String TAG = "P2PServerService";
 
 	@Override
 	public void onCreate() {
@@ -21,9 +24,8 @@ public class P2PServerService extends Service {
 		runServer();
 		return START_STICKY;
 	}
-
 	
-    public void runServer() {
+	public void runServer() {
         ServerSocket serverSock = startServer();
         if (serverSock == null) {
                 return;
@@ -38,7 +40,7 @@ public class P2PServerService extends Service {
                         closeSocket(clientSock);
                         continue;
                 }
-                Log.d(WIFI_P2P_SERVICE, "Client Accepted : " + clientSock.toString());
+                Log.d(TAG, "Client Accepted : " + clientSock.toString());
                 new P2PSession(clientSock).start();
         }
 }
@@ -53,16 +55,16 @@ public class P2PServerService extends Service {
 
 	@Override
 	public void onDestroy() {
-
+		super.onDestroy();
 	}
 
 	public ServerSocket startServer() {
 		ServerSocket sock = null;
 		int portIdx = 0;
 
-		for (int i = 0; i < PORT.length; i++) {
+		for (int i = 0; i < OurDefine.P2P_SERVER_PORT.length; i++) {
 			try {
-				sock = new ServerSocket(PORT[portIdx++]);
+				sock = new ServerSocket(OurDefine.P2P_SERVER_PORT[portIdx++]);
 			} catch (IOException e) {
 				continue;
 			}
@@ -76,7 +78,7 @@ public class P2PServerService extends Service {
 
 		String clientAddress = clientSock.getInetAddress().getHostAddress();
 		int clientPort = clientSock.getPort();
-		Log.d(WIFI_P2P_SERVICE, "Client connected,  IP: " + clientAddress
+		Log.d(TAG, "Client connected,  IP: " + clientAddress
 				+ ", Port:" + clientPort);
 
 		return clientSock;
