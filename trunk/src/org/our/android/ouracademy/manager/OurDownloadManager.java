@@ -12,7 +12,7 @@ import android.content.ContentValues;
  */
 public class OurDownloadManager {
 
-	public static final String Table_NAME = "download";
+	public static final String Table_NAME = "DOWNLOAD_TBL";
 
 	public static final String KEY_FILE_ID = "FileId";
 	public static final String KEY_DOWNLOAD_FILE_SIZE = "DownladedFileSize";
@@ -27,7 +27,7 @@ public class OurDownloadManager {
 		if (!DbManager.getInstance().isTableExist(Table_NAME)) {
 
 			ContentValues value = new ContentValues();
-			value.put(KEY_FILE_ID, "INTEGER");
+			value.put(KEY_FILE_ID, "TEXT PRIMARY KEY");
 			value.put(KEY_DOWNLOAD_FILE_SIZE, "LONG");
 			value.put(KEY_FILE_SIZE, "LONG");
 			value.put(KEY_FILE_NAME, "TEXT");
@@ -47,13 +47,13 @@ public class OurDownloadManager {
 			sb.setLength(0);
 			sb.append(FileManager.STRSAVEPATH);
 			sb.append(fileName);
-			addRow(-1, FileManager.geFileSize(sb.toString()), -1, fileName, sb.toString());
+			addRow(fileName, FileManager.geFileSize(sb.toString()), -1, fileName, sb.toString());
 		}
 	}
 
-	public void addRow(int id, long downladedFileSize, long fileSize, String fileName, String filePath) {
+	public void addRow(String id, long downladedFileSize, long fileSize, String fileName, String filePath) {
 		DbRow dbRow = new DbRow();
-		if (id != -1) {
+		if (id != null) {
 			dbRow.add(KEY_FILE_ID, id);
 		}
 		if (downladedFileSize != -1) {
