@@ -72,7 +72,7 @@ public class P2PSession implements Runnable {
 		while ((len = in.read(buffer)) != -1) {
 			baos.write(buffer, 0, len);
 			totalLen += len;
-			if (totalLen > size) {
+			if (totalLen >= size) {
 				break;
 			}
 		}
