@@ -61,9 +61,9 @@ public class WifiDirectWrapper {
 
 	private WifiDirectDefaultListener getWifiDirectListner() {
 		if (OurPreferenceManager.getInstance().isTeacher()) {
-			return new WifiDirectTeacherListener(manager, channel);
+			return new WifiDirectTeacherListener(context, manager, channel);
 		} else {
-			return new WifiDirectStudentListener(manager, channel);
+			return new WifiDirectStudentListener(context, manager, channel);
 		}
 
 	}

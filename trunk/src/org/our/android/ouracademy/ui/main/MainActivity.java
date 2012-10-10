@@ -2,16 +2,18 @@ package org.our.android.ouracademy.ui.main;
 
 import org.our.android.ouracademy.OurPreferenceManager;
 import org.our.android.ouracademy.R;
-
 import org.our.android.ouracademy.p2p.P2PService;
 import org.our.android.ouracademy.ui.common.BaseFragmentActivity;
 import org.our.android.ouracademy.util.DbManager;
 import org.our.android.ouracademy.wifidirect.WifiDirectWrapper;
 
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -26,11 +28,14 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 public class MainActivity extends BaseFragmentActivity {
-	private static final String TAG = "Main";
+	public static final String OUR_CONTENT_DATA_CHANGED = "org.our.android.ouracademy.ui.main.OUR_CONTENT_DATA_CHANGED";
 	
+	private static final String TAG = "Main";
 	private OurPreferenceManager pref;
 	private WifiDirectWrapper wifidirectWrapper;
 	private ComponentName serviceName;
+	private final IntentFilter intentFilter = new IntentFilter();
+	private ContentsDataChangedReciever reciever;
 	
 	ListView contentsListview;
 	ContentsListAdapter contentsListAdapter;
@@ -42,15 +47,13 @@ public class MainActivity extends BaseFragmentActivity {
 		
 		pref = OurPreferenceManager.getInstance();
 		wifidirectWrapper = WifiDirectWrapper.getInstance();
-
+		reciever = new ContentsDataChangedReciever();
+		
 		wifidirectWrapper.init(this);
+		intentFilter.addAction(OUR_CONTENT_DATA_CHANGED);
 	}
 	
-	private void initUI() {
-		setContentView(R.layout.activity_main);
-		
-		FrameLayout layout = (FrameLayout)findViewById(R.id.layout_list);
-		
+	private Cursor readContents(){
 		StringBuilder query = new StringBuilder();
 		query.append("select t1._id, t1.ContentId AS ContentId, t2.FileId AS FileId, t2.FilePath AS FilePath ");
 		query.append("from CONTENTS_TBL t1 ");
@@ -58,9 +61,16 @@ public class MainActivity extends BaseFragmentActivity {
 		// load File, Download table data
 		Cursor cursor = DbManager.getInstance().getDB()
 				.rawQuery(query.toString(), null);
-
+		return cursor;
+	}
+	
+	private void initUI() {
+		setContentView(R.layout.activity_main);
+		
+		FrameLayout layout = (FrameLayout)findViewById(R.id.layout_list);
+		
 		contentsListview = new ListView(this);
-		contentsListAdapter = new ContentsListAdapter(this,	cursor, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
+		contentsListAdapter = new ContentsListAdapter(this,	readContents(), CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
 		contentsListview.setAdapter(contentsListAdapter);
 		
 		contentsListview.setOnItemClickListener(itemClickListener);
@@ -71,7 +81,6 @@ public class MainActivity extends BaseFragmentActivity {
 	// tmp method
 	private void startP2pService() {
 		if(pref.isTeacher() && serviceName == null){
-			Log.d(TAG, "start service from main!");
 			serviceName = startService(new Intent(this, P2PService.class));
 		}
 	}
@@ -120,6 +129,8 @@ public class MainActivity extends BaseFragmentActivity {
 			wifidirectWrapper.register();
 			startP2pService();
 		}
+		
+		registerReceiver(reciever, intentFilter);
 	}
 
 	@Override
@@ -127,6 +138,7 @@ public class MainActivity extends BaseFragmentActivity {
 		super.onPause();
 
 		wifidirectWrapper.unregister();
+		unregisterReceiver(reciever);
 	}
 
 	@Override
@@ -154,4 +166,14 @@ public class MainActivity extends BaseFragmentActivity {
 			}
 		}
 	};
+	
+	
+	public class ContentsDataChangedReciever extends BroadcastReceiver{
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			contentsListAdapter.changeCursor(readContents());
+			contentsListAdapter.notifyDataSetChanged();
+		}
+	}
 }

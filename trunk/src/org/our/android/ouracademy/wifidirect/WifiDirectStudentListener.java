@@ -6,6 +6,7 @@ import java.util.concurrent.Executors;
 
 import org.our.android.ouracademy.p2p.P2PClient;
 
+import android.content.Context;
 import android.net.wifi.WpsInfo;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
@@ -22,10 +23,8 @@ public class WifiDirectStudentListener extends WifiDirectDefaultListener
 		implements PeerListListener, ConnectionInfoListener {
 	private static String TAG = "WifiDirectStudentListener";
 
-	private WifiP2pInfo info;
-
-	public WifiDirectStudentListener(WifiP2pManager manager, Channel channel) {
-		super(manager, channel);
+	public WifiDirectStudentListener(Context context, WifiP2pManager manager, Channel channel) {
+		super(context, manager, channel);
 	}
 
 	@Override
@@ -112,9 +111,7 @@ public class WifiDirectStudentListener extends WifiDirectDefaultListener
 
 	@Override
 	public void onConnectionInfoAvailable(WifiP2pInfo info) {
-		this.info = info;
-
 		Executor executor = Executors.newSingleThreadExecutor();
-		executor.execute(new P2PClient(this.info.groupOwnerAddress.getHostAddress()));
+		executor.execute(new P2PClient(context, info.groupOwnerAddress.getHostAddress()));
 	}
 }
