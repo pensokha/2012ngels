@@ -11,7 +11,7 @@ import android.os.Environment;
  */
 public class FileManager {
 	public static final String TAG = "FileManager";
-	public static final String STRSAVEPATH = Environment.getExternalStorageDirectory() + "/OurAcademy/";
+	public static final String STRSAVEPATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/OurAcademy/";
 
 	/**
 	 * get Files from Directory

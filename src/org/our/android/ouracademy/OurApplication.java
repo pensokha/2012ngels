@@ -1,5 +1,7 @@
 package org.our.android.ouracademy;
 
+import org.our.android.ouracademy.manager.OurDownloadManager;
+import org.our.android.ouracademy.manager.TestFileDbCreate;
 import org.our.android.ouracademy.util.DbManager;
 import org.our.android.ouracademy.util.ScreenInfo;
 
@@ -25,10 +27,14 @@ public class OurApplication extends Application {
 
 		//DbManager open
 		DbManager.getInstance().open(getApplicationContext());
-
+		//테스트할 임시 컨텐츠 테이블을 만든다.
+		TestFileDbCreate.createContentsTable();
+		TestFileDbCreate.setTestContentsData();
+		
+		OurDownloadManager downloadManager = new OurDownloadManager();
+		downloadManager.updateStorage();
+		//화면 정보 
 		ScreenInfo.create(this);
-
-//		OurDownloadManager downloadManager = new OurDownloadManager();
 	}
 
 	public static boolean isTestMode() {
