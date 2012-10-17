@@ -1,4 +1,4 @@
-package org.our.android.ouracademy.ui.common;
+package org.our.android.ouracademy.ui.fragment;
 
 import android.app.Activity;
 import android.os.Bundle;

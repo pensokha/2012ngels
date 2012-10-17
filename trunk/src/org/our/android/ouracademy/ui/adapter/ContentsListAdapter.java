@@ -1,4 +1,4 @@
-package org.our.android.ouracademy.ui.main;
+package org.our.android.ouracademy.ui.adapter;
 
 import android.content.Context;
 import android.database.Cursor;

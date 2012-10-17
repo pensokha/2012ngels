@@ -1,4 +1,4 @@
-package org.our.android.ouracademy.ui.main;
+package org.our.android.ouracademy.ui.pages;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -17,7 +17,7 @@ import org.our.android.ouracademy.p2p.JSONProtocol;
 import org.our.android.ouracademy.p2p.P2PManager;
 import org.our.android.ouracademy.p2p.P2PService;
 import org.our.android.ouracademy.p2p.action.DownloadFile;
-import org.our.android.ouracademy.ui.common.BaseFragmentActivity;
+import org.our.android.ouracademy.ui.adapter.ContentsListAdapter;
 import org.our.android.ouracademy.util.DbManager;
 import org.our.android.ouracademy.wifidirect.WifiDirectWrapper;
 
