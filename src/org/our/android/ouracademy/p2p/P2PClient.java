@@ -11,7 +11,7 @@ import org.our.android.ouracademy.OurDefine;
 import org.our.android.ouracademy.manager.TestFileDbCreate;
 import org.our.android.ouracademy.model.OurContent;
 import org.our.android.ouracademy.p2p.action.GetNewFileList;
-import org.our.android.ouracademy.ui.main.MainActivity;
+import org.our.android.ouracademy.ui.pages.MainActivity;
 
 import android.content.Context;
 import android.content.Intent;
