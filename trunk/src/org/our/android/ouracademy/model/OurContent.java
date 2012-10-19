@@ -9,6 +9,7 @@ public class OurContent implements OurJSONModel {
 	private String subject;
 	private long size;
 	private String category;
+	public boolean isDownloaded;
 	
 	public OurContent() {
 		super();

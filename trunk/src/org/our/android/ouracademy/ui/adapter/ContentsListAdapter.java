@@ -1,41 +1,79 @@
 package org.our.android.ouracademy.ui.adapter;
 
+import java.util.ArrayList;
+
+import org.our.android.ouracademy.R;
+import org.our.android.ouracademy.model.OurContent;
+
 import android.content.Context;
-import android.database.Cursor;
-import android.graphics.Color;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CursorAdapter;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
-public class ContentsListAdapter extends CursorAdapter {
-
-	public ContentsListAdapter(Context context, Cursor c, int flag) {
-		super(context, c, flag);
-		// TODO Auto-generated constructor stub
-	}
-
-	@Override
-	public void bindView(View view, final Context context, Cursor cursor) {
-		TextView textView = (TextView)view.findViewById(android.R.id.text1);
-		final String contentFile = cursor.getString(cursor.getColumnIndex("ContentId"));
-		final String downloadFile = cursor.getString(cursor.getColumnIndex("FileId"));
-//		final String downloadFilePath = cursor.getString(cursor.getColumnIndex("FilePath"));
-		if (TextUtils.isEmpty(downloadFile)) {
-			textView.setTextColor(Color.LTGRAY);
-		}
-		textView.setText(contentFile);
+public class ContentsListAdapter extends BaseAdapter {
+	 private Context context;
+	ArrayList<OurContent> contentsList = null;
+	
+	private LayoutInflater inflater;
+	
+	class ViewHolder {
+    	RelativeLayout currencyListLayout;
+        TextView text; //통화코드
+        TextView description; //통화설명
+        ImageView icon; //라디오버튼
+    }
+	
+	public ContentsListAdapter(Context context, ArrayList<OurContent> contentsList) {
+		this.context = context;
+		this.contentsList = contentsList;
 		
+		inflater = LayoutInflater.from(context);
+	}
+	
+	@Override
+	public int getCount() {
+		if (contentsList == null) {
+			return 0;	
+		}
+		return contentsList.size();
 	}
 
 	@Override
-	public View newView(Context context, Cursor cursor, ViewGroup parent) {
-		LayoutInflater inflater = LayoutInflater.from(context);
-		View view = inflater.inflate(android.R.layout.simple_list_item_1, parent, false);
-		return view;
+	public OurContent getItem(int position) {
+		if (contentsList == null) {
+			return null;	
+		}
+		if (position < 0 && getCount()-1 > position ) {
+			return null;
+		}
+		return (OurContent)contentsList.get(position);
 	}
 
+	@Override
+	public long getItemId(int position) {
+		return position;
+	}
+
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		ViewHolder holder;
+		if (convertView == null) {
+			convertView = inflater.inflate(R.layout.layout_contents_list_item, null);
+			holder = new ViewHolder();
+			holder.text = (TextView) convertView.findViewById(R.id.text);
+			
+			convertView.setTag(holder);
+		} else {
+			holder = (ViewHolder) convertView.getTag();
+		}
+		
+		holder.text.setText(contentsList.get(position).getId());
+		
+		return convertView;
+	}
 }
