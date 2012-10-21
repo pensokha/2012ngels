@@ -1,9 +1,11 @@
 package org.our.android.ouracademy.wifidirect;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import org.our.android.ouracademy.OurPreferenceManager;
 import org.our.android.ouracademy.p2p.P2PClient;
 
 import android.content.Context;
@@ -17,37 +19,53 @@ import android.net.wifi.p2p.WifiP2pManager.ActionListener;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener;
 import android.net.wifi.p2p.WifiP2pManager.PeerListListener;
+import android.os.Handler;
 import android.util.Log;
 
+/*********
+ * 
+ * @author hyeongseokLim
+ * 
+ */
 public class WifiDirectStudentListener extends WifiDirectDefaultListener
 		implements PeerListListener, ConnectionInfoListener {
-	private static String TAG = "WifiDirectStudentListener";
+	private static final String TAG = "WifiDirectStudentListener";
+	private static final int MAX_RETRY_COUNT = 10;
+	private int retryCount = 0;
 
-	public WifiDirectStudentListener(Context context, WifiP2pManager manager, Channel channel) {
+	public WifiDirectStudentListener(Context context, WifiP2pManager manager,
+			Channel channel) {
 		super(context, manager, channel);
+	}
+
+	/******
+	 * 
+	 * @author hyeongseokLim
+	 * 
+	 */
+	private class DiscoverListener implements ActionListener {
+		private boolean retry = false;
+
+		@Override
+		public void onSuccess() {
+			Log.d(TAG, "DiscoverPeers Success");
+		}
+
+		@Override
+		public void onFailure(int reason) {
+			if (retry == false) {
+				manager.discoverPeers(channel, this);
+				retry = true;
+			} else {
+				Log.d(TAG, "DiscoverPeers False");
+			}
+		}
 	}
 
 	@Override
 	public void onEnableP2p() {
 		if (manager != null) {
-			manager.discoverPeers(channel, new ActionListener() {
-				private boolean retry = false;
-
-				@Override
-				public void onSuccess() {
-					Log.d(TAG, "DiscoverPeers Success");
-				}
-
-				@Override
-				public void onFailure(int reason) {
-					if (retry == false) {
-						manager.discoverPeers(channel, this);
-						retry = true;
-					} else {
-						Log.d(TAG, "DiscoverPeers False");
-					}
-				}
-			});
+			manager.discoverPeers(channel, new DiscoverListener());
 		}
 	}
 
@@ -69,22 +87,62 @@ public class WifiDirectStudentListener extends WifiDirectDefaultListener
 	public void onPeersAvailable(WifiP2pDeviceList peers) {
 		if (getConnected() == false) {
 			Collection<WifiP2pDevice> devices = peers.getDeviceList();
+
+			ArrayList<WifiP2pDevice> groupOwnerDevices = new ArrayList<WifiP2pDevice>();
 			for (WifiP2pDevice device : devices) {
 				if (device.isGroupOwner()) {
+					groupOwnerDevices.add(device);
+				}
+			}
+
+			if (OurPreferenceManager.getInstance().isStudent() == true
+					&& getConnected() == false) {
+				if (groupOwnerDevices.size() == 1) {
 					WifiP2pConfig config = new WifiP2pConfig();
-					config.deviceAddress = device.deviceAddress;
+					config.deviceAddress = groupOwnerDevices.get(0).deviceAddress;
 					config.wps.setup = WpsInfo.PBC;
 
 					manager.connect(channel, config,
 							new StudenetConnectListener(config));
-					return;
+				} else if (groupOwnerDevices.size() == 0
+						&& retryCount <= MAX_RETRY_COUNT) {
+					retryCount++;
+
+					Handler handler = new Handler();
+					handler.postDelayed(new Runnable() {
+						@Override
+						public void run() {
+							if (getConnected() == true && manager != null
+									&& channel != null) {
+								manager.discoverPeers(channel,
+										new DiscoverListener());
+							}
+						}
+					}, 300000); // 5 Minute
 				}
 			}
-			Log.d(TAG, "Can't find group owner(teacher)");
-			// TODO : Thread로 일정 시간후 다시 discover를 시도해야 된다.
+
+			for (GroupOwnerFoundListener groupOwnerFoundListenr : WifiDirectWrapper
+					.getInstance().getGroupOwnerFoundListenr()) {
+				groupOwnerFoundListenr.onFound(groupOwnerDevices);
+			}
 		}
 	}
 
+	/*****
+	 * 
+	 * @author hyeongseokLim
+	 * 
+	 */
+	public interface GroupOwnerFoundListener {
+		public void onFound(ArrayList<WifiP2pDevice> groupOwnerDevices);
+	}
+
+	/**********
+	 * 
+	 * @author hyeongseokLim
+	 * 
+	 */
 	private class StudenetConnectListener implements ActionListener {
 		private boolean retry = false;
 		private WifiP2pConfig config;
@@ -112,10 +170,9 @@ public class WifiDirectStudentListener extends WifiDirectDefaultListener
 	@Override
 	public void onConnectionInfoAvailable(WifiP2pInfo info) {
 		WifiDirectWrapper.getInstance().setInfo(info);
-		
-		Log.d(TAG, "SET INFO");
-		
+
 		Executor executor = Executors.newSingleThreadExecutor();
-		executor.execute(new P2PClient(context, info.groupOwnerAddress.getHostAddress()));
+		executor.execute(new P2PClient(context, info.groupOwnerAddress
+				.getHostAddress()));
 	}
 }

@@ -5,32 +5,39 @@ import android.content.ContextWrapper;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
-
 /**
  * 
  * @author JiHoon, Moon on NTS
- *
+ * 
  */
 public class OurPreferenceManager {
 	private static OurPreferenceManager mSelfInstance = new OurPreferenceManager();
 	private SharedPreferences mPreference = null;
-	
+
 	public final static String PREFERENCE_KEY = "our";
 	private static final String MODE = "MODE";
-	
-	private static enum Mode { TEACHER, STUDENT };
-	
+
+	/***
+	 * 
+	 * @author hyeongseokLim
+	 * 
+	 */
+	private static enum Mode {
+		TEACHER, STUDENT
+	};
+
 	private OurPreferenceManager() {
 	}
-	
+
 	public static OurPreferenceManager getInstance() {
 		return mSelfInstance;
 	}
 
 	public void initPreferenceData(ContextWrapper ctxWrapper) {
-		mPreference = ctxWrapper.getSharedPreferences(PREFERENCE_KEY, Activity.MODE_PRIVATE);
+		mPreference = ctxWrapper.getSharedPreferences(PREFERENCE_KEY,
+				Activity.MODE_PRIVATE);
 	}
-	
+
 	public int getIntValue(String prefKey) {
 		if (mPreference != null) {
 			return mPreference.getInt(prefKey, 0);
@@ -136,32 +143,32 @@ public class OurPreferenceManager {
 		return false;
 	}
 
-	public boolean isTeacher(){
+	public boolean isTeacher() {
 		int ordinal = getIntValue(MODE, Mode.STUDENT.ordinal());
 		Mode mode = Mode.values()[ordinal];
-		
+
 		return (mode == Mode.TEACHER ? true : false);
 	}
-	
-	public boolean isStudent(){
+
+	public boolean isStudent() {
 		int ordinal = getIntValue(MODE, Mode.STUDENT.ordinal());
 		Mode mode = Mode.values()[ordinal];
-		
+
 		return (mode == Mode.STUDENT ? true : false);
 	}
-	
-	public boolean isSettingMode(){
+
+	public boolean isSettingMode() {
 		int empty = -1;
 		int ordinal = getIntValue(MODE, empty);
-		
-		return (ordinal != empty ? true : false );
+
+		return (ordinal != empty ? true : false);
 	}
-	
-	public boolean setTeacherMode(){
+
+	public boolean setTeacherMode() {
 		return setIntValue(MODE, Mode.TEACHER.ordinal());
 	}
-	
-	public boolean setStudentMode(){
+
+	public boolean setStudentMode() {
 		return setIntValue(MODE, Mode.STUDENT.ordinal());
 	}
 }

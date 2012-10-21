@@ -12,11 +12,12 @@ import android.util.Log;
 /**
  * 
  * @author jyeon
- *
+ * 
  */
 public class FileManager {
 	public static final String TAG = "FileManager";
-	public static final String STRSAVEPATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/OurAcademy/";
+	public static final String STRSAVEPATH = Environment
+			.getExternalStorageDirectory().getAbsolutePath() + "/OurAcademy/";
 
 	/**
 	 * get Files from Directory
@@ -31,31 +32,31 @@ public class FileManager {
 		}
 		return null;
 	}
-	
-	public static File getFile(String fileName) throws FileNotFoundException{
-		File file = new File(STRSAVEPATH+fileName);
-		
+
+	public static File getFile(String fileName) throws FileNotFoundException {
+		File file = new File(STRSAVEPATH + fileName);
+
 		File dirs = new File(file.getParent());
-		if(!dirs.exists())
+		if (!dirs.exists())
 			dirs.mkdirs();
 		return file;
 	}
-	
+
 	public static boolean copyFile(InputStream inputStream, OutputStream out) {
-        byte buf[] = new byte[1024];
-        int len;
-        try {
-            while ((len = inputStream.read(buf)) != -1) {
-                out.write(buf, 0, len);
-                Log.d(TAG, ""+buf.length);
-            }
-            out.close();
-            inputStream.close();
-        } catch (IOException e) {
-            return false;
-        }
-        return true;
-    }
+		byte buf[] = new byte[1024 * 1024];
+		int len;
+		try {
+			Log.d(TAG, "File Download");
+			while ((len = inputStream.read(buf)) != -1) {
+				out.write(buf, 0, len);
+			}
+			out.close();
+			inputStream.close();
+		} catch (IOException e) {
+			return false;
+		}
+		return true;
+	}
 
 	/**
 	 * get File size
