@@ -23,19 +23,27 @@ public class OurApplication extends Application {
 
 		mOurApplication = this;
 
-		OurPreferenceManager.getInstance().initPreferenceData(this);
+		OurPreferenceManager pref = OurPreferenceManager.getInstance();
+		pref.initPreferenceData(this);
 
-		//DbManager open
+		// DbManager open
 		DbManager.getInstance().open(getApplicationContext());
-		//테스트할 임시 컨텐츠 테이블을 만든다.
+		// 테스트할 임시 컨텐츠 테이블을 만든다.
 		TestFileDbCreate.createContentsTable();
-		if(OurPreferenceManager.getInstance().isTeacher()){
-			TestFileDbCreate.setTestContentsData();
+
+		if (pref.isSettingMode() == true) {
+			//선생님 일때 dummy data 입력 
+			if (pref.isTeacher()) {
+				TestFileDbCreate.setTestContentsData();
+			}
+		} else {
+			//default student mode
+			pref.setStudentMode();
 		}
-		
+
 		OurDownloadManager downloadManager = new OurDownloadManager();
 		downloadManager.updateStorage();
-		//화면 정보 
+		// 화면 정보
 		ScreenInfo.create(this);
 	}
 
