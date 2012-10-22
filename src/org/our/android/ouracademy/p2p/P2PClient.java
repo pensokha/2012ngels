@@ -11,7 +11,7 @@ import org.our.android.ouracademy.OurDefine;
 import org.our.android.ouracademy.manager.TestFileDbCreate;
 import org.our.android.ouracademy.model.OurContent;
 import org.our.android.ouracademy.p2p.action.GetNewFileList;
-import org.our.android.ouracademy.ui.pages.CopyOfMainActivity;
+import org.our.android.ouracademy.ui.pages.MainActivityOld;
 
 import android.content.Context;
 import android.content.Intent;
@@ -63,7 +63,7 @@ public class P2PClient implements Runnable {
 			}
 			
 			TestFileDbCreate.setAllContents(contents);
-			context.sendBroadcast(new Intent(CopyOfMainActivity.OUR_CONTENT_DATA_CHANGED));
+			context.sendBroadcast(new Intent(MainActivityOld.OUR_CONTENT_DATA_CHANGED));
 			P2PManager.close(socket);
 		}
 	}
