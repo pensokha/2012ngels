@@ -38,6 +38,8 @@
             </intent-filter>
         </activity>
         
+        <activity android:name=".ui.pages.MediaPlayerPage" android:label="Media Player Page" android:screenOrientation="landscape"/>
+        
         <service android:enabled="true" android:name=".p2p.P2PService" />
     </application>
 
