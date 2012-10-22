@@ -11,9 +11,9 @@ import android.widget.CursorAdapter;
 import android.widget.TextView;
 
 
-public class CopyOfContentsListAdapter extends CursorAdapter {
+public class ContentsListAdapterOld extends CursorAdapter {
 
-	public CopyOfContentsListAdapter(Context context, Cursor c, int flag) {
+	public ContentsListAdapterOld(Context context, Cursor c, int flag) {
 		super(context, c, flag);
 		// TODO Auto-generated constructor stub
 	}

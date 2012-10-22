@@ -18,7 +18,7 @@ import org.our.android.ouracademy.p2p.P2PManager;
 import org.our.android.ouracademy.p2p.P2PService;
 import org.our.android.ouracademy.p2p.action.DownloadFile;
 import org.our.android.ouracademy.ui.adapter.ContentsListAdapter;
-import org.our.android.ouracademy.ui.adapter.CopyOfContentsListAdapter;
+import org.our.android.ouracademy.ui.adapter.ContentsListAdapterOld;
 import org.our.android.ouracademy.util.DbManager;
 import org.our.android.ouracademy.wifidirect.WifiDirectWrapper;
 
@@ -53,7 +53,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 @SuppressWarnings("deprecation")
-public class CopyOfMainActivity extends BaseFragmentActivity {
+public class MainActivityOld extends BaseFragmentActivity {
 	private ViewGroup menuLayout;
     private ViewGroup detailRootView;
     private ViewGroup detailLayout;
@@ -77,7 +77,7 @@ public class CopyOfMainActivity extends BaseFragmentActivity {
 	private ContentsDataChangedReciever reciever;
 
 	ListView contentsListview;
-	CopyOfContentsListAdapter contentsListAdapter;
+	ContentsListAdapterOld contentsListAdapter;
 	
 	enum TouchStatus {
 		START_DRAGGING, DRAGGING, STOP_DRAGGING
@@ -134,7 +134,7 @@ public class CopyOfMainActivity extends BaseFragmentActivity {
 //		FrameLayout layout = (FrameLayout) findViewById(R.id.layout_list);
 
 		contentsListview = new ListView(this);
-		contentsListAdapter = new CopyOfContentsListAdapter(this, readContents(),
+		contentsListAdapter = new ContentsListAdapterOld(this, readContents(),
 				CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
 		contentsListview.setAdapter(contentsListAdapter);
 
@@ -163,48 +163,48 @@ public class CopyOfMainActivity extends BaseFragmentActivity {
 		}
 	}
 
-	// tmp method
-	private void alertMode() {
-		new AlertDialog.Builder(this).setTitle("Mode Setting")
-				.setPositiveButton("teacher", modeClickListenr)
-				.setNegativeButton("student", modeClickListenr).show();
-	}
+//	// tmp method
+//	private void alertMode() {
+//		new AlertDialog.Builder(this).setTitle("Mode Setting")
+//				.setPositiveButton("teacher", modeClickListenr)
+//				.setNegativeButton("student", modeClickListenr).show();
+//	}
 
-	// tmp method
-	private DialogInterface.OnClickListener modeClickListenr = new DialogInterface.OnClickListener() {
-		@Override
-		public void onClick(DialogInterface dialog, int which) {
-			if (which == -1) {
-				pref.setTeacherMode();
-			} else {
-				pref.setStudentMode();
-			}
-			wifidirectWrapper.register();
-			startP2pService();
-		}
-	};
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-
-		if (pref.isSettingMode() == false) {
-			alertMode();
-		} else {
-			wifidirectWrapper.register();
-			startP2pService();
-		}
-
-		registerReceiver(reciever, intentFilter);
-	}
-
-	@Override
-	protected void onPause() {
-		super.onPause();
-
-		wifidirectWrapper.unregister();
-		unregisterReceiver(reciever);
-	}
+//	// tmp method
+//	private DialogInterface.OnClickListener modeClickListenr = new DialogInterface.OnClickListener() {
+//		@Override
+//		public void onClick(DialogInterface dialog, int which) {
+//			if (which == -1) {
+//				pref.setTeacherMode();
+//			} else {
+//				pref.setStudentMode();
+//			}
+//			wifidirectWrapper.register();
+//			startP2pService();
+//		}
+//	};
+//
+//	@Override
+//	protected void onResume() {
+//		super.onResume();
+//
+//		if (pref.isSettingMode() == false) {
+//			alertMode();
+//		} else {
+//			wifidirectWrapper.register();
+//			startP2pService();
+//		}
+//
+//		registerReceiver(reciever, intentFilter);
+//	}
+//
+//	@Override
+//	protected void onPause() {
+//		super.onPause();
+//
+//		wifidirectWrapper.unregister();
+//		unregisterReceiver(reciever);
+//	}
 
 	@Override
 	public void onDestroy() {
@@ -433,7 +433,7 @@ public class CopyOfMainActivity extends BaseFragmentActivity {
 			contentsListAdapter.changeCursor(readContents());
 			contentsListAdapter.notifyDataSetChanged();
 			
-			sendBroadcast(new Intent(CopyOfMainActivity.OUR_CONTENT_DATA_CHANGED));
+			sendBroadcast(new Intent(MainActivityOld.OUR_CONTENT_DATA_CHANGED));
 		}
 
 		private Socket connectToOwner(String serverAddress) {
