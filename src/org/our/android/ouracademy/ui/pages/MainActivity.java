@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import org.our.android.ouracademy.R;
 import org.our.android.ouracademy.model.OurContent;
 import org.our.android.ouracademy.ui.adapter.ContentsListAdapter;
-import org.our.android.ouracademy.ui.view.NCHorizontalListView;
+import org.our.android.ouracademy.ui.view.HorizontalListView;
 
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -22,7 +22,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 @SuppressWarnings("deprecation")
-public class MainActivity extends BaseFragmentActivity {
+public class MainActivity extends BaseActivity {
 	private ViewGroup menuLayout;
 	private ViewGroup detailRootView;
 	private ViewGroup detailLayout;
@@ -109,7 +109,7 @@ public class MainActivity extends BaseFragmentActivity {
         	contentsList.add(ourContent);
         }
         
-        NCHorizontalListView listView = (NCHorizontalListView) findViewById(R.id.horizontal_listview);
+        HorizontalListView listView = (HorizontalListView) findViewById(R.id.horizontal_listview);
         contentsListAdapter = new ContentsListAdapter(this, contentsList);
         listView.setAdapter(contentsListAdapter);
 	}

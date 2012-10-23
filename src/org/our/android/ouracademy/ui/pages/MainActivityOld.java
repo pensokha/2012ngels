@@ -53,7 +53,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 @SuppressWarnings("deprecation")
-public class MainActivityOld extends BaseFragmentActivity {
+public class MainActivityOld extends BaseActivity {
 	private ViewGroup menuLayout;
     private ViewGroup detailRootView;
     private ViewGroup detailLayout;

@@ -8,8 +8,8 @@ package org.our.android.ouracademy.ui.pages;
 
 import org.our.android.ouracademy.util.ScreenInfo;
 
+import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.view.KeyEvent;
 import android.widget.Toast;
 
@@ -17,7 +17,7 @@ import android.widget.Toast;
  * 
  * @author
  */
-public class BaseFragmentActivity extends FragmentActivity {
+public class BaseActivity extends Activity {
 	private Toast toast;
 	
 	@Override

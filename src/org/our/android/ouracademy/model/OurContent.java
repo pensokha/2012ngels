@@ -4,7 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class OurContent implements OurJSONModel {
-	public static final String ID_JSON_KEY = "id";
+	public static final String CONTENTS_ID_JSON_KEY = "id";
 	public static final String SUBJECT_ENG_JSON_KEY = "subjectEng";
 	public static final String SUBJECT_KMR_JSON_KEY = "subjectKmr";
 	public static final String CATEGIRY_ID_JSON_KEY = "categoryId";
@@ -12,7 +12,7 @@ public class OurContent implements OurJSONModel {
 	public static final String CATEGIRY_KRM_JSON_KEY = "categoryKmr";
 	public static final String SUBCATEGIRY_ID_JSON_KEY = "subCategoryId";
 	public static final String SUBCATEGIRY_ENG_JSON_KEY = "subCategoryEng";
-	public static final String SUBCATEGIRY_KRM_JSON_KEY = "subCategoryKmr";
+	public static final String SUBCATEGIRY_KMR_JSON_KEY = "subCategoryKmr";
 	public static final String DESCRIPTION_ENG_JSON_KEY = "descriptionEng";
 	public static final String DESCRIPTION_KMR_JSON_KEY = "descriptionKmr";
 	public static final String CONTENT_URL_JSON_KEY = "contentUrl";
@@ -29,7 +29,7 @@ public class OurContent implements OurJSONModel {
 	private String subCategoryKmr;
 	private String descriptionEng;
 	private String descriptionKmr;
-	private String contentUrl;
+	private String contentsUrl;
 	private String subtitleUrl;
 	private long size;
 	public boolean isDownloaded;
@@ -127,11 +127,11 @@ public class OurContent implements OurJSONModel {
 	}
 
 	public String getContentUrl() {
-		return contentUrl;
+		return contentsUrl;
 	}
 
-	public void setContentUrl(String contentUrl) {
-		this.contentUrl = contentUrl;
+	public void setContentUrl(String contentsUrl) {
+		this.contentsUrl = contentsUrl;
 	}
 
 	public String getSubtitleUrl() {
@@ -160,7 +160,7 @@ public class OurContent implements OurJSONModel {
 
 	public OurContent(String id, String subjectEng, String subjectKmr, String categoryId,
 			String categoryEng, String categoryKmr, String subCategoryId, String subCategoryEng,
-			String subCategoryKmr, String descriptionEng, String descriptionKmr, String contentUrl,
+			String subCategoryKmr, String descriptionEng, String descriptionKmr, String contentsUrl,
 			String subtitleUrl, long size, boolean isDownloaded) {
 		this.id = id;            
 		this.subjectEng = subjectEng;    
@@ -173,7 +173,7 @@ public class OurContent implements OurJSONModel {
 		this.subCategoryKmr = subCategoryKmr;
 		this.descriptionEng = descriptionEng;
 		this.descriptionKmr = descriptionKmr;
-		this.contentUrl = contentUrl;    
+		this.contentsUrl = contentsUrl;    
 		this.subtitleUrl = subtitleUrl; 
 		this.size = size;
 		this.isDownloaded = isDownloaded; 
@@ -186,13 +186,13 @@ public class OurContent implements OurJSONModel {
 				", categoryKmr=" + categoryKmr +  ", subCategoryId=" + subCategoryId +
 				", subCategoryEng=" + subCategoryEng + ", subCategoryKmr=" + subCategoryKmr +
 				", descriptionEng=" + descriptionEng + ", descriptionKmr=" + descriptionKmr + 
-				", contentUrl=" + contentUrl + ", subtitleUrl=" + subtitleUrl + "]";
+				", contentsUrl=" + contentsUrl + ", subtitleUrl=" + subtitleUrl + "]";
 	}
 
 	@Override
 	public JSONObject getJSONObject() throws JSONException {
 		JSONObject jsonObject = new JSONObject();
-		jsonObject.put(ID_JSON_KEY, id);                             
+		jsonObject.put(CONTENTS_ID_JSON_KEY, id);                             
 		jsonObject.put(SUBJECT_ENG_JSON_KEY, subjectEng);            
 		jsonObject.put(SUBJECT_KMR_JSON_KEY, subjectKmr);            
 		jsonObject.put(CATEGIRY_ID_JSON_KEY, categoryId);            
@@ -200,10 +200,10 @@ public class OurContent implements OurJSONModel {
 		jsonObject.put(CATEGIRY_KRM_JSON_KEY, categoryKmr);          
 		jsonObject.put(SUBCATEGIRY_ID_JSON_KEY, subCategoryId);      
 		jsonObject.put(SUBCATEGIRY_ENG_JSON_KEY, subCategoryEng);    
-		jsonObject.put(SUBCATEGIRY_KRM_JSON_KEY, subCategoryKmr);    
+		jsonObject.put(SUBCATEGIRY_KMR_JSON_KEY, subCategoryKmr);    
 		jsonObject.put(DESCRIPTION_ENG_JSON_KEY, descriptionEng);    
 		jsonObject.put(DESCRIPTION_KMR_JSON_KEY, descriptionKmr);    
-		jsonObject.put(CONTENT_URL_JSON_KEY, contentUrl);            
+		jsonObject.put(CONTENT_URL_JSON_KEY, contentsUrl);            
 		jsonObject.put(SUBTITLE_URL_JSON_KEY, subtitleUrl);          
 		
 		return jsonObject;
@@ -211,7 +211,7 @@ public class OurContent implements OurJSONModel {
 
 	@Override
 	public void setFromJSONObject(JSONObject json) throws JSONException {
-		id = json.getString(ID_JSON_KEY);            
+		id = json.getString(CONTENTS_ID_JSON_KEY);            
 		subjectEng = json.getString(SUBJECT_ENG_JSON_KEY);    
 		subjectKmr = json.getString(SUBJECT_KMR_JSON_KEY);    
 		categoryId = json.getString(CATEGIRY_ID_JSON_KEY);    
@@ -219,10 +219,10 @@ public class OurContent implements OurJSONModel {
 		categoryKmr = json.getString(CATEGIRY_KRM_JSON_KEY);   
 		subCategoryId = json.getString(SUBCATEGIRY_ID_JSON_KEY); 
 		subCategoryEng = json.getString(SUBCATEGIRY_ENG_JSON_KEY);
-		subCategoryKmr = json.getString(SUBCATEGIRY_KRM_JSON_KEY);
+		subCategoryKmr = json.getString(SUBCATEGIRY_KMR_JSON_KEY);
 		descriptionEng = json.getString(DESCRIPTION_ENG_JSON_KEY);
 		descriptionKmr = json.getString(DESCRIPTION_KMR_JSON_KEY);
-		contentUrl = json.getString(CONTENT_URL_JSON_KEY);    
+		contentsUrl = json.getString(CONTENT_URL_JSON_KEY);    
 		subtitleUrl = json.getString(SUBTITLE_URL_JSON_KEY);   
 	}
 }
