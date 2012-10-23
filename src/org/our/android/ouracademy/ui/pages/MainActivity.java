@@ -81,34 +81,37 @@ public class MainActivity extends BaseFragmentActivity {
 
 	private void initUI() {
 		setContentView(R.layout.activity_main);
-
-		menuLayout = (ViewGroup)findViewById(R.id.layout_menu); //하단화면 View
-		detailRootView = (ViewGroup)findViewById(R.id.layout_root_detail); //상단화면 최상단 View
-		detailLayout = (ViewGroup)findViewById(R.id.layout_detail); //상단화면 View
-
-		hideMenuBtn = (ViewGroup)(ViewGroup)findViewById(R.id.hide_menu_btn);
-		hideMenuBtn.setClickable(false);
-
-		ViewGroup dragLayout = (ViewGroup)findViewById(R.id.drag_layout); //상단화면의 메뉴를 Drag할 수 있는 여역
-		dragLayout.setOnTouchListener(dargTouchListener); //onTouchListener 지정
-
-		//상단화면 CashBitmap이 저장된 iamgeView
-		decoyImage = new ImageView(this);
-
-		contentsList = new ArrayList<OurContent>();
-
-		String[] temp = {"1", "2", "3", "4", "5", "6", "7", "8"};
-
-		OurContent ourContent;
-		for (String tt : temp) {
-			ourContent = new OurContent();
-			ourContent.setId(tt);
-			contentsList.add(ourContent);
-		}
-
-		NCHorizontalListView listView = (NCHorizontalListView)findViewById(R.id.horizontal_listview);
-		contentsListAdapter = new ContentsListAdapter(this, contentsList);
-		listView.setAdapter(contentsListAdapter);
+		
+		menuLayout		= (ViewGroup)findViewById(R.id.layout_menu);				//하단화면 View
+        detailRootView	= (ViewGroup)findViewById(R.id.layout_root_detail);			//상단화면 최상단 View
+        detailLayout	= (ViewGroup)findViewById(R.id.layout_detail);				//상단화면 View
+        
+        hideMenuBtn = (ViewGroup)(ViewGroup)findViewById(R.id.hide_menu_btn);
+        hideMenuBtn.setClickable(false);
+        
+        ViewGroup dragLayout = (ViewGroup)findViewById(R.id.drag_layout);	//상단화면의 메뉴를 Drag할 수 있는 여역
+        dragLayout.setOnTouchListener(dargTouchListener);					//onTouchListener 지정
+        
+        //상단화면 CashBitmap이 저장된 iamgeView
+        decoyImage = new ImageView(this);
+        
+        contentsList = new ArrayList<OurContent>();
+        
+        String[] temp = {"우와","이야","오오","우우","하하","대박","중박","쪽박","말박","이야","오오","우우","하하","대박","중박","쪽박","말박"
+        		,"이야","오오","우우","하하","대박","중박","쪽박","말박"
+        		,"이야","오오","우우","하하","대박","중박","쪽박","말박"
+        		,"이야","오오","우우","하하","대박","중박","쪽박","말박"};
+ 
+        OurContent ourContent;
+        for (String tt : temp) {
+        	ourContent = new OurContent();
+        	ourContent.setSubjectEng(tt);
+        	contentsList.add(ourContent);
+        }
+        
+        NCHorizontalListView listView = (NCHorizontalListView) findViewById(R.id.horizontal_listview);
+        contentsListAdapter = new ContentsListAdapter(this, contentsList);
+        listView.setAdapter(contentsListAdapter);
 	}
 
 	private void setDetailLayoutImageCache(LayoutParams params) {

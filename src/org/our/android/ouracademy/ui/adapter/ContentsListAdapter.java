@@ -6,26 +6,43 @@ import org.our.android.ouracademy.R;
 import org.our.android.ouracademy.model.OurContent;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
 public class ContentsListAdapter extends BaseAdapter {
-	 private Context context;
+	private Context context;
 	ArrayList<OurContent> contentsList = null;
 	
 	private LayoutInflater inflater;
 	
-	class ViewHolder {
-    	RelativeLayout currencyListLayout;
-        TextView text; //통화코드
-        TextView description; //통화설명
-        ImageView icon; //라디오버튼
+	public static final int CELL_PER_ITEM = 2;
+	
+	class ObjViewHolder {
+		TextView tagTitle01;
+		TextView tagTitle02;
+		ItemHolder[] itemHolderList = new ItemHolder[CELL_PER_ITEM];
+	}
+
+
+	int layoutIds[] = {
+		R.id.layout_content_01,
+		R.id.layout_content_02
+	};
+
+	int contentTitleIds[] = {
+		R.id.txt_content_01,
+		R.id.txt_content_02
+	};
+	
+	class ItemHolder {
+    	RelativeLayout itemCellLayout;
+        TextView contentTitle; 
     }
 	
 	public ContentsListAdapter(Context context, ArrayList<OurContent> contentsList) {
@@ -40,7 +57,9 @@ public class ContentsListAdapter extends BaseAdapter {
 		if (contentsList == null) {
 			return 0;	
 		}
-		return contentsList.size();
+		int count = contentsList.size() / CELL_PER_ITEM;
+		count = count + (contentsList.size() % CELL_PER_ITEM > 0 ? 1 : 0);
+		return count;
 	}
 
 	@Override
@@ -61,19 +80,42 @@ public class ContentsListAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		ViewHolder holder;
+		int itemSize = contentsList.size();
+		if (position * CELL_PER_ITEM >= itemSize) {
+			return convertView;
+		}
+		
+		ObjViewHolder holder = new ObjViewHolder();;
 		if (convertView == null) {
 			convertView = inflater.inflate(R.layout.layout_contents_list_item, null);
-			holder = new ViewHolder();
-			holder.text = (TextView) convertView.findViewById(R.id.text);
+			
+			for (int idx = 0; idx < CELL_PER_ITEM; idx++) {
+				ItemHolder itemHolder = new ItemHolder();
+				itemHolder.itemCellLayout = (RelativeLayout)convertView.findViewById(layoutIds[idx]);
+				itemHolder.contentTitle = (TextView)convertView.findViewById(contentTitleIds[idx]);
+				holder.itemHolderList[idx] = itemHolder;
+			}
+			
+			holder.tagTitle01 = (TextView)convertView.findViewById(R.id.txt_list_tag_01);
 			
 			convertView.setTag(holder);
 		} else {
-			holder = (ViewHolder) convertView.getTag();
+			holder = (ObjViewHolder)convertView.getTag();
 		}
 		
-		holder.text.setText(contentsList.get(position).getId());
-		
+		for (int i = 0; i < CELL_PER_ITEM; i++) {
+			final int currentPositionOfItem = position * CELL_PER_ITEM + i;
+			if (currentPositionOfItem < itemSize) {
+				holder.itemHolderList[i].itemCellLayout.setVisibility(View.VISIBLE);
+				OurContent model = contentsList.get(currentPositionOfItem);
+				
+//				holder.itemHolderList[i].itemCellLayout.setBackgroundResource();
+				holder.itemHolderList[i].contentTitle.setText(model.getSubjectEng());
+			} else {
+				
+				holder.itemHolderList[i].itemCellLayout.setVisibility(View.GONE);
+			}
+		}
 		return convertView;
 	}
 }

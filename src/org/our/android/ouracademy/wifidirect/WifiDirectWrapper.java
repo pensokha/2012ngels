@@ -17,7 +17,8 @@ import org.our.android.ouracademy.p2p.JSONProtocol;
 import org.our.android.ouracademy.p2p.P2PManager;
 import org.our.android.ouracademy.p2p.P2PService;
 import org.our.android.ouracademy.p2p.action.DownloadFile;
-import org.our.android.ouracademy.ui.main.MainActivity;
+import org.our.android.ouracademy.ui.pages.MainActivity;
+import org.our.android.ouracademy.ui.pages.MainActivityOld;
 import org.our.android.ouracademy.wifidirect.WifiDirectStudentListener.GroupOwnerFoundListener;
 
 import android.content.ComponentName;
@@ -286,7 +287,7 @@ public class WifiDirectWrapper {
 			super.onPostExecute(result);
 
 			context.sendBroadcast(new Intent(
-					MainActivity.OUR_CONTENT_DATA_CHANGED));
+					MainActivityOld.OUR_CONTENT_DATA_CHANGED));
 		}
 
 		private Socket connectToOwner(String serverAddress) {
