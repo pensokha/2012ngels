@@ -12,17 +12,14 @@
         android:gravity="center_horizontal"
         android:background="@drawable/list_tag01"
         style="@style/fontstyle_txt_main_list_tag"
-        android:text="english" />
+        android:text="ENGLiSH" />
     <RelativeLayout
         android:id="@+id/layout_content_01" 
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_marginLeft="24dp"
-	    android:layout_below="@id/txt_list_tag_01" >
-	    <ImageView 
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:src="@drawable/btn_main_book_selector"/>
+	    android:layout_below="@id/txt_list_tag_01"
+	    android:background="@drawable/btn_main_book_selector" >
 	    <TextView 
 	        android:id="@+id/txt_content_01"
 	        android:layout_width="wrap_content"
@@ -36,17 +33,18 @@
 	    android:layout_height="wrap_content"
 	    android:layout_marginLeft="24dp"
 	    android:layout_marginTop="62dp"
-	    android:layout_below="@id/layout_content_01" >
-	    <ImageView 
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:src="@drawable/btn_main_book_selector"/>
+	    android:layout_below="@id/layout_content_01"
+	    android:background="@drawable/btn_main_book_selector" >
 	    <TextView 
 	        android:id="@+id/txt_content_02"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_centerInParent="true"
 	        style="@style/fontstyle_txt_main_contenst_txt" />
+	    <Button
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="테슷"/>
 	</RelativeLayout>
 
 </RelativeLayout>

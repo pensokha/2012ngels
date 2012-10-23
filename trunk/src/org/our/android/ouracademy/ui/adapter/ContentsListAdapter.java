@@ -4,11 +4,15 @@ import java.util.ArrayList;
 
 import org.our.android.ouracademy.R;
 import org.our.android.ouracademy.model.OurContent;
+import org.our.android.ouracademy.ui.pages.MediaPlayerPage;
 
 import android.content.Context;
-import android.util.Log;
+import android.content.Intent;
+import android.graphics.Color;
+import android.provider.CalendarContract.Colors;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.RelativeLayout;
@@ -109,10 +113,18 @@ public class ContentsListAdapter extends BaseAdapter {
 				holder.itemHolderList[i].itemCellLayout.setVisibility(View.VISIBLE);
 				OurContent model = contentsList.get(currentPositionOfItem);
 				
-//				holder.itemHolderList[i].itemCellLayout.setBackgroundResource();
+//				holder.itemHolderList[i].itemCellLayout.setBackgroundColor(Color.BLUE);
 				holder.itemHolderList[i].contentTitle.setText(model.getSubjectEng());
+				holder.itemHolderList[i].itemCellLayout.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						Intent intent = new Intent(context, MediaPlayerPage.class);
+						intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+						intent.putExtra("VideoPath", "");
+						context.startActivity(intent);
+					}
+				});
 			} else {
-				
 				holder.itemHolderList[i].itemCellLayout.setVisibility(View.GONE);
 			}
 		}

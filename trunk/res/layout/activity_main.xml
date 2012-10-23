@@ -53,7 +53,7 @@
 		                android:text="@string/menu"/>
 	            </LinearLayout>
 			</RelativeLayout>
-            <org.our.android.ouracademy.ui.view.NCHorizontalListView 
+            <org.our.android.ouracademy.ui.view.HorizontalListView 
 		        android:id="@+id/horizontal_listview"
 		        android:layout_width="fill_parent"
 		        android:layout_height="fill_parent"
