@@ -65,40 +65,40 @@ public class TestFileDbCreate {
 
 	static public ArrayList<OurContent> getAllContents() {
 		ArrayList<OurContent> contents = new ArrayList<OurContent>();
-		SQLiteDatabase db = DbManager.getInstance().getDB();
-		Cursor cursor = db.query(CONTENTS_TABLE, FIELDS, null, null, null,
-				null, null);
-
-		while (cursor.moveToNext()) {
-			OurContent content = new OurContent();
-			content.setId(cursor.getString(cursor
-					.getColumnIndex(KEY_CONTENT_ID)));
-			content.setName(cursor.getString(cursor
-					.getColumnIndex(KEY_CONTENT_NAME)));
-			content.setSubject(cursor.getString(cursor
-					.getColumnIndex(KEY_CONTENT_SUBJECT)));
-			content.setSize(cursor.getLong(cursor
-					.getColumnIndex(KEY_CONTENT_SIZE)));
-			content.setCategory(cursor.getString(cursor
-					.getColumnIndex(KEY_CONTENT_CATEGORY)));
-
-			contents.add(content);
-		}
-		cursor.close();
-
+//		SQLiteDatabase db = DbManager.getInstance().getDB();
+//		Cursor cursor = db.query(CONTENTS_TABLE, FIELDS, null, null, null,
+//				null, null);
+//
+//		while (cursor.moveToNext()) {
+//			OurContent content = new OurContent();
+//			content.setId(cursor.getString(cursor
+//					.getColumnIndex(KEY_CONTENT_ID)));
+//			content.setName(cursor.getString(cursor
+//					.getColumnIndex(KEY_CONTENT_NAME)));
+//			content.setSubject(cursor.getString(cursor
+//					.getColumnIndex(KEY_CONTENT_SUBJECT)));
+//			content.setSize(cursor.getLong(cursor
+//					.getColumnIndex(KEY_CONTENT_SIZE)));
+//			content.setCategory(cursor.getString(cursor
+//					.getColumnIndex(KEY_CONTENT_CATEGORY)));
+//
+//			contents.add(content);
+//		}
+//		cursor.close();
+//
 		return contents;
 	}
 
 	static public void setAllContents(ArrayList<OurContent> contents) {
-		for (OurContent content : contents) {
-			DbRow dbRow = new DbRow();
-			dbRow.add(KEY_CONTENT_ID, content.getId());
-			dbRow.add(KEY_CONTENT_NAME, content.getName());
-			dbRow.add(KEY_CONTENT_SUBJECT, content.getSubject());
-			dbRow.add(KEY_CONTENT_SIZE, Long.valueOf(content.getSize()).toString());
-			dbRow.add(KEY_CONTENT_CATEGORY, content.getCategory());
-
-			DbManager.getInstance().insertOrReplace(CONTENTS_TABLE, dbRow);
-		}
+//		for (OurContent content : contents) {
+//			DbRow dbRow = new DbRow();
+//			dbRow.add(KEY_CONTENT_ID, content.getId());
+//			dbRow.add(KEY_CONTENT_NAME, content.getName());
+//			dbRow.add(KEY_CONTENT_SUBJECT, content.getSubject());
+//			dbRow.add(KEY_CONTENT_SIZE, Long.valueOf(content.getSize()).toString());
+//			dbRow.add(KEY_CONTENT_CATEGORY, content.getCategory());
+//
+//			DbManager.getInstance().insertOrReplace(CONTENTS_TABLE, dbRow);
+//		}
 	}
 }
