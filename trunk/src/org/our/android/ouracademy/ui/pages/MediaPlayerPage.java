@@ -6,7 +6,6 @@ import android.app.Activity;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnErrorListener;
-import android.net.Uri;
 import android.os.Bundle;
 import android.widget.VideoView;
 
@@ -23,36 +22,39 @@ public class MediaPlayerPage extends Activity implements MediaPlayer.OnPreparedL
 		mediaView = new MediaPlayerView(this);
 		setContentView(mediaView);
 
-		initVideo();
+//		initVideo();
 	}
 
-	private void initVideo() {
-		mediaVideo = mediaView.getVideo();
-		if (mediaVideo == null) {
-			finish();
-			return;
-		}
-		mediaVideo.setOnPreparedListener(this);
-		mediaVideo.setOnCompletionListener(this);
-		mediaVideo.setOnErrorListener(this);
-
-		// test
-		Uri videoUri = Uri.parse("http://cctvsec.ktict.co.kr/78/u/FtAQITFukDkiiMvDe87iI4p13U/Ro4QMfGPvWABZg4YNkfb8pbmz5+ku01i0/c");
-
-		if (mediaVideo.isPlaying()) {
-			mediaVideo.stopPlayback();
-		}
-		mediaVideo.setVideoURI(videoUri);
-		mediaVideo.start();
-	}
+//	private void initVideo() {
+//		mediaVideo = mediaView.getVideo();
+//		if (mediaVideo == null) {
+//			finish();
+//			return;
+//		}
+//		mediaVideo.setOnPreparedListener(this);
+//		mediaVideo.setOnCompletionListener(this);
+//		mediaVideo.setOnErrorListener(this);
+//
+//		if (mediaVideo.isPlaying()) {
+//			mediaVideo.stopPlayback();
+//		}
+//
+//		// test
+////		Uri videoUri = Uri.parse("http://cctvsec.ktict.co.kr/78/u/FtAQITFukDkiiMvDe87iI4p13U/Ro4QMfGPvWABZg4YNkfb8pbmz5+ku01i0/c");
+////		mediaVideo.setVideoURI(videoUri);
+//
+//		String filePath = FileManager.STRSAVEPATH + "link_v03_9_24_2012_0.mp4";
+//		mediaVideo.setVideoPath(filePath);
+//		mediaVideo.start();
+//	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
 
-		if (mediaVideo.isPlaying()) {
-			mediaVideo.stopPlayback();
-		}
+//		if (mediaVideo.isPlaying()) {
+//			mediaVideo.stopPlayback();
+//		}
 	}
 
 	@Override
@@ -74,9 +76,9 @@ public class MediaPlayerPage extends Activity implements MediaPlayer.OnPreparedL
 	}
 
 	public void finishPage() {
-		if (mediaVideo.isPlaying()) {
-			mediaVideo.stopPlayback();
-		}
+//		if (mediaVideo.isPlaying()) {
+//			mediaVideo.stopPlayback();
+//		}
 
 		this.finish();
 	}

@@ -1,15 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/mainFrame"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="#21272e"
-    android:orientation="vertical" >
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent" 	>
+
+	<SurfaceView 
+	    android:id="@+id/surface"
+	    android:layout_width="wrap_content"
+	    android:layout_height="match_parent"	/>
     
-    <VideoView
-		android:id="@+id/video"
+    <RelativeLayout
 		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:layout_gravity="center" />
-                
-</LinearLayout>
+		android:layout_height="fill_parent" >
+		
+		<TextView
+			android:id="@+id/title"  
+			android:layout_width="fill_parent" 
+			android:layout_height="40dp"
+			android:gravity="center_vertical"
+			android:layout_alignParentTop="true"
+			android:text="01. 덧셈, 뺄셈"
+			android:textSize="18dp"
+			android:textColor="#000000"
+			android:background="#ffffff"
+		/>
+		
+		<Button
+			android:id="@+id/play"  
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+			android:text="Play" 		/>
+		
+		<LinearLayout
+			android:layout_width="fill_parent" 
+			android:layout_height="50dp"		
+			android:orientation="horizontal"
+			android:gravity="center_vertical"
+			android:background="#ffffff" 		
+			android:layout_alignParentBottom="true">
+			
+			<TextView
+				android:id="@+id/runTime"  
+				android:layout_width="wrap_content" 
+				android:layout_height="wrap_content"
+				android:gravity="center_vertical"
+				android:text="00:00"
+				android:textSize="18dp"
+				android:textColor="#000000"
+			/>
+			
+			<SeekBar android:id="@+android:id/progresss"
+				android:layout_width="wrap_content" 
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:layout_margin="5dp" 
+				style="@style/Widget.SeekBar.Normal" />
+			
+			<TextView
+				android:id="@+id/remainingTime"  
+				android:layout_width="wrap_content" 
+				android:layout_height="wrap_content"
+				android:gravity="center_vertical"
+				android:text="00:00"
+				android:textSize="18dp"
+				android:textColor="#000000"
+			/>			
+			
+			<Button
+				android:id="@+id/more"  
+				android:layout_width="wrap_content" 
+				android:layout_height="fill_parent"
+				android:text="more" 		/>
+						
+		</LinearLayout>
+    </RelativeLayout>
+    
+</FrameLayout>
