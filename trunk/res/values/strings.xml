@@ -7,6 +7,9 @@
     
     <!-- main -->
     <string name="menu">MENU</string>
-    <string name="LIST">LIST</string>
+    <string name="list">LIST</string>
+    
+    <string name="category_upper_case">CATEGORY</string>
+    <string name="apply">Apply</string>
 
 </resources>

@@ -3,6 +3,11 @@ package org.our.android.ouracademy.model;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+*
+* @author JiHoon, Moon
+*
+*/
 public class OurContent implements OurJSONModel {
 	public static final String CONTENTS_ID_JSON_KEY = "id";
 	public static final String SUBJECT_ENG_JSON_KEY = "subjectEng";

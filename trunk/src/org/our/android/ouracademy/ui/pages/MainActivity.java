@@ -3,9 +3,12 @@ package org.our.android.ouracademy.ui.pages;
 import java.util.ArrayList;
 
 import org.our.android.ouracademy.R;
+import org.our.android.ouracademy.model.OurCategory;
 import org.our.android.ouracademy.model.OurContent;
+import org.our.android.ouracademy.ui.adapter.CategoryListAdapter;
 import org.our.android.ouracademy.ui.adapter.ContentsListAdapter;
 import org.our.android.ouracademy.ui.view.HorizontalListView;
+import org.our.android.ouracademy.util.ScreenInfo;
 
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -21,6 +24,11 @@ import android.widget.AbsoluteLayout.LayoutParams;
 import android.widget.ImageView;
 import android.widget.ListView;
 
+/**
+*
+* @author JiHoon, Moon
+*
+*/
 @SuppressWarnings("deprecation")
 public class MainActivity extends BaseActivity {
 	private ViewGroup menuLayout;
@@ -40,6 +48,7 @@ public class MainActivity extends BaseActivity {
 	ContentsListAdapter contentsListAdapter;
 
 	ArrayList<OurContent> contentsList;
+	ArrayList<OurCategory> categoryList;
 
 	enum TouchStatus {
 		START_DRAGGING,
@@ -95,7 +104,12 @@ public class MainActivity extends BaseActivity {
         //상단화면 CashBitmap이 저장된 iamgeView
         decoyImage = new ImageView(this);
         
-        contentsList = new ArrayList<OurContent>();
+        initContentsLayout();
+        initMenuLayout();
+	}
+	
+	private void initContentsLayout() {
+		contentsList = new ArrayList<OurContent>();
         
         String[] temp = {"우와","이야","오오","우우","하하","대박","중박","쪽박","말박","이야","오오","우우","하하","대박","중박","쪽박","말박"
         		,"이야","오오","우우","하하","대박","중박","쪽박","말박"
@@ -112,6 +126,24 @@ public class MainActivity extends BaseActivity {
         HorizontalListView listView = (HorizontalListView) findViewById(R.id.horizontal_listview);
         contentsListAdapter = new ContentsListAdapter(this, contentsList);
         listView.setAdapter(contentsListAdapter);
+	}
+	
+	private void initMenuLayout() {
+		ViewGroup menuListLayout = (ViewGroup)menuLayout.findViewById(R.id.menu_category_listview);
+		
+		categoryList = new ArrayList<OurCategory>();
+		String[] temp = {"English", "Math", "Korean", " Social Study", "science", "Music", "Art",
+				 "Physical education", "Practical course", "Ethics"};
+		OurCategory ourCategory;
+		for (String tt : temp) {
+			ourCategory = new OurCategory();
+			ourCategory.setCategoryTitleEng(tt);
+			categoryList.add(ourCategory);
+		}
+		ListView listView = new ListView(this);
+		CategoryListAdapter adapter = new CategoryListAdapter(this, R.layout.layout_category_list_item, categoryList);
+		listView.setAdapter(adapter);
+		menuListLayout.addView(listView, new ViewGroup.LayoutParams(ScreenInfo.dp2px(249.33f), LayoutParams.FILL_PARENT));
 	}
 
 	private void setDetailLayoutImageCache(LayoutParams params) {
