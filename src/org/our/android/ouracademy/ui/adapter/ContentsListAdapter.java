@@ -8,8 +8,6 @@ import org.our.android.ouracademy.ui.pages.MediaPlayerPage;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.provider.CalendarContract.Colors;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,7 +16,11 @@ import android.widget.BaseAdapter;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-
+/**
+*
+* @author JiHoon, Moon
+*
+*/
 public class ContentsListAdapter extends BaseAdapter {
 	private Context context;
 	ArrayList<OurContent> contentsList = null;
