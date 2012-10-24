@@ -24,12 +24,12 @@ public class DbManager {
 
 		@Override
 		public void onCreate(SQLiteDatabase db) {
-			//db.execSQL(DATABASE_CREATE);
+			// db.execSQL(DATABASE_CREATE);
 		}
 
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-			//db.execSQL("DROP IF TABLE EXISTS "+DATABASE_TABLE);
+			// db.execSQL("DROP IF TABLE EXISTS "+DATABASE_TABLE);
 			onCreate(db);
 		}
 	}
@@ -47,7 +47,7 @@ public class DbManager {
 		}
 	}
 
-	/////////////////////////////////////////////////////////////
+	// ///////////////////////////////////////////////////////////
 	DbManager() {
 
 	}
@@ -58,7 +58,7 @@ public class DbManager {
 
 	public boolean create(Context ctx, String name) {
 		try {
-			mDb = ctx.openOrCreateDatabase(name, 0, null);//MODE_WORLD_READABLE
+			mDb = ctx.openOrCreateDatabase(name, 0, null);// MODE_WORLD_READABLE
 		} catch (Exception err) {
 			return (false);
 		}
@@ -67,7 +67,8 @@ public class DbManager {
 	}
 
 	public SQLiteDatabase getDB() {
-		// http://stackoverflow.com/questions/1483629/exception-attempt-to-acquire-a-reference-on-a-close-sqliteclosable 이슈로 인해 수정
+		// http://stackoverflow.com/questions/1483629/exception-attempt-to-acquire-a-reference-on-a-close-sqliteclosable
+		// 이슈로 인해 수정
 		if (mDbHelper != null) {
 			return mDbHelper.getWritableDatabase();
 		} else {
@@ -75,14 +76,34 @@ public class DbManager {
 		}
 	}
 
+	public boolean beginTransaction() {
+		SQLiteDatabase db = getDB();
+		if (db != null && db.inTransaction() == false) {
+			db.beginTransaction();
+			return db.inTransaction();
+		} else {
+			return false;
+		}
+	}
+	
+	public boolean endTransaction(){
+		SQLiteDatabase db = getDB();
+		if (db != null && db.inTransaction() == false) {
+			db.endTransaction();
+			return !db.inTransaction();
+		}else {
+			return false;
+		}
+	}
+
 	/* Table operations */
 	public boolean createTable(String tableName, ContentValues values) {
-		//		int i;
+		// int i;
 		String statement = "CREATE TABLE IF NOT EXISTS ";
 		statement += tableName;
 		statement += " ";
 		statement += "(";
-		//	statement += tableEntries;
+		// statement += tableEntries;
 
 		Set set = values.valueSet();
 
@@ -142,9 +163,10 @@ public class DbManager {
 		}
 		return (true);
 	}
-	
+
 	public boolean copyTable(String from, String to) {
-		String sql = String.format("CREATE TABLE %s AS SELECT * FROM %s", to, from);
+		String sql = String.format("CREATE TABLE %s AS SELECT * FROM %s", to,
+				from);
 		SQLiteDatabase db = getDB();
 
 		try {
@@ -161,7 +183,9 @@ public class DbManager {
 	}
 
 	public boolean isTableExist(String tableName) {
-		String sql = String.format("SELECT COUNT(*) FROM sqlite_master WHERE type='table' and name='%s'", tableName);
+		String sql = String
+				.format("SELECT COUNT(*) FROM sqlite_master WHERE type='table' and name='%s'",
+						tableName);
 		Cursor cursor = null;
 		boolean result = false;
 		SQLiteDatabase db = getDB();
@@ -191,7 +215,7 @@ public class DbManager {
 
 	public void deleteTable(String tableName) {
 		try {
-			//mDb.execSQL("DROP IF TABLE EXISTS "+tableName);
+			// mDb.execSQL("DROP IF TABLE EXISTS "+tableName);
 			SQLiteDatabase db = getDB();
 			if (db != null) {
 				db.delete(tableName, null, null);
@@ -200,13 +224,13 @@ public class DbManager {
 			err.printStackTrace();
 		}
 	}
-	
+
 	public void dropTable(String tableName) {
 		try {
 			SQLiteDatabase db = getDB();
-			
+
 			if (db != null) {
-				db.execSQL("DROP TABLE IF EXISTS "+tableName);
+				db.execSQL("DROP TABLE IF EXISTS " + tableName);
 			}
 		} catch (Exception err) {
 			err.printStackTrace();
@@ -218,18 +242,20 @@ public class DbManager {
 		try {
 			SQLiteDatabase db = getDB();
 			if (db != null) {
-				cursor = db.query(tableName, columns, condition, null, null, null, null);
+				cursor = db.query(tableName, columns, condition, null, null,
+						null, null);
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 		return (cursor);
 	}
-	
+
 	public Cursor selectAllColumns(String tableName, String condition) {
 		Cursor cursor = null;
 		try {
-			String sql = String.format("SELECT * FROM %s WHERE %s", tableName,condition);
+			String sql = String.format("SELECT * FROM %s WHERE %s", tableName,
+					condition);
 			SQLiteDatabase db = getDB();
 			if (db != null) {
 				cursor = db.rawQuery(sql, null);
@@ -242,14 +268,15 @@ public class DbManager {
 
 		return (cursor);
 	}
-	
-	
-	public Cursor selectByOrder(String tableName, String[] columns, String condition, String order) {
+
+	public Cursor selectByOrder(String tableName, String[] columns,
+			String condition, String order) {
 		Cursor cursor = null;
 		try {
 			SQLiteDatabase db = getDB();
 			if (db != null) {
-				cursor = db.query(tableName, columns, condition, null, null, null, order);
+				cursor = db.query(tableName, columns, condition, null, null,
+						null, order);
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -259,21 +286,13 @@ public class DbManager {
 
 	public long insert(String tableName, DbRow row) {
 		/*
-				long result = 0;
-				try
-				{
-					InsertHelper helper = new DatabaseUtils.InsertHelper(mDb,tableName);
-					//helper.prepareForReplace();
-					//helper.execute();
-					//helper.close();
-					helper.replace(row.getConentValues());
-					//result = mDb.insert(tableName, null, row.getConentValues());
-				} catch (Exception err)
-				{
-					err.printStackTrace();
-				}
-				return (result);
-		*/
+		 * long result = 0; try { InsertHelper helper = new
+		 * DatabaseUtils.InsertHelper(mDb,tableName);
+		 * //helper.prepareForReplace(); //helper.execute(); //helper.close();
+		 * helper.replace(row.getConentValues()); //result =
+		 * mDb.insert(tableName, null, row.getConentValues()); } catch
+		 * (Exception err) { err.printStackTrace(); } return (result);
+		 */
 		return (insertOrReplace(tableName, row));
 	}
 
@@ -305,12 +324,10 @@ public class DbManager {
 
 		try {
 			/*
-			SQLiteStatement statement = mDb.compileStatement(sql);
-			for (int i = 0; i < row.getLength(); i++)
-				statement.bindString(i , row.getValue(i));
-			statement.execute();
-			//result = mDb.insert(tableName, null, row.getConentValues());
-			 
+			 * SQLiteStatement statement = mDb.compileStatement(sql); for (int i
+			 * = 0; i < row.getLength(); i++) statement.bindString(i ,
+			 * row.getValue(i)); statement.execute(); //result =
+			 * mDb.insert(tableName, null, row.getConentValues());
 			 */
 
 			SQLiteDatabase db = getDB();
@@ -326,16 +343,17 @@ public class DbManager {
 		}
 		return (result);
 	}
-	
-	public long delete(String tableName, String whereClause, String[] whereArgs) {
+
+	public long delete(String tableName, String whereClause, String[] whereArgs) throws Exception {
 		long result = 0;
 		try {
 			SQLiteDatabase db = getDB();
 			result = db.delete(tableName, whereClause, whereArgs);
 		} catch (Exception err) {
 			err.printStackTrace();
+			throw err;
 		}
-		
+
 		return result;
 	}
 
@@ -347,13 +365,13 @@ public class DbManager {
 		return insert(tableName, "INSERT OR IGNORE", row);
 	}
 
-	public long insertOrUpdate(String tableName, DbRow row,String condition) {
+	public long insertOrUpdate(String tableName, DbRow row, String condition) {
 		long result = 0;
 		SQLiteDatabase db = getDB();
 
 		result = insertOrIgnore(tableName, row);
 		result = db.update(tableName, row.getConentValues(), condition, null);
-	
+
 		return (result);
 	}
 
@@ -373,15 +391,18 @@ public class DbManager {
 		}
 		return (-1);
 	}
-	
-	public void addColumn(String tableName, String columnName, String type, String defaultValue) {
-		Cursor dbCursor = this.getDB().rawQuery("SELECT * from " + tableName + " LIMIT 1", null);
+
+	public void addColumn(String tableName, String columnName, String type,
+			String defaultValue) {
+		Cursor dbCursor = this.getDB().rawQuery(
+				"SELECT * from " + tableName + " LIMIT 1", null);
 		if (dbCursor.getColumnIndex(columnName) == -1) {
 			SQLiteDatabase db = this.getDB();
 			if (db != null) {
-				String query = "ALTER TABLE " + tableName + " ADD " + columnName + " " + type + " " + defaultValue;
+				String query = "ALTER TABLE " + tableName + " ADD "
+						+ columnName + " " + type + " " + defaultValue;
 				db.execSQL(query);
-				db.close(); // 다시 들어왔을 때 Column 을 정상적으로 보여주기 위해 close 한다.	
+				db.close(); // 다시 들어왔을 때 Column 을 정상적으로 보여주기 위해 close 한다.
 			}
 		}
 		dbCursor.close();

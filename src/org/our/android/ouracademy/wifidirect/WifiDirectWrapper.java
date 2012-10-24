@@ -157,14 +157,10 @@ public class WifiDirectWrapper {
 	public void setting() {
 		register();
 
-//		if (OurPreferenceManager.getInstance().isTeacher() == true) {
+		if (OurPreferenceManager.getInstance().isTeacher() == true) {
 			serviceName = context.startService(new Intent(context,
 					P2PService.class));
-			Log.d(TAG, serviceName.toString());
-			serviceName = context.startService(new Intent(context,
-					P2PService.class));
-			Log.d(TAG, serviceName.toString());
-//		}
+		}
 	}
 
 	public void resetService(ActionListener listener) {

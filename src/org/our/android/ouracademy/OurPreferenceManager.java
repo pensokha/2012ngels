@@ -16,6 +16,7 @@ public class OurPreferenceManager {
 
 	public final static String PREFERENCE_KEY = "our";
 	private static final String MODE = "MODE";
+	private static final String VERSION = "VERSION";
 
 	/***
 	 * 
@@ -170,5 +171,13 @@ public class OurPreferenceManager {
 
 	public boolean setStudentMode() {
 		return setIntValue(MODE, Mode.STUDENT.ordinal());
+	}
+
+	public boolean setVersion(int version) {
+		return setIntValue(VERSION, version);
+	}
+
+	public int getVersion() {
+		return getIntValue(VERSION);
 	}
 }
