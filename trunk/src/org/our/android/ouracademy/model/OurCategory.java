@@ -25,7 +25,7 @@ public class OurCategory implements OurJSONModel {
 	public OurCategory() {
 		
 	}
-	public OurCategory(String categoryId, String categoryDepth ,String categoryTitleEng ,String categoryTitleKmr, 
+	public OurCategory(String categoryId, int categoryDepth ,String categoryTitleEng ,String categoryTitleKmr, 
 			String categoryDescriptionEng, String categoryDescriptionKmr, String categoryParent) {
 		this.categoryId = categoryId;
 		this.categoryDepth = categoryDepth;
