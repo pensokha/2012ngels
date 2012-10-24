@@ -149,13 +149,34 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
 
 	private void addAndMeasureChild(final View child, int viewPos) {
 		LayoutParams params = child.getLayoutParams();
+		int     childWidth;
+        int     childWidthMeasureSpec;
+        int     childHeight;
+        int     childHeightMeasureSpec;
+        
 		if (params == null) {
 			params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 		}
+		
+		childWidth = getWidth();
+        childWidthMeasureSpec = MeasureSpec.AT_MOST;
+         
+        if (params.height == LayoutParams.WRAP_CONTENT) {
+            childHeight = getHeight();
+            childHeightMeasureSpec = MeasureSpec.AT_MOST;
+             
+        } else if (params.height == LayoutParams.FILL_PARENT) {
+            childHeight = getHeight();
+            childHeightMeasureSpec = MeasureSpec.EXACTLY;
+             
+        } else {
+            childHeight = params.height;
+            childHeightMeasureSpec = MeasureSpec.EXACTLY;
+        }
 
 		addViewInLayout(child, viewPos, params, true);
-		child.measure(MeasureSpec.makeMeasureSpec(getWidth(), MeasureSpec.AT_MOST),
-				MeasureSpec.makeMeasureSpec(getHeight(), MeasureSpec.AT_MOST));
+		child.measure(MeasureSpec.makeMeasureSpec(childWidth, childWidthMeasureSpec),
+                MeasureSpec.makeMeasureSpec(childHeight, childHeightMeasureSpec));
 	}
 
 	@Override
@@ -297,6 +318,12 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
 		handled |= mGesture.onTouchEvent(ev);
 		return handled;
 	}
+	
+	@Override
+    public boolean onTouchEvent(MotionEvent event) {
+        super.onTouchEvent(event);
+        return true;
+    }
 
 	protected boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
 				float velocityY) {
