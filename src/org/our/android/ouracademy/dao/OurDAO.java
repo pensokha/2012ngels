@@ -7,6 +7,8 @@ import org.our.android.ouracademy.model.OurContent;
 import org.our.android.ouracademy.model.OurMetaInfo;
 import org.our.android.ouracademy.util.DbManager;
 
+import android.util.Log;
+
 public abstract class OurDAO {
 	protected OurPreferenceManager pref;
 	protected DbManager dbManager;
@@ -42,6 +44,8 @@ public abstract class OurDAO {
 			
 			categoryDao.insertCategories(metaInfo.getCategories());
 			contentDao.insertContents(metaInfo.getContents(), false);
+			
+			dbManager.commitTransaction();
 		} catch (DAOException err) {
 			dbManager.endTransaction();
 			throw err;

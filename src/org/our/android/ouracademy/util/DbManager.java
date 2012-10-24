@@ -4,12 +4,16 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.our.android.ouracademy.dao.CategoryDAO;
+import org.our.android.ouracademy.dao.ContentDAO;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 public class DbManager {
 
@@ -24,7 +28,13 @@ public class DbManager {
 
 		@Override
 		public void onCreate(SQLiteDatabase db) {
-			// db.execSQL(DATABASE_CREATE);
+			try {
+				db.execSQL(CategoryDAO.CATEGORY_DDL);
+				db.execSQL(ContentDAO.CONTENT_DDL);
+				db.execSQL(ContentDAO.CONTENT_CATEGORY_DDL);
+			} catch (Exception e) {
+				Log.d("DB Create", e.toString());
+			}
 		}
 
 		@Override
@@ -86,9 +96,13 @@ public class DbManager {
 		}
 	}
 	
+	public void commitTransaction(){
+		getDB().setTransactionSuccessful();
+	}
+	
 	public boolean endTransaction(){
 		SQLiteDatabase db = getDB();
-		if (db != null && db.inTransaction() == false) {
+		if (db != null && db.inTransaction() == true) {
 			db.endTransaction();
 			return !db.inTransaction();
 		}else {
