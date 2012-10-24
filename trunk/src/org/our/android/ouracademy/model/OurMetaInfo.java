@@ -6,6 +6,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Log;
+
 public class OurMetaInfo implements OurJSONModel {
 	public static final int RES_CODE_SUCCESS = 0;
 	public static final int RES_CODE_DONT_NEED_UPDATE = -100;
@@ -70,6 +72,7 @@ public class OurMetaInfo implements OurJSONModel {
 			for (int i = 0; i < jsonCategories.length(); i++) {
 				OurCategory category = new OurCategory();
 				category.setFromJSONObject(jsonCategories.getJSONObject(i));
+				categories.add(category);
 			}
 		}
 		if (json.has(CONTENTS_JSON_KEY)) {
@@ -78,6 +81,7 @@ public class OurMetaInfo implements OurJSONModel {
 			for (int i = 0; i < jsonContents.length(); i++) {
 				OurContent content = new OurContent();
 				content.setFromJSONObject(jsonContents.getJSONObject(i));
+				contents.add(content);
 			}
 		}
 	}

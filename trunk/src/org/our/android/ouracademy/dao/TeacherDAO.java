@@ -5,14 +5,17 @@ import java.util.ArrayList;
 import org.our.android.ouracademy.model.OurContent;
 import org.our.android.ouracademy.model.OurMetaInfo;
 
+import android.util.Log;
+
 public class TeacherDAO extends OurDAO {
 
 	@Override
 	public ArrayList<OurContent> getInitContents() throws DAOException {
 		FSIDAO fsiDao = new FSIDAO();
 		OurMetaInfo metaInfo = fsiDao.getMetaInfo();
+		
 		ArrayList<OurContent> contents;
-		switch (metaInfo.getVersion()) {
+		switch (metaInfo.getResponseCode()) {
 			case OurMetaInfo.RES_CODE_SUCCESS:
 				insertMetaInfo(metaInfo);
 				break;

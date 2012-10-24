@@ -10,12 +10,14 @@ import org.our.android.ouracademy.dao.StudentDAO;
 import org.our.android.ouracademy.dao.TeacherDAO;
 import org.our.android.ouracademy.model.OurCategory;
 import org.our.android.ouracademy.model.OurContent;
+import org.our.android.ouracademy.ui.adapter.CategoryListAdapter;
 import org.our.android.ouracademy.ui.adapter.ContentsListAdapter;
 import org.our.android.ouracademy.ui.view.HorizontalListView;
 import org.our.android.ouracademy.util.ScreenInfo;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -78,7 +80,7 @@ public class MainActivity extends BaseActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-//		initData();
+		initData();
 		initUI();
 	}
 
@@ -107,6 +109,7 @@ public class MainActivity extends BaseActivity {
 	}
 
 	private void initData() {
+		OurPreferenceManager.getInstance().setTeacherMode();
 		OurDAO dataDao = getOurDataDAO();
 		// TODO : 모든 경우 : 현존하는 파일과 DB정보를 일치 시킨다. - File에서 Meta 정보를 추출하는 기능을 개발 후
 		// 작업을 한다.
@@ -116,6 +119,8 @@ public class MainActivity extends BaseActivity {
 		// 학생일 경우 : DB로 부터 Data를 로딩한다.
 		try {
 			contentsList = dataDao.getInitContents();
+			
+			Log.d("Test", ""+contentsList.size());
 		} catch (DAOException e) {
 //			e.printStackTrace();
 		}
@@ -142,7 +147,7 @@ public class MainActivity extends BaseActivity {
 	}
 	
 	private void initContentsLayout() {
-		contentsList = new ArrayList<OurContent>();
+//		contentsList = new ArrayList<OurContent>();
         
         String[] temp = {"우와","이야","오오","우우","하하","대박","중박","쪽박","말박","이야","오오","우우","하하","대박","중박","쪽박","말박"
         		,"이야","오오","우우","하하","대박","중박","쪽박","말박"
@@ -153,7 +158,7 @@ public class MainActivity extends BaseActivity {
         for (String tt : temp) {
         	ourContent = new OurContent();
         	ourContent.setSubjectEng(tt);
-        	contentsList.add(ourContent);
+//        	contentsList.add(ourContent);
         }
         
         HorizontalListView listView = (HorizontalListView) findViewById(R.id.horizontal_listview);

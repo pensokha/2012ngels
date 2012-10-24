@@ -16,6 +16,14 @@ public class CategoryDAO {
 	public static final String DESCRIPTION_ENG_KEY = "description_eng";
 	public static final String DESCRIPTION_KMR_KEY = "description_kmr";
 	public static final String PARENT_ID_KEY = "parent_category_id";
+	public static final String ICON_KEY = "icon";
+
+	public static final String CATEGORY_DDL = "CREATE TABLE "
+			+ CATEGORY_TABLE_NAME + "(" + ID_KEY + " VARCHAR PRIMARY KEY, "
+			+ DEPTH_KEY + " INTEGER, " + TITLE_ENG_KEY + " VARCHAR, "
+			+ TITLE_KMR_KEY + " VARCHAR, " + DESCRIPTION_ENG_KEY + " TEXT, "
+			+ DESCRIPTION_KMR_KEY + " TEXT," + PARENT_ID_KEY + " VARCHAR, "
+			+ ICON_KEY + " VARCHAR);";
 
 	private DbManager dbManager;
 
@@ -26,11 +34,12 @@ public class CategoryDAO {
 	}
 
 	public void deleteAllCategories() throws DAOException {
-		//성공 실패 여부 Check 해야됨
+		// 성공 실패 여부 Check 해야됨
 		dbManager.deleteTable(CATEGORY_TABLE_NAME);
 	}
 
-	public void insertCategories(ArrayList<OurCategory> categories) throws DAOException {
+	public void insertCategories(ArrayList<OurCategory> categories)
+			throws DAOException {
 		for (OurCategory category : categories) {
 			DbRow dbrow = new DbRow();
 			dbrow.add(ID_KEY, category.getCategoryId());

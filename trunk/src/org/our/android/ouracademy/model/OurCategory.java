@@ -91,7 +91,30 @@ public class OurCategory implements OurJSONModel {
 	public void setCategoryParent(String categoryParent) {
 		this.categoryParent = categoryParent;
 	}
-
+	
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("OurCategory [categoryId=");
+		builder.append(categoryId);
+		builder.append(", categoryDepth=");
+		builder.append(categoryDepth);
+		builder.append(", categoryTitleEng=");
+		builder.append(categoryTitleEng);
+		builder.append(", categoryTitleKmr=");
+		builder.append(categoryTitleKmr);
+		builder.append(", categoryDescriptionEng=");
+		builder.append(categoryDescriptionEng);
+		builder.append(", categoryDescriptionKmr=");
+		builder.append(categoryDescriptionKmr);
+		builder.append(", categoryParent=");
+		builder.append(categoryParent);
+		builder.append(", isChecked=");
+		builder.append(isChecked);
+		builder.append("]");
+		return builder.toString();
+	}
+	
 	@Override
 	public JSONObject getJSONObject() throws JSONException {
 		// TODO Auto-generated method stub
