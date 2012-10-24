@@ -2,10 +2,14 @@ package org.our.android.ouracademy.ui.pages;
 
 import java.util.ArrayList;
 
+import org.our.android.ouracademy.OurPreferenceManager;
 import org.our.android.ouracademy.R;
+import org.our.android.ouracademy.dao.DAOException;
+import org.our.android.ouracademy.dao.OurDAO;
+import org.our.android.ouracademy.dao.StudentDAO;
+import org.our.android.ouracademy.dao.TeacherDAO;
 import org.our.android.ouracademy.model.OurCategory;
 import org.our.android.ouracademy.model.OurContent;
-import org.our.android.ouracademy.ui.adapter.CategoryListAdapter;
 import org.our.android.ouracademy.ui.adapter.ContentsListAdapter;
 import org.our.android.ouracademy.ui.view.HorizontalListView;
 import org.our.android.ouracademy.util.ScreenInfo;
@@ -74,6 +78,7 @@ public class MainActivity extends BaseActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+//		initData();
 		initUI();
 	}
 
@@ -91,6 +96,29 @@ public class MainActivity extends BaseActivity {
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
+	}
+	
+	private OurDAO getOurDataDAO() {
+		if (OurPreferenceManager.getInstance().isTeacher()) {
+			return new TeacherDAO();
+		} else {
+			return new StudentDAO();
+		}
+	}
+
+	private void initData() {
+		OurDAO dataDao = getOurDataDAO();
+		// TODO : 모든 경우 : 현존하는 파일과 DB정보를 일치 시킨다. - File에서 Meta 정보를 추출하는 기능을 개발 후
+		// 작업을 한다.
+		dataDao.sync();
+
+		// 선생님일 경우 : FSI로 부터 Data를 로딩한다.
+		// 학생일 경우 : DB로 부터 Data를 로딩한다.
+		try {
+			contentsList = dataDao.getInitContents();
+		} catch (DAOException e) {
+//			e.printStackTrace();
+		}
 	}
 
 	private void initUI() {
