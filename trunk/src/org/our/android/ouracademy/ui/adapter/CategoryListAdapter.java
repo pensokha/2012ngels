@@ -1,7 +1,6 @@
 package org.our.android.ouracademy.ui.adapter;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.our.android.ouracademy.R;
 import org.our.android.ouracademy.model.OurCategory;
@@ -48,8 +47,14 @@ public class CategoryListAdapter extends ArrayAdapter<OurCategory> {
 		
 		OurCategory ourCategory = getItem(position);
 		
-	itemHolder.txt.setText(ourCategory.getCategoryTitleEng());
+		itemHolder.txt.setText(ourCategory.getCategoryTitleEng());
 		itemHolder.icon.setImageResource(R.drawable.subject_icon_math);
+		
+		if (ourCategory.isChecked) {
+			itemHolder.check.setVisibility(View.VISIBLE);
+		} else {
+			itemHolder.check.setVisibility(View.INVISIBLE);
+		}
 		
 		return convertView;
 	}

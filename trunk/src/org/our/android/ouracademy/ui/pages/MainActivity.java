@@ -10,9 +10,11 @@ import org.our.android.ouracademy.ui.adapter.ContentsListAdapter;
 import org.our.android.ouracademy.ui.view.HorizontalListView;
 import org.our.android.ouracademy.util.ScreenInfo;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -21,6 +23,9 @@ import android.view.animation.AnimationSet;
 import android.view.animation.TranslateAnimation;
 import android.widget.AbsoluteLayout;
 import android.widget.AbsoluteLayout.LayoutParams;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 
@@ -141,9 +146,34 @@ public class MainActivity extends BaseActivity {
 			categoryList.add(ourCategory);
 		}
 		ListView listView = new ListView(this);
-		CategoryListAdapter adapter = new CategoryListAdapter(this, R.layout.layout_category_list_item, categoryList);
+		final CategoryListAdapter adapter = new CategoryListAdapter(this, R.layout.layout_category_list_item, categoryList);
 		listView.setAdapter(adapter);
+		listView.setDivider(null);
+		listView.setCacheColorHint(Color.TRANSPARENT);
+		listView.setSelector(android.R.color.transparent);
+		listView.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> list, View view, int position, long id) {
+				OurCategory ourCategory = categoryList.get(position);
+				if (ourCategory.isChecked) {
+					ourCategory.isChecked = false;
+				} else {
+					ourCategory.isChecked = true;
+				}
+				adapter.notifyDataSetChanged();
+			}
+		});
+		
 		menuListLayout.addView(listView, new ViewGroup.LayoutParams(ScreenInfo.dp2px(249.33f), LayoutParams.FILL_PARENT));
+		
+		Button button = (Button) menuLayout.findViewById(R.id.menu_apply_btn);
+		
+		button.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				onClickMenu(null);
+			}
+		});
 	}
 
 	private void setDetailLayoutImageCache(LayoutParams params) {

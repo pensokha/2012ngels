@@ -20,6 +20,8 @@ public class OurCategory implements OurJSONModel {
 	private String categoryDescriptionKmr;
 	private String categoryParent;
 	
+	public boolean isChecked = false;
+	
 	public OurCategory() {
 		
 	}
