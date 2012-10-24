@@ -58,12 +58,22 @@
     </style>
 	
    <style name="Widget.SeekBar.Normal" parent="@android:style/Widget.SeekBar">
-        <item name="android:maxHeight">18dip</item>
+        <item name="android:maxHeight">15dip</item>
         <item name="android:indeterminateOnly">false</item>
         <item name="android:indeterminateDrawable">@android:drawable/progress_indeterminate_horizontal</item>
         <item name="android:progressDrawable">@drawable/custom_seek_bar</item>
-        <item name="android:minHeight">18dip</item>
-        <item name="android:thumb">@drawable/seek_thumb</item>
+        <item name="android:minHeight">15dip</item>
+        <item name="android:thumb">@drawable/player_ctrl_time03</item>
+        <item name="android:thumbOffset">10dip</item>
+    </style>
+
+      <style name="Widget.SeekBar.Sound" parent="@android:style/Widget.SeekBar">
+        <item name="android:maxHeight">11.33dp</item>
+        <item name="android:indeterminateOnly">false</item>
+        <item name="android:indeterminateDrawable">@android:drawable/progress_indeterminate_horizontal</item>
+        <item name="android:progressDrawable">@drawable/custom_seek_bar</item>
+        <item name="android:minHeight">11.33dp</item>
+        <item name="android:thumb">@drawable/player_ctrl_sound03</item>
         <item name="android:thumbOffset">10dip</item>
     </style>
 </resources>
