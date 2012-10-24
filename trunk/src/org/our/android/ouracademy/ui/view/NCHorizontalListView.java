@@ -42,6 +42,7 @@ public class NCHorizontalListView extends AdapterView<ListAdapter> {
 	private Runnable finished;
 
 	boolean isBounceEnabled = false;
+	int action = -1;
 
 	public NCHorizontalListView(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -389,6 +390,20 @@ public class NCHorizontalListView extends AdapterView<ListAdapter> {
 	@Override
 	public boolean dispatchTouchEvent(MotionEvent ev) {
 		boolean handled = gesture.onTouchEvent(ev);
+
+		if (ev.getAction() == 1) {
+			if (action == 0) {
+				super.dispatchTouchEvent(ev);
+			} else {
+				ev.setAction(MotionEvent.ACTION_CANCEL);
+				super.dispatchTouchEvent(ev);
+			}
+		} else if (ev.getAction() == 0) {
+			super.dispatchTouchEvent(ev);
+		}
+
+		action = ev.getAction();
+
 		return handled;
 	}
 
