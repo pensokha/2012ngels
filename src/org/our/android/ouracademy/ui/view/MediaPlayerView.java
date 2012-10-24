@@ -3,6 +3,7 @@ package org.our.android.ouracademy.ui.view;
 import org.our.android.ouracademy.R;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.SurfaceView;
@@ -37,7 +38,7 @@ public class MediaPlayerView extends LinearLayout implements View.OnClickListene
 	LinearLayout closeBtn, soundBtn, moreBtn, list, soundControll;
 	LinearLayout frame;
 
-	TextView runTime, remainingTime;
+	TextView title, runTime, remainingTime;
 
 	OnMediaPlayerViewCb mediaPlayerViewCb;
 
@@ -72,6 +73,7 @@ public class MediaPlayerView extends LinearLayout implements View.OnClickListene
 		moreBtn = (LinearLayout)findViewById(R.id.moreBtn);
 		moreBtn.setOnClickListener(this);
 
+		title = (TextView)findViewById(R.id.title);
 		runTime = (TextView)findViewById(R.id.runTime);
 		remainingTime = (TextView)findViewById(R.id.remainingTime);
 
@@ -196,6 +198,13 @@ public class MediaPlayerView extends LinearLayout implements View.OnClickListene
 		} else {
 			playBtn.setBackgroundResource(R.drawable.btn_state_play_stop);
 		}
+	}
+
+	public void setTitleText(String text) {
+		if (TextUtils.isEmpty(text) || title == null) {
+			return;
+		}
+		title.setText(text);
 	}
 
 	public void setRunTimeText(int milliseconds) {
