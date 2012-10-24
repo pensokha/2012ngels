@@ -1,44 +1,30 @@
 package org.our.android.ouracademy.model;
 
+import java.util.ArrayList;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-/**
-*
-* @author JiHoon, Moon
-*
-*/
 public class OurContent implements OurJSONModel {
-	public static final String CONTENTS_ID_JSON_KEY = "id";
-	public static final String SUBJECT_ENG_JSON_KEY = "subjectEng";
-	public static final String SUBJECT_KMR_JSON_KEY = "subjectKmr";
-	public static final String CATEGIRY_ID_JSON_KEY = "categoryId";
-	public static final String CATEGIRY_ENG_JSON_KEY = "categoryEng";
-	public static final String CATEGIRY_KRM_JSON_KEY = "categoryKmr";
-	public static final String SUBCATEGIRY_ID_JSON_KEY = "subCategoryId";
-	public static final String SUBCATEGIRY_ENG_JSON_KEY = "subCategoryEng";
-	public static final String SUBCATEGIRY_KMR_JSON_KEY = "subCategoryKmr";
-	public static final String DESCRIPTION_ENG_JSON_KEY = "descriptionEng";
-	public static final String DESCRIPTION_KMR_JSON_KEY = "descriptionKmr";
-	public static final String CONTENT_URL_JSON_KEY = "contentUrl";
-	public static final String SUBTITLE_URL_JSON_KEY = "subtitleUrl";
-	
+	public static final String CONTENTS_ID_JSON_KEY = "ID";
+	public static final String SUBJECT_ENG_JSON_KEY = "subjectEnglish";
+	public static final String SUBJECT_KMR_JSON_KEY = "subjectKhmer";
+	public static final String CONTENT_URL_JSON_KEY = "ContentUrl";
+	public static final String SUBTITLE_URL_JSON_KEY = "SubTitleFileUrl";
+	public static final String SIZE_JSON_KEY = "size";
+	public static final String CATEGORY_ID_LIST_JSON_KEY = "CategoryIDList";
+
 	private String id;
 	private String subjectEng;
 	private String subjectKmr;
-	private String categoryId;
-	private String categoryEng;
-	private String categoryKmr;
-	private String subCategoryId;
-	private String subCategoryEng;
-	private String subCategoryKmr;
-	private String descriptionEng;
-	private String descriptionKmr;
-	private String contentsUrl;
+	private String contentUrl;
 	private String subtitleUrl;
 	private long size;
+	private ArrayList<String> categoryIdList;
+	private long downloadedSize;
 	public boolean isDownloaded;
-	
+
 	public OurContent() {
 		super();
 	}
@@ -67,76 +53,12 @@ public class OurContent implements OurJSONModel {
 		this.subjectKmr = subjectKmr;
 	}
 
-	public String getCategoryId() {
-		return categoryId;
-	}
-
-	public void setCategoryId(String categoryId) {
-		this.categoryId = categoryId;
-	}
-
-	public String getCategoryEng() {
-		return categoryEng;
-	}
-
-	public void setCategoryEng(String categoryEng) {
-		this.categoryEng = categoryEng;
-	}
-
-	public String getCategoryKmr() {
-		return categoryKmr;
-	}
-
-	public void setCategoryKmr(String categoryKmr) {
-		this.categoryKmr = categoryKmr;
-	}
-
-	public String getSubCategoryId() {
-		return subCategoryId;
-	}
-
-	public void setSubCategoryId(String subCategoryId) {
-		this.subCategoryId = subCategoryId;
-	}
-
-	public String getSubCategoryEng() {
-		return subCategoryEng;
-	}
-
-	public void setSubCategoryEng(String subCategoryEng) {
-		this.subCategoryEng = subCategoryEng;
-	}
-
-	public String getSubCategoryKmr() {
-		return subCategoryKmr;
-	}
-
-	public void setSubCategoryKmr(String subCategoryKmr) {
-		this.subCategoryKmr = subCategoryKmr;
-	}
-
-	public String getDescriptionEng() {
-		return descriptionEng;
-	}
-
-	public void setDescriptionEng(String descriptionEng) {
-		this.descriptionEng = descriptionEng;
-	}
-
-	public String getDescriptionKmr() {
-		return descriptionKmr;
-	}
-
-	public void setDescriptionKmr(String descriptionKmr) {
-		this.descriptionKmr = descriptionKmr;
-	}
-
 	public String getContentUrl() {
-		return contentsUrl;
+		return contentUrl;
 	}
 
 	public void setContentUrl(String contentsUrl) {
-		this.contentsUrl = contentsUrl;
+		this.contentUrl = contentsUrl;
 	}
 
 	public String getSubtitleUrl() {
@@ -163,71 +85,68 @@ public class OurContent implements OurJSONModel {
 		this.isDownloaded = isDownloaded;
 	}
 
-	public OurContent(String id, String subjectEng, String subjectKmr, String categoryId,
-			String categoryEng, String categoryKmr, String subCategoryId, String subCategoryEng,
-			String subCategoryKmr, String descriptionEng, String descriptionKmr, String contentsUrl,
-			String subtitleUrl, long size, boolean isDownloaded) {
-		this.id = id;            
-		this.subjectEng = subjectEng;    
-		this.subjectKmr = subjectKmr;    
-		this.categoryId = categoryId;    
-		this.categoryEng = categoryEng;   
-		this.categoryKmr = categoryKmr;   
-		this.subCategoryId = subCategoryId; 
-		this.subCategoryEng = subCategoryEng;
-		this.subCategoryKmr = subCategoryKmr;
-		this.descriptionEng = descriptionEng;
-		this.descriptionKmr = descriptionKmr;
-		this.contentsUrl = contentsUrl;    
-		this.subtitleUrl = subtitleUrl; 
-		this.size = size;
-		this.isDownloaded = isDownloaded; 
+	public ArrayList<String> getCategoryIdList() {
+		return categoryIdList;
 	}
-	
+
+	public void setCategoryIdList(ArrayList<String> categoryIdList) {
+		this.categoryIdList = categoryIdList;
+	}
+
+	public long getDownloadedSize() {
+		return downloadedSize;
+	}
+
+	public void setDownloadedSize(long downloadedSize) {
+		this.downloadedSize = downloadedSize;
+	}
+
 	@Override
 	public String toString() {
-		return "OurContent [id=" + id + ", subjectEng=" + subjectEng + ", subjectKmr="
-				+ subjectKmr + ", categoryId=" + categoryId + ", categoryEng=" + categoryEng + 
-				", categoryKmr=" + categoryKmr +  ", subCategoryId=" + subCategoryId +
-				", subCategoryEng=" + subCategoryEng + ", subCategoryKmr=" + subCategoryKmr +
-				", descriptionEng=" + descriptionEng + ", descriptionKmr=" + descriptionKmr + 
-				", contentsUrl=" + contentsUrl + ", subtitleUrl=" + subtitleUrl + "]";
+		StringBuilder builder = new StringBuilder();
+		builder.append("OurContent [id=");
+		builder.append(id);
+		builder.append(", subjectEng=");
+		builder.append(subjectEng);
+		builder.append(", subjectKmr=");
+		builder.append(subjectKmr);
+		builder.append(", contentsUrl=");
+		builder.append(contentUrl);
+		builder.append(", subtitleUrl=");
+		builder.append(subtitleUrl);
+		builder.append(", size=");
+		builder.append(size);
+		builder.append(", categoryIdList=");
+		builder.append(categoryIdList);
+		builder.append(", downloadedSize=");
+		builder.append(downloadedSize);
+		builder.append(", isDownloaded=");
+		builder.append(isDownloaded);
+		builder.append("]");
+		return builder.toString();
 	}
 
 	@Override
 	public JSONObject getJSONObject() throws JSONException {
 		JSONObject jsonObject = new JSONObject();
-		jsonObject.put(CONTENTS_ID_JSON_KEY, id);                             
-		jsonObject.put(SUBJECT_ENG_JSON_KEY, subjectEng);            
-		jsonObject.put(SUBJECT_KMR_JSON_KEY, subjectKmr);            
-		jsonObject.put(CATEGIRY_ID_JSON_KEY, categoryId);            
-		jsonObject.put(CATEGIRY_ENG_JSON_KEY, categoryEng);          
-		jsonObject.put(CATEGIRY_KRM_JSON_KEY, categoryKmr);          
-		jsonObject.put(SUBCATEGIRY_ID_JSON_KEY, subCategoryId);      
-		jsonObject.put(SUBCATEGIRY_ENG_JSON_KEY, subCategoryEng);    
-		jsonObject.put(SUBCATEGIRY_KMR_JSON_KEY, subCategoryKmr);    
-		jsonObject.put(DESCRIPTION_ENG_JSON_KEY, descriptionEng);    
-		jsonObject.put(DESCRIPTION_KMR_JSON_KEY, descriptionKmr);    
-		jsonObject.put(CONTENT_URL_JSON_KEY, contentsUrl);            
-		jsonObject.put(SUBTITLE_URL_JSON_KEY, subtitleUrl);          
-		
+
 		return jsonObject;
 	}
 
 	@Override
 	public void setFromJSONObject(JSONObject json) throws JSONException {
-		id = json.getString(CONTENTS_ID_JSON_KEY);            
-		subjectEng = json.getString(SUBJECT_ENG_JSON_KEY);    
-		subjectKmr = json.getString(SUBJECT_KMR_JSON_KEY);    
-		categoryId = json.getString(CATEGIRY_ID_JSON_KEY);    
-		categoryEng = json.getString(CATEGIRY_ENG_JSON_KEY);   
-		categoryKmr = json.getString(CATEGIRY_KRM_JSON_KEY);   
-		subCategoryId = json.getString(SUBCATEGIRY_ID_JSON_KEY); 
-		subCategoryEng = json.getString(SUBCATEGIRY_ENG_JSON_KEY);
-		subCategoryKmr = json.getString(SUBCATEGIRY_KMR_JSON_KEY);
-		descriptionEng = json.getString(DESCRIPTION_ENG_JSON_KEY);
-		descriptionKmr = json.getString(DESCRIPTION_KMR_JSON_KEY);
-		contentsUrl = json.getString(CONTENT_URL_JSON_KEY);    
-		subtitleUrl = json.getString(SUBTITLE_URL_JSON_KEY);   
+		id = json.getString(CONTENTS_ID_JSON_KEY);
+		subjectEng = json.getString(SUBJECT_ENG_JSON_KEY);
+		subjectKmr = json.getString(SUBJECT_KMR_JSON_KEY);
+		contentUrl = json.getString(CONTENT_URL_JSON_KEY);
+		subtitleUrl = json.getString(SUBTITLE_URL_JSON_KEY);
+		size = json.getLong(SIZE_JSON_KEY);
+
+		categoryIdList = new ArrayList<String>();
+		JSONArray jsonCategoryIdList = json
+				.getJSONArray(CATEGORY_ID_LIST_JSON_KEY);
+		for (int i = 0; i < jsonCategoryIdList.length(); i++) {
+			categoryIdList.add(jsonCategoryIdList.getString(i));
+		}
 	}
 }
