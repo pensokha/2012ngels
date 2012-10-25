@@ -4,7 +4,7 @@
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent" 	>
 
-	<SurfaceView 
+	<org.our.android.ouracademy.ui.view.PlayerSurfaceView
 	    android:id="@+id/surface"
 	    android:layout_width="wrap_content"
 	    android:layout_height="match_parent"	/>
@@ -185,13 +185,13 @@
 						
 		</LinearLayout>
 		
-		<LinearLayout 
+		<org.our.android.ouracademy.ui.view.NCHorizontalListView 
 	 		android:id="@+id/list"  
 			android:layout_width="fill_parent" 
-			android:layout_height="190.67dp"
+			android:layout_height="230.67dp"
 			android:background="@drawable/list_bottom_bg_drawable"	
 			android:visibility="gone">
         
-    	</LinearLayout>
+    	</org.our.android.ouracademy.ui.view.NCHorizontalListView >
     </LinearLayout>
 </FrameLayout>

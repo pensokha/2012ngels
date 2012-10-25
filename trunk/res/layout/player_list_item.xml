@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"	
+    android:paddingTop="20dp">
+    
+    <ImageView 
+		android:layout_width="188.67dp"
+		android:layout_height="fill_parent"
+		android:minHeight="100dp"
+		android:layout_marginTop="23.67dp"
+		android:layout_marginLeft="69.33dp"
+		android:background="#000000"	/>    
+    
+    <RelativeLayout
+        android:id="@+id/book"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:background="@drawable/btn_main_book_selector">
+        
+        <org.our.android.ouracademy.ui.view.VerticalTextView 
+            android:id="@+id/subject"
+ 			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignParentTop="true"
+			android:layout_alignParentLeft="true"
+			android:layout_marginLeft="22dp"
+			android:layout_marginTop="20dp"
+			android:text = "English"
+			android:textSize="13.33dp"
+			android:textColor="#333333"
+			android:textStyle="bold"
+			android:shadowColor="#33ffffff"
+	        android:shadowDy="1"
+	        android:shadowRadius="1"
+            />
+
+		<TextView 
+		    android:id="@+id/title"
+ 			android:layout_width="188.67dp"
+			android:layout_height="48.67dp"
+			android:gravity="center"
+			android:layout_alignParentTop="true"
+			android:layout_alignParentLeft="true"
+			android:layout_marginLeft="70dp"
+			android:layout_marginTop="125.67dp"
+			android:text = "PSY-GANGNAM_STYLE_M_V"
+			android:textSize="16dp"
+			android:textColor="#444444"
+			android:shadowColor="#88ffffff"
+	        android:shadowDy="1"
+	        android:shadowRadius="1"		/>
+        
+    </RelativeLayout>
+</FrameLayout>
