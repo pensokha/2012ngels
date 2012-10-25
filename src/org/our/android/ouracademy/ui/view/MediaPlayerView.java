@@ -1,8 +1,10 @@
 package org.our.android.ouracademy.ui.view;
 
 import org.our.android.ouracademy.R;
+import org.our.android.ouracademy.ui.view.PlayerSurfaceView.OnPlayerSurfaceViewListener;
 
 import android.content.Context;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -25,22 +27,27 @@ public class MediaPlayerView extends LinearLayout implements View.OnClickListene
 	 * 
 	 * @author Jyeon
 	 */
-	public interface OnMediaPlayerViewCb {
+	public interface MediaPlayerViewListener {
 		void onClickBtn(View view);
 	};
 
-	private SurfaceView preview;
+	private PlayerSurfaceView preview;
 
 	SeekBar progress;
 	VerticalSeekBar soundVolume;
 
 	ImageView playBtn, soundIcon;
-	LinearLayout closeBtn, soundBtn, moreBtn, list, soundControll;
+	LinearLayout closeBtn, soundBtn, moreBtn, soundControll;
 	LinearLayout frame;
 
 	TextView title, runTime, remainingTime;
 
-	OnMediaPlayerViewCb mediaPlayerViewCb;
+	MediaPlayerViewListener listener;
+
+	NCHorizontalListView listView;
+
+	private Handler handler;
+	private Runnable fullScreen;
 
 	public MediaPlayerView(Context context) {
 		super(context);
@@ -59,8 +66,17 @@ public class MediaPlayerView extends LinearLayout implements View.OnClickListene
 		LayoutInflater li = (LayoutInflater)getContext().getSystemService(infService);
 		li.inflate(R.layout.media_player, this, true);
 
-		preview = (SurfaceView)findViewById(R.id.surface);
+		preview = (PlayerSurfaceView)findViewById(R.id.surface);
 		preview.setOnClickListener(this);
+		preview.setOnPlayerSurfaceViewListViewListener(new OnPlayerSurfaceViewListener() {
+
+			@Override
+			public void pinchZoomIn() {
+				if (listener != null) {
+					listener.onClickBtn(closeBtn);
+				}
+			}
+		});
 
 		frame = (LinearLayout)findViewById(R.id.frame);
 
@@ -77,7 +93,7 @@ public class MediaPlayerView extends LinearLayout implements View.OnClickListene
 		runTime = (TextView)findViewById(R.id.runTime);
 		remainingTime = (TextView)findViewById(R.id.remainingTime);
 
-		list = (LinearLayout)findViewById(R.id.list);
+		listView = (NCHorizontalListView)findViewById(R.id.list);
 		soundControll = (LinearLayout)findViewById(R.id.soundControll);
 
 		progress = (SeekBar)findViewById(R.id.progress);
@@ -99,15 +115,19 @@ public class MediaPlayerView extends LinearLayout implements View.OnClickListene
 	}
 
 	public void postShowFrame(final int show) {
+		if (handler == null) {
+			handler = new Handler();
+		}
 
-		postDelayed(new Runnable() {
-
-			@Override
-			public void run() {
-				frame.setVisibility(show);
-
-			}
-		}, 3000);
+		if (fullScreen == null) {
+			fullScreen = new Runnable() {
+				@Override
+				public void run() {
+					frame.setVisibility(show);
+				}
+			};
+		}
+		handler.postDelayed(fullScreen, 3000);
 	}
 
 	public String getTimeText(int milliseconds) {
@@ -134,6 +154,8 @@ public class MediaPlayerView extends LinearLayout implements View.OnClickListene
 	@Override
 	public void onClick(View view) {
 
+		removeFullScreenCallback();
+
 		if (view.getId() != R.id.soundBtn) {
 			showSoundControll(false);
 		}
@@ -149,8 +171,8 @@ public class MediaPlayerView extends LinearLayout implements View.OnClickListene
 				break;
 			case R.id.closeBtn:
 			case R.id.play:
-				if (mediaPlayerViewCb != null) {
-					mediaPlayerViewCb.onClickBtn(view);
+				if (listener != null) {
+					listener.onClickBtn(view);
 				}
 				break;
 			case R.id.soundBtn:
@@ -165,9 +187,9 @@ public class MediaPlayerView extends LinearLayout implements View.OnClickListene
 
 	private void showVideoList(boolean show) {
 		if (show) {
-			list.setVisibility(View.VISIBLE);
+			listView.setVisibility(View.VISIBLE);
 		} else {
-			list.setVisibility(View.GONE);
+			listView.setVisibility(View.GONE);
 		}
 		moreBtn.setSelected(show);
 	}
@@ -215,8 +237,18 @@ public class MediaPlayerView extends LinearLayout implements View.OnClickListene
 		remainingTime.setText(getTimeText(milliseconds));
 	}
 
-	public void setOnProgressBarClickCb(OnMediaPlayerViewCb callback) {
-		mediaPlayerViewCb = callback;
+	public void setOnMediaPlayerViewListener(MediaPlayerViewListener callback) {
+		listener = callback;
 	}
 
+	public NCHorizontalListView getListView() {
+		return listView;
+	}
+
+	private void removeFullScreenCallback() {
+		if (fullScreen != null) {
+			handler.removeCallbacks(fullScreen);
+			fullScreen = null;
+		}
+	}
 }

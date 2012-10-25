@@ -1,7 +1,9 @@
 package org.our.android.ouracademy.ui.pages;
 
 import org.our.android.ouracademy.R;
+import org.our.android.ouracademy.ui.adapter.PlayListAdapter;
 import org.our.android.ouracademy.ui.view.MediaPlayerView;
+import org.our.android.ouracademy.ui.view.NCHorizontalListView;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -40,6 +42,9 @@ public class MediaPlayerPage extends Activity implements MediaPlayer.OnPreparedL
 	SurfaceView preview;
 	SurfaceHolder holder;
 
+	NCHorizontalListView listView;
+	PlayListAdapter playListAdapter;
+
 	boolean wasPlaying;
 
 	String filePath;
@@ -49,7 +54,7 @@ public class MediaPlayerPage extends Activity implements MediaPlayer.OnPreparedL
 		super.onCreate(savedInstanceState);
 
 		mediaView = new MediaPlayerView(this);
-		mediaView.setOnProgressBarClickCb(mediaPlayerViewCb);
+		mediaView.setOnMediaPlayerViewListener(mediaPlayerViewListener);
 		setContentView(mediaView);
 
 		preview = mediaView.getSurfaceView();
@@ -71,11 +76,15 @@ public class MediaPlayerPage extends Activity implements MediaPlayer.OnPreparedL
 		videoSeekBar.setOnSeekBarChangeListener(onSeek);
 		progressHandler.sendEmptyMessageDelayed(0, 200);
 
+		listView = mediaView.getListView();
+		playListAdapter = new PlayListAdapter();
+		listView.setAdapter(playListAdapter);
+
 		Intent intent = getIntent();
 		filePath = intent.getStringExtra(INTENTKEY_STR_VIDEO_FILE_PATH);
 		// test Code 
-//		String sd = Environment.getExternalStorageDirectory().getAbsolutePath();
-//		filePath = sd + "/OurAcademy/PSY-GANGNAM_STYLE_M_V.mp4";
+		String sd = Environment.getExternalStorageDirectory().getAbsolutePath();
+		filePath = sd + "/OurAcademy/PSY-GANGNAM_STYLE_M_V.mp4";
 	}
 
 	Handler progressHandler = new Handler() {
@@ -110,8 +119,7 @@ public class MediaPlayerPage extends Activity implements MediaPlayer.OnPreparedL
 		public void onStopTrackingTouch(SeekBar seekBar) {
 			wasPlaying = player.isPlaying();
 			if (!wasPlaying) {
-				player.start();
-				mediaView.postShowFrame(View.GONE);
+				startPlayer();
 			}
 		}
 	};
@@ -217,7 +225,7 @@ public class MediaPlayerPage extends Activity implements MediaPlayer.OnPreparedL
 		}
 	};
 
-	MediaPlayerView.OnMediaPlayerViewCb mediaPlayerViewCb = new MediaPlayerView.OnMediaPlayerViewCb() {
+	MediaPlayerView.MediaPlayerViewListener mediaPlayerViewListener = new MediaPlayerView.MediaPlayerViewListener() {
 
 		@Override
 		public void onClickBtn(View view) {
@@ -226,15 +234,34 @@ public class MediaPlayerPage extends Activity implements MediaPlayer.OnPreparedL
 					finishPage();
 					break;
 				case R.id.play:
-					if (player.isPlaying() == false) {
-						player.start();
-						mediaView.setPlayerResource(false);
+					if (player != null && player.isPlaying() == false) {
+						startPlayer();
 					} else {
-						player.pause();
-						mediaView.setPlayerResource(true);
+						pausePlayer();
 					}
 					break;
 			}
 		}
 	};
+
+	public void startPlayer() {
+		if (player != null) {
+			player.start();
+		}
+
+		if (mediaView != null) {
+			mediaView.setPlayerResource(false);
+			mediaView.postShowFrame(View.GONE);
+		}
+	}
+
+	public void pausePlayer() {
+		if (player != null) {
+			player.pause();
+		}
+
+		if (mediaView != null) {
+			mediaView.setPlayerResource(true);
+		}
+	}
 }
