@@ -10,9 +10,10 @@ import org.our.android.ouracademy.dao.StudentDAO;
 import org.our.android.ouracademy.dao.TeacherDAO;
 import org.our.android.ouracademy.model.OurCategory;
 import org.our.android.ouracademy.model.OurContent;
+import org.our.android.ouracademy.model.OurContent.FileStatus;
 import org.our.android.ouracademy.ui.adapter.CategoryListAdapter;
 import org.our.android.ouracademy.ui.adapter.ContentsListAdapter;
-import org.our.android.ouracademy.ui.view.HorizontalListView;
+import org.our.android.ouracademy.ui.view.NCHorizontalListView;
 import org.our.android.ouracademy.util.ScreenInfo;
 
 import android.graphics.Color;
@@ -158,10 +159,11 @@ public class MainActivity extends BaseActivity {
         for (String tt : temp) {
         	ourContent = new OurContent();
         	ourContent.setSubjectEng(tt);
-//        	contentsList.add(ourContent);
+        	ourContent.fileStatus = FileStatus.DOWNLOADED;
+        	contentsList.add(ourContent);
         }
         
-        HorizontalListView listView = (HorizontalListView) findViewById(R.id.horizontal_listview);
+        NCHorizontalListView listView = (NCHorizontalListView) findViewById(R.id.horizontal_listview);
         contentsListAdapter = new ContentsListAdapter(this, contentsList);
         listView.setAdapter(contentsListAdapter);
 	}

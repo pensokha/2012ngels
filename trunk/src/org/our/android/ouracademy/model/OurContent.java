@@ -23,7 +23,11 @@ public class OurContent implements OurJSONModel {
 	private long size;
 	private ArrayList<String> categoryIdList;
 	private long downloadedSize;
-	public boolean isDownloaded;
+	
+	public enum FileStatus {
+		NOEN, DOWNLOADING, DOWNLOADED
+	}
+	public FileStatus fileStatus = FileStatus.NOEN;
 
 	public OurContent() {
 		super();
@@ -77,14 +81,6 @@ public class OurContent implements OurJSONModel {
 		this.size = size;
 	}
 
-	public boolean isDownloaded() {
-		return isDownloaded;
-	}
-
-	public void setDownloaded(boolean isDownloaded) {
-		this.isDownloaded = isDownloaded;
-	}
-
 	public ArrayList<String> getCategoryIdList() {
 		return categoryIdList;
 	}
@@ -99,6 +95,14 @@ public class OurContent implements OurJSONModel {
 
 	public void setDownloadedSize(long downloadedSize) {
 		this.downloadedSize = downloadedSize;
+	}
+	
+	public void setDownloaded(boolean isDownloaded) {
+		if (isDownloaded) {
+			fileStatus = FileStatus.DOWNLOADED;
+		} else {
+			fileStatus = FileStatus.NOEN;
+		}
 	}
 
 	@Override
@@ -121,7 +125,7 @@ public class OurContent implements OurJSONModel {
 		builder.append(", downloadedSize=");
 		builder.append(downloadedSize);
 		builder.append(", isDownloaded=");
-		builder.append(isDownloaded);
+//		builder.append(isDownloaded);
 		builder.append("]");
 		return builder.toString();
 	}
