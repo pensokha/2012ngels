@@ -4,15 +4,18 @@ import java.util.ArrayList;
 
 import org.our.android.ouracademy.R;
 import org.our.android.ouracademy.model.OurContent;
+import org.our.android.ouracademy.model.OurContent.FileStatus;
 import org.our.android.ouracademy.ui.pages.MediaPlayerPage;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -31,7 +34,6 @@ public class ContentsListAdapter extends BaseAdapter {
 	
 	class ObjViewHolder {
 		TextView tagTitle01;
-		TextView tagTitle02;
 		ItemHolder[] itemHolderList = new ItemHolder[CELL_PER_ITEM];
 	}
 
@@ -46,9 +48,15 @@ public class ContentsListAdapter extends BaseAdapter {
 		R.id.txt_content_02
 	};
 	
+	int contentProgressBarIds[] = {
+		R.id.progressbar_01,
+		R.id.progressbar_02
+	};
+	
 	class ItemHolder {
     	RelativeLayout itemCellLayout;
-        TextView contentTitle; 
+        TextView contentTitle;
+        ProgressBar progressbar;
     }
 	
 	public ContentsListAdapter(Context context, ArrayList<OurContent> contentsList) {
@@ -99,6 +107,7 @@ public class ContentsListAdapter extends BaseAdapter {
 				ItemHolder itemHolder = new ItemHolder();
 				itemHolder.itemCellLayout = (RelativeLayout)convertView.findViewById(layoutIds[idx]);
 				itemHolder.contentTitle = (TextView)convertView.findViewById(contentTitleIds[idx]);
+				itemHolder.progressbar = (ProgressBar)convertView.findViewById(contentProgressBarIds[idx]);
 				holder.itemHolderList[idx] = itemHolder;
 			}
 			
@@ -112,18 +121,43 @@ public class ContentsListAdapter extends BaseAdapter {
 		for (int i = 0; i < CELL_PER_ITEM; i++) {
 			final int currentPositionOfItem = position * CELL_PER_ITEM + i;
 			if (currentPositionOfItem < itemSize) {
-				holder.itemHolderList[i].itemCellLayout.setVisibility(View.VISIBLE);
-				OurContent model = contentsList.get(currentPositionOfItem);
+				final ItemHolder itemHolder = holder.itemHolderList[i];
+				itemHolder.itemCellLayout.setVisibility(View.VISIBLE);
+				final OurContent model = contentsList.get(currentPositionOfItem);
+				if (model.fileStatus == FileStatus.DOWNLOADED) {	//파일이 존재
+					itemHolder.itemCellLayout.setBackgroundResource(R.drawable.btn_main_book_selector);
+					itemHolder.progressbar.setVisibility(View.INVISIBLE);
+				} else if (model.fileStatus == FileStatus.DOWNLOADING) {	//파일 다운로드 중
+					itemHolder.itemCellLayout.setBackgroundResource(R.drawable.book_download02);
+					itemHolder.progressbar.setVisibility(View.VISIBLE);
+					//다운로드 진행 % 셋팅
+					
+				} else {	//파일이 없는 경우
+					itemHolder.itemCellLayout.setBackgroundResource(R.drawable.btn_main_book_download_selector);
+				}
 				
 //				holder.itemHolderList[i].itemCellLayout.setBackgroundColor(Color.BLUE);
 				holder.itemHolderList[i].contentTitle.setText(model.getSubjectEng());
 				holder.itemHolderList[i].itemCellLayout.setOnClickListener(new OnClickListener() {
 					@Override
 					public void onClick(View view) {
-						Intent intent = new Intent(context, MediaPlayerPage.class);
-						intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-						intent.putExtra("VideoPath", "");
-						context.startActivity(intent);
+						if (model.fileStatus == FileStatus.DOWNLOADED) {	//파일이 존재
+							String sd = Environment.getExternalStorageDirectory().getAbsolutePath();
+							String filePath = sd + "/OurAcademy/HYUNA - 'Ice Cream'.mp4";
+							
+							Intent intent = new Intent(context, MediaPlayerPage.class);
+							intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+							intent.putExtra(MediaPlayerPage.INTENTKEY_STR_VIDEO_FILE_PATH, filePath);
+							context.startActivity(intent);
+						} else if (model.fileStatus == FileStatus.DOWNLOADING) {	//파일 다운로드 중
+							return;
+						} else {	//파일이 없는 경우
+							//다운로드 시작
+							model.fileStatus = FileStatus.DOWNLOADING;
+							itemHolder.itemCellLayout.setBackgroundResource(R.drawable.book_download02);
+							itemHolder.progressbar.setVisibility(View.VISIBLE);
+						}
+						
 					}
 				});
 			} else {

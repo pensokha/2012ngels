@@ -1,50 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:background="@drawable/list_bg01" >
-    <TextView 
+    android:layout_height="fill_parent"
+    android:background="@drawable/list_bg01"
+    android:paddingBottom="37dp" >
+
+    <TextView
         android:id="@+id/txt_list_tag_01"
+        style="@style/fontstyle_txt_main_list_tag"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="24dp"
-        android:paddingTop="4dp"
-        android:gravity="center_horizontal"
         android:background="@drawable/list_tag01"
-        style="@style/fontstyle_txt_main_list_tag"
-        android:text="ENGLiSH" />
+        android:gravity="center_horizontal"
+        android:paddingTop="4dp"
+        android:text="ENGLISH" />
+
     <RelativeLayout
-        android:id="@+id/layout_content_01" 
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_marginLeft="24dp"
-	    android:layout_below="@id/txt_list_tag_01"
-	    android:background="@drawable/btn_main_book_selector" >
-	    <TextView 
-	        android:id="@+id/txt_content_01"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_centerInParent="true"
-	        style="@style/fontstyle_txt_main_contenst_txt" />
-	</RelativeLayout>
-	<RelativeLayout
-        android:id="@+id/layout_content_02" 
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_marginLeft="24dp"
-	    android:layout_marginTop="62dp"
-	    android:layout_below="@id/layout_content_01"
-	    android:background="@drawable/btn_main_book_selector" >
-	    <TextView 
-	        android:id="@+id/txt_content_02"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_centerInParent="true"
-	        style="@style/fontstyle_txt_main_contenst_txt" />
-	    <Button
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:text="테슷"/>
-	</RelativeLayout>
+        android:id="@+id/layout_content_01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="49dp"
+        android:background="@drawable/btn_main_book_selector" >
+
+        <TextView
+            android:id="@+id/txt_content_01"
+            style="@style/fontstyle_txt_main_contenst_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <ProgressBar 
+			android:id="@+id/progressbar_01" 
+			android:layout_width="121dp" 
+			android:layout_height="15dp" 
+			android:layout_centerInParent="true"
+			android:progress="0"
+			android:max="100" 
+			android:secondaryProgress="0"
+			style="@style/Widget.Pogressbar" 
+			android:visibility="invisible"
+			/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/layout_content_02"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="24dp"
+        android:background="@drawable/btn_main_book_selector" >
+
+        <TextView
+            android:id="@+id/txt_content_02"
+            style="@style/fontstyle_txt_main_contenst_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <ProgressBar 
+			android:id="@+id/progressbar_02" 
+			android:layout_width="121dp" 
+			android:layout_height="15dp" 
+			android:layout_centerInParent="true"
+			android:progress="0"
+			android:max="100" 
+			android:secondaryProgress="0"
+			style="@style/Widget.Pogressbar" 
+			android:visibility="invisible"
+			/>
+    </RelativeLayout>
 
 </RelativeLayout>
