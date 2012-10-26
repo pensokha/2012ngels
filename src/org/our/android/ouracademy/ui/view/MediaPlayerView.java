@@ -4,6 +4,7 @@ import org.our.android.ouracademy.R;
 import org.our.android.ouracademy.ui.view.PlayerSurfaceView.OnPlayerSurfaceViewListener;
 
 import android.content.Context;
+import android.graphics.PixelFormat;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -12,6 +13,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -38,12 +40,14 @@ public class MediaPlayerView extends LinearLayout implements View.OnClickListene
 
 	ImageView playBtn, soundIcon;
 	LinearLayout closeBtn, soundBtn, moreBtn, soundControll;
-	LinearLayout frame;
+	RelativeLayout playerCenter;
 
 	TextView title, runTime, remainingTime;
 
 	MediaPlayerViewListener listener;
 
+	PlayerTopView topView;
+	PlayerBottomView bottomView;
 	NCHorizontalListView listView;
 
 	private Handler handler;
@@ -67,6 +71,7 @@ public class MediaPlayerView extends LinearLayout implements View.OnClickListene
 		li.inflate(R.layout.media_player, this, true);
 
 		preview = (PlayerSurfaceView)findViewById(R.id.surface);
+		preview.getHolder().setFormat(PixelFormat.TRANSLUCENT);
 		preview.setOnClickListener(this);
 		preview.setOnPlayerSurfaceViewListViewListener(new OnPlayerSurfaceViewListener() {
 
@@ -77,8 +82,6 @@ public class MediaPlayerView extends LinearLayout implements View.OnClickListene
 				}
 			}
 		});
-
-		frame = (LinearLayout)findViewById(R.id.frame);
 
 		closeBtn = (LinearLayout)findViewById(R.id.closeBtn);
 		closeBtn.setOnClickListener(this);
@@ -100,6 +103,10 @@ public class MediaPlayerView extends LinearLayout implements View.OnClickListene
 
 		soundVolume = (VerticalSeekBar)findViewById(R.id.soundVolume);
 		soundIcon = (ImageView)findViewById(R.id.soundIcon);
+
+		topView = (PlayerTopView)findViewById(R.id.titleBar);
+		bottomView = (PlayerBottomView)findViewById(R.id.bottomBar);
+		playerCenter = (RelativeLayout)findViewById(R.id.playerCenter);
 	}
 
 	public SurfaceView getSurfaceView() {
@@ -123,7 +130,7 @@ public class MediaPlayerView extends LinearLayout implements View.OnClickListene
 			fullScreen = new Runnable() {
 				@Override
 				public void run() {
-					frame.setVisibility(show);
+					showFrameView(false);
 				}
 			};
 		}
@@ -162,12 +169,7 @@ public class MediaPlayerView extends LinearLayout implements View.OnClickListene
 
 		switch (view.getId()) {
 			case R.id.surface:
-				if (frame.getVisibility() == View.GONE) {
-					frame.setVisibility(View.VISIBLE);
-					showVideoList(false);
-				} else {
-					frame.setVisibility(View.GONE);
-				}
+				showFrameView(bottomView.getVisibility() == View.GONE);
 				break;
 			case R.id.closeBtn:
 			case R.id.play:
@@ -182,6 +184,27 @@ public class MediaPlayerView extends LinearLayout implements View.OnClickListene
 			case R.id.moreBtn:
 				showVideoList(!moreBtn.isSelected());
 				break;
+		}
+	}
+
+	private void showFrameView(boolean show) {
+		if (show) {
+			topView.startAnimation(true);
+			bottomView.startAnimation(true);
+
+			postDelayed(new Runnable() {
+
+				@Override
+				public void run() {
+					playerCenter.setVisibility(View.VISIBLE);
+				}
+			}, 300);
+
+			showVideoList(false);
+		} else {
+			topView.startAnimation(false);
+			bottomView.startAnimation(false);
+			playerCenter.setVisibility(View.GONE);
 		}
 	}
 
