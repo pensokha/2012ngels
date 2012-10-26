@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="56.67dp"
+    android:background="@drawable/player_bg01"
+    android:gravity="center_vertical" >
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="22dp"
+        android:layout_weight="1"
+        android:shadowColor="#e7e5e4"
+        android:shadowDy="1"
+        android:shadowRadius="1"
+        android:text="01. 덧셈, 뺄셈"
+        android:textColor="#433c33"
+        android:textSize="20dp" />
+
+    <LinearLayout
+        android:id="@+id/closeBtn"
+        android:layout_width="66dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/btn_state_play_close"
+        android:gravity="center" >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/player_icon_close" />
+    </LinearLayout>
+
+</LinearLayout>
