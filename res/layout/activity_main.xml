@@ -73,7 +73,8 @@
 		        android:id="@+id/horizontal_listview"
 		        android:layout_width="fill_parent"
 		        android:layout_height="fill_parent"
-		        android:layout_toRightOf="@id/drag_layout" />
+		        android:layout_toRightOf="@id/drag_layout"
+		        android:background="@drawable/list_bg_drawable" />
 		    <!-- 메뉴가 show 되었을 버튼을 역활을 함.-->
 	        <LinearLayout
 	            android:id="@+id/hide_menu_btn"
