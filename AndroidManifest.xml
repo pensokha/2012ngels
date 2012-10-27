@@ -2,19 +2,19 @@
     package="org.our.android.ouracademy"
     android:versionCode="1"
     android:versionName="1.0" >
-    
+
     <supports-screens
-		android:xlargeScreens="true"
+        android:anyDensity="true"
         android:largeScreens="true"
         android:normalScreens="true"
-        android:smallScreens="true"
         android:resizeable="true"
-        android:anyDensity="true" />
+        android:smallScreens="true"
+        android:xlargeScreens="true" />
 
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="15" />
-    
+
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
@@ -24,23 +24,31 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
+        android:name=".OurApplication"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/Theme.NoTitleNoBackground"
-        android:name=".OurApplication" >
+        android:theme="@style/Theme.NoTitleNoBackground" >
         <activity
             android:name=".ui.pages.MainActivity"
             android:label="@string/title_activity_main"
             android:screenOrientation="landscape" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
-        <activity android:name=".ui.pages.MediaPlayerPage" android:label="Media Player Page" android:screenOrientation="landscape"/>
-        
-        <service android:enabled="true" android:name=".p2p.P2PService" />
+        <activity
+            android:name=".ui.pages.MediaPlayerPage"
+            android:label="Media Player Page"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".ui.pages.SettingActivity"
+            android:screenOrientation="landscape" />
+
+        <service
+            android:name=".p2p.P2PService"
+            android:enabled="true" />
     </application>
 
 </manifest>
