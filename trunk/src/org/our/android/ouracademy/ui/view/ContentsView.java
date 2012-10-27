@@ -105,6 +105,18 @@ public class ContentsView extends RelativeLayout implements OnClickListener{
 		}
 	}
 	
+//	private void rotateContent(final View view) {
+//		ObjectAnimator  animator =  ObjectAnimator.ofFloat(view, "rotationY", 180);
+//		animator.setDuration(500);
+//		animator.addListener(new AnimatorListenerAdapter() {
+//			@Override
+//			public void onAnimationEnd(Animator animation) {
+//			}
+//		});
+//		
+//		animator.start();
+//	}
+	
 	class ProgressAsyncTask extends AsyncTask<Void, Integer, Long> {
 		ProgressBar progressBar;
 		public ProgressAsyncTask(ProgressBar progressBar) {

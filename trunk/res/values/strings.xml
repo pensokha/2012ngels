@@ -5,6 +5,8 @@
     <string name="menu_settings">Settings</string>
     <string name="title_activity_main">MainActivity</string>
     
+    <string name="finish_application">Please press BACK again to exit.</string>
+    
     <!-- main -->
     <string name="menu">MENU</string>
     <string name="list">LIST</string>

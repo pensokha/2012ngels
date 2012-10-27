@@ -6,16 +6,20 @@ import org.our.android.ouracademy.R;
 import org.our.android.ouracademy.model.OurCategory;
 import org.our.android.ouracademy.ui.adapter.CategoryListAdapter;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 /**
 *
@@ -24,7 +28,8 @@ import android.widget.ListView;
 */
 public class MainMenuView extends FrameLayout {
 	ArrayList<OurCategory> categoryList = null;
-	
+	ListView listView;
+	TextView categoryTxtView;
 	Button applyButton;
 	
 	public MainMenuView(Context context) {
@@ -58,12 +63,9 @@ public class MainMenuView extends FrameLayout {
 	private void initUI() {
 		LayoutInflater.from(getContext()).inflate(R.layout.layout_main_menu, this, true);
 		
-		ListView listView = (ListView)findViewById(R.id.category_listview);
+		listView = (ListView)findViewById(R.id.category_listview);
 		final CategoryListAdapter adapter = new CategoryListAdapter(getContext(), R.layout.layout_category_list_item, getCategoryListData());
 		listView.setAdapter(adapter);
-		listView.setDivider(null);
-		listView.setCacheColorHint(Color.TRANSPARENT);
-		listView.setSelector(android.R.color.transparent);
 		listView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> list, View view, int position, long id) {
@@ -77,6 +79,9 @@ public class MainMenuView extends FrameLayout {
 			}
 		});
 		
+		listView.setOnScrollListener(onScrollChangedListener);
+		listView.setOnTouchListener(onTouchListener);
+		
 		applyButton = (Button) findViewById(R.id.main_menu_apply_btn);
 	}
 	
@@ -85,4 +90,50 @@ public class MainMenuView extends FrameLayout {
 			applyButton.setOnClickListener(onClickListener);
 		}
 	}
+	
+	boolean isVisibleLastItem;
+	
+	OnTouchListener onTouchListener = new OnTouchListener() {
+		@Override
+		public boolean onTouch(View v, MotionEvent event) {
+			if (event.getAction() == MotionEvent.ACTION_DOWN) {
+				
+			} else if (event.getAction() == MotionEvent.ACTION_MOVE) {
+				if (applyButton != null) {
+					applyButton.setVisibility(View.GONE);
+				}
+			} else if (event.getAction() == MotionEvent.ACTION_UP) {
+				isVisibleLastItem = false;
+				if (listView.getLastVisiblePosition() == listView.getCount()-1) {
+					isVisibleLastItem = true;
+				}
+				applyButton.setVisibility(View.VISIBLE);
+			}
+			return false;
+		}
+	};
+	
+	OnScrollListener onScrollChangedListener = new OnScrollListener() {
+		@Override
+		public void onScroll(AbsListView view, int firstVisibleItem,
+				int visibleItemCount, int totalItemCount) {
+		}
+		@Override
+		public void onScrollStateChanged(final AbsListView view, int scrollState) {
+			if (scrollState == OnScrollListener.SCROLL_STATE_IDLE) {
+				if (isVisibleLastItem) {
+					listView.postDelayed(new Runnable() {
+						@Override
+						public void run() {
+							listView.smoothScrollToPosition(listView.getCount()-1);
+						}
+					}, 100);
+				}
+			} else if (scrollState == OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+
+			} else if (scrollState == OnScrollListener.SCROLL_STATE_FLING) {
+
+			}
+		}
+	};
 }

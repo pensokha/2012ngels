@@ -28,6 +28,7 @@ import android.widget.AbsoluteLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 /**
 *
@@ -41,6 +42,8 @@ public class MainDetailView extends RelativeLayout {
 	private ImageView decoyImage;
 	
 	private ViewGroup hideMenuBtn;
+	
+	private TextView dragLayoutTxt = null;
 
 	private int moveStart;
 	private int moveEnd;
@@ -54,21 +57,21 @@ public class MainDetailView extends RelativeLayout {
 	
 	ArrayList<OurContent> contentsList;
 	
-	enum TouchStatus {
+	public enum TouchStatus {
 		START_DRAGGING,
 		DRAGGING,
 		STOP_DRAGGING
 	}
 
-	TouchStatus touchStatus = TouchStatus.STOP_DRAGGING;
+	public TouchStatus touchStatus = TouchStatus.STOP_DRAGGING;
 
-	enum MenuStatus {
+	public enum MenuStatus {
 		INVISIBLE_MENU,
 		MOVING_MENU,
 		VISIBLE_MENU
 	}
 
-	MenuStatus menuStatus = MenuStatus.INVISIBLE_MENU;
+	public MenuStatus menuStatus = MenuStatus.INVISIBLE_MENU;
 	
 	public MainDetailView(Context context) {
 		super(context);
@@ -127,8 +130,10 @@ public class MainDetailView extends RelativeLayout {
 		detailRootLayout = (ViewGroup)findViewById(R.id.layout_root_detail);
 		detailLayout = (ViewGroup)findViewById(R.id.layout_detail);
 		
-		ViewGroup dragLayout = (ViewGroup)findViewById(R.id.drag_layout);	//상단화면의 메뉴를 Drag할 수 있는 여역
-        dragLayout.setOnTouchListener(dargTouchListener);					//onTouchListener 지정
+		ViewGroup dragLayout = (ViewGroup)findViewById(R.id.drag_layout);
+        dragLayout.setOnTouchListener(dargTouchListener);
+        
+        dragLayoutTxt = (TextView) dragLayout.findViewById(R.id.drag_layout_txt);
         
         hideMenuBtn = (ViewGroup)(ViewGroup)findViewById(R.id.hide_menu_btn);
         hideMenuBtn.setOnClickListener(new OnClickListener() {
@@ -160,9 +165,8 @@ public class MainDetailView extends RelativeLayout {
 	}
 	
 	private void setDetailLayoutImageCache(android.widget.AbsoluteLayout.LayoutParams params) {
-		//detailLayout의 DrawingCache를 가져와 imageView에 넣은다음 datailRootView에 add해준다.
 		detailLayout.destroyDrawingCache();
-		detailLayout.buildDrawingCache(); //detailLayout의 최신 Drawing Cache를 업데이트 해준다.
+		detailLayout.buildDrawingCache();
 		decoyImage.setImageBitmap(detailLayout.getDrawingCache());
 		decoyImage.setLayoutParams(params);
 
@@ -182,31 +186,23 @@ public class MainDetailView extends RelativeLayout {
 		decoyImage.startAnimation(set);
 
 		set.setAnimationListener(new AnimationListener() {
-
 			@Override
 			public void onAnimationStart(Animation animation) {
 				menuStatus = MenuStatus.MOVING_MENU;
 				detailLayout.setVisibility(View.INVISIBLE);
 			}
-
 			@Override
 			public void onAnimationRepeat(Animation animation) {
 			}
-
 			@Override
 			public void onAnimationEnd(Animation animation) {
 				// TODO Auto-generated method stub
 				menuStatus = MenuStatus.VISIBLE_MENU;
-
-				detailLayout.setVisibility(View.VISIBLE);
-				AbsoluteLayout.LayoutParams params;
-				params = (AbsoluteLayout.LayoutParams)detailLayout.getLayoutParams();
-				params.x = (int)(dragWidth);
-				detailLayout.setLayoutParams(params);
-
+				setDetailLayoutXPosition(dragWidth);
 				detailRootLayout.removeView(decoyImage);
 
 				hideMenuBtn.setClickable(true);
+				changeDragLayoutIcon();
 			}
 		});
 	}
@@ -224,32 +220,46 @@ public class MainDetailView extends RelativeLayout {
 		decoyImage.startAnimation(set);
 
 		set.setAnimationListener(new AnimationListener() {
-
 			@Override
 			public void onAnimationStart(Animation animation) {
 				menuStatus = MenuStatus.MOVING_MENU;
 				detailLayout.setVisibility(View.INVISIBLE);
 			}
-
 			@Override
 			public void onAnimationRepeat(Animation animation) {
 			}
-
 			@Override
 			public void onAnimationEnd(Animation animation) {
 				menuStatus = MenuStatus.INVISIBLE_MENU;
-
-				detailLayout.setVisibility(View.VISIBLE);
-				AbsoluteLayout.LayoutParams params;
-				params = (AbsoluteLayout.LayoutParams)detailLayout.getLayoutParams();
-				params.x = 0;
-				detailLayout.setLayoutParams(params);
-
+				setDetailLayoutXPosition(0);
 				detailRootLayout.removeView(decoyImage);
 
 				hideMenuBtn.setClickable(false);
+				changeDragLayoutIcon();
 			}
 		});
+	}
+	
+	private void changeDragLayoutIcon() {
+		if (dragLayoutTxt == null) {
+			return;
+		}
+		
+		if (menuStatus == MenuStatus.VISIBLE_MENU) {
+			dragLayoutTxt.setText(R.string.list);
+			dragLayoutTxt.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.list_icon_menu02, 0, 0);
+		} else if (menuStatus == MenuStatus.INVISIBLE_MENU) {
+			dragLayoutTxt.setText(R.string.menu);
+			dragLayoutTxt.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.list_icon_menu01, 0, 0);
+		}
+	}
+	
+	private void setDetailLayoutXPosition(int XPoint) {
+		detailLayout.setVisibility(View.VISIBLE);
+		AbsoluteLayout.LayoutParams params;
+		params = (AbsoluteLayout.LayoutParams)detailLayout.getLayoutParams();
+		params.x = XPoint;
+		detailLayout.setLayoutParams(params);
 	}
 	
 	OnTouchListener dargTouchListener = new OnTouchListener() {
