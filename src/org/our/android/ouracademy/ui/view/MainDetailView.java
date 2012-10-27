@@ -134,6 +134,12 @@ public class MainDetailView extends RelativeLayout {
         dragLayout.setOnTouchListener(dargTouchListener);
         
         dragLayoutTxt = (TextView) dragLayout.findViewById(R.id.drag_layout_txt);
+        dragLayoutTxt.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				onClickMenu();
+			}
+		});
         
         hideMenuBtn = (ViewGroup)(ViewGroup)findViewById(R.id.hide_menu_btn);
         hideMenuBtn.setOnClickListener(new OnClickListener() {
@@ -154,6 +160,9 @@ public class MainDetailView extends RelativeLayout {
 	}
 	
 	public void onClickMenu() {
+		if (menuStatus == MenuStatus.MOVING_MENU) {
+			return;
+		}
 		AbsoluteLayout.LayoutParams params = (AbsoluteLayout.LayoutParams)detailLayout.getLayoutParams();
 		setDetailLayoutImageCache(params);
 
@@ -165,6 +174,9 @@ public class MainDetailView extends RelativeLayout {
 	}
 	
 	private void setDetailLayoutImageCache(android.widget.AbsoluteLayout.LayoutParams params) {
+		if (menuStatus == MenuStatus.MOVING_MENU) {
+			return;
+		}
 		detailLayout.destroyDrawingCache();
 		detailLayout.buildDrawingCache();
 		decoyImage.setImageBitmap(detailLayout.getDrawingCache());
@@ -208,10 +220,6 @@ public class MainDetailView extends RelativeLayout {
 	}
 
 	public void hideManuAnimation(final int aniWidth) {
-		if (menuStatus == MenuStatus.MOVING_MENU) {
-			return;
-		}
-
 		final AnimationSet set = new AnimationSet(true);
 		set.setInterpolator(getContext(), android.R.anim.decelerate_interpolator);
 		Animation ani = new TranslateAnimation(0, -aniWidth, 0.0f, 0.0f);
@@ -313,17 +321,9 @@ public class MainDetailView extends RelativeLayout {
 					touchStatus = TouchStatus.STOP_DRAGGING;
 					detailLayout.setVisibility(View.VISIBLE);
 					detailRootLayout.removeView(decoyImage);
-
-					//Detail 화면에서 터치후 Drag 하지 않고 땐경우
-					if (menuStatus == MenuStatus.VISIBLE_MENU) {
-						onClickMenu();
-					} else if (menuStatus == MenuStatus.INVISIBLE_MENU) {
-						onClickMenu();
-					}
 				}
 			}
 			return true;
 		}
 	};
-
 }

@@ -53,7 +53,7 @@ public class OurApplication extends Application {
 
 	public static OurApplication getInstance() {
 		if (null == mOurApplication) {
-			Log.d("AeonApplication", "Application was killed!!!");
+			Log.d("Application", "Application was killed!!!");
 		}
 
 		return mOurApplication;

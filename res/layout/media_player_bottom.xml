@@ -84,12 +84,12 @@
         </LinearLayout>
     </LinearLayout>
 
-    <org.our.android.ouracademy.ui.view.NCHorizontalListView
+    <org.our.android.ouracademy.ui.widget.NCHorizontalListView
         android:id="@+id/list"
         android:layout_width="fill_parent"
         android:layout_height="230.67dp"
         android:background="@drawable/list_bottom_bg_drawable"
         android:visibility="gone" >
-    </org.our.android.ouracademy.ui.view.NCHorizontalListView>
+    </org.our.android.ouracademy.ui.widget.NCHorizontalListView>
 
 </LinearLayout>
