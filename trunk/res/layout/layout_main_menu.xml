@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="385.35dp"
+    android:layout_height="fill_parent"
+    android:background="@drawable/menu_bg01" >
+    <TextView
+        android:id="@+id/main_menu_txt"
+        style="@style/fontstyle_txt_main_category_title"
+        android:layout_width="wrap_content"
+        android:layout_height="57.33dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="25.33dp"
+        android:drawableLeft="@drawable/list_icon_category"
+        android:drawablePadding="7dp"
+        android:gravity="center_vertical"
+        android:text="@string/category_upper_case" />
+    <Button 
+        android:id="@+id/main_menu_apply_btn"
+        android:layout_width="306dp"
+        android:layout_height="62dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="13.33dp"
+        android:background="@drawable/btn_main_apply_selector"
+        style="@style/fontstyle_txt_main_apply_btn"
+        android:text="@string/apply" />
+    <ListView
+        android:id="@+id/category_listview"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@id/main_menu_txt"
+        android:layout_above="@id/main_menu_apply_btn" />
+    
+    <ImageButton
+        android:id="@+id/setting_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="20.67dp"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/btn_main_setting_selector" />
+ 
+</RelativeLayout>

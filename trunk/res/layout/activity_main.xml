@@ -1,101 +1,15 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
-     <!-- 하단 메뉴 -->
-    <LinearLayout
+    <FrameLayout 
+        android:id="@+id/layout_main_menu"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:baselineAligned="false"
-        android:orientation="horizontal" >
-        <!-- 하단 메뉴가 보여질 공간 -->
-        <RelativeLayout 
-            android:id="@+id/layout_menu"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:layout_weight="0"
-            android:background="@drawable/list_bg05">
-            <Button 
-                android:id="@+id/menu_apply_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:background="@drawable/list_bg_table04"
-                style="@style/fontstyle_txt_main_category_title"
-                android:text="@string/apply" />
-            <LinearLayout
-                android:id="@+id/menu_category_listview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:gravity="center_horizontal"
-                android:layout_above="@id/menu_apply_btn" />
-        </RelativeLayout>
-        <LinearLayout
-            android:layout_width="0.0px"
-            android:layout_height="fill_parent"
-            android:layout_weight="1" >
-        </LinearLayout>
-    </LinearLayout>
-    <AbsoluteLayout
-        android:id="@+id/layout_root_detail"
+        android:layout_height="fill_parent" >
+    </FrameLayout>
+    <FrameLayout 
+        android:id="@+id/layout_main_detail"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:orientation="horizontal" >
-        <RelativeLayout
-            android:id="@+id/layout_detail"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent" >
-            <RelativeLayout
-                android:id="@+id/drag_layout"
-                android:layout_width="wrap_content"
-	            android:layout_height="fill_parent"
-	            android:background="@drawable/list_bg02">
-	            <LinearLayout 
-	                android:layout_width="wrap_content"
-	                android:layout_height="wrap_content"
-	                android:layout_centerInParent="true"
-	                android:gravity="center"
-	                android:orientation="vertical" >
-	                <ImageView 
-		                android:layout_width="wrap_content"
-		                android:layout_height="wrap_content"
-		                android:src="@drawable/list_icon_menu01"/>
-		            <TextView 
-		                android:layout_width="wrap_content"
-		                android:layout_height="wrap_content"
-		                style="@style/fontstyle_txt_main_menu"
-		                android:text="@string/menu"/>
-	            </LinearLayout>
-			</RelativeLayout>
-            <org.our.android.ouracademy.ui.view.NCHorizontalListView
-		        android:id="@+id/horizontal_listview"
-		        android:layout_width="fill_parent"
-		        android:layout_height="fill_parent"
-		        android:layout_toRightOf="@id/drag_layout"
-		        android:background="@drawable/list_bg_drawable" />
-		    <!-- 메뉴가 show 되었을 버튼을 역활을 함.-->
-	        <LinearLayout
-	            android:id="@+id/hide_menu_btn"
-	            android:layout_width="fill_parent"
-	            android:layout_height="fill_parent"
-	            android:layout_toRightOf="@id/drag_layout"
-	            android:onClick="onClickMenu" >
-	        </LinearLayout>
-	        <!-- Left shadow Image-->
-		    <ImageView 
-		        android:layout_width="wrap_content"
-		        android:layout_height="fill_parent"
-		        android:layout_toRightOf="@id/drag_layout"
-		        android:background="@drawable/list_bg03"/>
-        </RelativeLayout>
-    </AbsoluteLayout>
-	<!-- Right shadow Image-->
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:layout_alignParentRight="true"
-        android:background="@drawable/list_bg04" />
-
-</RelativeLayout>
+        android:layout_height="fill_parent" >
+    </FrameLayout>
+</FrameLayout>

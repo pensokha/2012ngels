@@ -114,33 +114,33 @@ public class MainActivityOld extends BaseActivity {
 	}
 
 	private void initUI() {
-		setContentView(R.layout.activity_main);
-		
-		menuLayout		= (ViewGroup)findViewById(R.id.layout_menu);				//하단화면 View
-        detailRootView	= (ViewGroup)findViewById(R.id.layout_root_detail);			//상단화면 최상단 View
-        detailLayout	= (ViewGroup)findViewById(R.id.layout_detail);				//상단화면 View
-        
-        hideMenuBtn = (ViewGroup)(ViewGroup)findViewById(R.id.hide_menu_btn);
-        hideMenuBtn.setClickable(false);
-        
-        ViewGroup dragLayout = (ViewGroup)findViewById(R.id.drag_layout);	//상단화면의 메뉴를 Drag할 수 있는 여역
-        dragLayout.setOnTouchListener(dargTouchListener);					//onTouchListener 지정
-        
-        //상단화면 CashBitmap이 저장된 iamgeView
-        decoyImage = new ImageView(this);
-        
-        
-		
-//		FrameLayout layout = (FrameLayout) findViewById(R.id.layout_list);
-
-		contentsListview = new ListView(this);
-		contentsListAdapter = new ContentsListAdapterOld(this, readContents(),
-				CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
-		contentsListview.setAdapter(contentsListAdapter);
-
-		contentsListview.setOnItemClickListener(itemClickListener);
-
-//		layout.addView(contentsListview);
+//		setContentView(R.layout.activity_main);
+//		
+//		menuLayout		= (ViewGroup)findViewById(R.id.layout_menu);				//하단화면 View
+//        detailRootView	= (ViewGroup)findViewById(R.id.layout_root_detail);			//상단화면 최상단 View
+//        detailLayout	= (ViewGroup)findViewById(R.id.layout_detail);				//상단화면 View
+//        
+//        hideMenuBtn = (ViewGroup)(ViewGroup)findViewById(R.id.hide_menu_btn);
+//        hideMenuBtn.setClickable(false);
+//        
+//        ViewGroup dragLayout = (ViewGroup)findViewById(R.id.drag_layout);	//상단화면의 메뉴를 Drag할 수 있는 여역
+//        dragLayout.setOnTouchListener(dargTouchListener);					//onTouchListener 지정
+//        
+//        //상단화면 CashBitmap이 저장된 iamgeView
+//        decoyImage = new ImageView(this);
+//        
+//        
+//		
+////		FrameLayout layout = (FrameLayout) findViewById(R.id.layout_list);
+//
+//		contentsListview = new ListView(this);
+//		contentsListAdapter = new ContentsListAdapterOld(this, readContents(),
+//				CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
+//		contentsListview.setAdapter(contentsListAdapter);
+//
+//		contentsListview.setOnItemClickListener(itemClickListener);
+//
+////		layout.addView(contentsListview);
 		
 	}
 

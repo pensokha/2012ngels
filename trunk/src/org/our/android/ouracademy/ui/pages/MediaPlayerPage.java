@@ -3,7 +3,7 @@ package org.our.android.ouracademy.ui.pages;
 import org.our.android.ouracademy.R;
 import org.our.android.ouracademy.ui.adapter.PlayListAdapter;
 import org.our.android.ouracademy.ui.view.MediaPlayerView;
-import org.our.android.ouracademy.ui.view.NCHorizontalListView;
+import org.our.android.ouracademy.ui.widget.NCHorizontalListView;
 
 import android.app.Activity;
 import android.content.Intent;
