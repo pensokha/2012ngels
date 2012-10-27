@@ -6,8 +6,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.util.Log;
-
 public class OurMetaInfo implements OurJSONModel {
 	public static final int RES_CODE_SUCCESS = 0;
 	public static final int RES_CODE_DONT_NEED_UPDATE = -100;

@@ -60,7 +60,7 @@
                 android:layout_height="20.67dp"
                 android:background="@drawable/player_icon_sound04" />
 
-            <org.our.android.ouracademy.ui.view.VerticalSeekBar
+            <org.our.android.ouracademy.ui.widget.VerticalSeekBar
                 android:id="@+id/soundVolume"
                 style="@style/Widget.SeekBar.Sound"
                 android:layout_width="wrap_content"
