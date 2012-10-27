@@ -5,13 +5,15 @@ import java.util.ArrayList;
 import org.our.android.ouracademy.R;
 import org.our.android.ouracademy.model.OurCategory;
 import org.our.android.ouracademy.ui.adapter.CategoryListAdapter;
+import org.our.android.ouracademy.ui.pages.SettingActivity;
 
-import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.content.Intent;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
@@ -26,7 +28,7 @@ import android.widget.TextView;
 * @author JiHoon, Moon
 *
 */
-public class MainMenuView extends FrameLayout {
+public class MainMenuView extends FrameLayout implements OnClickListener{
 	ArrayList<OurCategory> categoryList = null;
 	ListView listView;
 	TextView categoryTxtView;
@@ -48,7 +50,7 @@ public class MainMenuView extends FrameLayout {
 		}
 		categoryList.clear();
 		
-		String[] temp = {"English", "Math", "Korean", " Social Study", "science", "Music", "Art",
+		String[] temp = {"English", "Math", "Korean", "Social Study", "science", "Music", "Art",
 				 "Physical education", "Practical course", "Ethics"};
 		OurCategory ourCategory;
 		for (String tt : temp) {
@@ -83,6 +85,9 @@ public class MainMenuView extends FrameLayout {
 		listView.setOnTouchListener(onTouchListener);
 		
 		applyButton = (Button) findViewById(R.id.main_menu_apply_btn);
+		
+		View settingBtn = findViewById(R.id.setting_btn);
+		settingBtn.setOnClickListener(this);
 	}
 	
 	public void setApplyBtnListener(OnClickListener onClickListener) {
@@ -136,4 +141,11 @@ public class MainMenuView extends FrameLayout {
 			}
 		}
 	};
+
+	@Override
+	public void onClick(View v) {
+		Intent intent = new Intent(getContext(), SettingActivity.class);
+		intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+		getContext().startActivity(intent);
+	}
 }

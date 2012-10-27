@@ -267,8 +267,6 @@ public class MainDetailView extends RelativeLayout {
 		public boolean onTouch(View v, MotionEvent event) {
 			if (event.getAction() == MotionEvent.ACTION_DOWN) {
 				touchStatus = TouchStatus.START_DRAGGING;
-//				Log.d("TEST","Down X " + (int) event.getX());
-//				Log.d("TEST","Down RawX " + (int) event.getRawX());
 
 				AbsoluteLayout.LayoutParams params = new AbsoluteLayout.LayoutParams(LayoutParams.FILL_PARENT,
 					LayoutParams.FILL_PARENT, ((AbsoluteLayout.LayoutParams)detailLayout.getLayoutParams()).x, 0);
@@ -280,7 +278,6 @@ public class MainDetailView extends RelativeLayout {
 			} else if (event.getAction() == MotionEvent.ACTION_MOVE) {
 				touchStatus = TouchStatus.DRAGGING;
 				moveEnd = (int)event.getRawX();
-				//decoyImage 위치 이동
 				AbsoluteLayout.LayoutParams params;
 				params = (AbsoluteLayout.LayoutParams)decoyImage.getLayoutParams();
 				int posX = params.x + moveEnd - moveStart;
