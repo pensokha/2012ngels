@@ -2,62 +2,63 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
+
     <AbsoluteLayout
         android:id="@+id/layout_root_detail"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="horizontal" >
+
         <RelativeLayout
             android:id="@+id/layout_detail"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent" >
+
             <RelativeLayout
                 android:id="@+id/drag_layout"
                 android:layout_width="wrap_content"
-	            android:layout_height="fill_parent"
-	            android:background="@drawable/list_bg02">
-	            <LinearLayout 
-	                android:layout_width="wrap_content"
-	                android:layout_height="wrap_content"
-	                android:layout_centerInParent="true"
-	                android:gravity="center"
-	                android:orientation="vertical" >
-	                <ImageView 
-		                android:layout_width="wrap_content"
-		                android:layout_height="wrap_content"
-		                android:src="@drawable/list_icon_menu01"/>
-		            <TextView 
-		                android:layout_width="wrap_content"
-		                android:layout_height="wrap_content"
-		                style="@style/fontstyle_txt_main_menu"
-		                android:text="@string/menu"/>
-	            </LinearLayout>
-			</RelativeLayout>
+                android:layout_height="fill_parent"
+                android:background="@drawable/list_bg02" >
+
+                <TextView
+                    android:id="@+id/drag_layout_txt"
+                    style="@style/fontstyle_txt_main_menu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:drawableTop="@drawable/list_icon_menu01"
+                    android:gravity="center"
+                    android:text="@string/menu" />
+            </RelativeLayout>
+
             <org.our.android.ouracademy.ui.widget.NCHorizontalListView
-		        android:id="@+id/horizontal_listview"
-		        android:layout_width="fill_parent"
-		        android:layout_height="fill_parent"
-		        android:layout_toRightOf="@id/drag_layout"
-		        android:background="@drawable/list_bg_drawable" />
-		    <!-- 메뉴가 show 되었을 버튼을 역활을 함.-->
-	        <LinearLayout
-	            android:id="@+id/hide_menu_btn"
-	            android:layout_width="fill_parent"
-	            android:layout_height="fill_parent"
-	            android:layout_toRightOf="@id/drag_layout" >
-	        </LinearLayout>
-	        <!-- Left shadow Image-->
-		    <ImageView 
-		        android:layout_width="wrap_content"
-		        android:layout_height="fill_parent"
-		        android:layout_toRightOf="@id/drag_layout"
-		        android:background="@drawable/list_bg03"/>
+                android:id="@+id/horizontal_listview"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_toRightOf="@id/drag_layout"
+                android:background="@drawable/list_bg_drawable" />
+
+            <LinearLayout
+                android:id="@+id/hide_menu_btn"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_toRightOf="@id/drag_layout" >
+            </LinearLayout>
+            <!-- Left shadow Image -->
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_toRightOf="@id/drag_layout"
+                android:background="@drawable/list_bg03" />
         </RelativeLayout>
     </AbsoluteLayout>
-	<!-- Right shadow Image-->
+    <!-- Right shadow Image -->
+
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:layout_alignParentRight="true"
         android:background="@drawable/list_bg04" />
+
 </RelativeLayout>
