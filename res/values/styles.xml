@@ -41,11 +41,11 @@
     </style>
 
     <style name="fontstyle_txt_main_category_title" parent="Common_Font_Style">
-        <item name="android:textColor">#68797f</item>
-        <item name="android:textSize">20dp</item>
+        <item name="android:textColor">#b9e01d</item>
+        <item name="android:textSize">30dp</item>
         <item name="android:singleLine">true</item>
         <item name="android:ellipsize">end</item>
-        <item name="android:shadowColor">#cedfd0</item>
+        <item name="android:shadowColor">#8c8c8c</item>
         <item name="android:shadowDx">0</item>
         <item name="android:shadowDy">1</item>
         <item name="android:shadowRadius">1</item>
@@ -57,6 +57,16 @@
         <item name="android:singleLine">true</item>
         <item name="android:ellipsize">end</item>
         <item name="android:shadowColor">#9a866e</item>
+        <item name="android:shadowDx">0</item>
+        <item name="android:shadowDy">1</item>
+        <item name="android:shadowRadius">1</item>
+    </style>
+    <style name="fontstyle_txt_main_apply_btn" parent="Common_Font_Style">
+        <item name="android:textColor">#41403f</item>
+        <item name="android:textSize">25dp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:shadowColor">#ffffff</item>
         <item name="android:shadowDx">0</item>
         <item name="android:shadowDy">1</item>
         <item name="android:shadowRadius">1</item>

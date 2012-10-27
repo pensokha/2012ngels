@@ -2,6 +2,8 @@ package org.our.android.ouracademy.ui.view;
 
 import org.our.android.ouracademy.R;
 import org.our.android.ouracademy.ui.view.PlayerSurfaceView.OnPlayerSurfaceViewListener;
+import org.our.android.ouracademy.ui.widget.NCHorizontalListView;
+import org.our.android.ouracademy.ui.widget.VerticalSeekBar;
 
 import android.content.Context;
 import android.graphics.PixelFormat;

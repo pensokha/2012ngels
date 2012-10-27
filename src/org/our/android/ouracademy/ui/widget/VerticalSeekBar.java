@@ -1,4 +1,4 @@
-package org.our.android.ouracademy.ui.view;
+package org.our.android.ouracademy.ui.widget;
 
 import android.content.Context;
 import android.graphics.Canvas;

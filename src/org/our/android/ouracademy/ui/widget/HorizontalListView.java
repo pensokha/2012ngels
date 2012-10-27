@@ -25,7 +25,7 @@
  *
  */
 
-package org.our.android.ouracademy.ui.view;
+package org.our.android.ouracademy.ui.widget;
 
 import java.util.LinkedList;
 import java.util.Queue;
