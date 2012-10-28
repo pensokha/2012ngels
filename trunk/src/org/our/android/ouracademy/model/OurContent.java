@@ -133,6 +133,20 @@ public class OurContent implements OurJSONModel {
 	@Override
 	public JSONObject getJSONObject() throws JSONException {
 		JSONObject jsonObject = new JSONObject();
+		jsonObject.put(CONTENTS_ID_JSON_KEY, id);
+		jsonObject.put(SUBJECT_ENG_JSON_KEY, subjectEng);
+		jsonObject.put(SUBJECT_KMR_JSON_KEY, subjectKmr);
+		jsonObject.put(CONTENT_URL_JSON_KEY, contentUrl);
+		jsonObject.put(SUBTITLE_URL_JSON_KEY, subtitleUrl);
+		jsonObject.put(SIZE_JSON_KEY, size);
+
+		JSONArray jsonCategoryIdList = new JSONArray();
+		if (categoryIdList != null) {
+			for (String categoryId : categoryIdList) {
+				jsonCategoryIdList.put(categoryId);
+			}
+		}
+		jsonObject.put(CATEGORY_ID_LIST_JSON_KEY, jsonCategoryIdList);
 
 		return jsonObject;
 	}
