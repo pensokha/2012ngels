@@ -5,6 +5,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+
+import org.our.android.ouracademy.model.OurVideoFile;
 
 import android.os.Environment;
 import android.util.Log;
@@ -31,6 +34,47 @@ public class FileManager {
 			return dir.list();
 		}
 		return null;
+	}
+	
+	public static String getFileRealPath(String fileName){
+		return STRSAVEPATH+fileName;
+	}
+	
+	public static String getContentId(String fileName){
+		return fileName.replace(".mp4", "");
+	}
+	
+	public static ArrayList<OurVideoFile> getVideoFiles(){
+		ArrayList<OurVideoFile> videoFiles = new ArrayList<OurVideoFile>();
+		String[] fileNameList = getList();
+		
+		File file;
+		OurVideoFile videoFile;
+		for(int i = 0; i < fileNameList.length; i++){
+			videoFile = new OurVideoFile();
+			file = new File(getFileRealPath(fileNameList[i]));
+			
+			videoFile.setName(fileNameList[i]);
+			videoFile.setContentId(getContentId(fileNameList[i]));
+			videoFile.setSize(file.getTotalSpace());
+			
+			videoFiles.add(videoFile);
+		}
+		
+		return videoFiles;
+	}
+	
+	public static void removeFiles(ArrayList<OurVideoFile> videoFiles){
+		if(videoFiles != null){
+			File file;
+			for(OurVideoFile videoFile : videoFiles){
+				file = new File(getFileRealPath(videoFile.getName()));
+				
+				if(file.exists()){
+					file.delete();
+				}
+			}
+		}
 	}
 
 	public static File getFile(String fileName) throws FileNotFoundException {
@@ -64,7 +108,7 @@ public class FileManager {
 	 * @param path
 	 * @return
 	 */
-	public static long geFileSize(String path) {
+	public static long getFileSize(String path) {
 		File file = new File(path);
 		if (file != null && file.exists()) {
 			return file.length();

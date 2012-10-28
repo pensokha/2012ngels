@@ -96,15 +96,14 @@ public class ContentDAO {
 				dbRow.add(DOWNLOADED_SIZE_KEY,
 						Long.toString(content.getDownloadedSize()));
 			}
+			
+			if (dbManager.insertOrReplace(CONTENT_TABLE_NAME, dbRow) != 1) {
+				throw new DAOException("Insert content Error");
+			}
 
 			if (content.getCategoryIdList().size() > 0) {
 				deleteContentCategories(content.getId());
-			}
-
-			addContentCategories(content.getId(), content.getCategoryIdList());
-
-			if (dbManager.insertOrReplace(CONTENT_TABLE_NAME, dbRow) != 1) {
-				throw new DAOException("Insert content Error");
+				addContentCategories(content.getId(), content.getCategoryIdList());
 			}
 		}
 	}

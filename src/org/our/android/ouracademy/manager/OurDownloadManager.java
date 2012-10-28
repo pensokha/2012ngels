@@ -48,7 +48,7 @@ public class OurDownloadManager {
 				sb.setLength(0);
 				sb.append(FileManager.STRSAVEPATH);
 				sb.append(fileName);
-				addRow(fileName, FileManager.geFileSize(sb.toString()), -1,
+				addRow(fileName, FileManager.getFileSize(sb.toString()), -1,
 						fileName, sb.toString());
 			}
 		}
