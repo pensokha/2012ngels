@@ -53,19 +53,6 @@ public class WifiDirectWrapper {
 	private WrapperChannelListener channelListener = new WrapperChannelListener();
 	private WiFiDirectBroadcastReceiver receiver;
 	private ArrayList<GroupOwnerFoundListener> groupOwnerFoundListenr;
-	private ComponentName serviceName;
-
-	public void stopP2pService() {
-		if (serviceName != null) {
-			Intent intent = new Intent();
-			intent.setComponent(serviceName);
-
-			if (context.stopService(intent)) {
-				Log.d(TAG, "Stop P2p Service");
-			}
-			serviceName = null;
-		}
-	}
 
 	private WifiDirectWrapper() {
 		intentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
@@ -153,21 +140,13 @@ public class WifiDirectWrapper {
 		}
 
 	}
-
-	public void setting() {
+	
+	public void setService(){
 		register();
-
-		if (OurPreferenceManager.getInstance().isTeacher() == true) {
-			serviceName = context.startService(new Intent(context,
-					P2PService.class));
-		}
 	}
 
-	public void resetService(ActionListener listener) {
-		if (serviceName != null) {
-			stopP2pService();
-		}
-		unsetting();
+	public void unsetService(ActionListener listener) {
+		unregister();
 		disconnect(listener);
 	}
 
@@ -175,10 +154,6 @@ public class WifiDirectWrapper {
 		if (isInitSuccess()) {
 			manager.removeGroup(channel, listener);
 		}
-	}
-
-	public void unsetting() {
-		unregister();
 	}
 
 	private void register() {

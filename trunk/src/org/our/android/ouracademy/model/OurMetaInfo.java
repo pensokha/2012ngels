@@ -9,7 +9,7 @@ import org.json.JSONObject;
 public class OurMetaInfo implements OurJSONModel {
 	public static final int RES_CODE_SUCCESS = 0;
 	public static final int RES_CODE_DONT_NEED_UPDATE = -100;
-	
+
 	private static final String VERSION_JSON_KEY = "Version";
 	private static final String RESPONSE_JSON_KEY = "ResponseCode";
 	private static final String CONTENTS_JSON_KEY = "Contents";
@@ -54,8 +54,28 @@ public class OurMetaInfo implements OurJSONModel {
 
 	@Override
 	public JSONObject getJSONObject() throws JSONException {
-		// TODO Auto-generated method stub
-		return null;
+		JSONObject jsonObject = new JSONObject();
+
+		jsonObject.put(RESPONSE_JSON_KEY, responseCode);
+		if (responseCode == RES_CODE_SUCCESS) {
+			jsonObject.put(VERSION_JSON_KEY, version);
+			
+			JSONArray jsonCatogories = new JSONArray();
+			JSONArray jsonContents = new JSONArray();
+			
+			for(OurCategory category : categories){
+				jsonCatogories.put(category.getJSONObject());
+			}
+			
+			for(OurContent content : contents){
+				jsonContents.put(content.getJSONObject());
+			}
+			
+			jsonObject.put(CATEGORIES_JSON_KEY, jsonCatogories);
+			jsonObject.put(CONTENTS_JSON_KEY, jsonContents);
+		}
+
+		return jsonObject;
 	}
 
 	@Override

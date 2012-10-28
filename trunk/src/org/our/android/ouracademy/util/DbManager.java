@@ -95,17 +95,17 @@ public class DbManager {
 			return false;
 		}
 	}
-	
-	public void commitTransaction(){
+
+	public void commitTransaction() {
 		getDB().setTransactionSuccessful();
 	}
-	
-	public boolean endTransaction(){
+
+	public boolean endTransaction() {
 		SQLiteDatabase db = getDB();
 		if (db != null && db.inTransaction() == true) {
 			db.endTransaction();
 			return !db.inTransaction();
-		}else {
+		} else {
 			return false;
 		}
 	}
@@ -358,7 +358,8 @@ public class DbManager {
 		return (result);
 	}
 
-	public long delete(String tableName, String whereClause, String[] whereArgs) throws Exception {
+	public long delete(String tableName, String whereClause, String[] whereArgs)
+			throws Exception {
 		long result = 0;
 		try {
 			SQLiteDatabase db = getDB();
@@ -387,6 +388,19 @@ public class DbManager {
 		result = db.update(tableName, row.getConentValues(), condition, null);
 
 		return (result);
+	}
+
+	public long update(String tableName, ContentValues values,
+			String whereClause, String[] whereArgs) {
+		long result = -1;
+		SQLiteDatabase db = getDB();
+
+		if(db != null){
+			result = db.update(tableName, values, whereClause, whereArgs);
+		}
+
+		return (result);
+
 	}
 
 	public int getCount(String tableName) {
