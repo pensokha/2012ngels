@@ -11,7 +11,7 @@ public class OurCategory implements OurJSONModel {
 	public static final String CATEGORY_DESCRIPTION_ENG_JSON_KEY = "DescriptionEnglish";
 	public static final String CATEGORY_DESCRIPTION_KMR_JSON_KEY = "DescriptionKhmer";
 	public static final String CATEGORY_PARENT_ID_JSON_KEY = "ParentCategoryID";
-	
+
 	private String categoryId;
 	private int categoryDepth;
 	private String categoryTitleEng;
@@ -21,12 +21,15 @@ public class OurCategory implements OurJSONModel {
 	private String categoryParent;
 
 	public boolean isChecked = false;
-	
+
 	public OurCategory() {
-		
+
 	}
-	public OurCategory(String categoryId, int categoryDepth ,String categoryTitleEng ,String categoryTitleKmr, 
-			String categoryDescriptionEng, String categoryDescriptionKmr, String categoryParent) {
+
+	public OurCategory(String categoryId, int categoryDepth,
+			String categoryTitleEng, String categoryTitleKmr,
+			String categoryDescriptionEng, String categoryDescriptionKmr,
+			String categoryParent) {
 		this.categoryId = categoryId;
 		this.categoryDepth = categoryDepth;
 		this.categoryTitleEng = categoryTitleEng;
@@ -35,7 +38,7 @@ public class OurCategory implements OurJSONModel {
 		this.categoryDescriptionKmr = categoryDescriptionKmr;
 		this.categoryParent = categoryParent;
 	}
-	
+
 	public String getCategoryId() {
 		return categoryId;
 	}
@@ -91,7 +94,7 @@ public class OurCategory implements OurJSONModel {
 	public void setCategoryParent(String categoryParent) {
 		this.categoryParent = categoryParent;
 	}
-	
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -114,7 +117,7 @@ public class OurCategory implements OurJSONModel {
 		builder.append("]");
 		return builder.toString();
 	}
-	
+
 	@Override
 	public JSONObject getJSONObject() throws JSONException {
 		// TODO Auto-generated method stub
@@ -127,8 +130,10 @@ public class OurCategory implements OurJSONModel {
 		categoryDepth = json.getInt(CATEGORY_DEPTH_JSON_KEY);
 		categoryTitleEng = json.getString(CATEGORY_TITLE_ENG_JSON_KEY);
 		categoryTitleKmr = json.getString(CATEGORY_TITLE_KMR_JSON_KEY);
-		categoryDescriptionEng = json.getString(CATEGORY_DESCRIPTION_ENG_JSON_KEY);
-		categoryDescriptionKmr = json.getString(CATEGORY_DESCRIPTION_KMR_JSON_KEY);
+		categoryDescriptionEng = json
+				.getString(CATEGORY_DESCRIPTION_ENG_JSON_KEY);
+		categoryDescriptionKmr = json
+				.getString(CATEGORY_DESCRIPTION_KMR_JSON_KEY);
 		categoryParent = json.getString(CATEGORY_PARENT_ID_JSON_KEY);
 	}
 }
