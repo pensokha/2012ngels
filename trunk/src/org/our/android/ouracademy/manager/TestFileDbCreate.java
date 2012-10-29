@@ -2,7 +2,7 @@ package org.our.android.ouracademy.manager;
 
 import java.util.ArrayList;
 
-import org.our.android.ouracademy.model.OurContent;
+import org.our.android.ouracademy.model.OurContents;
 import org.our.android.ouracademy.util.DbManager;
 import org.our.android.ouracademy.util.DbRow;
 
@@ -63,8 +63,8 @@ public class TestFileDbCreate {
 		}
 	}
 
-	static public ArrayList<OurContent> getAllContents() {
-		ArrayList<OurContent> contents = new ArrayList<OurContent>();
+	static public ArrayList<OurContents> getAllContents() {
+		ArrayList<OurContents> contents = new ArrayList<OurContents>();
 //		SQLiteDatabase db = DbManager.getInstance().getDB();
 //		Cursor cursor = db.query(CONTENTS_TABLE, FIELDS, null, null, null,
 //				null, null);
@@ -89,7 +89,7 @@ public class TestFileDbCreate {
 		return contents;
 	}
 
-	static public void setAllContents(ArrayList<OurContent> contents) {
+	static public void setAllContents(ArrayList<OurContents> contents) {
 //		for (OurContent content : contents) {
 //			DbRow dbRow = new DbRow();
 //			dbRow.add(KEY_CONTENT_ID, content.getId());

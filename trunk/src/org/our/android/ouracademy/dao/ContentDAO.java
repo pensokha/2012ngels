@@ -2,7 +2,7 @@ package org.our.android.ouracademy.dao;
 
 import java.util.ArrayList;
 
-import org.our.android.ouracademy.model.OurContent;
+import org.our.android.ouracademy.model.OurContents;
 import org.our.android.ouracademy.util.DbManager;
 import org.our.android.ouracademy.util.DbRow;
 
@@ -47,15 +47,15 @@ public class ContentDAO {
 		dbManager = DbManager.getInstance();
 	}
 
-	public ArrayList<OurContent> getContents() throws DAOException {
-		ArrayList<OurContent> contents = new ArrayList<OurContent>();
+	public ArrayList<OurContents> getContents() throws DAOException {
+		ArrayList<OurContents> contents = new ArrayList<OurContents>();
 		try {
 			SQLiteDatabase db = dbManager.getDB();
 			Cursor cursor = db.query(CONTENT_TABLE_NAME, CONTENT_FIELDS, null,
 					null, null, null, null);
 
 			while (cursor.moveToNext()) {
-				OurContent content = new OurContent();
+				OurContents content = new OurContents();
 				content.setId(cursor.getString(cursor.getColumnIndex(ID_KEY)));
 				content.setSubjectEng(cursor.getString(cursor
 						.getColumnIndex(SUBJECT_ENG_KEY)));
@@ -81,9 +81,9 @@ public class ContentDAO {
 		return contents;
 	}
 
-	public void insertContents(ArrayList<OurContent> contents,
+	public void insertContents(ArrayList<OurContents> contents,
 			boolean isAddedDownloadedSize) throws DAOException {
-		for (OurContent content : contents) {
+		for (OurContents content : contents) {
 			DbRow dbRow = new DbRow();
 			dbRow.add(ID_KEY, content.getId());
 			dbRow.add(SUBJECT_ENG_KEY, content.getSubjectEng());

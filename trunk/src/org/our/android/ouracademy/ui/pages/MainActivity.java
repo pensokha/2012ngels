@@ -2,13 +2,16 @@ package org.our.android.ouracademy.ui.pages;
 
 import java.util.List;
 
+import org.our.android.ouracademy.OurApplication;
 import org.our.android.ouracademy.R;
 import org.our.android.ouracademy.ui.adapter.ContentsListAdapter;
 import org.our.android.ouracademy.ui.pages.MainActivityOld.ContentsDataChangedReciever;
 import org.our.android.ouracademy.ui.view.MainDetailView;
 import org.our.android.ouracademy.ui.view.MainMenuView;
+import org.our.android.ouracademy.youtubedownloader.YoutoubeDownloadManager;
 
 import android.app.ActivityManager;
+import android.app.DownloadManager;
 import android.app.ActivityManager.RunningServiceInfo;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -22,6 +25,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 /**
  * 
@@ -63,7 +67,6 @@ public class MainActivity extends BaseActivity {
 	@Override
 	protected void onPause() {
 		super.onPause();
-
 		unregisterReceiver(reciever);
 	}
 

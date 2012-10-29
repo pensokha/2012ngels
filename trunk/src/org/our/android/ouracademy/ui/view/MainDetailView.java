@@ -8,8 +8,8 @@ import org.our.android.ouracademy.dao.DAOException;
 import org.our.android.ouracademy.dao.OurDAO;
 import org.our.android.ouracademy.dao.StudentDAO;
 import org.our.android.ouracademy.dao.TeacherDAO;
-import org.our.android.ouracademy.model.OurContent;
-import org.our.android.ouracademy.model.OurContent.FileStatus;
+import org.our.android.ouracademy.model.OurContents;
+import org.our.android.ouracademy.model.OurContents.FileStatus;
 import org.our.android.ouracademy.ui.adapter.ContentsListAdapter;
 import org.our.android.ouracademy.ui.widget.NCHorizontalListView;
 
@@ -55,7 +55,7 @@ public class MainDetailView extends RelativeLayout {
 	
 	public int dragWidth = 0;				//Drag field witdh
 	
-	ArrayList<OurContent> contentsList;
+	ArrayList<OurContents> contentsList;
 	
 	public enum TouchStatus {
 		START_DRAGGING,
@@ -83,7 +83,7 @@ public class MainDetailView extends RelativeLayout {
 		initUI();
 	}
 	
-	private ArrayList<OurContent> getContensListData() {
+	private ArrayList<OurContents> getContensListData() {
 		OurPreferenceManager.getInstance().setTeacherMode();
 		OurDAO dataDao = getOurDataDAO();
 		// TODO : 모든 경우 : 현존하는 파일과 DB정보를 일치 시킨다. - File에서 Meta 정보를 추출하는 기능을 개발 후
@@ -100,17 +100,18 @@ public class MainDetailView extends RelativeLayout {
 		}
 		
 		//임시 추가
-		String[] temp = { "우와", "이야", "오오", "우우", "하하", "대박", "중박", "쪽박", "말박",
-				"이야", "오오", "우우", "하하", "대박", "중박", "쪽박", "말박", "이야", "오오",
-				"우우", "하하", "대박", "중박", "쪽박", "말박", "이야", "오오", "우우", "하하",
-				"대박", "중박", "쪽박", "말박", "이야", "오오", "우우", "하하", "대박", "중박",
-				"쪽박", "말박" };
+		String[] temp = { "아이스크림", "버블팝", "강남스타일" };
+		String[] url = {"http://www.youtube.com/watch?v=QlWZluzBNxM&feature=g-all-xit",
+				"http://www.youtube.com/watch?v=bw9CALKOvAI&feature=relmfu",
+				"http://www.youtube.com/watch?v=kpZhZAr1cQU&feature=related"};
+		
 
-		OurContent ourContent;
-		for (String tt : temp) {
-			ourContent = new OurContent();
-			ourContent.setSubjectEng(tt);
-			ourContent.fileStatus = FileStatus.DOWNLOADED;
+		OurContents ourContent;
+		for (int i = 0; i < temp.length; i++) {
+			ourContent = new OurContents();
+			ourContent.setSubjectEng(temp[i]);
+			ourContent.setContentUrl(url[i]);
+			ourContent.fileStatus = FileStatus.NOEN;
 			contentsList.add(ourContent);
 		}
 		return contentsList;

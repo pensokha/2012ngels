@@ -3,7 +3,7 @@ package org.our.android.ouracademy.dao;
 import java.util.ArrayList;
 
 import org.our.android.ouracademy.OurPreferenceManager;
-import org.our.android.ouracademy.model.OurContent;
+import org.our.android.ouracademy.model.OurContents;
 import org.our.android.ouracademy.model.OurMetaInfo;
 import org.our.android.ouracademy.util.DbManager;
 
@@ -29,7 +29,7 @@ public abstract class OurDAO {
 	}; // 장비에 존재하는 파일과 DB를 Match 시키는 Class
 
 	// 초기화시에 가져올 data
-	public abstract ArrayList<OurContent> getInitContents() throws DAOException;
+	public abstract ArrayList<OurContents> getInitContents() throws DAOException;
 
 	protected void insertMetaInfo(OurMetaInfo metaInfo) throws DAOException {
 		pref.setVersion(metaInfo.getVersion());

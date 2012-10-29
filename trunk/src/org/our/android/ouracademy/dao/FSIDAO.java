@@ -5,10 +5,8 @@ import java.util.ArrayList;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.our.android.ouracademy.model.OurCategory;
-import org.our.android.ouracademy.model.OurContent;
+import org.our.android.ouracademy.model.OurContents;
 import org.our.android.ouracademy.model.OurMetaInfo;
-
-import android.util.Log;
 
 /******
  * 
@@ -37,9 +35,9 @@ public class FSIDAO {
 			}
 			categories.add(category);
 		}
-		ArrayList<OurContent> contents = new ArrayList<OurContent>();
+		ArrayList<OurContents> contents = new ArrayList<OurContents>();
 		for(int i = 0; i < 20; i++){
-			OurContent content = new OurContent();
+			OurContents content = new OurContents();
 			content.setId("ContentId"+i);
 			content.setSubjectEng("SubjectEng"+i);
 			content.setSubjectKmr("SubjectKmr"+i);

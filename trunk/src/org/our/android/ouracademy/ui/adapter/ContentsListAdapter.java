@@ -3,7 +3,7 @@ package org.our.android.ouracademy.ui.adapter;
 import java.util.ArrayList;
 
 import org.our.android.ouracademy.R;
-import org.our.android.ouracademy.model.OurContent;
+import org.our.android.ouracademy.model.OurContents;
 import org.our.android.ouracademy.ui.view.ContentsView;
 
 import android.content.Context;
@@ -20,7 +20,7 @@ import android.widget.TextView;
 */
 public class ContentsListAdapter extends BaseAdapter {
 	private Context context;
-	ArrayList<OurContent> contentsList = null;
+	ArrayList<OurContents> contentsList = null;
 	
 	private LayoutInflater inflater;
 	
@@ -33,7 +33,7 @@ public class ContentsListAdapter extends BaseAdapter {
 	
 	int layoutIds[] = { R.id.layout_content_01, R.id.layout_content_02 };
 	
-	public ContentsListAdapter(Context context, ArrayList<OurContent> contentsList) {
+	public ContentsListAdapter(Context context, ArrayList<OurContents> contentsList) {
 		this.context = context;
 		this.contentsList = contentsList;
 		
@@ -51,14 +51,14 @@ public class ContentsListAdapter extends BaseAdapter {
 	}
 
 	@Override
-	public OurContent getItem(int position) {
+	public OurContents getItem(int position) {
 		if (contentsList == null) {
 			return null;	
 		}
 		if (position < 0 && getCount()-1 > position ) {
 			return null;
 		}
-		return (OurContent)contentsList.get(position);
+		return (OurContents)contentsList.get(position);
 	}
 
 	@Override
@@ -99,7 +99,7 @@ public class ContentsListAdapter extends BaseAdapter {
 			final ContentsView contentsView = holder.itemHolderList[i];
 			if (currentPositionOfItem < itemSize) {
 				contentsView.setVisibility(View.VISIBLE);
-				OurContent model = contentsList.get(currentPositionOfItem);
+				OurContents model = contentsList.get(currentPositionOfItem);
 				contentsView.setContentsData(model);
 			} else {
 				contentsView.setVisibility(View.GONE);
