@@ -15,16 +15,16 @@ public class OurMetaInfo implements OurJSONModel {
 	private static final String CONTENTS_JSON_KEY = "Contents";
 	private static final String CATEGORIES_JSON_KEY = "Categories";
 
-	private ArrayList<OurContent> contents;
+	private ArrayList<OurContents> contents;
 	private ArrayList<OurCategory> categories;
 	private int responseCode;
 	private int version;
 
-	public ArrayList<OurContent> getContents() {
+	public ArrayList<OurContents> getContents() {
 		return contents;
 	}
 
-	public void setContents(ArrayList<OurContent> contents) {
+	public void setContents(ArrayList<OurContents> contents) {
 		this.contents = contents;
 	}
 
@@ -67,7 +67,7 @@ public class OurMetaInfo implements OurJSONModel {
 				jsonCatogories.put(category.getJSONObject());
 			}
 			
-			for(OurContent content : contents){
+			for(OurContents content : contents){
 				jsonContents.put(content.getJSONObject());
 			}
 			
@@ -94,10 +94,10 @@ public class OurMetaInfo implements OurJSONModel {
 			}
 		}
 		if (json.has(CONTENTS_JSON_KEY)) {
-			contents = new ArrayList<OurContent>();
+			contents = new ArrayList<OurContents>();
 			JSONArray jsonContents = json.getJSONArray(CONTENTS_JSON_KEY);
 			for (int i = 0; i < jsonContents.length(); i++) {
-				OurContent content = new OurContent();
+				OurContents content = new OurContents();
 				content.setFromJSONObject(jsonContents.getJSONObject(i));
 				contents.add(content);
 			}

@@ -1,13 +1,22 @@
 package org.our.android.ouracademy.ui.view;
 
 
-import org.our.android.ouracademy.R;
-import org.our.android.ouracademy.model.OurContent;
-import org.our.android.ouracademy.model.OurContent.FileStatus;
-import org.our.android.ouracademy.ui.pages.MediaPlayerPage;
+import java.net.URL;
+import java.util.ArrayList;
 
+import org.our.android.ouracademy.OurApplication;
+import org.our.android.ouracademy.R;
+import org.our.android.ouracademy.model.OurContents;
+import org.our.android.ouracademy.model.OurContents.FileStatus;
+import org.our.android.ouracademy.ui.pages.MediaPlayerPage;
+import org.our.android.ouracademy.youtubedownloader.Videos;
+import org.our.android.ouracademy.youtubedownloader.YoutoubeDownloadManager;
+import org.our.android.ouracademy.youtubedownloader.YoutubeDownloader;
+
+import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.AttributeSet;
@@ -30,7 +39,7 @@ public class ContentsView extends RelativeLayout implements OnClickListener{
 	public TextView title;
 	public ProgressBar progressBar;
 	
-	OurContent ourContents = null;
+	OurContents ourContents = null;
 	
 	ProgressAsyncTask progressAsyncTask = null;
 	
@@ -59,7 +68,7 @@ public class ContentsView extends RelativeLayout implements OnClickListener{
 		progressBar.setVisibility(visibility);
 	}
 	
-	public void setContentsData(OurContent ourContents_) {
+	public void setContentsData(OurContents ourContents_) {
 		this.ourContents = ourContents_;
 		
 		if (ourContents.fileStatus == FileStatus.DOWNLOADED) {	//파일이 존재
@@ -96,29 +105,18 @@ public class ContentsView extends RelativeLayout implements OnClickListener{
 			ourContents.fileStatus = FileStatus.DOWNLOADING;
 			contentsLayout.setBackgroundResource(R.drawable.book_download02);
 			progressBar.setVisibility(View.VISIBLE);
+			
 			if (progressAsyncTask == null) {
 				progressAsyncTask = new ProgressAsyncTask(progressBar);
-			} else {
-//				progressAsyncTask.
 			}
-			progressAsyncTask.execute();
+			progressAsyncTask.execute(ourContents);
 		}
 	}
 	
-//	private void rotateContent(final View view) {
-//		ObjectAnimator  animator =  ObjectAnimator.ofFloat(view, "rotationY", 180);
-//		animator.setDuration(500);
-//		animator.addListener(new AnimatorListenerAdapter() {
-//			@Override
-//			public void onAnimationEnd(Animator animation) {
-//			}
-//		});
-//		
-//		animator.start();
-//	}
-	
-	class ProgressAsyncTask extends AsyncTask<Void, Integer, Long> {
+	class ProgressAsyncTask extends AsyncTask<OurContents, Integer, Long> {
 		ProgressBar progressBar;
+		OurContents ourContents;
+		
 		public ProgressAsyncTask(ProgressBar progressBar) {
 			this.progressBar = progressBar;
 		}
@@ -129,15 +127,40 @@ public class ContentsView extends RelativeLayout implements OnClickListener{
 		}
 
 		@Override
-		protected Long doInBackground(Void... params) {
-			for(int i = 1 ; i <= 100; i++) {
-	          try {
-	            publishProgress(i);
-	            Thread.sleep(500);
-	          } catch(InterruptedException e) {
-	            e.printStackTrace();
-	          }
-	        }
+		protected Long doInBackground(OurContents... params) {
+			ourContents = params[0];
+			
+			YoutoubeDownloadManager dm = YoutoubeDownloadManager.getInstance(OurApplication.getInstance());
+			long id = dm.add(ourContents);
+			
+			DownloadManager.Query query = new DownloadManager.Query();
+			query.setFilterById(id);
+			query.setFilterByStatus(DownloadManager.STATUS_RUNNING);
+			
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e1) {
+				e1.printStackTrace();
+			}
+			
+			boolean isDownloading = true;
+			while (isDownloading) {
+				Cursor cursor = dm.downloadManager.query(query);
+				cursor.moveToFirst();
+				int bytes_total = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES));
+				int bytes_downloaded = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR));
+				int percentage = bytes_downloaded / bytes_total * 100;
+				publishProgress(percentage);
+				cursor.close();
+				if (bytes_total == bytes_downloaded) {
+					isDownloading = false;
+				}
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
 			return null;
 		}
 		
@@ -153,7 +176,8 @@ public class ContentsView extends RelativeLayout implements OnClickListener{
 		
 		@Override
 		protected void onPostExecute(Long result) {
-			
+			progressBar.setVisibility(View.INVISIBLE);
+			ourContents.fileStatus = FileStatus.DOWNLOADED;
 		}
 	}
 	

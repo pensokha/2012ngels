@@ -8,7 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.our.android.ouracademy.manager.TestFileDbCreate;
-import org.our.android.ouracademy.model.OurContent;
+import org.our.android.ouracademy.model.OurContents;
 import org.our.android.ouracademy.p2p.JSONProtocol;
 
 public class GetNewFileList implements OurP2PAction {
@@ -25,11 +25,11 @@ public class GetNewFileList implements OurP2PAction {
 	}
 	
 	private String getContentsJsonString(){
-		ArrayList<OurContent> contents = TestFileDbCreate.getAllContents();
+		ArrayList<OurContents> contents = TestFileDbCreate.getAllContents();
 		
 		JSONObject responseJson = new JSONObject();
 		JSONArray jsonContents = new JSONArray();
-		for(OurContent content : contents){
+		for(OurContents content : contents){
 			try {
 				jsonContents.put(content.getJSONObject());
 			} catch (JSONException e) {

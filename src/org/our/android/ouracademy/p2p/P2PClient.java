@@ -9,7 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.our.android.ouracademy.OurDefine;
 import org.our.android.ouracademy.manager.TestFileDbCreate;
-import org.our.android.ouracademy.model.OurContent;
+import org.our.android.ouracademy.model.OurContents;
 import org.our.android.ouracademy.p2p.action.GetNewFileList;
 import org.our.android.ouracademy.ui.pages.MainActivityOld;
 
@@ -45,14 +45,14 @@ public class P2PClient implements Runnable {
 				e.printStackTrace();
 			}
 			
-			ArrayList<OurContent> contents = new ArrayList<OurContent>();
+			ArrayList<OurContents> contents = new ArrayList<OurContents>();
 			try {
 				String jsonString = JSONProtocol.read(socket);
 				JSONObject jsonContent = new JSONObject(jsonString);
 				JSONArray jsonList = jsonContent.getJSONArray("contents");
 				
 				for(int i = 0; i < jsonList.length(); i++){
-					OurContent content = new OurContent();
+					OurContents content = new OurContents();
 					content.setFromJSONObject(jsonList.getJSONObject(i));
 					contents.add(content);
 				}
