@@ -8,8 +8,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.our.android.ouracademy.OurDefine;
+import org.our.android.ouracademy.dao.DAOException;
 import org.our.android.ouracademy.manager.TestFileDbCreate;
-import org.our.android.ouracademy.model.OurContents;
+import org.our.android.ouracademy.model.OurContent;
 import org.our.android.ouracademy.p2p.action.GetNewFileList;
 import org.our.android.ouracademy.ui.pages.MainActivityOld;
 
@@ -17,15 +18,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-public class P2PClient implements Runnable {
+public abstract class P2PClient implements Runnable {
 	private static final String TAG = "P2PClient";
-	private String serverAddress;
-	private Context context;
+	private static final String HEADER_KEY = "header";
+	private static final String METHOD_KEY = "method";
 	
-	public P2PClient(Context context, String serverAddress) {
+	private String serverAddress;
+	
+	public P2PClient(String serverAddress) {
 		super();
 		this.serverAddress = serverAddress;
-		this.context = context;
 	}
 
 	@Override
@@ -34,39 +36,49 @@ public class P2PClient implements Runnable {
 		if (socket == null) {
 			Log.d(TAG, "Fail Connect Owner");
 		} else {
-			StringBuilder json =  new StringBuilder();
-			json.append("{ 'header' : { 'method' : '");
-			json.append(GetNewFileList.methodName);
-			json.append("' } }");
+			JSONObject requestJson = new JSONObject();
 			
 			try {
-				JSONProtocol.write(socket, json.toString());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			
-			ArrayList<OurContents> contents = new ArrayList<OurContents>();
-			try {
-				String jsonString = JSONProtocol.read(socket);
-				JSONObject jsonContent = new JSONObject(jsonString);
-				JSONArray jsonList = jsonContent.getJSONArray("contents");
 				
-				for(int i = 0; i < jsonList.length(); i++){
-					OurContents content = new OurContents();
-					content.setFromJSONObject(jsonList.getJSONObject(i));
-					contents.add(content);
-				}
+				requestJson.put(HEADER_KEY, makeHeader()); 
+				
+				setBody(requestJson);
+				
+				JSONProtocol.write(socket, requestJson.toString());
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
 			
-			TestFileDbCreate.setAllContents(contents);
-			context.sendBroadcast(new Intent(MainActivityOld.OUR_CONTENT_DATA_CHANGED));
+			try {
+				
+				String jsonResponse = JSONProtocol.read(socket);
+				
+				parseResponse(jsonResponse);
+				
+				responseProcess();
+				
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+			
 			P2PManager.close(socket);
 		}
 	}
+	
+	private JSONObject makeHeader() throws JSONException{
+		JSONObject header = new JSONObject();
+		header.put(METHOD_KEY, getMethod());
+		return header;
+	}
+	
+	protected abstract String getMethod();
+	protected abstract void setBody(JSONObject request) throws JSONException;
+	protected abstract void parseResponse(String jsonResponse) throws IOException, JSONException;
+	protected abstract void responseProcess();
 
 	private Socket connectToOwner() {
 		Socket sock = null;
