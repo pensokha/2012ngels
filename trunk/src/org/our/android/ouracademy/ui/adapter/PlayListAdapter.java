@@ -1,8 +1,7 @@
 package org.our.android.ouracademy.ui.adapter;
 
-import org.our.android.ouracademy.R;
+import org.our.android.ouracademy.ui.view.PlayerListItemView;
 
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -34,12 +33,10 @@ public class PlayListAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		if (convertView == null) {
+			convertView = new PlayerListItemView(parent.getContext());
 		}
 
-		View retval = LayoutInflater.from(parent.getContext()).inflate(
-				R.layout.player_list_item, null);
-
-		return retval;
+		return convertView;
 	}
 
 }

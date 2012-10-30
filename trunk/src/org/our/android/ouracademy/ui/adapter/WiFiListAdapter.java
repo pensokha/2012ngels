@@ -36,6 +36,12 @@ public class WiFiListAdapter extends BaseAdapter {
 			convertView = new SetupWifiListItemVew(parent.getContext());
 		}
 
+		if (convertView instanceof SetupWifiListItemVew) {
+			SetupWifiListItemVew view = (SetupWifiListItemVew)convertView;
+			String testId = position + " ";
+			view.setData(true, testId, 0);
+		}
+
 		return convertView;
 	}
 }

@@ -26,6 +26,12 @@ public class SetupMainView extends LinearLayout {
 	 */
 	public interface SetupMainViewListener {
 		void onClickCloseBtn();
+
+		void onClickModeBtn(boolean teacher);
+
+		void onClickDeleteCell();
+
+		void onClickDataSyncCell();
 	};
 
 	ViewFlipper viewFlipper;
@@ -83,7 +89,7 @@ public class SetupMainView extends LinearLayout {
 		viewFlipper.showNext();
 	}
 
-	private void previousView() {
+	public void previousView() {
 		if (viewFlipper == null) {
 			return;
 		}
@@ -93,28 +99,47 @@ public class SetupMainView extends LinearLayout {
 		viewFlipper.showPrevious();
 	}
 
+	public boolean onBackPressed() {
+		View currentView = viewFlipper.getCurrentView();
+		if (currentView != null && currentView == wifiListView) {
+			previousView();
+			return true;
+		}
+		return false;
+	}
+
 	SetupCategoryViewListener categoryListener = new SetupCategoryViewListener() {
 
 		@Override
 		public void onClickBtn(View view) {
 			switch (view.getId()) {
 				case R.id.closeBtn:
-					listener.onClickCloseBtn();
+					if (listener != null) {
+						listener.onClickCloseBtn();
+					}
 					break;
 				case R.id.teacherBtn:
-
+					if (listener != null) {
+						listener.onClickModeBtn(true);
+					}
 					break;
 				case R.id.studentBtn:
-
+					if (listener != null) {
+						listener.onClickModeBtn(false);
+					}
 					break;
 				case R.id.network:
 					nextView();
 					break;
 				case R.id.delete:
-
+					if (listener != null) {
+						listener.onClickDeleteCell();
+					}
 					break;
 				case R.id.dataSync:
-
+					if (listener != null) {
+						listener.onClickDataSyncCell();
+					}
 					break;
 			}
 		}
@@ -137,5 +162,9 @@ public class SetupMainView extends LinearLayout {
 
 	public void setOnSetupMainViewListener(SetupMainViewListener callback) {
 		listener = callback;
+	}
+
+	public void setNetworkIdText(String id) {
+		categoryView.setNetworkIdText(id);
 	}
 }
