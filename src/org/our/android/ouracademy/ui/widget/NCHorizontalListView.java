@@ -215,6 +215,10 @@ public class NCHorizontalListView extends AdapterView<ListAdapter> {
 						return;
 					}
 
+					if (currentX == maxX) {
+						return;
+					}
+
 					View child = getChildAt(0);
 					int halfWidth = child.getWidth() / 2;
 
