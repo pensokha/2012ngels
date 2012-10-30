@@ -11,13 +11,14 @@ import java.io.*;
 import java.net.*;
 import java.util.concurrent.*;
 
+import org.our.android.ouracademy.OurDefine;
+
 import android.util.*;
 
 
 public class P2PServer implements Runnable {
 	private static final String TAG = "P2PServerService";
-	private static final int[] PORT = { 7777, 7778, 7779, 7780, 7781 };
-	private static final int SERVER_NUM = PORT.length;
+	private static final int SERVER_NUM = OurDefine.P2P_SERVER_PORT.length;
 
 	/**
 	 * 
@@ -53,9 +54,9 @@ public class P2PServer implements Runnable {
 		ServerSocket sock = null;
 		int portIdx = 0;
 
-		for (int i = 0; i < PORT.length; i++) {
+		for (int i = 0; i < OurDefine.P2P_SERVER_PORT.length; i++) {
 			try {
-				sock = new ServerSocket(PORT[portIdx++]);
+				sock = new ServerSocket(OurDefine.P2P_SERVER_PORT[portIdx++]);
 			} catch (IOException e) {
 				continue;
 			}

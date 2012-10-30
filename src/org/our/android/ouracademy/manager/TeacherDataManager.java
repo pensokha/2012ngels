@@ -22,7 +22,6 @@ public class TeacherDataManager extends DataManager {
 
 	private ExecutorService initExcutor;
 	private Future<?> initFuture;
-	private Context context;
 	private ComponentName serviceName;
 	private final Handler initHandler = new Handler();
 
@@ -43,13 +42,14 @@ public class TeacherDataManager extends DataManager {
 	}
 
 	/********
-	 * When : onPowerOn, ChangeMode Start Service 1. enableWifi : FSI connect,
-	 * get MetaInfo, Db update 2. sync file and db 3. start service, register
-	 * wifi receiver, make wifi group
+	 * When : onPowerOn, ChangeMode, start application
+	 * 1. enableWifi : FSI connect, get MetaInfo, Db update 
+	 * 2. sync file and db 
+	 * 3. start service, register wifi receiver, make wifi group
 	 */
 	@Override
 	public void startService(Context ctx) {
-		context = ctx;
+		super.startService(ctx);
 		reqStop = false; 
 
 		ConnectivityManager cManager;
@@ -58,33 +58,19 @@ public class TeacherDataManager extends DataManager {
 				.getSystemService(Context.CONNECTIVITY_SERVICE);
 		wifi = cManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
-		initExcutor = Executors.newSingleThreadExecutor();
-		Runnable asyncTask;
-
-		TeacherSyncCallback callback = new TeacherSyncCallback() {
-			@Override
-			public void endSync() {
-				// start service, register wifi receiver, make wifi group
-				if (reqStop == false) {
-					serviceName = context.startService(new Intent(context,
-							P2PService.class));
-					WifiDirectWrapper.getInstance().setService();
-				}
-			}
-		};
-
 		if (wifi.isConnected()) {
-			asyncTask = new GetMetaInfoFromFSI(context, initHandler, callback);
+			getMetaInfo();
 		} else {
-			asyncTask = new TeacherSyncTask(context, initHandler, callback);
+			initExcutor = Executors.newSingleThreadExecutor();
+			initFuture = initExcutor.submit(new TeacherSyncTask(context, initHandler, callback));
 		}
-		initFuture = initExcutor.submit(asyncTask);
 	}
 
 	/*********
-	 * When : onPowerOff, ChangeMode Stop Service 1. If StartTask is running,
-	 * Stop 2. Download File From Youtube Stop 3. service stop, remove wifi
-	 * group, unregister wifi receiver
+	 * When : onPowerOff, ChangeMode Stop Service 
+	 * 1. If StartTask is running, Stop 
+	 * 2. Download File From Youtube Stop 
+	 * 3. service stop, remove wifi group, unregister wifi receiver
 	 */
 	@Override
 	public void stopService(Context context) {
@@ -102,4 +88,22 @@ public class TeacherDataManager extends DataManager {
 
 		WifiDirectWrapper.getInstance().unsetService(null);
 	}
+
+	@Override
+	public void getMetaInfo() {
+		initExcutor = Executors.newSingleThreadExecutor();
+		initFuture = initExcutor.submit(new GetMetaInfoFromFSI(context, initHandler, callback));
+	}
+	
+	private TeacherSyncCallback callback = new TeacherSyncCallback() {
+		@Override
+		public void endSync() {
+			// start service, register wifi receiver, make wifi group
+			if (reqStop == false) {
+				serviceName = context.startService(new Intent(context,
+						P2PService.class));
+				WifiDirectWrapper.getInstance().setService();
+			}
+		}
+	};
 }

@@ -6,7 +6,9 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import org.our.android.ouracademy.OurPreferenceManager;
+import org.our.android.ouracademy.manager.DataManagerFactory;
 import org.our.android.ouracademy.p2p.P2PClient;
+import org.our.android.ouracademy.p2p.client.GetMetaInfoClient;
 
 import android.content.Context;
 import android.net.wifi.WpsInfo;
@@ -32,6 +34,7 @@ public class WifiDirectStudentListener extends WifiDirectDefaultListener
 	private static final String TAG = "WifiDirectStudentListener";
 	private static final int MAX_RETRY_COUNT = 10;
 	private int retryCount = 0;
+	private Handler handler;
 
 	public WifiDirectStudentListener(Context context, WifiP2pManager manager,
 			Channel channel) {
@@ -106,25 +109,36 @@ public class WifiDirectStudentListener extends WifiDirectDefaultListener
 							new StudenetConnectListener(config));
 				} else if (groupOwnerDevices.size() == 0
 						&& retryCount <= MAX_RETRY_COUNT) {
-					retryCount++;
+					if (handler == null) {
+						retryCount++;
 
-					Handler handler = new Handler();
-					handler.postDelayed(new Runnable() {
-						@Override
-						public void run() {
-							if (getConnected() == true && manager != null
-									&& channel != null) {
-								manager.discoverPeers(channel,
-										new DiscoverListener());
+						handler = new Handler();
+						handler.postDelayed(new Runnable() {
+							@Override
+							public void run() {
+								handler = null;
+								if (getConnected() == true && manager != null
+										&& channel != null) {
+									manager.discoverPeers(channel,
+											new DiscoverListener());
+								}
 							}
-						}
-					}, 300000); // 5 Minute
+						}, 300000); // 5 Minute
+					}
+				}
+
+				if (groupOwnerDevices.size() > 0) {
+					retryCount = 0;
 				}
 			}
 
-			for (GroupOwnerFoundListener groupOwnerFoundListenr : WifiDirectWrapper
-					.getInstance().getGroupOwnerFoundListenr()) {
-				groupOwnerFoundListenr.onFound(groupOwnerDevices);
+			ArrayList<GroupOwnerFoundListener> groupOwnerFoundListner = WifiDirectWrapper
+					.getInstance().getGroupOwnerFoundListenr();
+			if (groupOwnerFoundListner != null) {
+				for (GroupOwnerFoundListener groupOwnerFoundListenr : WifiDirectWrapper
+						.getInstance().getGroupOwnerFoundListenr()) {
+					groupOwnerFoundListenr.onFound(groupOwnerDevices);
+				}
 			}
 		}
 	}
@@ -171,8 +185,6 @@ public class WifiDirectStudentListener extends WifiDirectDefaultListener
 	public void onConnectionInfoAvailable(WifiP2pInfo info) {
 		WifiDirectWrapper.getInstance().setInfo(info);
 
-		Executor executor = Executors.newSingleThreadExecutor();
-		executor.execute(new P2PClient(context, info.groupOwnerAddress
-				.getHostAddress()));
+		DataManagerFactory.getDataManager().getMetaInfo();
 	}
 }
