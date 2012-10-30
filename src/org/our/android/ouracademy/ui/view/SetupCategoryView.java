@@ -3,11 +3,13 @@ package org.our.android.ouracademy.ui.view;
 import org.our.android.ouracademy.R;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 /**
  * 
@@ -25,6 +27,8 @@ public class SetupCategoryView extends LinearLayout implements View.OnClickListe
 	};
 
 	ImageView closeBtn;
+
+	TextView netText;
 
 	LinearLayout teacherBtn, studentBtn;
 	LinearLayout network, delete, dataSync;
@@ -60,6 +64,8 @@ public class SetupCategoryView extends LinearLayout implements View.OnClickListe
 		delete.setOnClickListener(this);
 		dataSync = (LinearLayout)findViewById(R.id.dataSync);
 		dataSync.setOnClickListener(this);
+
+		netText = (TextView)findViewById(R.id.netText);
 	}
 
 	@Override
@@ -73,5 +79,15 @@ public class SetupCategoryView extends LinearLayout implements View.OnClickListe
 
 	public void setOnSetupCategoryViewListener(SetupCategoryViewListener callback) {
 		listener = callback;
+	}
+
+	public void setNetworkIdText(String id) {
+		if (!TextUtils.isEmpty(id)) {
+			StringBuilder sb = new StringBuilder();
+			sb.append("WI-FI Direct ID (");
+			sb.append(id);
+			sb.append(")");
+			netText.setText(sb.toString());
+		}
 	}
 }

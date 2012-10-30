@@ -9,13 +9,14 @@
     android:paddingRight="24dp" >
 
     <ImageView
+        android:id="@+id/userIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="10dp"
         android:src="@drawable/setup_icon_wifi_teacher01" />
 
     <TextView
-        android:id="@+id/title"
+        android:id="@+id/directId"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -24,6 +25,7 @@
         android:textSize="20dp" />
 
     <ImageView
+        android:id="@+id/wifiIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/setup_icon_wifi02" />
