@@ -9,11 +9,13 @@ import org.json.JSONObject;
 public class OurMetaInfo implements OurJSONModel {
 	public static final int RES_CODE_SUCCESS = 0;
 	public static final int RES_CODE_DONT_NEED_UPDATE = -100;
+	public static final int RES_CODE_INVALID_REQUEST = -200;
+	public static final int RES_CODE_GET_DATA_FAIL = -300;
 
-	private static final String VERSION_JSON_KEY = "Version";
-	private static final String RESPONSE_JSON_KEY = "ResponseCode";
-	private static final String CONTENTS_JSON_KEY = "Contents";
-	private static final String CATEGORIES_JSON_KEY = "Categories";
+	public static final String VERSION_JSON_KEY = "Version";
+	public static final String RESPONSE_JSON_KEY = "ResponseCode";
+	public static final String CONTENTS_JSON_KEY = "Contents";
+	public static final String CATEGORIES_JSON_KEY = "Categories";
 
 	private ArrayList<OurContents> contents;
 	private ArrayList<OurCategory> categories;
@@ -40,7 +42,7 @@ public class OurMetaInfo implements OurJSONModel {
 		return responseCode;
 	}
 
-	public void setErrorCode(int responseCode) {
+	public void setResponseCode(int responseCode) {
 		this.responseCode = responseCode;
 	}
 

@@ -22,40 +22,44 @@ public class GetMetaInfoFromFSI extends TeacherSyncTask{
 		try {
 			OurMetaInfo metaInfo = fsiDao.getMetaInfo();
 			
-			switch (metaInfo.getResponseCode()) {
-			case OurMetaInfo.RES_CODE_SUCCESS:
-				OurPreferenceManager.getInstance().setVersion(metaInfo.getVersion());
-				
-				DbManager dbManager = DbManager.getInstance();
-				CategoryDAO categoryDao = new CategoryDAO();
-				ContentDAO contentDao = new ContentDAO();
-				
-				if(dbManager.beginTransaction() == false){
-					throw new DAOException("fail begin transaction");
-				}
-				contentDao.deleteAllContent();
-				categoryDao.deleteAllCategories();
-				
-				categoryDao.insertCategories(metaInfo.getCategories());
-				contentDao.insertContents(metaInfo.getContents(), false);
-				
-				if(Thread.currentThread().isInterrupted() == false){
-					dbManager.commitTransaction();
-				}
-				if(dbManager.endTransaction() == false){
-					throw new DAOException("fail end transaction");
-				}
-				
-				break;
-			case OurMetaInfo.RES_CODE_DONT_NEED_UPDATE:
-				break;
-			default:
-				throw new DAOException("ResponseCode : "+metaInfo.getResponseCode());
-			}
+			GetMetaInfoFromFSI.getMetaInfoProcesses(metaInfo);
 			
 			super.run();
 		} catch (DAOException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	public static void getMetaInfoProcesses(OurMetaInfo metaInfo) throws DAOException{
+		switch (metaInfo.getResponseCode()) {
+		case OurMetaInfo.RES_CODE_SUCCESS:
+			OurPreferenceManager.getInstance().setVersion(metaInfo.getVersion());
+			
+			DbManager dbManager = DbManager.getInstance();
+			CategoryDAO categoryDao = new CategoryDAO();
+			ContentDAO contentDao = new ContentDAO();
+			
+			if(dbManager.beginTransaction() == false){
+				throw new DAOException("fail begin transaction");
+			}
+			contentDao.deleteAllContent();
+			categoryDao.deleteAllCategories();
+			
+			categoryDao.insertCategories(metaInfo.getCategories());
+			contentDao.insertContents(metaInfo.getContents(), false);
+			
+			if(Thread.currentThread().isInterrupted() == false){
+				dbManager.commitTransaction();
+			}
+			if(dbManager.endTransaction() == false){
+				throw new DAOException("fail end transaction");
+			}
+			
+			break;
+		case OurMetaInfo.RES_CODE_DONT_NEED_UPDATE:
+			break;
+		default:
+			throw new DAOException("ResponseCode : "+metaInfo.getResponseCode());
 		}
 	}
 }
