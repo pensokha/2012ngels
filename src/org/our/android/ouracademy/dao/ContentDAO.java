@@ -1,7 +1,9 @@
 package org.our.android.ouracademy.dao;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
+import org.our.android.ouracademy.model.OurContentCategory;
 import org.our.android.ouracademy.model.OurContents;
 import org.our.android.ouracademy.util.DbManager;
 import org.our.android.ouracademy.util.DbRow;
@@ -47,7 +49,7 @@ public class ContentDAO {
 		dbManager = DbManager.getInstance();
 	}
 
-	public ArrayList<OurContents> getContents() throws DAOException {
+	public ArrayList<OurContents> getOnlyContents() throws DAOException {
 		ArrayList<OurContents> contents = new ArrayList<OurContents>();
 		try {
 			SQLiteDatabase db = dbManager.getDB();
@@ -80,6 +82,48 @@ public class ContentDAO {
 
 		return contents;
 	}
+	
+	public ArrayList<OurContentCategory> getContentCategories() throws DAOException {
+		ArrayList<OurContentCategory> contentCategories = new ArrayList<OurContentCategory>();
+		try {
+			SQLiteDatabase db = dbManager.getDB();
+			Cursor cursor = db.query(CONTENT_TABLE_NAME, CONTENT_FIELDS, null,
+					null, null, null, null);
+
+			while (cursor.moveToNext()) {
+				OurContentCategory contentCategory = new OurContentCategory();
+				contentCategory.setContentId(cursor.getString(cursor.getColumnIndex(CONTENT_ID_KEY)));
+				contentCategory.setCategoryId(cursor.getString(cursor.getColumnIndex(CATEGORY_ID_KEY)));
+
+				contentCategories.add(contentCategory);
+			}
+			cursor.close();
+		} catch (SQLException err) {
+			throw new DAOException("Error get contents");
+		}
+		
+		return contentCategories;
+	}
+	
+	public ArrayList<OurContents> getContents() throws DAOException {
+		HashMap<String, Integer> contentIdMap = new HashMap<String, Integer>();
+		
+		ArrayList<OurContents> contents = getOnlyContents();
+		for(int i = 0; i < contents.size(); i++){
+			contentIdMap.put(contents.get(i).getId(), i);
+		}
+		
+		int contentIndex = 0;
+		ArrayList<OurContentCategory> contentCategories = new ArrayList<OurContentCategory>();
+		for(OurContentCategory contentCategory : contentCategories){
+			contentIndex = contentIdMap.get(contentCategory.getContentId());
+			
+			contents.get(contentIndex).getCategoryIdList().add(contentCategory.getCategoryId()); 
+		}
+		
+		return contents;
+	}
+	
 
 	public void insertContents(ArrayList<OurContents> contents,
 			boolean isAddedDownloadedSize) throws DAOException {

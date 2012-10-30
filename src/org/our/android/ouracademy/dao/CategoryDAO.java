@@ -55,4 +55,10 @@ public class CategoryDAO {
 			}
 		}
 	}
+	
+	public ArrayList<OurCategory> getCategories(){
+		ArrayList<OurCategory> categories = new ArrayList<OurCategory>();
+		
+		return categories;
+	}
 }

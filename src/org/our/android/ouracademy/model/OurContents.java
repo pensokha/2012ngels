@@ -82,6 +82,10 @@ public class OurContents implements OurJSONModel {
 	}
 
 	public ArrayList<String> getCategoryIdList() {
+		if(categoryIdList == null){
+			categoryIdList = new ArrayList<String>();
+		}
+		
 		return categoryIdList;
 	}
 

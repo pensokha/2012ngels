@@ -2,20 +2,11 @@ package org.our.android.ouracademy.p2p;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.util.ArrayList;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.our.android.ouracademy.OurDefine;
-import org.our.android.ouracademy.dao.DAOException;
-import org.our.android.ouracademy.manager.TestFileDbCreate;
-import org.our.android.ouracademy.model.OurContent;
-import org.our.android.ouracademy.p2p.action.GetNewFileList;
-import org.our.android.ouracademy.ui.pages.MainActivityOld;
 
-import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 
 public abstract class P2PClient implements Runnable {

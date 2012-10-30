@@ -54,7 +54,7 @@ public class FSIDAO {
 		}
 		
 		testData.setVersion(1);
-		testData.setErrorCode(OurMetaInfo.RES_CODE_SUCCESS);
+		testData.setResponseCode(OurMetaInfo.RES_CODE_SUCCESS);
 		testData.setCategories(categories);
 		testData.setContents(contents);
 		
