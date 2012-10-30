@@ -1,5 +1,7 @@
 package org.our.android.ouracademy.wifidirect;
 
+import org.our.android.ouracademy.manager.DataManagerFactory;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -32,6 +34,8 @@ public abstract class WifiDirectDefaultListener implements WifiDirectListener,
 
 	@Override
 	public void onDisableP2p() {
+		DataManagerFactory.getDataManager().syncFileAndDatabase();
+		
 		if (dialogOn == true) {
 			new AlertDialog.Builder(context)
 					.setTitle("Do you want to set wifidirect?")
