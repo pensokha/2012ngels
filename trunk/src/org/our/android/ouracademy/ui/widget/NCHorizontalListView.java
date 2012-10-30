@@ -484,4 +484,8 @@ public class NCHorizontalListView extends AdapterView<ListAdapter> {
 		}
 
 	};
+
+	public void smoothScrollToFirstView() {
+		scrollTo(0, 500);
+	}
 }
