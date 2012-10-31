@@ -13,10 +13,11 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 public class YoutubeDownloader {
-
 	public static String Unknow = "UNKNOWN";
 
 	// request content from youtube url
+	// 필히 쓰레드에서 실행해야한다. 3.0 이상부터는 메인 메소드에서 네트워크 호출하면 
+	// android.os.NetworkOnMainThreadException 에러 발생
 	private String getContent(URL url) throws Exception {
 		DefaultHttpClient client = new DefaultHttpClient();
 		HttpGet request = new HttpGet(url.toURI());
@@ -62,9 +63,7 @@ public class YoutubeDownloader {
 			video.add(new Videos(splitUrl[i], getType(splitUrl[i]),
 					getResolution(splitUrl[i])));
 		}
-
 		return video;
-
 	}
 
 	// get video resolution
@@ -92,5 +91,8 @@ public class YoutubeDownloader {
 		}
 		return tmpType.replaceFirst("type=video/x{0,1}\\-{0,1}", "");
 	}
-
+	
+	public interface GetContentTaskCallBackInterface {
+		public void onCompletedGetContentResult(String contents);
+	}
 }
