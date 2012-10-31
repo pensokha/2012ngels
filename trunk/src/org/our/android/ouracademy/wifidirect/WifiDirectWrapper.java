@@ -1,37 +1,17 @@
 package org.our.android.ouracademy.wifidirect;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.Socket;
 import java.util.ArrayList;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.our.android.ouracademy.OurDefine;
 import org.our.android.ouracademy.OurPreferenceManager;
-import org.our.android.ouracademy.manager.FileManager;
-import org.our.android.ouracademy.manager.OurDownloadManager;
-import org.our.android.ouracademy.p2p.JSONProtocol;
-import org.our.android.ouracademy.p2p.P2PManager;
-import org.our.android.ouracademy.p2p.P2PService;
-import org.our.android.ouracademy.p2p.action.DownloadFile;
-import org.our.android.ouracademy.ui.pages.MainActivity;
-import org.our.android.ouracademy.ui.pages.MainActivityOld;
 import org.our.android.ouracademy.wifidirect.WifiDirectStudentListener.GroupOwnerFoundListener;
 
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.ActionListener;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.net.wifi.p2p.WifiP2pManager.ChannelListener;
-import android.os.AsyncTask;
-import android.util.Log;
 import android.widget.Toast;
 
 /*********
@@ -197,89 +177,7 @@ public class WifiDirectWrapper {
 		}
 	}
 
-	/********
-	 * 
-	 * @author hyeongseokLim
-	 * 
-	 */
-	private class DownloadFileAsyncTask extends AsyncTask<String, Void, Void> {
-		@Override
-		protected Void doInBackground(String... params) {
-			if (params == null || params[0] == null) {
-				return null;
-			}
-
-			String fileId = params[0];
-			String address = getOwnerIP();
-
-			if (address == null) {
-				return null;
-			}
-
-			Socket socket = connectToOwner(address);
-			if (socket == null) {
-				return null;
-			}
-
-			JSONObject json = new JSONObject();
-			JSONObject header = new JSONObject();
-
-			try {
-				header.put("method", DownloadFile.methodName);
-				json.put("header", header);
-				json.put("id", fileId);
-
-				JSONProtocol.write(socket, json.toString());
-
-				File file = FileManager.getFile(fileId);
-				file.createNewFile();
-
-				InputStream inputStream = socket.getInputStream();
-				FileManager.copyFile(inputStream, new FileOutputStream(file));
-
-				OurDownloadManager downloadManager = new OurDownloadManager();
-				downloadManager.addRow(fileId, file.getTotalSpace(),
-						file.getTotalSpace(), fileId, FileManager.STRSAVEPATH
-								+ fileId);
-
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (JSONException e) {
-				e.printStackTrace();
-			} finally {
-				P2PManager.close(socket);
-			}
-
-			return null;
-		}
-
-		@Override
-		protected void onPostExecute(Void result) {
-			super.onPostExecute(result);
-
-			context.sendBroadcast(new Intent(
-					MainActivityOld.OUR_CONTENT_DATA_CHANGED));
-		}
-
-		private Socket connectToOwner(String serverAddress) {
-			Socket sock = null;
-			int portIdx = 0;
-
-			for (int i = 0; i < OurDefine.P2P_SERVER_PORT.length; i++) {
-				try {
-					sock = new Socket(serverAddress,
-							OurDefine.P2P_SERVER_PORT[portIdx++]);
-
-				} catch (IOException e) {
-					continue;
-				}
-				return sock;
-			}
-			return sock;
-		}
-	}
-
 	public void download(String contentId) {
-		new DownloadFileAsyncTask().execute(contentId);
+//		new DownloadFileAsyncTask().execute(contentId);
 	}
 }

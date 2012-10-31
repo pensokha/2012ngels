@@ -1,12 +1,10 @@
 package org.our.android.ouracademy.manager;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-
+import org.our.android.ouracademy.asynctask.CallbackTask;
+import org.our.android.ouracademy.asynctask.CallbackTask.OurCallback;
 import org.our.android.ouracademy.asynctask.GetMetaInfoFromFSI;
-import org.our.android.ouracademy.asynctask.TeacherSyncTask;
-import org.our.android.ouracademy.asynctask.TeacherSyncTask.TeacherSyncCallback;
+import org.our.android.ouracademy.asynctask.SyncAndContentNoti;
+import org.our.android.ouracademy.model.OurContents;
 import org.our.android.ouracademy.p2p.P2PService;
 import org.our.android.ouracademy.wifidirect.WifiDirectWrapper;
 
@@ -15,17 +13,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Handler;
 
 public class TeacherDataManager extends DataManager {
 	private static TeacherDataManager instance = new TeacherDataManager();
 
-	private ExecutorService initExcutor;
-	private Future<?> initFuture;
 	private ComponentName serviceName;
-	private final Handler initHandler = new Handler();
-
-	private boolean reqStop = false;
 
 	public static DataManager getInstance() {
 		return instance;
@@ -50,7 +42,6 @@ public class TeacherDataManager extends DataManager {
 	@Override
 	public void startService(Context ctx) {
 		super.startService(ctx);
-		reqStop = false; 
 
 		ConnectivityManager cManager;
 		NetworkInfo wifi;
@@ -61,8 +52,9 @@ public class TeacherDataManager extends DataManager {
 		if (wifi.isConnected()) {
 			getMetaInfo();
 		} else {
-			initExcutor = Executors.newSingleThreadExecutor();
-			initFuture = initExcutor.submit(new TeacherSyncTask(context, initHandler, callback));
+			CallbackTask syncAndContentNoti = new SyncAndContentNoti(context);
+			syncAndContentNoti.addCallback(callback);
+			executeRunnable(syncAndContentNoti);
 		}
 	}
 
@@ -74,10 +66,7 @@ public class TeacherDataManager extends DataManager {
 	 */
 	@Override
 	public void stopService(Context context) {
-		reqStop = true;
-		if (initFuture.isDone() == false) {
-			initExcutor.shutdownNow();
-		}
+		super.stopService(context);
 
 		if (serviceName != null) {
 			Intent intent = new Intent();
@@ -91,19 +80,28 @@ public class TeacherDataManager extends DataManager {
 
 	@Override
 	public void getMetaInfo() {
-		initExcutor = Executors.newSingleThreadExecutor();
-		initFuture = initExcutor.submit(new GetMetaInfoFromFSI(context, initHandler, callback));
+		CallbackTask syncAndContentNoti = new GetMetaInfoFromFSI(context);
+		syncAndContentNoti.addCallback(callback);
+		executeRunnable(syncAndContentNoti);
 	}
 	
-	private TeacherSyncCallback callback = new TeacherSyncCallback() {
+	private OurCallback callback = new OurCallback() {
 		@Override
-		public void endSync() {
-			// start service, register wifi receiver, make wifi group
-			if (reqStop == false) {
-				serviceName = context.startService(new Intent(context,
-						P2PService.class));
-				WifiDirectWrapper.getInstance().setService();
-			}
+		public void callback() {
+			serviceName = context.startService(new Intent(context,
+					P2PService.class));
+			WifiDirectWrapper.getInstance().setService();
 		}
 	};
+
+	@Override
+	public void download(OurContents content) {
+		//download from youtube
+	}
+
+	@Override
+	public void cancleDownload(OurContents content) {
+		// TODO Auto-generated method stub
+		
+	}
 }

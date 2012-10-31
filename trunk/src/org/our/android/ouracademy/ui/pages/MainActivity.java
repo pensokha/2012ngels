@@ -160,6 +160,8 @@ public class MainActivity extends BaseActivity {
 		public static final String OUR_DATA_CHANGED = "org.our.android.ouracademy.broadreceiver.OurDataChanged";
 
 		public static final String ACTION = "action";
+		public static final String CONTENT_ID = "content_id";
+		public static final String DOWNLAD_SIZE = "download_size";
 		
 		public static final int ACTION_RELOAD = 0;
 		public static final int ACTION_CATEGORY_CHANGED = 1;

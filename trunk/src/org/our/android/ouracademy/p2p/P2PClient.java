@@ -6,10 +6,11 @@ import java.net.Socket;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.our.android.ouracademy.OurDefine;
+import org.our.android.ouracademy.asynctask.CallbackTask;
 
 import android.util.Log;
 
-public abstract class P2PClient implements Runnable {
+public abstract class P2PClient extends CallbackTask {
 	private static final String TAG = "P2PClient";
 	private static final String HEADER_KEY = "header";
 	private static final String METHOD_KEY = "method";
@@ -20,9 +21,10 @@ public abstract class P2PClient implements Runnable {
 		super();
 		this.serverAddress = serverAddress;
 	}
-
+	
 	@Override
-	public void run() {
+	public void proceed() {
+		
 		Socket socket = connectToOwner();
 		if (socket == null) {
 			Log.d(TAG, "Fail Connect Owner");
@@ -43,16 +45,8 @@ public abstract class P2PClient implements Runnable {
 			}
 			
 			try {
-				
-				String jsonResponse = JSONProtocol.read(socket);
-				
-				parseResponse(jsonResponse);
-				
-				responseProcess();
-				
+				responseProcess(socket);
 			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (JSONException e) {
 				e.printStackTrace();
 			}
 			
@@ -68,8 +62,8 @@ public abstract class P2PClient implements Runnable {
 	
 	protected abstract String getMethod();
 	protected abstract void setBody(JSONObject request) throws JSONException;
-	protected abstract void parseResponse(String jsonResponse) throws IOException, JSONException;
-	protected abstract void responseProcess();
+	protected abstract void responseProcess(Socket socket) throws IOException;
+	
 
 	private Socket connectToOwner() {
 		Socket sock = null;

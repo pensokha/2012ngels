@@ -377,83 +377,6 @@ public class MainActivityOld extends BaseActivity {
 		}
 	};
 	
-	private class DownloadFileAsyncTask extends AsyncTask<String, Void, Void> {
-
-		@Override
-		protected Void doInBackground(String... params) {
-			if (params == null || params[0] == null)
-				return null;
-
-			String fileId = params[0];
-			String address = wifidirectWrapper.getOwnerIP();
-			
-			if(address == null)
-				return null;
-
-			Socket socket = connectToOwner(address);
-			if (socket == null)
-				return null;
-
-			JSONObject json = new JSONObject();
-			JSONObject header = new JSONObject();
-
-			try {
-				header.put("method", DownloadFile.methodName);
-				json.put("header", header);
-				json.put("id", fileId);
-				
-				JSONProtocol.write(socket, json.toString());
-
-				File file = FileManager.getFile(fileId);
-				file.createNewFile();
-
-				InputStream inputStream = socket.getInputStream();
-				FileManager.copyFile(inputStream, new FileOutputStream(file));
-
-				OurDownloadManager downloadManager = new OurDownloadManager();
-				downloadManager.addRow(fileId, file.getTotalSpace(),
-						file.getTotalSpace(), fileId, FileManager.STRSAVEPATH
-								+ fileId);
-
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (JSONException e) {
-				e.printStackTrace();
-			} finally {
-				P2PManager.close(socket);
-			}
-
-			return null;
-		}
-
-		@Override
-		protected void onPostExecute(Void result) {
-			super.onPostExecute(result);
-			
-			contentsListAdapter.changeCursor(readContents());
-			contentsListAdapter.notifyDataSetChanged();
-			
-			sendBroadcast(new Intent(MainActivityOld.OUR_CONTENT_DATA_CHANGED));
-		}
-
-		private Socket connectToOwner(String serverAddress) {
-			Socket sock = null;
-			int portIdx = 0;
-
-			for (int i = 0; i < OurDefine.P2P_SERVER_PORT.length; i++) {
-				try {
-					sock = new Socket(serverAddress,
-							OurDefine.P2P_SERVER_PORT[portIdx++]);
-
-				} catch (IOException e) {
-					continue;
-				}
-				return sock;
-			}
-			return sock;
-		}
-	}
-
 	OnItemClickListener itemClickListener = new OnItemClickListener() {
 		@Override
 		public void onItemClick(AdapterView<?> list, View view, int position,
@@ -467,9 +390,6 @@ public class MainActivityOld extends BaseActivity {
 				Toast.makeText(getBaseContext(), downloadFilePath,
 						Toast.LENGTH_SHORT).show();
 			} else {
-				DownloadFileAsyncTask downloadTask = new DownloadFileAsyncTask();
-				downloadTask.execute(cursor.getString(cursor
-						.getColumnIndex("ContentId")));
 			}
 		}
 	};

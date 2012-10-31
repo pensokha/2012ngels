@@ -40,8 +40,13 @@ public class FileManager {
 		return STRSAVEPATH+fileName;
 	}
 	
+	private static final String EXTENTION_NAME = ".mp4";
 	public static String getContentId(String fileName){
-		return fileName.replace(".mp4", "");
+		return fileName.replace(EXTENTION_NAME, "");
+	}
+	
+	public static String getFileName(String contentId){
+		return contentId+EXTENTION_NAME;
 	}
 	
 	public static ArrayList<OurVideoFile> getVideoFiles(){
