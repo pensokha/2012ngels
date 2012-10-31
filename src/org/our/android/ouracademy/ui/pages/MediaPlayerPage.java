@@ -83,8 +83,8 @@ public class MediaPlayerPage extends Activity implements MediaPlayer.OnPreparedL
 		Intent intent = getIntent();
 		filePath = intent.getStringExtra(INTENTKEY_STR_VIDEO_FILE_PATH);
 		// test Code 
-		String sd = Environment.getExternalStorageDirectory().getAbsolutePath();
-		filePath = sd + "/OurAcademy/PSY-GANGNAM_STYLE_M_V.mp4";
+//		String sd = Environment.getExternalStorageDirectory().getAbsolutePath();
+//		filePath = sd + "/OurAcademy/PSY-GANGNAM_STYLE_M_V.mp4";
 	}
 
 	Handler progressHandler = new Handler() {

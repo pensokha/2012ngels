@@ -92,23 +92,36 @@ public class MainDetailView extends RelativeLayout {
 
 		// 선생님일 경우 : FSI로 부터 Data를 로딩한다.
 		// 학생일 경우 : DB로 부터 Data를 로딩한다.
-		try {
-			contentsList = dataDao.getInitContents();
-			Log.d("Test", ""+contentsList.size());
-		} catch (DAOException e) {
+//		try {
+//			contentsList = dataDao.getInitContents();
+//			Log.d("Test", ""+contentsList.size());
+//		} catch (DAOException e) {
 //			e.printStackTrace();
-		}
+//		}
 		
 		//임시 추가
-		String[] temp = { "아이스크림", "버블팝", "강남스타일" };
+		String[] temp = { "아이스크림", "버블팝", "강남스타일",
+				"1,2,3,4", "shy boy", "Magic Girl",
+				"MY MY MV", "Good-bye Baby", "Breathe",
+				"Like this", "So Cool", "Electric Shock"};
 		String[] url = {"http://www.youtube.com/watch?v=QlWZluzBNxM&feature=g-all-xit",
 				"http://www.youtube.com/watch?v=bw9CALKOvAI&feature=relmfu",
-				"http://www.youtube.com/watch?v=kpZhZAr1cQU&feature=related"};
+				"http://www.youtube.com/watch?v=kpZhZAr1cQU&feature=related",
+				"http://www.youtube.com/watch?v=KOORTO1byzY",
+				"http://www.youtube.com/watch?v=JHzSd26gB-c&feature=b-vrec",
+				"http://www.youtube.com/watch?v=MouuWhlmFO0&feature=related",
+				"http://www.youtube.com/watch?v=YDI2G9jzN-U&feature=related",
+				"http://www.youtube.com/watch?v=X8FXUq4HBkw&feature=related",
+				"http://www.youtube.com/watch?v=wTnwjlDhAY4&feature=related",
+				"http://www.youtube.com/watch?v=7EZTUYwjWBs&feature=fvwrel",
+				"http://www.youtube.com/watch?v=Pj3q0ZChgFE&feature=related",
+				"http://www.youtube.com/watch?v=n8I8QGFA1oM&feature=related"};
 		
-
+		contentsList = new ArrayList<OurContents>();
 		OurContents ourContent;
 		for (int i = 0; i < temp.length; i++) {
 			ourContent = new OurContents();
+			ourContent.setId(temp[i]);
 			ourContent.setSubjectEng(temp[i]);
 			ourContent.setContentUrl(url[i]);
 			ourContent.fileStatus = FileStatus.NOEN;
@@ -190,7 +203,6 @@ public class MainDetailView extends RelativeLayout {
 		if (menuStatus == MenuStatus.MOVING_MENU) {
 			return;
 		}
-
 		final AnimationSet set = new AnimationSet(true);
 		set.setInterpolator(getContext(), android.R.anim.decelerate_interpolator);
 		Animation ani = new TranslateAnimation(0.0f, aniWidth, 0.0f, 0.0f);

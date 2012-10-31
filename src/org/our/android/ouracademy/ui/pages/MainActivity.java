@@ -2,16 +2,12 @@ package org.our.android.ouracademy.ui.pages;
 
 import java.util.List;
 
-import org.our.android.ouracademy.OurApplication;
 import org.our.android.ouracademy.R;
 import org.our.android.ouracademy.ui.adapter.ContentsListAdapter;
-import org.our.android.ouracademy.ui.pages.MainActivityOld.ContentsDataChangedReciever;
 import org.our.android.ouracademy.ui.view.MainDetailView;
 import org.our.android.ouracademy.ui.view.MainMenuView;
-import org.our.android.ouracademy.youtubedownloader.YoutoubeDownloadManager;
 
 import android.app.ActivityManager;
-import android.app.DownloadManager;
 import android.app.ActivityManager.RunningServiceInfo;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -25,7 +21,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.Toast;
 
 /**
  * 
@@ -67,6 +62,7 @@ public class MainActivity extends BaseActivity {
 	@Override
 	protected void onPause() {
 		super.onPause();
+		closeHandler.removeMessages(0);
 		unregisterReceiver(reciever);
 	}
 
@@ -78,10 +74,9 @@ public class MainActivity extends BaseActivity {
 	private void initUI() {
 		setContentView(R.layout.activity_main);
 
-		menuLayout = (ViewGroup) findViewById(R.id.layout_main_menu); // 하단화면
-																		// View
-		detailLayout = (ViewGroup) findViewById(R.id.layout_main_detail); // 상단화면
-																			// View
+		menuLayout = (ViewGroup) findViewById(R.id.layout_main_menu); 
+																		
+		detailLayout = (ViewGroup) findViewById(R.id.layout_main_detail); 
 
 		initMenuLayout();
 		initContentsLayout();
@@ -119,7 +114,7 @@ public class MainActivity extends BaseActivity {
 				showShortToast(getResources().getString(
 						R.string.finish_application));
 				closeFlag = true;
-				mCloseHandler.sendEmptyMessageDelayed(0, 3000);
+				closeHandler.sendEmptyMessageDelayed(0, 3000);
 				return true;
 			} else {
 				finishApp();
@@ -147,7 +142,7 @@ public class MainActivity extends BaseActivity {
 		// System.gc();
 	}
 
-	private static Handler mCloseHandler = new Handler() {
+	private static Handler closeHandler = new Handler() {
 		public void handleMessage(Message msg) {
 			closeFlag = false;
 		}
