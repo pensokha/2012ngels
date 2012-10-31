@@ -124,7 +124,7 @@ public class MainDetailView extends RelativeLayout {
 			ourContent.setId(temp[i]);
 			ourContent.setSubjectEng(temp[i]);
 			ourContent.setContentUrl(url[i]);
-			ourContent.fileStatus = FileStatus.NOEN;
+			ourContent.fileStatus = FileStatus.NONE;
 			contentsList.add(ourContent);
 		}
 		return contentsList;

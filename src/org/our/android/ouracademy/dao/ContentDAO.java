@@ -8,6 +8,7 @@ import org.our.android.ouracademy.model.OurContents;
 import org.our.android.ouracademy.util.DbManager;
 import org.our.android.ouracademy.util.DbRow;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -70,8 +71,9 @@ public class ContentDAO {
 				content.setSize(cursor.getLong(cursor.getColumnIndex(SIZE_KEY)));
 				content.setDownloadedSize(cursor.getLong(cursor
 						.getColumnIndex(DOWNLOADED_SIZE_KEY)));
-				
-				content.setDownloaded(content.getSize() == content.getDownloadedSize());
+
+				content.setDownloaded(content.getSize() == content
+						.getDownloadedSize());
 
 				contents.add(content);
 			}
@@ -82,8 +84,21 @@ public class ContentDAO {
 
 		return contents;
 	}
-	
-	public ArrayList<OurContentCategory> getContentCategories() throws DAOException {
+
+	public void updateDownloadedSize(OurContents content) throws DAOException {
+		try {
+			SQLiteDatabase db = dbManager.getDB();
+			ContentValues values = new ContentValues();
+			values.put(DOWNLOADED_SIZE_KEY, content.getDownloadedSize());
+			db.update(CONTENT_TABLE_NAME, values, CONTENT_ID_KEY + "= ?",
+					new String[] { content.getId() });
+		} catch (SQLException err) {
+			throw new DAOException("Error update downloaded size");
+		}
+	}
+
+	public ArrayList<OurContentCategory> getContentCategories()
+			throws DAOException {
 		ArrayList<OurContentCategory> contentCategories = new ArrayList<OurContentCategory>();
 		try {
 			SQLiteDatabase db = dbManager.getDB();
@@ -92,8 +107,10 @@ public class ContentDAO {
 
 			while (cursor.moveToNext()) {
 				OurContentCategory contentCategory = new OurContentCategory();
-				contentCategory.setContentId(cursor.getString(cursor.getColumnIndex(CONTENT_ID_KEY)));
-				contentCategory.setCategoryId(cursor.getString(cursor.getColumnIndex(CATEGORY_ID_KEY)));
+				contentCategory.setContentId(cursor.getString(cursor
+						.getColumnIndex(CONTENT_ID_KEY)));
+				contentCategory.setCategoryId(cursor.getString(cursor
+						.getColumnIndex(CATEGORY_ID_KEY)));
 
 				contentCategories.add(contentCategory);
 			}
@@ -101,29 +118,29 @@ public class ContentDAO {
 		} catch (SQLException err) {
 			throw new DAOException("Error get contents");
 		}
-		
+
 		return contentCategories;
 	}
-	
+
 	public ArrayList<OurContents> getContents() throws DAOException {
 		HashMap<String, Integer> contentIdMap = new HashMap<String, Integer>();
-		
+
 		ArrayList<OurContents> contents = getOnlyContents();
-		for(int i = 0; i < contents.size(); i++){
+		for (int i = 0; i < contents.size(); i++) {
 			contentIdMap.put(contents.get(i).getId(), i);
 		}
-		
+
 		int contentIndex = 0;
 		ArrayList<OurContentCategory> contentCategories = new ArrayList<OurContentCategory>();
-		for(OurContentCategory contentCategory : contentCategories){
+		for (OurContentCategory contentCategory : contentCategories) {
 			contentIndex = contentIdMap.get(contentCategory.getContentId());
-			
-			contents.get(contentIndex).getCategoryIdList().add(contentCategory.getCategoryId()); 
+
+			contents.get(contentIndex).getCategoryIdList()
+					.add(contentCategory.getCategoryId());
 		}
-		
+
 		return contents;
 	}
-	
 
 	public void insertContents(ArrayList<OurContents> contents,
 			boolean isAddedDownloadedSize) throws DAOException {
@@ -140,14 +157,15 @@ public class ContentDAO {
 				dbRow.add(DOWNLOADED_SIZE_KEY,
 						Long.toString(content.getDownloadedSize()));
 			}
-			
+
 			if (dbManager.insertOrReplace(CONTENT_TABLE_NAME, dbRow) != 1) {
 				throw new DAOException("Insert content Error");
 			}
 
 			if (content.getCategoryIdList().size() > 0) {
 				deleteContentCategories(content.getId());
-				addContentCategories(content.getId(), content.getCategoryIdList());
+				addContentCategories(content.getId(),
+						content.getCategoryIdList());
 			}
 		}
 	}

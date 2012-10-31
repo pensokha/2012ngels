@@ -8,46 +8,38 @@ import org.our.android.ouracademy.manager.FileManager;
 import org.our.android.ouracademy.model.OurVideoFile;
 import org.our.android.ouracademy.util.DbManager;
 
-import android.content.Context;
+public class SyncFileAndDatabase extends CallbackTask {
 
-
-public class SyncFileAndDatabase implements Runnable{
-	protected Context context;
-	
-	public SyncFileAndDatabase(Context context) {
-		super();
-		
-		this.context = context;
+	@Override
+	public void onInterrupted() {
 	}
 
 	@Override
-	public void run() {
+	public void proceed() {
 		ArrayList<OurVideoFile> videoFiles = FileManager.getVideoFiles();
-		
+
 		ArrayList<OurVideoFile> dontExistVideos;
-		try{
+		try {
 			DbManager dbManager = DbManager.getInstance();
 			VideoFileDAO videoFileDAO = new VideoFileDAO();
-			if(dbManager.beginTransaction() == false){
+			if (dbManager.beginTransaction() == false) {
 				throw new DAOException("fail begin transaction");
 			}
-			
+
 			videoFileDAO.deleteFileState();
 			dontExistVideos = videoFileDAO.updateFileState(videoFiles);
-			
-			dbManager.commitTransaction();
-			if(dbManager.endTransaction() == false){
+
+			if (Thread.currentThread().isInterrupted() == false) {
+				dbManager.commitTransaction();
+				
+				if (dontExistVideos != null) {
+					FileManager.removeFiles(dontExistVideos);
+				}
+			}
+			if (dbManager.endTransaction() == false) {
 				throw new DAOException("fail end transaction");
 			}
-			
-			if(dontExistVideos != null){
-				FileManager.removeFiles(dontExistVideos);
-			}
-			
-			if(Thread.currentThread().isInterrupted() == false){
-				dbManager.commitTransaction();
-			}
-		}catch(DAOException e){
+		} catch (DAOException e) {
 			e.printStackTrace();
 		}
 	}

@@ -9,22 +9,24 @@ import org.our.android.ouracademy.model.OurMetaInfo;
 import org.our.android.ouracademy.util.DbManager;
 
 import android.content.Context;
-import android.os.Handler;
 
 
-public class GetMetaInfoFromFSI extends TeacherSyncTask{
-	public GetMetaInfoFromFSI(Context context, Handler handler, TeacherSyncCallback callback){
-		super(context, handler, callback);
+public class GetMetaInfoFromFSI extends SyncAndReloadNoti{
+	public GetMetaInfoFromFSI(Context context){
+		super(context);
 	}
 
-	public void run() {
+	@Override
+	public void proceed() {
 		FSIDAO fsiDao = new FSIDAO();
 		try {
 			OurMetaInfo metaInfo = fsiDao.getMetaInfo();
 			
-			GetMetaInfoFromFSI.getMetaInfoProcesses(metaInfo);
+			if(Thread.currentThread().isInterrupted() == false){
+				GetMetaInfoFromFSI.getMetaInfoProcesses(metaInfo);
+			}
 			
-			super.run();
+			super.proceed();
 		} catch (DAOException e) {
 			e.printStackTrace();
 		}

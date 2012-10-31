@@ -1,23 +1,27 @@
 package org.our.android.ouracademy.manager;
 
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
+import java.util.HashMap;
 
+import org.our.android.ouracademy.asynctask.CallbackTask;
+import org.our.android.ouracademy.asynctask.CallbackTask.OurCallback;
+import org.our.android.ouracademy.model.OurContents;
+import org.our.android.ouracademy.p2p.client.DownloadClient;
 import org.our.android.ouracademy.p2p.client.GetMetaInfoClient;
 import org.our.android.ouracademy.wifidirect.WifiDirectWrapper;
 
 import android.content.Context;
 
 public class StudentDataManager extends DataManager {
+	private static HashMap<String, ExecutorPair> downloadMap = new HashMap<String, ExecutorPair>();
 	private static StudentDataManager instance = new StudentDataManager();
-	
-	public static DataManager getInstance(){
+
+	public static DataManager getInstance() {
 		return instance;
 	}
 
 	@Override
 	public void onPowerOn(Context context) {
-		//Do noting
+		// Do noting
 	}
 
 	@Override
@@ -26,34 +30,73 @@ public class StudentDataManager extends DataManager {
 	}
 
 	/*******
-	 * When : start main page, change mode
-	 * 1. register wifi receiver, find teacher
-	 * 2. if find teacher, get meta info
-	 * 3. sync file and db 
+	 * When : start main page, change mode 1. register wifi receiver, find
+	 * teacher 2. if find teacher, get meta info 3. sync file and db
 	 */
 	@Override
 	public void startService(Context context) {
 		super.startService(context);
-		
+
 		WifiDirectWrapper.getInstance().setService();
 	}
 
 	/**********
-	 * When : onPowerOff, aplication stop, change mode
-	 * 1. unregister wifi receiver -> donwload false
+	 * When : onPowerOff, aplication stop, change mode 1. unregister wifi
+	 * receiver -> donwload false
 	 */
 	@Override
 	public void stopService(Context context) {
+		super.stopService(context);
+
 		WifiDirectWrapper.getInstance().unsetService(null);
 	}
 
 	@Override
 	public void getMetaInfo() {
 		String ownerIp = WifiDirectWrapper.getInstance().getOwnerIP();
+
+		if (ownerIp != null) {
+			executeRunnable(new GetMetaInfoClient(ownerIp, context));
+		}
+	}
+
+	@Override
+	public void download(OurContents content) {
+		CallbackTask downloadTask = new DownloadClient(WifiDirectWrapper
+				.getInstance().getOwnerIP(), content, context);
+		downloadTask.addCallback(new ExecutorCallbackTask(content));
+		ExecutorPair pair = executeRunnable(downloadTask);
+
+		synchronized (downloadMap) {
+			downloadMap.put(content.getId(), pair);
+		}
+	}
+
+	@Override
+	public void cancleDownload(OurContents content) {
+		synchronized (downloadMap) {
+			ExecutorPair pair = downloadMap.get(content.getId());
+			if(pair.future.isDone()){
+				pair.executor.shutdownNow();
+			}else{
+				downloadMap.remove(content.getId());
+			}
+		}
+	}
+	
+	private class ExecutorCallbackTask implements OurCallback{
+		private OurContents content;
 		
-		if(ownerIp != null){
-			Executor executor = Executors.newSingleThreadExecutor();
-			executor.execute(new GetMetaInfoClient(ownerIp, context));
+		public ExecutorCallbackTask(OurContents content) {
+			super();
+			this.content = content;
+		}
+
+		@Override
+		public void callback() {
+			synchronized (downloadMap) {
+				downloadMap.remove(content.getId());
+			}
 		}
 	}
 }

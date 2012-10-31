@@ -14,6 +14,7 @@ public class OurContents implements OurJSONModel {
 	public static final String SUBTITLE_URL_JSON_KEY = "SubTitleFileUrl";
 	public static final String SIZE_JSON_KEY = "Size";
 	public static final String CATEGORY_ID_LIST_JSON_KEY = "CategoryIDList";
+	public static final String DOWNLOAD_POINT_JSON_KEY = "DownloadPoint";
 
 	private String id;
 	private String subjectEng;
@@ -25,9 +26,9 @@ public class OurContents implements OurJSONModel {
 	private long downloadedSize;
 	
 	public enum FileStatus {
-		NOEN, DOWNLOADING, DOWNLOADED
+		NONE, DOWNLOADING, DOWNLOADED
 	}
-	public FileStatus fileStatus = FileStatus.NOEN;
+	public FileStatus fileStatus = FileStatus.NONE;
 
 	public OurContents() {
 		super();
@@ -105,7 +106,7 @@ public class OurContents implements OurJSONModel {
 		if (isDownloaded) {
 			fileStatus = FileStatus.DOWNLOADED;
 		} else {
-			fileStatus = FileStatus.NOEN;
+			fileStatus = FileStatus.NONE;
 		}
 	}
 

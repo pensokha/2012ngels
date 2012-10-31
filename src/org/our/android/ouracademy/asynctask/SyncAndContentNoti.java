@@ -6,14 +6,17 @@ import android.content.Context;
 import android.content.Intent;
 
 public class SyncAndContentNoti extends SyncFileAndDatabase {
+	private Context context;
 
 	public SyncAndContentNoti(Context context) {
-		super(context);
+		super();
+		
+		this.context = context;
 	}
 
 	@Override
-	public void run() {
-		super.run();
+	public void proceed() {
+		super.proceed();
 		
 		Intent intent = new Intent(OurDataChangeReceiver.OUR_DATA_CHANGED);
 		intent.putExtra(OurDataChangeReceiver.ACTION, OurDataChangeReceiver.ACTION_CONTENT_CHANGED);

@@ -2,13 +2,9 @@ package org.our.android.ouracademy.wifidirect;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 import org.our.android.ouracademy.OurPreferenceManager;
 import org.our.android.ouracademy.manager.DataManagerFactory;
-import org.our.android.ouracademy.p2p.P2PClient;
-import org.our.android.ouracademy.p2p.client.GetMetaInfoClient;
 
 import android.content.Context;
 import android.net.wifi.WpsInfo;

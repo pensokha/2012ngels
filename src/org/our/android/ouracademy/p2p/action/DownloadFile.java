@@ -11,8 +11,7 @@ import org.json.JSONObject;
 import org.our.android.ouracademy.manager.FileManager;
 
 public class DownloadFile implements OurP2PAction {
-	public static final String methodName = "DownloadFile";
-
+	
 	@Override
 	public void excute(Socket socket, JSONObject data) {
 		try {
