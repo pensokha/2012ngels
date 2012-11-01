@@ -2,13 +2,10 @@ package org.our.android.ouracademy.ui.view;
 
 import java.util.ArrayList;
 
-import org.our.android.ouracademy.OurPreferenceManager;
 import org.our.android.ouracademy.R;
-import org.our.android.ouracademy.dao.OurDAO;
-import org.our.android.ouracademy.dao.StudentDAO;
-import org.our.android.ouracademy.dao.TeacherDAO;
+import org.our.android.ouracademy.dao.ContentDAO;
+import org.our.android.ouracademy.dao.DAOException;
 import org.our.android.ouracademy.model.OurContents;
-import org.our.android.ouracademy.model.OurContents.FileStatus;
 import org.our.android.ouracademy.ui.adapter.ContentsListAdapter;
 import org.our.android.ouracademy.ui.widget.NCHorizontalListView;
 
@@ -48,8 +45,8 @@ public class MainDetailView extends RelativeLayout {
 
 	private int aniDuration = 200;
 	
-	private ListView contentsListview;
-	private ContentsListAdapter contentsListAdapter;
+	ListView contentsListview;
+	ContentsListAdapter contentsListAdapter;
 	
 	public int dragWidth = 0;				//Drag field witdh
 	
@@ -81,59 +78,23 @@ public class MainDetailView extends RelativeLayout {
 		initUI();
 	}
 	
-	private ArrayList<OurContents> getContensListData() {
-		OurPreferenceManager.getInstance().setTeacherMode();
-		OurDAO dataDao = getOurDataDAO();
-		// TODO : 모든 경우 : 현존하는 파일과 DB정보를 일치 시킨다. - File에서 Meta 정보를 추출하는 기능을 개발 후
-		// 작업을 한다.
-		dataDao.sync();
-
-		// 선생님일 경우 : FSI로 부터 Data를 로딩한다.
-		// 학생일 경우 : DB로 부터 Data를 로딩한다.
-//		try {
-//			contentsList = dataDao.getInitContents();
-//			Log.d("Test", ""+contentsList.size());
-//		} catch (DAOException e) {
-//			e.printStackTrace();
-//		}
-		
-		//임시 추가
-		String[] temp = { "아이스크림", "버블팝", "강남스타일",
-				"1,2,3,4", "shy boy", "Magic Girl",
-				"MY MY MV", "Good-bye Baby", "Breathe",
-				"Like this", "So Cool", "Electric Shock"};
-		String[] url = {"http://www.youtube.com/watch?v=QlWZluzBNxM&feature=g-all-xit",
-				"http://www.youtube.com/watch?v=bw9CALKOvAI&feature=relmfu",
-				"http://www.youtube.com/watch?v=kpZhZAr1cQU&feature=related",
-				"http://www.youtube.com/watch?v=KOORTO1byzY",
-				"http://www.youtube.com/watch?v=JHzSd26gB-c&feature=b-vrec",
-				"http://www.youtube.com/watch?v=MouuWhlmFO0&feature=related",
-				"http://www.youtube.com/watch?v=YDI2G9jzN-U&feature=related",
-				"http://www.youtube.com/watch?v=X8FXUq4HBkw&feature=related",
-				"http://www.youtube.com/watch?v=wTnwjlDhAY4&feature=related",
-				"http://www.youtube.com/watch?v=7EZTUYwjWBs&feature=fvwrel",
-				"http://www.youtube.com/watch?v=Pj3q0ZChgFE&feature=related",
-				"http://www.youtube.com/watch?v=n8I8QGFA1oM&feature=related"};
-		
-		contentsList = new ArrayList<OurContents>();
-		OurContents ourContent;
-		for (int i = 0; i < temp.length; i++) {
-			ourContent = new OurContents();
-			ourContent.setId(temp[i]);
-			ourContent.setSubjectEng(temp[i]);
-			ourContent.setContentUrl(url[i]);
-			ourContent.fileStatus = FileStatus.NONE;
-			contentsList.add(ourContent);
-		}
+	public ArrayList<OurContents> getContentList(){
 		return contentsList;
 	}
 	
-	private OurDAO getOurDataDAO() {
-		if (OurPreferenceManager.getInstance().isTeacher()) {
-			return new TeacherDAO();
-		} else {
-			return new StudentDAO();
+	public ContentsListAdapter getListAdapter(){
+		return contentsListAdapter;
+	}
+	
+	private ArrayList<OurContents> getContensListData() {
+		ContentDAO contentDao = new ContentDAO();
+		try {
+			contentsList = contentDao.getContents();
+		} catch (DAOException e) {
+			e.printStackTrace();
+			contentsList = new ArrayList<OurContents>();
 		}
+		return contentsList;
 	}
 	
 	private void initUI() {
@@ -195,10 +156,6 @@ public class MainDetailView extends RelativeLayout {
 		decoyImage.setLayoutParams(params);
 
 		detailRootLayout.addView(decoyImage);
-	}
-	
-	public void notifyDataSetChanged() {
-		contentsListAdapter.notifyDataSetChanged();
 	}
 	
 	public void openMenuAnimation(final int aniWidth) {
