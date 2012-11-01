@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import org.our.android.ouracademy.OurPreferenceManager;
 import org.our.android.ouracademy.R;
-import org.our.android.ouracademy.dao.DAOException;
 import org.our.android.ouracademy.dao.OurDAO;
 import org.our.android.ouracademy.dao.StudentDAO;
 import org.our.android.ouracademy.dao.TeacherDAO;
@@ -15,7 +14,6 @@ import org.our.android.ouracademy.ui.widget.NCHorizontalListView;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;

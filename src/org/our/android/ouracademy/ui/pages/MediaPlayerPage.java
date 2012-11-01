@@ -153,6 +153,14 @@ public class MediaPlayerPage extends Activity implements MediaPlayer.OnPreparedL
 			player.stop();
 		}
 	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		if (player != null) {
+			player.release();
+		}
+	}
 
 	@Override
 	public boolean onError(MediaPlayer mp, int what, int extra) {

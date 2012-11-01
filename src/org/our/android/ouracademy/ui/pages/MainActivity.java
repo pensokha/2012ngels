@@ -6,8 +6,10 @@ import org.our.android.ouracademy.R;
 import org.our.android.ouracademy.ui.adapter.ContentsListAdapter;
 import org.our.android.ouracademy.ui.view.MainDetailView;
 import org.our.android.ouracademy.ui.view.MainMenuView;
+import org.our.android.ouracademy.youtubedownloader.YoutubeDownloadManager;
 
 import android.app.ActivityManager;
+import android.app.DownloadManager;
 import android.app.ActivityManager.RunningServiceInfo;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -21,6 +23,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 /**
  * 
@@ -39,7 +42,7 @@ public class MainActivity extends BaseActivity {
 	
 	private OurDataChangeReceiver reciever;
 	private IntentFilter intentFilter;
-
+	
 	private static boolean closeFlag = false;
 
 	@Override
@@ -50,12 +53,12 @@ public class MainActivity extends BaseActivity {
 		reciever = new OurDataChangeReceiver();
 		intentFilter = new IntentFilter();
 		intentFilter.addAction(OurDataChangeReceiver.OUR_DATA_CHANGED);
+		
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		
 		registerReceiver(reciever, intentFilter);
 	}
 
@@ -154,7 +157,7 @@ public class MainActivity extends BaseActivity {
 			detailView.onClickMenu();
 		}
 	};
-
+	
 	public class OurDataChangeReceiver extends BroadcastReceiver {
 
 		public static final String OUR_DATA_CHANGED = "org.our.android.ouracademy.broadreceiver.OurDataChanged";

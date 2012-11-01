@@ -75,7 +75,11 @@ public class YoutubeDownloadManager {
 		return id;
 	}
 	
-	public boolean checkDownloadComplete(long downloadID) {
+	public boolean checkDownloadComplete(String contentsId) {
+		long downloadID = getDownloadId(contentsId);
+		if (downloadID == -1) {
+			return false;
+		}
 	    DownloadManager.Query query = new DownloadManager.Query();
 	    query.setFilterById(downloadID);
 
@@ -94,82 +98,83 @@ public class YoutubeDownloadManager {
 	    return false;
 	}
 	
-	public void CheckDwnloadStatus(String contentsId){
+	public void CheckDwnloadStatus(OurContents contentsId){
 		DownloadManager.Query query = new DownloadManager.Query();
-		long id = getDownloadId(contentsId);
-		query.setFilterById(id);
-		Cursor cursor = downloadManager.query(query);
-		if (cursor.moveToFirst()) {
-			int columnIndex = cursor.getColumnIndex(DownloadManager.COLUMN_STATUS);
-			int status = cursor.getInt(columnIndex);
-			int columnReason = cursor.getColumnIndex(DownloadManager.COLUMN_REASON);
-			int reason = cursor.getInt(columnReason);
-
-			switch (status) {
-			case DownloadManager.STATUS_FAILED:
-				String failedReason = "";
-				switch (reason) {
-				case DownloadManager.ERROR_CANNOT_RESUME:
-					failedReason = "ERROR_CANNOT_RESUME";
-					break;
-				case DownloadManager.ERROR_DEVICE_NOT_FOUND:
-					failedReason = "ERROR_DEVICE_NOT_FOUND";
-					break;
-				case DownloadManager.ERROR_FILE_ALREADY_EXISTS:
-					failedReason = "ERROR_FILE_ALREADY_EXISTS";
-					break;
-				case DownloadManager.ERROR_FILE_ERROR:
-					failedReason = "ERROR_FILE_ERROR";
-					break;
-				case DownloadManager.ERROR_HTTP_DATA_ERROR:
-					failedReason = "ERROR_HTTP_DATA_ERROR";
-					break;
-				case DownloadManager.ERROR_INSUFFICIENT_SPACE:
-					failedReason = "ERROR_INSUFFICIENT_SPACE";
-					break;
-				case DownloadManager.ERROR_TOO_MANY_REDIRECTS:
-					failedReason = "ERROR_TOO_MANY_REDIRECTS";
-					break;
-				case DownloadManager.ERROR_UNHANDLED_HTTP_CODE:
-					failedReason = "ERROR_UNHANDLED_HTTP_CODE";
-					break;
-				case DownloadManager.ERROR_UNKNOWN:
-					failedReason = "ERROR_UNKNOWN";
-					break;
-				}
-				Toast.makeText(appContext, "FAILED: " + failedReason, Toast.LENGTH_LONG).show();
-				break;
-			case DownloadManager.STATUS_PAUSED:
-				String pausedReason = "";
-				switch (reason) {
-				case DownloadManager.PAUSED_QUEUED_FOR_WIFI:
-					pausedReason = "PAUSED_QUEUED_FOR_WIFI";
-					break;
-				case DownloadManager.PAUSED_UNKNOWN:
-					pausedReason = "PAUSED_UNKNOWN";
-					break;
-				case DownloadManager.PAUSED_WAITING_FOR_NETWORK:
-					pausedReason = "PAUSED_WAITING_FOR_NETWORK";
-					break;
-				case DownloadManager.PAUSED_WAITING_TO_RETRY:
-					pausedReason = "PAUSED_WAITING_TO_RETRY";
-					break;
-				}
-				Toast.makeText(appContext, "PAUSED: " + pausedReason, Toast.LENGTH_LONG).show();
-				break;
-			case DownloadManager.STATUS_PENDING:
-				Toast.makeText(appContext, "PENDING", Toast.LENGTH_LONG).show();
-				break;
-			case DownloadManager.STATUS_RUNNING:
-				Toast.makeText(appContext, "RUNNING", Toast.LENGTH_LONG).show();
-				break;
-			case DownloadManager.STATUS_SUCCESSFUL:
-				Toast.makeText(appContext, "SUCCESSFUL", Toast.LENGTH_LONG).show();
-				GetFile(id);
-				downloadManager.remove(id);
-				break;
-			}
-		}
+		return;
+//		long id = getDownloadId(contentsId.getId());
+//		query.setFilterById(id);
+//		Cursor cursor = downloadManager.query(query);
+//		if (cursor.moveToFirst()) {
+//			int columnIndex = cursor.getColumnIndex(DownloadManager.COLUMN_STATUS);
+//			int status = cursor.getInt(columnIndex);
+//			int columnReason = cursor.getColumnIndex(DownloadManager.COLUMN_REASON);
+//			int reason = cursor.getInt(columnReason);
+//
+//			switch (status) {
+//			case DownloadManager.STATUS_FAILED:
+//				String failedReason = "";
+//				switch (reason) {
+//				case DownloadManager.ERROR_CANNOT_RESUME:
+//					failedReason = "ERROR_CANNOT_RESUME";
+//					break;
+//				case DownloadManager.ERROR_DEVICE_NOT_FOUND:
+//					failedReason = "ERROR_DEVICE_NOT_FOUND";
+//					break;
+//				case DownloadManager.ERROR_FILE_ALREADY_EXISTS:
+//					failedReason = "ERROR_FILE_ALREADY_EXISTS";
+//					break;
+//				case DownloadManager.ERROR_FILE_ERROR:
+//					failedReason = "ERROR_FILE_ERROR";
+//					break;
+//				case DownloadManager.ERROR_HTTP_DATA_ERROR:
+//					failedReason = "ERROR_HTTP_DATA_ERROR";
+//					break;
+//				case DownloadManager.ERROR_INSUFFICIENT_SPACE:
+//					failedReason = "ERROR_INSUFFICIENT_SPACE";
+//					break;
+//				case DownloadManager.ERROR_TOO_MANY_REDIRECTS:
+//					failedReason = "ERROR_TOO_MANY_REDIRECTS";
+//					break;
+//				case DownloadManager.ERROR_UNHANDLED_HTTP_CODE:
+//					failedReason = "ERROR_UNHANDLED_HTTP_CODE";
+//					break;
+//				case DownloadManager.ERROR_UNKNOWN:
+//					failedReason = "ERROR_UNKNOWN";
+//					break;
+//				}
+//				Toast.makeText(appContext, "FAILED: " + failedReason, Toast.LENGTH_LONG).show();
+//				break;
+//			case DownloadManager.STATUS_PAUSED:
+//				String pausedReason = "";
+//				switch (reason) {
+//				case DownloadManager.PAUSED_QUEUED_FOR_WIFI:
+//					pausedReason = "PAUSED_QUEUED_FOR_WIFI";
+//					break;
+//				case DownloadManager.PAUSED_UNKNOWN:
+//					pausedReason = "PAUSED_UNKNOWN";
+//					break;
+//				case DownloadManager.PAUSED_WAITING_FOR_NETWORK:
+//					pausedReason = "PAUSED_WAITING_FOR_NETWORK";
+//					break;
+//				case DownloadManager.PAUSED_WAITING_TO_RETRY:
+//					pausedReason = "PAUSED_WAITING_TO_RETRY";
+//					break;
+//				}
+//				Toast.makeText(appContext, "PAUSED: " + pausedReason, Toast.LENGTH_LONG).show();
+//				break;
+//			case DownloadManager.STATUS_PENDING:
+//				Toast.makeText(appContext, "PENDING", Toast.LENGTH_LONG).show();
+//				break;
+//			case DownloadManager.STATUS_RUNNING:
+//				Toast.makeText(appContext, "RUNNING", Toast.LENGTH_LONG).show();
+//				break;
+//			case DownloadManager.STATUS_SUCCESSFUL:
+//				Toast.makeText(appContext, "SUCCESSFUL", Toast.LENGTH_LONG).show();
+//				GetFile(id);
+//				downloadManager.remove(id);
+//				break;
+//			}
+//		}
 	}
 
 	private void GetFile(long downloadID) {
