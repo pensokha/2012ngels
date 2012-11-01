@@ -293,6 +293,9 @@ public class NCHorizontalListView extends AdapterView<ListAdapter> {
 				}
 				rightViewIndex++;
 			}
+			if (maxX < 0) {
+				maxX = 0;
+			}
 		} else {
 			while (rightEdge + dx < getWidth() && rightViewIndex < listAdapter.getCount()) {
 				View child = listAdapter.getView(rightViewIndex, removedViewQueue.poll(), this);
@@ -302,7 +305,12 @@ public class NCHorizontalListView extends AdapterView<ListAdapter> {
 				if (rightViewIndex == listAdapter.getCount() - 1) {
 					maxX = currentX + rightEdge - getWidth();
 				}
+
 				rightViewIndex++;
+			}
+
+			if (maxX < 0) {
+				maxX = 0;
 			}
 		}
 	}
