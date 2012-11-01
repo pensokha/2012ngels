@@ -59,6 +59,19 @@
                 <action android:name="android.intent.action.ACTION_SHUTDOWN"/>
             </intent-filter>
         </receiver>
+        
+        <service android:name="org.our.android.ouracademy.download.DownloadService"
+            android:exported="false" >
+			<intent-filter>
+				<action android:name="org.our.android.ouracademy.download.DOWNLOAD_SERVICE" />
+			</intent-filter>
+		</service>
+		
+		<receiver android:name="org.our.android.ouracademy.download.ServiceStartReceiver">
+    		<intent-filter>
+    			<action android:name="android.intent.action.BOOT_COMPLETED"/>
+    		</intent-filter>
+    	</receiver>
     </application>
 
 </manifest>

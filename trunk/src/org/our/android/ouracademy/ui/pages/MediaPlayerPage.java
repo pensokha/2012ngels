@@ -157,9 +157,9 @@ public class MediaPlayerPage extends Activity implements MediaPlayer.OnPreparedL
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		if (player != null) {
-			player.release();
-		}
+//		if (player != null) {
+//			player.release();
+//		}
 	}
 
 	@Override
