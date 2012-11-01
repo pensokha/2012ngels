@@ -44,7 +44,7 @@ public class MediaPlayerView extends LinearLayout implements View.OnClickListene
 	LinearLayout closeBtn, soundBtn, moreBtn, soundControll;
 	RelativeLayout playerCenter;
 
-	TextView title, runTime, remainingTime;
+	TextView runTime, remainingTime;
 
 	MediaPlayerViewListener listener;
 
@@ -94,7 +94,6 @@ public class MediaPlayerView extends LinearLayout implements View.OnClickListene
 		moreBtn = (LinearLayout)findViewById(R.id.moreBtn);
 		moreBtn.setOnClickListener(this);
 
-		title = (TextView)findViewById(R.id.title);
 		runTime = (TextView)findViewById(R.id.runTime);
 		remainingTime = (TextView)findViewById(R.id.remainingTime);
 
@@ -248,10 +247,10 @@ public class MediaPlayerView extends LinearLayout implements View.OnClickListene
 	}
 
 	public void setTitleText(String text) {
-		if (TextUtils.isEmpty(text) || title == null) {
+		if (TextUtils.isEmpty(text) || topView == null) {
 			return;
 		}
-		title.setText(text);
+		topView.setTitleText(text);
 	}
 
 	public void setRunTimeText(int milliseconds) {
