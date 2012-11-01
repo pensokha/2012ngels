@@ -6,6 +6,10 @@ import org.our.android.ouracademy.model.OurCategory;
 import org.our.android.ouracademy.util.DbManager;
 import org.our.android.ouracademy.util.DbRow;
 
+import android.database.Cursor;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
+
 public class CategoryDAO {
 	public static final String CATEGORY_TABLE_NAME = "categories";
 
@@ -24,6 +28,10 @@ public class CategoryDAO {
 			+ TITLE_KMR_KEY + " VARCHAR, " + DESCRIPTION_ENG_KEY + " TEXT, "
 			+ DESCRIPTION_KMR_KEY + " TEXT," + PARENT_ID_KEY + " VARCHAR, "
 			+ ICON_KEY + " VARCHAR);";
+	
+	private static final String[] CATEGORY_FIELDS = { ID_KEY, DEPTH_KEY,
+		TITLE_ENG_KEY, TITLE_KMR_KEY, DESCRIPTION_ENG_KEY, DESCRIPTION_KMR_KEY,
+		PARENT_ID_KEY, ICON_KEY};
 
 	private DbManager dbManager;
 
@@ -47,7 +55,7 @@ public class CategoryDAO {
 			dbrow.add(TITLE_ENG_KEY, category.getCategoryTitleEng());
 			dbrow.add(TITLE_KMR_KEY, category.getCategoryTitleKmr());
 			dbrow.add(DESCRIPTION_ENG_KEY, category.getCategoryDescriptionEng());
-			dbrow.add(TITLE_KMR_KEY, category.getCategoryDescriptionKmr());
+			dbrow.add(DESCRIPTION_KMR_KEY, category.getCategoryDescriptionKmr());
 			dbrow.add(PARENT_ID_KEY, category.getCategoryParent());
 
 			if (dbManager.insertOrReplace(CATEGORY_TABLE_NAME, dbrow) != 1) {
@@ -56,9 +64,30 @@ public class CategoryDAO {
 		}
 	}
 	
-	public ArrayList<OurCategory> getCategories(){
+	public ArrayList<OurCategory> getCategories() throws DAOException{
 		ArrayList<OurCategory> categories = new ArrayList<OurCategory>();
 		
+		try {
+			SQLiteDatabase db = dbManager.getDB();
+			Cursor cursor = db.query(CATEGORY_TABLE_NAME, CATEGORY_FIELDS, null,
+					null, null, null, null);
+
+			while (cursor.moveToNext()) {
+				OurCategory category = new OurCategory();
+				category.setCategoryId(cursor.getString(cursor.getColumnIndex(ID_KEY)));
+				category.setCategoryDepth(cursor.getInt(cursor.getColumnIndex(DEPTH_KEY)));
+				category.setCategoryDescriptionEng(cursor.getString(cursor.getColumnIndex(DESCRIPTION_ENG_KEY)));
+				category.setCategoryDescriptionKmr(cursor.getString(cursor.getColumnIndex(DESCRIPTION_KMR_KEY)));
+				category.setCategoryTitleEng(cursor.getString(cursor.getColumnIndex(TITLE_ENG_KEY)));
+				category.setCategoryTitleKmr(cursor.getString(cursor.getColumnIndex(TITLE_KMR_KEY)));
+				category.setCategoryParent(cursor.getString(cursor.getColumnIndex(PARENT_ID_KEY)));
+
+				categories.add(category);
+			}
+			cursor.close();
+		} catch (SQLException err) {
+			throw new DAOException("Error get contents");
+		}
 		return categories;
 	}
 }

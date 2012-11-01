@@ -1,6 +1,7 @@
 package org.our.android.ouracademy;
 
 import org.our.android.ouracademy.manager.DataManagerFactory;
+import org.our.android.ouracademy.util.DbManager;
 import org.our.android.ouracademy.util.ScreenInfo;
 
 import android.app.Application;
@@ -23,6 +24,8 @@ public class OurApplication extends Application {
 
 		OurPreferenceManager pref = OurPreferenceManager.getInstance();
 		pref.initPreferenceData(this);
+		
+		DbManager.getInstance().open(this);
 
 		// 화면 정보
 		ScreenInfo.create(this);

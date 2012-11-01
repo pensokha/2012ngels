@@ -86,8 +86,13 @@ public class DbManager {
 		}
 	}
 
-	public boolean beginTransaction() {
+	public boolean beginTransaction(Context ctx) {
 		SQLiteDatabase db = getDB();
+		if (db == null){
+			open(ctx);
+			db = getDB();
+		}
+		
 		if (db != null && db.inTransaction() == false) {
 			db.beginTransaction();
 			return db.inTransaction();

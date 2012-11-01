@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 
+import org.our.android.ouracademy.OurDefine;
 import org.our.android.ouracademy.model.OurVideoFile;
 
 import android.os.Environment;
@@ -40,13 +41,16 @@ public class FileManager {
 		return STRSAVEPATH+fileName;
 	}
 	
-	private static final String EXTENTION_NAME = ".mp4";
+	public static String getRealPathFromContentId(String contentId){
+		return getFileRealPath(getFileName(contentId));
+	}
+	
 	public static String getContentId(String fileName){
-		return fileName.replace(EXTENTION_NAME, "");
+		return fileName.replace("."+OurDefine.VIDEO_FORMAT_MP4, "");
 	}
 	
 	public static String getFileName(String contentId){
-		return contentId+EXTENTION_NAME;
+		return contentId+"."+OurDefine.VIDEO_FORMAT_MP4;
 	}
 	
 	public static ArrayList<OurVideoFile> getVideoFiles(){
@@ -61,7 +65,7 @@ public class FileManager {
 			
 			videoFile.setName(fileNameList[i]);
 			videoFile.setContentId(getContentId(fileNameList[i]));
-			videoFile.setSize(file.getTotalSpace());
+			videoFile.setSize(file.length());
 			
 			videoFiles.add(videoFile);
 		}

@@ -6,12 +6,9 @@ import android.content.Context;
 import android.content.Intent;
 
 public class SyncAndContentNoti extends SyncFileAndDatabase {
-	private Context context;
 
 	public SyncAndContentNoti(Context context) {
-		super();
-		
-		this.context = context;
+		super(context);
 	}
 
 	@Override

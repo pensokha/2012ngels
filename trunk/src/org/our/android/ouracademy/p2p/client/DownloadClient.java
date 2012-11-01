@@ -7,6 +7,7 @@ import java.net.Socket;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.our.android.ouracademy.OurDefine;
 import org.our.android.ouracademy.dao.ContentDAO;
 import org.our.android.ouracademy.dao.DAOException;
 import org.our.android.ouracademy.manager.FileManager;
@@ -23,12 +24,13 @@ public class DownloadClient extends P2PClient {
 	private Context context;
 	private Intent intent;
 
-	public DownloadClient(String serverAddress, OurContents content, Context context) {
+	public DownloadClient(String serverAddress, OurContents content,
+			Context context) {
 		super(serverAddress);
 
 		this.content = content;
 		this.context = context;
-		
+
 		this.intent = new Intent(OurDataChangeReceiver.OUR_DATA_CHANGED);
 	}
 
@@ -47,10 +49,11 @@ public class DownloadClient extends P2PClient {
 	@Override
 	protected void responseProcess(Socket socket) throws IOException {
 		InputStream inputStream = socket.getInputStream();
-		RandomAccessFile rand = new RandomAccessFile(FileManager.getFileName(content.getId()), "rws");
+		RandomAccessFile rand = new RandomAccessFile(
+				FileManager.getRealPathFromContentId(content.getId()), "rws");
 		rand.seek(content.getDownloadedSize());
-		
-		byte buf[] = new byte[512 * 1024];
+
+		byte buf[] = new byte[OurDefine.SOCKET_BUFFER_SIZE];
 		long totalSize = content.getDownloadedSize();
 		int len;
 		while ((len = inputStream.read(buf)) != -1) {
@@ -58,21 +61,24 @@ public class DownloadClient extends P2PClient {
 			totalSize += len;
 			content.setDownloadedSize(totalSize);
 			sendDownload(totalSize);
+			if (Thread.currentThread().isInterrupted()) {
+				break;
+			}
 		}
-		
 		rand.close();
 		inputStream.close();
-		
+
 		content.setDownloadedSize(totalSize);
-		
+
 		updateDownloadedSize();
 	}
-	
-	private void sendDownload(long downloadSize){
-		intent.putExtra(OurDataChangeReceiver.ACTION, OurDataChangeReceiver.ACTION_DOWNLOADING);
+
+	private void sendDownload(long downloadSize) {
+		intent.putExtra(OurDataChangeReceiver.ACTION,
+				OurDataChangeReceiver.ACTION_DOWNLOADING);
 		intent.putExtra(OurDataChangeReceiver.CONTENT_ID, content.getId());
 		intent.putExtra(OurDataChangeReceiver.DOWNLAD_SIZE, downloadSize);
-		
+
 		context.sendBroadcast(intent);
 	}
 
@@ -80,8 +86,8 @@ public class DownloadClient extends P2PClient {
 	public void onInterrupted() {
 		updateDownloadedSize();
 	}
-	
-	private void updateDownloadedSize(){
+
+	private void updateDownloadedSize() {
 		ContentDAO contentDao = new ContentDAO();
 		try {
 			contentDao.updateDownloadedSize(content);

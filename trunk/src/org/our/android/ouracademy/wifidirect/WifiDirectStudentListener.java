@@ -81,6 +81,15 @@ public class WifiDirectStudentListener extends WifiDirectDefaultListener
 
 		manager.requestConnectionInfo(channel, this);
 	}
+	
+	@Override
+	public void onDisConnected() {
+		super.onDisConnected();
+		
+		if (manager != null) {
+			manager.discoverPeers(channel, new DiscoverListener());
+		}
+	}
 
 	@Override
 	public void onPeersAvailable(WifiP2pDeviceList peers) {

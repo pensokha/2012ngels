@@ -43,7 +43,24 @@ public class FSIDAO {
 			content.setSubjectKmr("SubjectKmr"+i);
 			content.setSubtitleUrl("SubTitleUrl"+i);
 			content.setContentUrl("ContentUrl"+i);
-			content.setSize(1024*1024);
+			
+			if(i == 0){
+				content.setSize(22656287);
+			}else if(i == 1){
+				content.setSize(21096887);
+			}else if(i == 2){
+				content.setSize(18743578);
+			}else if(i == 3){
+				content.setSize(20170381);
+			}else if(i == 4){
+				content.setSize(27986769);
+			}else if(i == 5){
+				content.setSize(31716876);
+			}else if(i == 6){
+				content.setSize(28390427);
+			}else{
+				content.setSize(1024*1024);
+			}
 			
 			ArrayList<String> categoryIdList = new ArrayList<String>();
 			for(int j = 0; j < 3; j++){

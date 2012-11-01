@@ -9,6 +9,7 @@ import org.our.android.ouracademy.model.OurMetaInfo;
 import org.our.android.ouracademy.util.DbManager;
 
 import android.content.Context;
+import android.util.Log;
 
 
 public class GetMetaInfoFromFSI extends SyncAndReloadNoti{
@@ -23,16 +24,16 @@ public class GetMetaInfoFromFSI extends SyncAndReloadNoti{
 			OurMetaInfo metaInfo = fsiDao.getMetaInfo();
 			
 			if(Thread.currentThread().isInterrupted() == false){
-				GetMetaInfoFromFSI.getMetaInfoProcesses(metaInfo);
+				GetMetaInfoFromFSI.getMetaInfoProcesses(metaInfo, context);
 			}
-			
+			Log.d("Test", "GetMetaInfoFromFSI");
 			super.proceed();
 		} catch (DAOException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public static void getMetaInfoProcesses(OurMetaInfo metaInfo) throws DAOException{
+	public static void getMetaInfoProcesses(OurMetaInfo metaInfo, Context context) throws DAOException{
 		switch (metaInfo.getResponseCode()) {
 		case OurMetaInfo.RES_CODE_SUCCESS:
 			OurPreferenceManager.getInstance().setVersion(metaInfo.getVersion());
@@ -41,7 +42,7 @@ public class GetMetaInfoFromFSI extends SyncAndReloadNoti{
 			CategoryDAO categoryDao = new CategoryDAO();
 			ContentDAO contentDao = new ContentDAO();
 			
-			if(dbManager.beginTransaction() == false){
+			if(dbManager.beginTransaction(context) == false){
 				throw new DAOException("fail begin transaction");
 			}
 			contentDao.deleteAllContent();

@@ -120,8 +120,16 @@ public class OurCategory implements OurJSONModel {
 
 	@Override
 	public JSONObject getJSONObject() throws JSONException {
-		// TODO Auto-generated method stub
-		return null;
+		JSONObject json = new JSONObject();
+		json.put(CATEGORY_ID_JSON_KEY, categoryId);
+		json.put(CATEGORY_DEPTH_JSON_KEY, categoryDepth);
+		json.put(CATEGORY_TITLE_ENG_JSON_KEY, categoryTitleEng);
+		json.put(CATEGORY_TITLE_KMR_JSON_KEY, categoryTitleKmr);
+		json.put(CATEGORY_DESCRIPTION_ENG_JSON_KEY, categoryDescriptionEng);
+		json.put(CATEGORY_DESCRIPTION_KMR_JSON_KEY, categoryDescriptionKmr);
+		json.put(CATEGORY_PARENT_ID_JSON_KEY, categoryParent);
+		
+		return json;
 	}
 
 	@Override

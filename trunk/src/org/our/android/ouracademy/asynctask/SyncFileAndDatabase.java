@@ -8,7 +8,15 @@ import org.our.android.ouracademy.manager.FileManager;
 import org.our.android.ouracademy.model.OurVideoFile;
 import org.our.android.ouracademy.util.DbManager;
 
+import android.content.Context;
+
 public class SyncFileAndDatabase extends CallbackTask {
+	protected Context context;
+
+	public SyncFileAndDatabase(Context context) {
+		super();
+		this.context = context;
+	}
 
 	@Override
 	public void onInterrupted() {
@@ -22,7 +30,7 @@ public class SyncFileAndDatabase extends CallbackTask {
 		try {
 			DbManager dbManager = DbManager.getInstance();
 			VideoFileDAO videoFileDAO = new VideoFileDAO();
-			if (dbManager.beginTransaction() == false) {
+			if (dbManager.beginTransaction(context) == false) {
 				throw new DAOException("fail begin transaction");
 			}
 
@@ -33,7 +41,7 @@ public class SyncFileAndDatabase extends CallbackTask {
 				dbManager.commitTransaction();
 				
 				if (dontExistVideos != null) {
-					FileManager.removeFiles(dontExistVideos);
+//					FileManager.removeFiles(dontExistVideos);
 				}
 			}
 			if (dbManager.endTransaction() == false) {

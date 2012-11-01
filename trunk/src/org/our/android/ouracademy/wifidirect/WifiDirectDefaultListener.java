@@ -10,6 +10,7 @@ import android.content.DialogInterface.OnClickListener;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.provider.Settings;
+import android.util.Log;
 
 /**********
  * 
@@ -34,6 +35,7 @@ public abstract class WifiDirectDefaultListener implements WifiDirectListener,
 
 	@Override
 	public void onDisableP2p() {
+		Log.d("Test", "onDisableP2p");
 		DataManagerFactory.getDataManager().syncFileAndDatabase();
 		
 		if (dialogOn == true) {
@@ -55,11 +57,13 @@ public abstract class WifiDirectDefaultListener implements WifiDirectListener,
 
 	@Override
 	public void onConnected() {
+		Log.d("Test", "onConnected");
 		connnect = true;
 	}
 
 	@Override
 	public void onDisConnected() {
+		Log.d("Test", "onDisConnected");
 		connnect = false;
 	}
 
@@ -69,5 +73,6 @@ public abstract class WifiDirectDefaultListener implements WifiDirectListener,
 
 	@Override
 	public void onDeviceInfoChanged() {
+		Log.d("Test", "onDeviceInfoChanged");
 	}
 }

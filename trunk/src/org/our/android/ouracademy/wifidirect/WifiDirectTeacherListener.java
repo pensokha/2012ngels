@@ -26,6 +26,7 @@ public class WifiDirectTeacherListener extends WifiDirectDefaultListener {
 
 	@Override
 	public void onPeerChanged() {
+		Log.d("Test", "onPeerChanged");
 		// Noting do
 	}
 
