@@ -12,8 +12,10 @@ import org.our.android.ouracademy.youtubedownloader.YoutubeContentsTaskCallback;
 import org.our.android.ouracademy.youtubedownloader.YoutubeDownloadManager;
 
 import android.app.DownloadManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.os.Environment;
 import android.os.Message;
@@ -45,20 +47,32 @@ public class ContentsView extends RelativeLayout implements OnClickListener {
 
 	YoutubeDownloadManager youtubeDM = null;
 
-	long youtubeDownloadID = -1;
-
 	WeakRefHandler progressUpdateHandler;
 
+	private DownloadcompleteReceiver downloadReceiver;
+	private IntentFilter downloadIntentFilter;
+	
+	Context context;
+	
+	public class DownloadcompleteReceiver extends BroadcastReceiver {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			youtubeDM.CheckDwnloadStatus(ourContents);
+		}
+	}
+	
 	public ContentsView(Context context) {
 		super(context);
+		this.context = context;
 		initUI();
 	}
 
 	public ContentsView(Context context, AttributeSet attrs) {
 		super(context, attrs);
+		this.context = context;
 		initUI();
 	}
-
+	
 	private void initUI() {
 		LayoutInflater.from(getContext()).inflate(R.layout.layout_contents_book_view, this, true);
 		thumbnail = (ImageView)findViewById(R.id.thumbnail);
@@ -71,6 +85,10 @@ public class ContentsView extends RelativeLayout implements OnClickListener {
 		cancelBtn.setOnClickListener(this);
 
 		youtubeDM = YoutubeDownloadManager.getInstance(OurApplication.getInstance());
+		downloadReceiver = new DownloadcompleteReceiver();
+		downloadIntentFilter = new IntentFilter();
+		downloadIntentFilter.addAction(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
+		context.registerReceiver(downloadReceiver, downloadIntentFilter);
 	}
 
 	public void setVisibility(int visibility) {
@@ -93,11 +111,11 @@ public class ContentsView extends RelativeLayout implements OnClickListener {
 			progressBar.setVisibility(View.VISIBLE);
 			cancelBtn.setVisibility(View.VISIBLE);
 
-			youtubeDownloadID = youtubeDM.getDownloadId(ourContents.getId());
+			youtubeDM.getDownloadId(ourContents.getId());
 			progressUpdateHandler = new WeakRefHandler(iOnHandlerMessage);
 			progressUpdateHandler.sendEmptyMessageDelayed(0, 1000);
-
 		} else { //파일이 없는 경우
+
 			contentsLayout.setBackgroundResource(R.drawable.btn_main_book_download_selector);
 			progressBar.setVisibility(View.INVISIBLE);
 			cancelBtn.setVisibility(View.INVISIBLE);
@@ -105,13 +123,15 @@ public class ContentsView extends RelativeLayout implements OnClickListener {
 		title.setText(ourContents.getSubjectEng());
 	}
 
-	//AdapterView에서 데이타를 셋팅할때 초기화 하것들.
+	//AdapterView에서 데이타를 init
 	private void reset() {
 		ourContents = null;
-		youtubeDownloadID = -1;
 		progressBar.setProgress(0);
 		if (progressUpdateHandler != null) {
 			progressUpdateHandler.removeMessages(0);
+		}
+		if (contentsTask != null) {
+			contentsTask.cancel(true);
 		}
 	}
 
@@ -154,8 +174,9 @@ public class ContentsView extends RelativeLayout implements OnClickListener {
 	YoutubeContentsTaskCallback cotentsTaskCallback = new YoutubeContentsTaskCallback() {
 		@Override
 		public void onCompletedContentResult(String url) {
+			ourContents.fileStatus = FileStatus.DOWNLOADING;
 			//start download contents
-			youtubeDownloadID = youtubeDM.add(url, ourContents);
+			youtubeDM.add(url, ourContents);
 
 			progressUpdateHandler = new WeakRefHandler(iOnHandlerMessage);
 			progressUpdateHandler.sendEmptyMessageDelayed(0, 1000);
@@ -165,19 +186,19 @@ public class ContentsView extends RelativeLayout implements OnClickListener {
 	IOnHandlerMessage iOnHandlerMessage = new IOnHandlerMessage() {
 		@Override
 		public void handleMessage(Message msg) {
-			if (youtubeDM.checkDownloadComplete(youtubeDownloadID) == true) {
+			if (youtubeDM.checkDownloadComplete(ourContents.getId()) == true) {
 				setCompleteDownload();
 				return;
 			}
 			updatingProgressbar();
-			progressUpdateHandler.sendEmptyMessageDelayed(0, 500);
+			progressUpdateHandler.sendEmptyMessageDelayed(0, 1000);
 		}
 	};
 
 	//update progressbar
 	private void updatingProgressbar() {
 		DownloadManager.Query query = new DownloadManager.Query();
-		query.setFilterById(youtubeDownloadID);
+		query.setFilterById(youtubeDM.getDownloadId(ourContents.getId()));
 		query.setFilterByStatus(DownloadManager.STATUS_RUNNING);
 		Cursor cursor = null;
 		try {
@@ -201,5 +222,6 @@ public class ContentsView extends RelativeLayout implements OnClickListener {
 		progressBar.setProgress(100); //set progressbar to max
 		ourContents.fileStatus = FileStatus.DOWNLOADED;
 		setContentsData(ourContents);
+//		youtubeDM.remove(ourContents.getId());
 	}
 }
