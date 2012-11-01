@@ -48,8 +48,8 @@ public class MainDetailView extends RelativeLayout {
 
 	private int aniDuration = 200;
 	
-	ListView contentsListview;
-	ContentsListAdapter contentsListAdapter;
+	private ListView contentsListview;
+	private ContentsListAdapter contentsListAdapter;
 	
 	public int dragWidth = 0;				//Drag field witdh
 	
@@ -195,6 +195,10 @@ public class MainDetailView extends RelativeLayout {
 		decoyImage.setLayoutParams(params);
 
 		detailRootLayout.addView(decoyImage);
+	}
+	
+	public void notifyDataSetChanged() {
+		contentsListAdapter.notifyDataSetChanged();
 	}
 	
 	public void openMenuAnimation(final int aniWidth) {

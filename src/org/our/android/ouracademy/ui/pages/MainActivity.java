@@ -2,19 +2,25 @@ package org.our.android.ouracademy.ui.pages;
 
 import java.util.List;
 
+import org.our.android.ouracademy.OurApplication;
 import org.our.android.ouracademy.R;
+import org.our.android.ouracademy.download.DownloadRequest;
+import org.our.android.ouracademy.download.DownloadRequest.PrepareCallback;
+import org.our.android.ouracademy.download.DownloadService;
+import org.our.android.ouracademy.model.OurContents;
+import org.our.android.ouracademy.model.OurContents.FileStatus;
 import org.our.android.ouracademy.ui.adapter.ContentsListAdapter;
 import org.our.android.ouracademy.ui.view.MainDetailView;
 import org.our.android.ouracademy.ui.view.MainMenuView;
 import org.our.android.ouracademy.youtubedownloader.YoutubeDownloadManager;
 
 import android.app.ActivityManager;
-import android.app.DownloadManager;
 import android.app.ActivityManager.RunningServiceInfo;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -44,6 +50,11 @@ public class MainActivity extends BaseActivity {
 	private IntentFilter intentFilter;
 	
 	private static boolean closeFlag = false;
+	
+	private NotiCompleteReceiver mNotiCompleteReceiver;
+	private NotiFailReceiver mNotiFailReceiver;
+	
+	private boolean downloadEnable = false;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -54,6 +65,28 @@ public class MainActivity extends BaseActivity {
 		intentFilter = new IntentFilter();
 		intentFilter.addAction(OurDataChangeReceiver.OUR_DATA_CHANGED);
 		
+		DownloadRequest downloadManager = DownloadRequest.getInstance(OurApplication.getInstance(), false);
+		downloadManager.start(new PrepareCallback() {
+			@Override
+			public void onStop() {
+				downloadEnable = true;
+			}
+			@Override
+			public void onStart() {
+				downloadEnable = true;
+			}
+		});
+		
+		//Downloader BR
+		mNotiCompleteReceiver = new NotiCompleteReceiver();
+    	IntentFilter infi = new IntentFilter(DownloadService.ACTION_DOWNLOAD_COMPLETED);
+    	infi.addDataScheme("id");
+    	registerReceiver( mNotiCompleteReceiver, infi);
+    	
+    	mNotiFailReceiver = new NotiFailReceiver();
+    	infi = new IntentFilter(DownloadService.ACTION_DOWNLOAD_FAILED);
+    	infi.addDataScheme("id");
+    	registerReceiver( mNotiFailReceiver, infi );
 	}
 
 	@Override
@@ -71,6 +104,11 @@ public class MainActivity extends BaseActivity {
 
 	@Override
 	public void onDestroy() {
+		unregisterReceiver(mNotiCompleteReceiver);
+		unregisterReceiver(mNotiFailReceiver);
+		if (downloadEnable == true) {
+			DownloadRequest.getInstance(getApplicationContext(), false).stop();
+		}
 		super.onDestroy();
 	}
 
@@ -189,4 +227,39 @@ public class MainActivity extends BaseActivity {
 			}
 		}
 	}
+	
+	private class NotiCompleteReceiver extends BroadcastReceiver {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			Uri u = intent.getData();
+			String strId = u.getLastPathSegment();
+			int id = Integer.parseInt(strId);
+			if (0 != id) {
+				YoutubeDownloadManager ymd = YoutubeDownloadManager.getInstance(getApplicationContext());
+				OurContents ourContents = ymd.getOurContents(id);
+				ymd.removeId(ourContents);
+				ourContents.fileStatus = FileStatus.DOWNLOADED;
+				detailView.notifyDataSetChanged();
+				Toast.makeText(context, ourContents.getSubjectEng() +"가 다운로드가 완료되었습니다.",Toast.LENGTH_SHORT).show();
+			}
+		}
+    } 
+    
+    private class NotiFailReceiver extends BroadcastReceiver {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			// TODO Auto-generated method stub
+			Uri u = intent.getData();
+			String strId = u.getLastPathSegment();
+			int id = Integer.parseInt(strId);
+			if (0 != id) {
+				YoutubeDownloadManager ymd = YoutubeDownloadManager.getInstance(getApplicationContext());
+				OurContents ourContents = ymd.getOurContents(id);
+				ymd.removeId(ourContents);
+				ourContents.fileStatus = FileStatus.NONE;
+				detailView.notifyDataSetChanged();
+				Toast.makeText(context, ourContents.getSubjectEng() +"가 다운로드가 실패하였습니다.",Toast.LENGTH_SHORT).show();
+			}
+		}
+    }
 }
