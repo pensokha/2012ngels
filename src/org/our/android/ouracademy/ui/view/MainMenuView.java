@@ -15,6 +15,9 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
+import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
@@ -34,6 +37,8 @@ public class MainMenuView extends FrameLayout implements OnClickListener {
 	ListView listView;
 	TextView categoryTxtView;
 	Button applyButton;
+
+	int aniResId = -1;
 
 	public MainMenuView(Context context) {
 		super(context);
@@ -67,8 +72,13 @@ public class MainMenuView extends FrameLayout implements OnClickListener {
 		LayoutInflater.from(getContext()).inflate(R.layout.layout_main_menu, this, true);
 
 		listView = (ListView)findViewById(R.id.category_listview);
+
+		View apply = LayoutInflater.from(getContext()).inflate(R.layout.main_menu_dummy_item, null);
+		listView.addFooterView(apply);
+
 		final CategoryListAdapter adapter = new CategoryListAdapter(getContext(), R.layout.layout_category_list_item,
 			getCategoryListData());
+
 		listView.setAdapter(adapter);
 		listView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
@@ -104,17 +114,18 @@ public class MainMenuView extends FrameLayout implements OnClickListener {
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 			if (event.getAction() == MotionEvent.ACTION_DOWN) {
-
 			} else if (event.getAction() == MotionEvent.ACTION_MOVE) {
 				if (applyButton != null) {
-					applyButton.setVisibility(View.GONE);
+//					applyButton.setVisibility(View.GONE);
+					startAnimation(false);
 				}
 			} else if (event.getAction() == MotionEvent.ACTION_UP) {
 				isVisibleLastItem = false;
 				if (listView.getLastVisiblePosition() == listView.getCount() - 1) {
 					isVisibleLastItem = true;
 				}
-				applyButton.setVisibility(View.VISIBLE);
+//				applyButton.setVisibility(View.VISIBLE);
+				startAnimation(true);
 			}
 			return false;
 		}
@@ -152,4 +163,55 @@ public class MainMenuView extends FrameLayout implements OnClickListener {
 		Activity activity = (Activity)getContext();
 		activity.startActivityForResult(intent, 1);
 	}
+
+	public void startAnimation(boolean showView) {
+
+		if (showView) {
+			// 보이고 있는 데 또 보여라는 요청 들오면 해당 애니메이션 무시.
+			if (aniResId == R.anim.push_up_in) {
+				return;
+			}
+			aniResId = R.anim.push_up_in;
+		} else {
+			// push up out 애니메이션을 수행했는데 또 요청이 들어오면 무시한다.
+			if (this.isShown() == false || aniResId == R.anim.push_up_out) {
+				return;
+			}
+			aniResId = R.anim.push_up_out;
+		}
+
+		Animation animation = AnimationUtils.loadAnimation(getContext(), aniResId);
+		animation.setAnimationListener(animationListener);
+		animation.setDuration(300);
+
+		applyButton.startAnimation(animation);
+	}
+
+	public void beforeAnimation() {
+		applyButton.setVisibility(View.VISIBLE);
+	}
+
+	public void afterAnimation() {
+		if (aniResId == R.anim.push_up_out) {
+			applyButton.setVisibility(View.GONE);
+		}
+	}
+
+	AnimationListener animationListener = new AnimationListener() {
+
+		@Override
+		public void onAnimationStart(Animation animation) {
+			beforeAnimation();
+		}
+
+		@Override
+		public void onAnimationEnd(Animation animation) {
+			afterAnimation();
+		}
+
+		@Override
+		public void onAnimationRepeat(Animation animation) {
+
+		}
+	};
 }

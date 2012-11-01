@@ -3,6 +3,7 @@ package org.our.android.ouracademy.ui.view;
 import org.our.android.ouracademy.R;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,12 +11,15 @@ import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 public class PlayerTopView extends LinearLayout {
 
 	private final static int INVALID_ANIMATION_RESOURCE_ID = -1;
 
 	int aniResId = INVALID_ANIMATION_RESOURCE_ID;
+
+	TextView title;
 
 	public PlayerTopView(Context context) {
 		super(context);
@@ -33,6 +37,14 @@ public class PlayerTopView extends LinearLayout {
 		String infService = Context.LAYOUT_INFLATER_SERVICE;
 		LayoutInflater li = (LayoutInflater)getContext().getSystemService(infService);
 		li.inflate(R.layout.media_player_top, this, true);
+
+		title = (TextView)findViewById(R.id.title);
+	}
+
+	public void setTitleText(String text) {
+		if (!TextUtils.isEmpty(text) && title != null) {
+			title.setText(text);
+		}
 	}
 
 	public void startAnimation(boolean showView) {

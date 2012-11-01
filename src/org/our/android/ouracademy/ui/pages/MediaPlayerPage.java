@@ -12,7 +12,6 @@ import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnErrorListener;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.view.SurfaceHolder;
@@ -31,6 +30,7 @@ public class MediaPlayerPage extends Activity implements MediaPlayer.OnPreparedL
 	OnErrorListener, SurfaceHolder.Callback {
 
 	public static final String INTENTKEY_STR_VIDEO_FILE_PATH = "videoFilePath";
+	public static final String INTENTKEY_STR_VIDEO_FILE_NAME = "videoFileName";
 
 	private MediaPlayerView mediaView;
 
@@ -80,8 +80,16 @@ public class MediaPlayerPage extends Activity implements MediaPlayer.OnPreparedL
 		playListAdapter = new PlayListAdapter();
 		listView.setAdapter(playListAdapter);
 
+		getIntentData();
+	}
+
+	private void getIntentData() {
 		Intent intent = getIntent();
 		filePath = intent.getStringExtra(INTENTKEY_STR_VIDEO_FILE_PATH);
+		String title = intent.getStringExtra(INTENTKEY_STR_VIDEO_FILE_NAME);
+		if (mediaView != null) {
+			mediaView.setTitleText(title);
+		}
 		// test Code 
 //		String sd = Environment.getExternalStorageDirectory().getAbsolutePath();
 //		filePath = sd + "/OurAcademy/PSY-GANGNAM_STYLE_M_V.mp4";
@@ -211,7 +219,7 @@ public class MediaPlayerPage extends Activity implements MediaPlayer.OnPreparedL
 		videoSeekBar.setProgress(0);
 		videoSeekBar.setMax(player.getDuration());
 
-		mediaView.postShowFrame(View.GONE);
+		startPlayer();
 	}
 
 	MediaPlayer.OnCompletionListener complete = new MediaPlayer.OnCompletionListener() {
