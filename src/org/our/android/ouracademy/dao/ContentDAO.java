@@ -90,7 +90,7 @@ public class ContentDAO {
 			SQLiteDatabase db = dbManager.getDB();
 			ContentValues values = new ContentValues();
 			values.put(DOWNLOADED_SIZE_KEY, content.getDownloadedSize());
-			db.update(CONTENT_TABLE_NAME, values, CONTENT_ID_KEY + "= ?",
+			db.update(CONTENT_TABLE_NAME, values, ID_KEY + "= ?",
 					new String[] { content.getId() });
 		} catch (SQLException err) {
 			throw new DAOException("Error update downloaded size");

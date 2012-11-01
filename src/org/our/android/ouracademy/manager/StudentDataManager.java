@@ -10,6 +10,7 @@ import org.our.android.ouracademy.p2p.client.GetMetaInfoClient;
 import org.our.android.ouracademy.wifidirect.WifiDirectWrapper;
 
 import android.content.Context;
+import android.util.Log;
 
 public class StudentDataManager extends DataManager {
 	private static HashMap<String, ExecutorPair> downloadMap = new HashMap<String, ExecutorPair>();
@@ -37,7 +38,7 @@ public class StudentDataManager extends DataManager {
 	public void startService(Context context) {
 		super.startService(context);
 
-		WifiDirectWrapper.getInstance().setService();
+		WifiDirectWrapper.getInstance().setService(context);
 	}
 
 	/**********
@@ -54,6 +55,8 @@ public class StudentDataManager extends DataManager {
 	@Override
 	public void getMetaInfo() {
 		String ownerIp = WifiDirectWrapper.getInstance().getOwnerIP();
+		
+		Log.d("Test", "OwnerIP:"+ownerIp);
 
 		if (ownerIp != null) {
 			executeRunnable(new GetMetaInfoClient(ownerIp, context));

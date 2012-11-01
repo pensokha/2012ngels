@@ -3,6 +3,8 @@ package org.our.android.ouracademy.ui.view;
 import java.util.ArrayList;
 
 import org.our.android.ouracademy.R;
+import org.our.android.ouracademy.dao.CategoryDAO;
+import org.our.android.ouracademy.dao.DAOException;
 import org.our.android.ouracademy.model.OurCategory;
 import org.our.android.ouracademy.ui.adapter.CategoryListAdapter;
 import org.our.android.ouracademy.ui.pages.SettingActivity;
@@ -39,6 +41,9 @@ public class MainMenuView extends FrameLayout implements OnClickListener {
 	Button applyButton;
 
 	int aniResId = -1;
+	
+
+	CategoryListAdapter adapter;
 
 	public MainMenuView(Context context) {
 		super(context);
@@ -49,20 +54,22 @@ public class MainMenuView extends FrameLayout implements OnClickListener {
 		super(context, attrs);
 		initUI();
 	}
+	
+	public ArrayList<OurCategory> getCategories() {
+		return categoryList;
+	}
+	
+	public CategoryListAdapter getAdapter(){
+		return adapter;
+	}
 
 	public ArrayList<OurCategory> getCategoryListData() {
-		if (categoryList == null) {
+		CategoryDAO categoryDao = new CategoryDAO();
+		try {
+			categoryList = categoryDao.getCategories();
+		} catch (DAOException e) {
+			e.printStackTrace();
 			categoryList = new ArrayList<OurCategory>();
-		}
-		categoryList.clear();
-
-		String[] temp = {"English", "Math", "Korean", "Social Study", "science", "Music", "Art",
-					"Physical education", "Practical course", "Ethics"};
-		OurCategory ourCategory;
-		for (String tt : temp) {
-			ourCategory = new OurCategory();
-			ourCategory.setCategoryTitleEng(tt);
-			categoryList.add(ourCategory);
 		}
 
 		return categoryList;
@@ -76,7 +83,7 @@ public class MainMenuView extends FrameLayout implements OnClickListener {
 		View apply = LayoutInflater.from(getContext()).inflate(R.layout.main_menu_dummy_item, null);
 		listView.addFooterView(apply);
 
-		final CategoryListAdapter adapter = new CategoryListAdapter(getContext(), R.layout.layout_category_list_item,
+		adapter = new CategoryListAdapter(getContext(), R.layout.layout_category_list_item,
 			getCategoryListData());
 
 		listView.setAdapter(adapter);

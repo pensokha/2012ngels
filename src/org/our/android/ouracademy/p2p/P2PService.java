@@ -1,9 +1,8 @@
 package org.our.android.ouracademy.p2p;
 
-import android.app.*;
-import android.content.*;
-import android.os.*;
-import android.util.Log;
+import android.app.Service;
+import android.content.Intent;
+import android.os.IBinder;
 
 public class P2PService extends Service {
 

@@ -11,6 +11,8 @@ public class OurDefine {
 	public static final String VIDEO_FORMAT_MP4 = "mp4";
 	public static final String VIDEO_RESOLUTION_MIDIUM = "medium";
 	
+	public static final int SOCKET_BUFFER_SIZE = 512 * 1024;
+	
 	public static final String getContentFilePath(String fileName) {
 		String path = Environment.getExternalStorageDirectory().getAbsolutePath() + 
 		"/" + CONTENTS_FOLDER_NAME + "/" + fileName;

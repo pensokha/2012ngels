@@ -18,7 +18,7 @@ import android.widget.TextView;
 * @author JiHoon, Moon
 *
 */
-public class ContentsListAdapter extends BaseAdapter {
+public class ContentsListAdapter extends BaseAdapter  {
 	private Context context;
 	ArrayList<OurContents> contentsList = null;
 	

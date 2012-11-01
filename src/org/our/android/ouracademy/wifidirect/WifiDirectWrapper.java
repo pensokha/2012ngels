@@ -88,7 +88,7 @@ public class WifiDirectWrapper {
 	}
 
 	public String getOwnerIP() {
-		if (info != null) {
+		if (info != null && info.groupOwnerAddress != null) {
 			return info.groupOwnerAddress.getHostAddress();
 		} else {
 			return null;
@@ -121,8 +121,8 @@ public class WifiDirectWrapper {
 
 	}
 	
-	public void setService(){
-		register();
+	public void setService(Context context){
+		register(context);
 	}
 
 	public void unsetService(ActionListener listener) {
@@ -136,17 +136,23 @@ public class WifiDirectWrapper {
 		}
 	}
 
-	private void register() {
+	public void register(Context context) {
 		if (context != null) {
+			if(isInitSuccess() == false){
+				init(context);
+			}
+			
 			if (receiver != null) {
 				unregister();
 			}
 			receiver = new WiFiDirectBroadcastReceiver(getWifiDirectListner());
 			context.registerReceiver(receiver, intentFilter);
+			
+			this.context = context;
 		}
 	}
 
-	private void unregister() {
+	public void unregister() {
 		if (context != null && receiver != null) {
 			context.unregisterReceiver(receiver);
 			receiver = null;

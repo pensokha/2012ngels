@@ -42,7 +42,7 @@ public class GetMetaInfoClient extends P2PClientJSON {
 		metaInfo.setFromJSONObject(jsonObject);
 
 		try {
-			GetMetaInfoFromFSI.getMetaInfoProcesses(metaInfo);
+			GetMetaInfoFromFSI.getMetaInfoProcesses(metaInfo, context);
 
 			if (metaInfo.getResponseCode() == OurMetaInfo.RES_CODE_SUCCESS) {
 				new SyncAndReloadNoti(context).run();

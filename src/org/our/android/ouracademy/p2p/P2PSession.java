@@ -38,7 +38,7 @@ public class P2PSession implements Runnable {
 		try {
 			JSONObject json = new JSONObject(request);
 			String method = json.getJSONObject("header").getString("method");
-			OurP2PAction action = (OurP2PAction)(Class.forName("org.our.android.ouracademy.p2p.action."+method).newInstance());
+			OurP2PAction action = (OurP2PAction)(Class.forName(method).newInstance());
 			
 			action.excute(clientSock, json);
 			

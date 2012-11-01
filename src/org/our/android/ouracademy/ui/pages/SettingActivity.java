@@ -1,10 +1,15 @@
 package org.our.android.ouracademy.ui.pages;
 
+import org.our.android.ouracademy.OurPreferenceManager;
+import org.our.android.ouracademy.manager.DataManager;
+import org.our.android.ouracademy.manager.DataManagerFactory;
 import org.our.android.ouracademy.ui.adapter.WiFiListAdapter;
 import org.our.android.ouracademy.ui.view.SetupMainView;
 import org.our.android.ouracademy.ui.view.SetupMainView.SetupMainViewListener;
 import org.our.android.ouracademy.ui.view.SetupWifiListItemVew;
+import org.our.android.ouracademy.wifidirect.WifiDirectWrapper;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -15,6 +20,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 public class SettingActivity extends BaseActivity {
+	private Context context;
 
 	public static String INTENTKEY_DELETE_MODE = "delete";
 	public static String INTENTKEY_ACTION_DATA_SYNC = "dataSync";
@@ -23,22 +29,30 @@ public class SettingActivity extends BaseActivity {
 
 	ListView wifiListView;
 	WiFiListAdapter listAdapter;
+	
+	WifiDirectWrapper wifiDirectWrapper;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		initUI();
+		
+		context = this;
+		wifiDirectWrapper = WifiDirectWrapper.getInstance();
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
+		
+		wifiDirectWrapper.register(context);
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
 
+		wifiDirectWrapper.unregister();
 	}
 
 	@Override
@@ -104,10 +118,25 @@ public class SettingActivity extends BaseActivity {
 
 		@Override
 		public void onClickModeBtn(boolean teacher) {
-			if (teacher) {
-				// TODO 
-			} else {
-				// TODO 
+			OurPreferenceManager pref = OurPreferenceManager.getInstance();
+			boolean change = false;
+			if (teacher && pref.isStudent()) {
+				change = true;
+			} else if(teacher == false && pref.isTeacher()){
+				change = true;
+			}
+			
+			if(change){
+				DataManager dataManager = DataManagerFactory.getDataManager();
+				dataManager.stopService(context);
+				
+				if(teacher){
+					pref.setTeacherMode();
+				}else{
+					pref.setStudentMode();
+				}
+				dataManager = DataManagerFactory.getDataManager();
+				dataManager.startService(context);
 			}
 		}
 	};
