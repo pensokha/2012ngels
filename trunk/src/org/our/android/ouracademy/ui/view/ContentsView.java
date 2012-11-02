@@ -12,11 +12,9 @@ import org.our.android.ouracademy.youtubedownloader.YoutubeContentsTask;
 import org.our.android.ouracademy.youtubedownloader.YoutubeContentsTaskCallback;
 import org.our.android.ouracademy.youtubedownloader.YoutubeDownloadManager;
 
-import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Message;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -57,7 +55,7 @@ public class ContentsView extends RelativeLayout implements OnClickListener {
 	public class DownloadcompleteReceiver extends BroadcastReceiver {
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			youtubeDM.CheckDwnloadStatus(ourContents);
+//			youtubeDM.CheckDwnloadStatus(ourContents);
 		}
 	}
 	
@@ -101,7 +99,7 @@ public class ContentsView extends RelativeLayout implements OnClickListener {
 
 	public void setContentsData(OurContents ourContents_) {
 		reset();
-		Log.d("Test", "setContentsData : "+ourContents_.getDownloadedSize());
+		Log.d("Test", "getView");
 		this.ourContents = ourContents_;
 		if (ourContents.fileStatus == FileStatus.DOWNLOADED) { //파일이 존재
 			contentsLayout.setBackgroundResource(R.drawable.btn_main_book_selector);
@@ -113,7 +111,7 @@ public class ContentsView extends RelativeLayout implements OnClickListener {
 			cancelBtn.setVisibility(View.VISIBLE);
 
 			
-			progressBar.setProgress((int)(ourContents_.getDownloadedSize()/ourContents_.getSize()*100));
+			progressBar.setProgress((int)(ourContents_.getDownloadedSize() * 100 / ourContents_.getSize()));
 //			youtubeDM.getDownloadId(ourContents.getId());
 //			progressUpdateHandler = new WeakRefHandler(iOnHandlerMessage);
 //			progressUpdateHandler.sendEmptyMessageDelayed(0, 1000);
@@ -190,35 +188,35 @@ public class ContentsView extends RelativeLayout implements OnClickListener {
 	IOnHandlerMessage iOnHandlerMessage = new IOnHandlerMessage() {
 		@Override
 		public void handleMessage(Message msg) {
-			if (youtubeDM.checkDownloadComplete(ourContents.getId()) == true) {
-				setCompleteDownload();
-				return;
-			}
-			updatingProgressbar();
-			progressUpdateHandler.sendEmptyMessageDelayed(0, 1000);
+//			if (youtubeDM.checkDownloadComplete(ourContents.getId()) == true) {
+//				setCompleteDownload();
+//				return;
+//			}
+//			updatingProgressbar();
+//			progressUpdateHandler.sendEmptyMessageDelayed(0, 1000);
 		}
 	};
 
 	//update progressbar
 	private void updatingProgressbar() {
-		DownloadManager.Query query = new DownloadManager.Query();
-		query.setFilterById(youtubeDM.getDownloadId(ourContents.getId()));
-		query.setFilterByStatus(DownloadManager.STATUS_RUNNING);
-		Cursor cursor = null;
-		try {
-			cursor = youtubeDM.downloadManager.query(query);
-			cursor.moveToFirst();
-			int bytes_total = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES));
-			int bytes_downloaded = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR));
-			int percentage = (bytes_downloaded * 100) / bytes_total;
-			progressBar.setProgress(percentage);
-		} catch (Exception e) {
-			// TODO: handle exception
-		} finally {
-			if (cursor != null) {
-				cursor.close();
-			}
-		}
+//		DownloadManager.Query query = new DownloadManager.Query();
+//		query.setFilterById(youtubeDM.getDownloadId(ourContents.getId()));
+//		query.setFilterByStatus(DownloadManager.STATUS_RUNNING);
+//		Cursor cursor = null;
+//		try {
+//			cursor = youtubeDM.downloadManager.query(query);
+//			cursor.moveToFirst();
+//			int bytes_total = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES));
+//			int bytes_downloaded = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR));
+//			int percentage = (bytes_downloaded * 100) / bytes_total;
+//			progressBar.setProgress(percentage);
+//		} catch (Exception e) {
+//			// TODO: handle exception
+//		} finally {
+//			if (cursor != null) {
+//				cursor.close();
+//			}
+//		}
 	}
 
 	//complete download contents

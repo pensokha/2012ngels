@@ -86,6 +86,10 @@ public class MainDetailView extends RelativeLayout {
 		return contentsListAdapter;
 	}
 	
+	public ListView getListView(){
+		return contentsListview;
+	}
+	
 	private ArrayList<OurContents> getContensListData() {
 		ContentDAO contentDao = new ContentDAO();
 		try {
