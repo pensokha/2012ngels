@@ -13,6 +13,7 @@ import org.our.android.ouracademy.model.OurContents;
 import org.our.android.ouracademy.ui.adapter.ContentsListAdapter;
 import org.our.android.ouracademy.ui.view.MainDetailView;
 import org.our.android.ouracademy.ui.view.MainMenuView;
+import org.our.android.ouracademy.wifidirect.WifiDirectWrapper;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -27,6 +28,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 /**
  * 
@@ -57,7 +59,7 @@ public class MainActivity extends BaseActivity {
 		intentFilter.addAction(OurDataChangeReceiver.OUR_DATA_CHANGED);
 		registerReceiver(reciever, intentFilter);
 
-		if(OurPreferenceManager.getInstance().isStudent()){
+		if (OurPreferenceManager.getInstance().isStudent()) {
 			DataManagerFactory.getDataManager().startService(this);
 		}
 	}
@@ -65,12 +67,16 @@ public class MainActivity extends BaseActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+
+		WifiDirectWrapper.getInstance().register(this);
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
 		closeHandler.removeMessages(0);
+
+		WifiDirectWrapper.getInstance().unregister();
 	}
 
 	@Override
@@ -78,7 +84,7 @@ public class MainActivity extends BaseActivity {
 		super.onDestroy();
 
 		unregisterReceiver(reciever);
-		if(OurPreferenceManager.getInstance().isStudent()){
+		if (OurPreferenceManager.getInstance().isStudent()) {
 			DataManagerFactory.getDataManager().stopService(this);
 		}
 	}
@@ -136,17 +142,18 @@ public class MainActivity extends BaseActivity {
 	}
 
 	private void finishApp() {
-//		final ActivityManager am = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+		// final ActivityManager am = (ActivityManager)
+		// getSystemService(ACTIVITY_SERVICE);
 
 		// stop running service inside current process.
-//		List<RunningServiceInfo> serviceList = am.getRunningServices(100);
-//		for (RunningServiceInfo service : serviceList) {
-//			if (service.pid == android.os.Process.myPid()) {
-//				Intent stop = new Intent();
-//				stop.setComponent(service.service);
-//				stopService(stop);
-//			}
-//		}
+		// List<RunningServiceInfo> serviceList = am.getRunningServices(100);
+		// for (RunningServiceInfo service : serviceList) {
+		// if (service.pid == android.os.Process.myPid()) {
+		// Intent stop = new Intent();
+		// stop.setComponent(service.service);
+		// stopService(stop);
+		// }
+		// }
 
 		this.finish();
 		// process kill~~!!
@@ -207,16 +214,20 @@ public class MainActivity extends BaseActivity {
 
 	private void updateDownloadSize(String contentId, long downloadedSize) {
 		ArrayList<OurContents> contents = detailView.getContentList();
-		if(contents != null){
-			for(OurContents content : contents){
-				if(content.getId().equals(contentId)){
-					Log.d("Test", "update size : "+downloadedSize);
-					if(content.getDownloadedSize() < downloadedSize){
+		if (contents != null) {
+			for (OurContents content : contents) {
+				if (content.getId().equals(contentId)) {
+					content.fileStatus = OurContents.FileStatus.DOWNLOADING;
+					if (content.getDownloadedSize() < downloadedSize) {
+						Log.d("Test", ""+content.getDownloadedSize());
 						content.setDownloadedSize(downloadedSize);
-						if(content.getDownloadedSize() == content.getSize()){
+						if (content.getDownloadedSize() == content.getSize()) {
 							content.fileStatus = OurContents.FileStatus.DOWNLOADED;
 						}
-						detailView.getListAdapter().notifyDataSetChanged();
+						if (detailView.getListAdapter() != null) { // && detailView.getListView() != null
+							detailView.getListAdapter().notifyDataSetChanged();
+//							detailView.getListView().setAdapter(detailView.getListAdapter());
+						}
 					}
 					break;
 				}
@@ -249,7 +260,8 @@ public class MainActivity extends BaseActivity {
 						.getOnlyContents();
 				contents.clear();
 				contents.addAll(contentsFromDB);
-				if (detailView.getListAdapter() != null) {
+				if (detailView.getListAdapter() != null) { // && detailView.getListView() != null
+//					detailView.getListView().setAdapter(new ContentsListAdapter(this, contentsFromDB));
 					detailView.getListAdapter().notifyDataSetChanged();
 				}
 			} catch (DAOException e) {
