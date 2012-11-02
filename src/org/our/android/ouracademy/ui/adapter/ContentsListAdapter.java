@@ -107,4 +107,9 @@ public class ContentsListAdapter extends BaseAdapter  {
 		}
 		return convertView;
 	}
+	
+	public void notifyDataSetChanged(ArrayList<OurContents> contentsList) {
+		this.contentsList = contentsList;
+		super.notifyDataSetChanged();
+	}
 }
