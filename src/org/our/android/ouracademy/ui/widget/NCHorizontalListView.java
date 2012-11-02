@@ -40,6 +40,8 @@ public class NCHorizontalListView extends AdapterView<ListAdapter> {
 	boolean completeFinishAction = true;
 	private Handler handler;
 	private Runnable finished;
+	
+	private boolean dataChanged = false;
 
 	boolean isBounceEnabled = false;
 	int action = -1;
@@ -97,8 +99,11 @@ public class NCHorizontalListView extends AdapterView<ListAdapter> {
 
 		@Override
 		public void onChanged() {
-			// TODO Auto-generated method stub
-			super.onChanged();
+			synchronized (NCHorizontalListView.this) {
+				dataChanged = true;
+			}
+			invalidate();
+			requestLayout();
 		}
 
 		@Override
@@ -156,6 +161,14 @@ public class NCHorizontalListView extends AdapterView<ListAdapter> {
 
 		if (listAdapter == null) {
 			return;
+		}
+		
+		if (dataChanged) {
+			int oldCurrentX = currentX;
+			initView();
+			removeAllViewsInLayout();
+			nextX = oldCurrentX;
+			dataChanged = false;
 		}
 
 		if (scroller.computeScrollOffset()) {
