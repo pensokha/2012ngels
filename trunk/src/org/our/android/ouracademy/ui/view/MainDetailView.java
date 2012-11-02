@@ -128,7 +128,6 @@ public class MainDetailView extends RelativeLayout {
         
         hideMenuBtn.setClickable(false);
 		
-		//상단화면 CashBitmap이 저장된 iamgeView
         decoyImage = new ImageView(getContext());
         
         NCHorizontalListView listView = (NCHorizontalListView) findViewById(R.id.horizontal_listview);
@@ -184,7 +183,6 @@ public class MainDetailView extends RelativeLayout {
 			}
 			@Override
 			public void onAnimationEnd(Animation animation) {
-				// TODO Auto-generated method stub
 				menuStatus = MenuStatus.VISIBLE_MENU;
 				setDetailLayoutXPosition(dragWidth);
 				detailRootLayout.removeView(decoyImage);

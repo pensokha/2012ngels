@@ -10,9 +10,7 @@ import org.our.android.ouracademy.model.OurContents.FileStatus;
 import org.our.android.ouracademy.ui.pages.MediaPlayerPage;
 import org.our.android.ouracademy.youtubedownloader.YoutubeContentsTask;
 import org.our.android.ouracademy.youtubedownloader.YoutubeContentsTaskCallback;
-import org.our.android.ouracademy.youtubedownloader.YoutubeDownloadManager;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Message;
@@ -43,21 +41,9 @@ public class ContentsView extends RelativeLayout implements OnClickListener {
 
 	YoutubeContentsTask contentsTask = null;
 
-	YoutubeDownloadManager youtubeDM = null;
-
 	WeakRefHandler progressUpdateHandler;
-
-//	private DownloadcompleteReceiver downloadReceiver;
-//	private IntentFilter downloadIntentFilter;
 	
 	Context context;
-	
-	public class DownloadcompleteReceiver extends BroadcastReceiver {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-//			youtubeDM.CheckDwnloadStatus(ourContents);
-		}
-	}
 	
 	public ContentsView(Context context) {
 		super(context);
@@ -81,12 +67,6 @@ public class ContentsView extends RelativeLayout implements OnClickListener {
 
 		contentsLayout.setOnClickListener(this);
 		cancelBtn.setOnClickListener(this);
-
-//		youtubeDM = YoutubeDownloadManager.getInstance(OurApplication.getInstance());
-//		downloadReceiver = new DownloadcompleteReceiver();
-//		downloadIntentFilter = new IntentFilter();
-//		downloadIntentFilter.addAction(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
-//		context.registerReceiver(downloadReceiver, downloadIntentFilter);
 	}
 
 	public void setVisibility(int visibility) {
@@ -110,11 +90,7 @@ public class ContentsView extends RelativeLayout implements OnClickListener {
 			progressBar.setVisibility(View.VISIBLE);
 			cancelBtn.setVisibility(View.VISIBLE);
 
-			
 			progressBar.setProgress((int)(ourContents_.getDownloadedSize() * 100 / ourContents_.getSize()));
-//			youtubeDM.getDownloadId(ourContents.getId());
-//			progressUpdateHandler = new WeakRefHandler(iOnHandlerMessage);
-//			progressUpdateHandler.sendEmptyMessageDelayed(0, 1000);
 		} else { //파일이 없는 경우
 
 			contentsLayout.setBackgroundResource(R.drawable.btn_main_book_download_selector);
@@ -160,15 +136,14 @@ public class ContentsView extends RelativeLayout implements OnClickListener {
 					progressBar.setVisibility(View.VISIBLE);
 
 					DataManagerFactory.getDataManager().download(ourContents);
+					
 					//get Download Url
-					//이거 문제 있음;
 //					YoutubeContentsTask contentsTask = new YoutubeContentsTask(cotentsTaskCallback);
 //					contentsTask.execute(ourContents.getContentUrl());
 				}
 				break;
 			case R.id.cancel_btn:
 				DataManagerFactory.getDataManager().cancleDownload(ourContents);
-//				youtubeDM.remove(ourContents.getId());
 				break;
 		}
 	}
@@ -177,8 +152,6 @@ public class ContentsView extends RelativeLayout implements OnClickListener {
 		@Override
 		public void onCompletedContentResult(String url) {
 			ourContents.fileStatus = FileStatus.DOWNLOADING;
-			//start download contents
-			youtubeDM.add(url, ourContents);
 
 			progressUpdateHandler = new WeakRefHandler(iOnHandlerMessage);
 			progressUpdateHandler.sendEmptyMessageDelayed(0, 1000);
@@ -188,35 +161,13 @@ public class ContentsView extends RelativeLayout implements OnClickListener {
 	IOnHandlerMessage iOnHandlerMessage = new IOnHandlerMessage() {
 		@Override
 		public void handleMessage(Message msg) {
-//			if (youtubeDM.checkDownloadComplete(ourContents.getId()) == true) {
-//				setCompleteDownload();
-//				return;
-//			}
-//			updatingProgressbar();
-//			progressUpdateHandler.sendEmptyMessageDelayed(0, 1000);
+			updatingProgressbar();
+			progressUpdateHandler.sendEmptyMessageDelayed(0, 1000);
 		}
 	};
 
 	//update progressbar
 	private void updatingProgressbar() {
-//		DownloadManager.Query query = new DownloadManager.Query();
-//		query.setFilterById(youtubeDM.getDownloadId(ourContents.getId()));
-//		query.setFilterByStatus(DownloadManager.STATUS_RUNNING);
-//		Cursor cursor = null;
-//		try {
-//			cursor = youtubeDM.downloadManager.query(query);
-//			cursor.moveToFirst();
-//			int bytes_total = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES));
-//			int bytes_downloaded = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR));
-//			int percentage = (bytes_downloaded * 100) / bytes_total;
-//			progressBar.setProgress(percentage);
-//		} catch (Exception e) {
-//			// TODO: handle exception
-//		} finally {
-//			if (cursor != null) {
-//				cursor.close();
-//			}
-//		}
 	}
 
 	//complete download contents
@@ -224,6 +175,5 @@ public class ContentsView extends RelativeLayout implements OnClickListener {
 		progressBar.setProgress(100); //set progressbar to max
 		ourContents.fileStatus = FileStatus.DOWNLOADED;
 		setContentsData(ourContents);
-//		youtubeDM.remove(ourContents.getId());
 	}
 }
