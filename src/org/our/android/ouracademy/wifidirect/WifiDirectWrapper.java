@@ -68,7 +68,7 @@ public class WifiDirectWrapper {
 		return info;
 	}
 
-	public void setInfo(WifiP2pInfo info) {
+	public synchronized void setInfo(WifiP2pInfo info) {
 		this.info = info;
 	}
 
@@ -95,20 +95,7 @@ public class WifiDirectWrapper {
 	}
 
 	public void discoverPeers() {
-		manager.discoverPeers(channel, new WifiP2pManager.ActionListener() {
-
-			@Override
-			public void onSuccess() {
-				Toast.makeText(context, "Discovery Initiated",
-						Toast.LENGTH_SHORT).show();
-			}
-
-			@Override
-			public void onFailure(int reasonCode) {
-				Toast.makeText(context, "Discovery Failed : " + reasonCode,
-						Toast.LENGTH_SHORT).show();
-			}
-		});
+		manager.discoverPeers(channel, null);
 	}
 
 	private WifiDirectDefaultListener getWifiDirectListner() {

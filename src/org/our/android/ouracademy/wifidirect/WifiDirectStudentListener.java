@@ -28,7 +28,7 @@ import android.util.Log;
 public class WifiDirectStudentListener extends WifiDirectDefaultListener
 		implements PeerListListener, ConnectionInfoListener {
 	private static final String TAG = "WifiDirectStudentListener";
-	private static final int MAX_RETRY_COUNT = 10;
+	private static final int MAX_RETRY_COUNT = 100;
 	private int retryCount = 0;
 	private Handler handler;
 
@@ -42,7 +42,7 @@ public class WifiDirectStudentListener extends WifiDirectDefaultListener
 	 * @author hyeongseokLim
 	 * 
 	 */
-	private class DiscoverListener implements ActionListener {
+	public class DiscoverListener implements ActionListener {
 
 		@Override
 		public void onSuccess() {
@@ -58,6 +58,7 @@ public class WifiDirectStudentListener extends WifiDirectDefaultListener
 
 	@Override
 	public void onEnableP2p() {
+		Log.d(TAG, "onEnableP2p");
 		if (manager != null) {
 			manager.discoverPeers(channel, new DiscoverListener());
 		}
@@ -65,6 +66,7 @@ public class WifiDirectStudentListener extends WifiDirectDefaultListener
 
 	@Override
 	public void onPeerChanged() {
+		Log.d(TAG, "onPeerChange");
 		if (manager != null && getConnected() == false) {
 			manager.requestPeers(channel, this);
 		}
@@ -81,6 +83,7 @@ public class WifiDirectStudentListener extends WifiDirectDefaultListener
 	public void onDisConnected() {
 		super.onDisConnected();
 		
+		WifiDirectWrapper.getInstance().setInfo(null);
 		if (manager != null) {
 			manager.discoverPeers(channel, new DiscoverListener());
 		}
@@ -88,6 +91,7 @@ public class WifiDirectStudentListener extends WifiDirectDefaultListener
 
 	@Override
 	public void onPeersAvailable(WifiP2pDeviceList peers) {
+		Log.d(TAG, "onPeersAvailable");
 		if (getConnected() == false) {
 			Collection<WifiP2pDevice> devices = peers.getDeviceList();
 

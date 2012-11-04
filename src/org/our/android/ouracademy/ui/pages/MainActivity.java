@@ -6,6 +6,7 @@ import org.our.android.ouracademy.R;
 import org.our.android.ouracademy.dao.CategoryDAO;
 import org.our.android.ouracademy.dao.ContentDAO;
 import org.our.android.ouracademy.dao.DAOException;
+import org.our.android.ouracademy.manager.DataManagerFactory;
 import org.our.android.ouracademy.model.OurCategory;
 import org.our.android.ouracademy.model.OurContents;
 import org.our.android.ouracademy.ui.view.MainDetailView;
@@ -18,7 +19,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -56,6 +56,8 @@ public class MainActivity extends BaseActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		
+		DataManagerFactory.getDataManager().syncFileAndDatabase();
 	}
 	
 	@Override
@@ -184,6 +186,7 @@ public class MainActivity extends BaseActivity {
 		public static final int ACTION_CATEGORY_CHANGED = 1;
 		public static final int ACTION_CONTENT_CHANGED = 2;
 		public static final int ACTION_DOWNLOADING = 3;
+		public static final int ACTION_CANCEL_DOWNLOADING = 4;
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
@@ -203,30 +206,53 @@ public class MainActivity extends BaseActivity {
 					updateDownloadSize(intent.getStringExtra(CONTENT_ID),
 							intent.getLongExtra(DOWNLAD_SIZE, 0));
 					break;
+				case ACTION_CANCEL_DOWNLOADING:
+					cancelDownloading(intent.getStringExtra(CONTENT_ID));
 				default:
 					break;
 				}
 			}
 		}
 	}
-
-	private void updateDownloadSize(String contentId, long downloadedSize) {
+	
+	private OurContents getContentFromViewList(String contentId){
 		ArrayList<OurContents> contents = detailView.getContentList();
 		if (contents != null) {
 			for (OurContents content : contents) {
 				if (content.getId().equals(contentId)) {
-					content.fileStatus = OurContents.FileStatus.DOWNLOADING;
-					if (content.getDownloadedSize() < downloadedSize) {
-						Log.d("Test", ""+content.getDownloadedSize());
-						content.setDownloadedSize(downloadedSize);
-						if (content.getDownloadedSize() == content.getSize()) {
-							content.fileStatus = OurContents.FileStatus.DOWNLOADED;
-						}
-						if (detailView.getListAdapter() != null) { 
-							detailView.getListAdapter().notifyDataSetChanged();
-						}
-					}
-					break;
+					return content;
+				}
+			}
+		}
+		return null;
+	}
+
+	private void cancelDownloading(String contentId) {
+		OurContents content = getContentFromViewList(contentId);
+		if(content != null){
+			content.fileStatus = OurContents.FileStatus.NONE;
+			if (detailView.getListAdapter() != null) {
+				detailView.getListAdapter().notifyDataSetChanged();
+			}
+		}
+	}
+	
+	private void updateDownloadSize(String contentId, long downloadedSize) {
+		OurContents content = getContentFromViewList(contentId);
+		if(content != null){
+			content.fileStatus = OurContents.FileStatus.DOWNLOADING;
+			if (detailView.getListAdapter() != null) {
+				detailView.getListAdapter().notifyDataSetChanged();
+			}
+			
+			if (content.getDownloadedSize() <= downloadedSize) {
+				content.setDownloadedSize(downloadedSize);
+				
+				if (content.getDownloadedSize() == content.getSize()) {
+					content.fileStatus = OurContents.FileStatus.DOWNLOADED;
+				}
+				if (detailView.getListAdapter() != null) {
+					detailView.getListAdapter().notifyDataSetChanged();
 				}
 			}
 		}

@@ -51,7 +51,7 @@ public class P2PSession implements Runnable {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
-		}
+		} 
 		
 		P2PManager.close(clientSock);
 	}	

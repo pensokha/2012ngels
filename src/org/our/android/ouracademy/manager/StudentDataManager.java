@@ -9,6 +9,7 @@ import org.our.android.ouracademy.model.OurContents;
 import org.our.android.ouracademy.p2p.client.DownloadClient;
 import org.our.android.ouracademy.p2p.client.GetMetaInfoClient;
 import org.our.android.ouracademy.service.StudentService;
+import org.our.android.ouracademy.util.NetworkState;
 import org.our.android.ouracademy.wifidirect.WifiDirectWrapper;
 
 import android.content.Context;
@@ -37,12 +38,14 @@ public class StudentDataManager extends DataManager {
 	 * teacher 2. if find teacher, get meta info 3. sync file and db
 	 */
 	@Override
-	public void startService(Context context) {
-		super.startService(context);
+	public synchronized void startService(Context context) {
+		if (isStarted() == false) {
+			super.startService(context);
 
-		CallbackTask syncAndContentNoti = new SyncAndContentNoti(context);
-		syncAndContentNoti.addCallback(callback);
-		executeRunnable(syncAndContentNoti);
+			CallbackTask syncAndContentNoti = new SyncAndContentNoti(context);
+			syncAndContentNoti.addCallback(callback);
+			executeRunnable(syncAndContentNoti);
+		}
 	}
 
 	/**********
@@ -73,25 +76,27 @@ public class StudentDataManager extends DataManager {
 
 	@Override
 	public void download(OurContents content) {
-		CallbackTask downloadTask = new DownloadClient(WifiDirectWrapper
-				.getInstance().getOwnerIP(), content, context);
-		downloadTask.addCallback(new ExecutorCallbackTask(content));
-		ExecutorPair pair = executeRunnable(downloadTask);
+		if (NetworkState.isWifiDirectConnected()) {
+			CallbackTask downloadTask = new DownloadClient(WifiDirectWrapper
+					.getInstance().getOwnerIP(), content, context);
+			downloadTask.addCallback(new ExecutorCallbackTask(content));
+			ExecutorPair pair = executeRunnable(downloadTask);
 
-		synchronized (downloadMap) {
-			downloadMap.put(content.getId(), pair);
+			synchronized (downloadMap) {
+				downloadMap.put(content.getId(), pair);
+			}
 		}
 	}
 
 	@Override
-	public void cancleDownload(OurContents content) {
+	public void cancelDownload(OurContents content) {
 		synchronized (downloadMap) {
 			ExecutorPair pair = downloadMap.get(content.getId());
 			if (pair != null) {
 				if (pair.future.isDone()) {
-					pair.executor.shutdownNow();
-				} else {
 					downloadMap.remove(content.getId());
+				} else {
+					pair.executor.shutdownNow();
 				}
 			}
 		}

@@ -8,6 +8,7 @@ import org.our.android.ouracademy.manager.FileManager;
 import org.our.android.ouracademy.model.OurContents;
 import org.our.android.ouracademy.model.OurContents.FileStatus;
 import org.our.android.ouracademy.ui.pages.MediaPlayerPage;
+import org.our.android.ouracademy.util.NetworkState;
 import org.our.android.ouracademy.youtubedownloader.YoutubeContentsTask;
 import org.our.android.ouracademy.youtubedownloader.YoutubeContentsTaskCallback;
 
@@ -25,10 +26,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 /**
-*
-* @author JiHoon, Moon
-*
-*/
+ * 
+ * @author JiHoon, Moon
+ * 
+ */
 public class ContentsView extends RelativeLayout implements OnClickListener {
 	ImageView thumbnail;
 	RelativeLayout contentsLayout;
@@ -41,9 +42,9 @@ public class ContentsView extends RelativeLayout implements OnClickListener {
 	YoutubeContentsTask contentsTask = null;
 
 	WeakRefHandler progressUpdateHandler;
-	
+
 	Context context;
-	
+
 	public ContentsView(Context context) {
 		super(context);
 		this.context = context;
@@ -55,14 +56,15 @@ public class ContentsView extends RelativeLayout implements OnClickListener {
 		this.context = context;
 		initUI();
 	}
-	
+
 	private void initUI() {
-		LayoutInflater.from(getContext()).inflate(R.layout.layout_contents_book_view, this, true);
-		thumbnail = (ImageView)findViewById(R.id.thumbnail);
-		contentsLayout = (RelativeLayout)findViewById(R.id.book);
-		title = (TextView)findViewById(R.id.title);
-		progressBar = (ProgressBar)findViewById(R.id.progressbar);
-		cancelBtn = (Button)findViewById(R.id.cancel_btn);
+		LayoutInflater.from(getContext()).inflate(
+				R.layout.layout_contents_book_view, this, true);
+		thumbnail = (ImageView) findViewById(R.id.thumbnail);
+		contentsLayout = (RelativeLayout) findViewById(R.id.book);
+		title = (TextView) findViewById(R.id.title);
+		progressBar = (ProgressBar) findViewById(R.id.progressbar);
+		cancelBtn = (Button) findViewById(R.id.cancel_btn);
 
 		contentsLayout.setOnClickListener(this);
 		cancelBtn.setOnClickListener(this);
@@ -79,29 +81,35 @@ public class ContentsView extends RelativeLayout implements OnClickListener {
 	public void setContentsData(OurContents ourContents_) {
 		reset();
 		this.ourContents = ourContents_;
-		if (ourContents.fileStatus == FileStatus.DOWNLOADED) { //파일이 존재
-			contentsLayout.setBackgroundResource(R.drawable.btn_main_book_selector);
+		if (ourContents.fileStatus == FileStatus.DOWNLOADED) { // 파일이 존재
+			contentsLayout
+					.setBackgroundResource(R.drawable.btn_main_book_selector);
 			progressBar.setVisibility(View.INVISIBLE);
 			cancelBtn.setVisibility(View.INVISIBLE);
-		} else if (ourContents.fileStatus == FileStatus.DOWNLOADING) { //파일 다운로드 중
+		} else if (ourContents.fileStatus == FileStatus.DOWNLOADING) { // 파일
+																		// 다운로드
+																		// 중
 			contentsLayout.setBackgroundResource(R.drawable.book_download02);
 			progressBar.setVisibility(View.VISIBLE);
 			cancelBtn.setVisibility(View.VISIBLE);
 
-//			progressBar.setProgress((int)(ourContents_.getDownloadedSize() * 100 / ourContents_.getSize()));
-		} else { //파일이 없는 경우
+			progressBar
+					.setProgress((int) (ourContents_.getDownloadedSize() * 100 / ourContents_
+							.getSize()));
+		} else { // 파일이 없는 경우
 
-			contentsLayout.setBackgroundResource(R.drawable.btn_main_book_download_selector);
+			contentsLayout
+					.setBackgroundResource(R.drawable.btn_main_book_download_selector);
 			progressBar.setVisibility(View.INVISIBLE);
 			cancelBtn.setVisibility(View.INVISIBLE);
 		}
 		title.setText(ourContents.getSubjectEng());
 	}
 
-	//AdapterView에서 데이타를 init
+	// AdapterView에서 데이타를 init
 	private void reset() {
 		ourContents = null;
-//		progressBar.setProgress(0);
+		// progressBar.setProgress(0);
 		if (progressUpdateHandler != null) {
 			progressUpdateHandler.removeMessages(0);
 		}
@@ -114,35 +122,42 @@ public class ContentsView extends RelativeLayout implements OnClickListener {
 	public void onClick(View v) {
 		int id = v.getId();
 		switch (id) {
-			case R.id.book:
-				//if exsit file. play
-				if (ourContents.fileStatus == FileStatus.DOWNLOADED) {
-					String filePath = FileManager.getRealPathFromContentId(ourContents.getId());
+		case R.id.book:
+			// if exsit file. play
+			if (ourContents.fileStatus == FileStatus.DOWNLOADED) {
+				String filePath = FileManager
+						.getRealPathFromContentId(ourContents.getId());
 
-					Intent intent = new Intent(getContext(), MediaPlayerPage.class);
-					intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-					intent.putExtra(MediaPlayerPage.INTENTKEY_STR_VIDEO_FILE_PATH, filePath);
-					intent.putExtra(MediaPlayerPage.INTENTKEY_STR_VIDEO_FILE_NAME, ourContents.getSubjectEng());
-					getContext().startActivity(intent);
-					// if file downloading	
-				} else if (ourContents.fileStatus == FileStatus.DOWNLOADING) {
-					return;
-					// else empty file
-				} else {
+				Intent intent = new Intent(getContext(), MediaPlayerPage.class);
+				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				intent.putExtra(MediaPlayerPage.INTENTKEY_STR_VIDEO_FILE_PATH,
+						filePath);
+				intent.putExtra(MediaPlayerPage.INTENTKEY_STR_VIDEO_FILE_NAME,
+						ourContents.getSubjectEng());
+				getContext().startActivity(intent);
+				// if file downloading
+			} else if (ourContents.fileStatus == FileStatus.DOWNLOADING) {
+				return;
+				// else empty file
+			} else {
+				if (NetworkState.isWifiDirectConnected()) {
+
 					ourContents.fileStatus = FileStatus.DOWNLOADING;
-					contentsLayout.setBackgroundResource(R.drawable.book_download02);
+					contentsLayout
+							.setBackgroundResource(R.drawable.book_download02);
 					progressBar.setVisibility(View.VISIBLE);
 
+					progressBar
+							.setProgress((int) (ourContents.getDownloadedSize() * 100 / ourContents
+									.getSize()));
+
 					DataManagerFactory.getDataManager().download(ourContents);
-					
-					//get Download Url
-//					YoutubeContentsTask contentsTask = new YoutubeContentsTask(cotentsTaskCallback);
-//					contentsTask.execute(ourContents.getContentUrl());
 				}
-				break;
-			case R.id.cancel_btn:
-				DataManagerFactory.getDataManager().cancleDownload(ourContents);
-				break;
+			}
+			break;
+		case R.id.cancel_btn:
+			DataManagerFactory.getDataManager().cancelDownload(ourContents);
+			break;
 		}
 	}
 
@@ -164,13 +179,13 @@ public class ContentsView extends RelativeLayout implements OnClickListener {
 		}
 	};
 
-	//update progressbar
+	// update progressbar
 	private void updatingProgressbar() {
 	}
 
-	//complete download contents
+	// complete download contents
 	public void setCompleteDownload() {
-		progressBar.setProgress(100); //set progressbar to max
+		progressBar.setProgress(100); // set progressbar to max
 		ourContents.fileStatus = FileStatus.DOWNLOADED;
 		setContentsData(ourContents);
 	}

@@ -7,6 +7,7 @@ import java.util.concurrent.Future;
 
 import org.our.android.ouracademy.OurPreferenceManager;
 import org.our.android.ouracademy.asynctask.CallbackTask;
+import org.our.android.ouracademy.asynctask.SyncAndContentNoti;
 import org.our.android.ouracademy.asynctask.CallbackTask.OurCallback;
 import org.our.android.ouracademy.model.OurContents;
 
@@ -19,21 +20,29 @@ import android.widget.Toast;
 public abstract class DataManager {
 	private ArrayList<ExecutorPair> taskList = new ArrayList<DataManager.ExecutorPair>();
 	protected Context context;
+	protected boolean started = false;
 	
 	protected ComponentName serviceName;
 
 	abstract public void getMetaInfo();
+	
+	public void syncFileAndDatabase(){
+		if(context != null){
+			executeRunnable(new SyncAndContentNoti(context));
+		}
+	}
 
-	public void startService(Context context) {
+	public synchronized void startService(Context context) {
 		Toast.makeText(
 				context,
 				"StartService"
 						+ (OurPreferenceManager.getInstance().isTeacher() ? "Teacher"
 								: "Student"), Toast.LENGTH_SHORT).show();
+		this.started = true;
 		this.context = context;
 	}
 
-	public void stopService(Context context) {
+	public synchronized void stopService(Context context) {
 		Toast.makeText(
 				context,
 				"StopService"
@@ -51,6 +60,12 @@ public abstract class DataManager {
 
 			context.stopService(intent);
 		}
+		this.context = null;
+		this.started = false;
+	}
+
+	public boolean isStarted() {
+		return started;
 	}
 
 	abstract public void onPowerOn(Context context);
@@ -59,10 +74,11 @@ public abstract class DataManager {
 
 	abstract public void download(OurContents content);
 
-	abstract public void cancleDownload(OurContents content);
+	abstract public void cancelDownload(OurContents content);
 
 	public ExecutorPair executeRunnable(CallbackTask task) {
-		Log.d("Test", "executeRunnable1");
+		Log.d("Test", "executeRunnable : "+task.getClass().getName());
+		
 		ExecutorPair pair = new ExecutorPair();
 
 		synchronized (taskList) {
@@ -73,8 +89,6 @@ public abstract class DataManager {
 
 		pair.executor = Executors.newSingleThreadExecutor();
 		pair.future = pair.executor.submit(task);
-
-		Log.d("Test", "executeRunnable2");
 		
 		return pair;
 	}
