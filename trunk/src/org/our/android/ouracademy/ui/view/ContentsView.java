@@ -88,7 +88,7 @@ public class ContentsView extends RelativeLayout implements OnClickListener {
 			progressBar.setVisibility(View.VISIBLE);
 			cancelBtn.setVisibility(View.VISIBLE);
 
-			progressBar.setProgress((int)(ourContents_.getDownloadedSize() * 100 / ourContents_.getSize()));
+//			progressBar.setProgress((int)(ourContents_.getDownloadedSize() * 100 / ourContents_.getSize()));
 		} else { //파일이 없는 경우
 
 			contentsLayout.setBackgroundResource(R.drawable.btn_main_book_download_selector);

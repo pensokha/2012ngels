@@ -58,7 +58,7 @@ public class ContentsListAdapter extends BaseAdapter  {
 		if (position < 0 && getCount()-1 > position ) {
 			return null;
 		}
-		return (OurContents)contentsList.get(position);
+		return (OurContents)contentsList.get(position * CELL_PER_ITEM);
 	}
 
 	@Override
@@ -68,11 +68,6 @@ public class ContentsListAdapter extends BaseAdapter  {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		int itemSize = contentsList.size();
-		if (position * CELL_PER_ITEM >= itemSize) {
-			return convertView;
-		}
-		
 		//set view holder pattern
 		ObjViewHolder holder = new ObjViewHolder();;
 		if (convertView == null) {
@@ -92,15 +87,17 @@ public class ContentsListAdapter extends BaseAdapter  {
 			holder = (ObjViewHolder)convertView.getTag();
 		}
 		
+		int itemSize = contentsList.size();
 		
 		//set Layout data & ui
 		for (int i = 0; i < CELL_PER_ITEM; i++) {
 			final int currentPositionOfItem = position * CELL_PER_ITEM + i;
 			final ContentsView contentsView = holder.itemHolderList[i];
+			OurContents curModel = contentsList.get(currentPositionOfItem);
+			
 			if (currentPositionOfItem < itemSize) {
 				contentsView.setVisibility(View.VISIBLE);
-				OurContents model = contentsList.get(currentPositionOfItem);
-				contentsView.setContentsData(model);
+				contentsView.setContentsData(curModel);
 			} else {
 				contentsView.setVisibility(View.GONE);
 			}
