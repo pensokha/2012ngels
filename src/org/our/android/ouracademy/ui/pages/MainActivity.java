@@ -8,7 +8,6 @@ import org.our.android.ouracademy.dao.ContentDAO;
 import org.our.android.ouracademy.dao.DAOException;
 import org.our.android.ouracademy.model.OurCategory;
 import org.our.android.ouracademy.model.OurContents;
-import org.our.android.ouracademy.ui.adapter.ContentsListAdapter;
 import org.our.android.ouracademy.ui.view.MainDetailView;
 import org.our.android.ouracademy.ui.view.MainMenuView;
 
@@ -24,7 +23,8 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ListView;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.Button;
 
 /**
  * 
@@ -36,10 +36,7 @@ public class MainActivity extends BaseActivity {
 	private ViewGroup detailLayout;
 
 	MainDetailView detailView;
-	MainMenuView mainMenuView;
-
-	ListView contentsListview;
-	ContentsListAdapter contentsListAdapter;
+	MainMenuView menuView;
 
 	private OurDataChangeReceiver reciever;
 	private final IntentFilter intentFilter = new IntentFilter();;
@@ -86,15 +83,31 @@ public class MainActivity extends BaseActivity {
 	}
 
 	private void initMenuLayout() {
-		mainMenuView = new MainMenuView(this);
-		mainMenuView.setApplyBtnListener(applyBtnClickListener);
-		menuLayout.addView(mainMenuView);
+		menuView = new MainMenuView(this);
+		menuView.setApplyBtnListener(applyBtnClickListener);
+		menuLayout.addView(menuView);
 	}
 
 	private void initContentsLayout() {
 		detailView = new MainDetailView(this);
 		detailView.dragWidth = 513; //
 		detailLayout.addView(detailView);
+		
+		Button button = new Button(this);
+		button.setText("notify");
+		button.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				ArrayList<OurContents> dd = detailView.getContentList();
+				OurContents our = new OurContents();
+				our.setId("11");
+				our.setSubjectEng("11");
+				dd.add(our);
+				
+				detailView.getListAdapter().notifyDataSetChanged(dd);
+			}
+		});
+		detailLayout.addView(button, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 	}
 
 	@Override
@@ -220,15 +233,15 @@ public class MainActivity extends BaseActivity {
 	}
 
 	private void reloadCategories() {
-		ArrayList<OurCategory> categories = mainMenuView.getCategories();
+		ArrayList<OurCategory> categories = menuView.getCategories();
 		if (categories != null) {
 			try {
 				ArrayList<OurCategory> categoriesFromDB = new CategoryDAO()
 						.getCategories();
 				categories.clear();
 				categories.addAll(categoriesFromDB);
-				if (mainMenuView.getAdapter() != null) {
-					mainMenuView.getAdapter().notifyDataSetChanged();
+				if (menuView.getAdapter() != null) {
+					menuView.getAdapter().notifyDataSetChanged();
 				}
 			} catch (DAOException e) {
 				e.printStackTrace();
