@@ -2,18 +2,15 @@ package org.our.android.ouracademy.ui.pages;
 
 import java.util.ArrayList;
 
-import org.our.android.ouracademy.OurPreferenceManager;
 import org.our.android.ouracademy.R;
 import org.our.android.ouracademy.dao.CategoryDAO;
 import org.our.android.ouracademy.dao.ContentDAO;
 import org.our.android.ouracademy.dao.DAOException;
-import org.our.android.ouracademy.manager.DataManagerFactory;
 import org.our.android.ouracademy.model.OurCategory;
 import org.our.android.ouracademy.model.OurContents;
 import org.our.android.ouracademy.ui.adapter.ContentsListAdapter;
 import org.our.android.ouracademy.ui.view.MainDetailView;
 import org.our.android.ouracademy.ui.view.MainMenuView;
-import org.our.android.ouracademy.wifidirect.WifiDirectWrapper;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -28,7 +25,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.Toast;
 
 /**
  * 
@@ -58,25 +54,17 @@ public class MainActivity extends BaseActivity {
 		reciever = new OurDataChangeReceiver();
 		intentFilter.addAction(OurDataChangeReceiver.OUR_DATA_CHANGED);
 		registerReceiver(reciever, intentFilter);
-
-		if (OurPreferenceManager.getInstance().isStudent()) {
-			DataManagerFactory.getDataManager().startService(this);
-		}
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-
-		WifiDirectWrapper.getInstance().register(this);
 	}
-
+	
 	@Override
 	protected void onPause() {
 		super.onPause();
 		closeHandler.removeMessages(0);
-
-		WifiDirectWrapper.getInstance().unregister();
 	}
 
 	@Override
@@ -84,9 +72,6 @@ public class MainActivity extends BaseActivity {
 		super.onDestroy();
 
 		unregisterReceiver(reciever);
-		if (OurPreferenceManager.getInstance().isStudent()) {
-			DataManagerFactory.getDataManager().stopService(this);
-		}
 	}
 
 	private void initUI() {
@@ -224,9 +209,8 @@ public class MainActivity extends BaseActivity {
 						if (content.getDownloadedSize() == content.getSize()) {
 							content.fileStatus = OurContents.FileStatus.DOWNLOADED;
 						}
-						if (detailView.getListAdapter() != null) { // && detailView.getListView() != null
+						if (detailView.getListAdapter() != null) { 
 							detailView.getListAdapter().notifyDataSetChanged();
-//							detailView.getListView().setAdapter(detailView.getListAdapter());
 						}
 					}
 					break;
@@ -260,8 +244,7 @@ public class MainActivity extends BaseActivity {
 						.getOnlyContents();
 				contents.clear();
 				contents.addAll(contentsFromDB);
-				if (detailView.getListAdapter() != null) { // && detailView.getListView() != null
-//					detailView.getListView().setAdapter(new ContentsListAdapter(this, contentsFromDB));
+				if (detailView.getListAdapter() != null) { 
 					detailView.getListAdapter().notifyDataSetChanged();
 				}
 			} catch (DAOException e) {
@@ -269,4 +252,6 @@ public class MainActivity extends BaseActivity {
 			}
 		}
 	}
+	
+	
 }

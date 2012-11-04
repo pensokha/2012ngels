@@ -8,6 +8,8 @@ import org.our.android.ouracademy.model.OurCategory;
 import org.our.android.ouracademy.model.OurContents;
 import org.our.android.ouracademy.model.OurMetaInfo;
 
+import android.util.Log;
+
 /******
  * 
  * @author hyeongseokLim
@@ -74,6 +76,7 @@ public class FSIDAO {
 		testData.setResponseCode(OurMetaInfo.RES_CODE_SUCCESS);
 		testData.setCategories(categories);
 		testData.setContents(contents);
+		
 		
 		try {
 			JSONObject jsonObject = new JSONObject(testData.getJSONObject().toString());

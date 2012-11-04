@@ -15,10 +15,11 @@ import org.our.android.ouracademy.OurDefine;
 
 import android.util.*;
 
-
 public class P2PServer implements Runnable {
 	private static final String TAG = "P2PServerService";
 	private static final int SERVER_NUM = OurDefine.P2P_SERVER_PORT.length;
+
+	private ServerSocket serverSock;
 
 	/**
 	 * 
@@ -28,17 +29,22 @@ public class P2PServer implements Runnable {
 
 	@Override
 	public void run() {
-		ServerSocket serverSock = startServer();
+		serverSock = startServer();
 		if (serverSock == null) {
 			return;
 		}
 		Log.d(TAG, "Server Started : " + serverSock.toString());
-		
+
 		while (true) {
+			if (serverSock == null) {
+				Log.d(TAG, "Server Stopped");
+				break;
+			}
+
 			Socket clientSock = null;
 			// accepting client
 			try {
-				clientSock = acceptClient(serverSock);
+				clientSock = serverSock.accept();
 			} catch (IOException e) {
 				P2PManager.close(clientSock);
 				continue;
@@ -47,6 +53,18 @@ public class P2PServer implements Runnable {
 
 			Executor executor = Executors.newFixedThreadPool(SERVER_NUM);
 			executor.execute(new P2PSession(clientSock));
+		}
+	}
+
+	public void stopServer() {
+		if (serverSock != null) {
+			try {
+				serverSock.close();
+			} catch (IOException err) {
+				err.printStackTrace();
+			} finally {
+				serverSock = null;
+			}
 		}
 	}
 
@@ -64,13 +82,4 @@ public class P2PServer implements Runnable {
 		}
 		return sock;
 	}
-
-	public Socket acceptClient(ServerSocket serverSock) throws IOException {
-		Socket clientSock = serverSock.accept();
-
-		// String clientAddress = clientSock.getInetAddress().getHostAddress();
-		// int clientPort = clientSock.getPort();
-		return clientSock;
-	}
-
 }

@@ -43,21 +43,16 @@ public class WifiDirectStudentListener extends WifiDirectDefaultListener
 	 * 
 	 */
 	private class DiscoverListener implements ActionListener {
-		private boolean retry = false;
 
 		@Override
 		public void onSuccess() {
 			Log.d(TAG, "DiscoverPeers Success");
+			manager.requestPeers(channel, WifiDirectStudentListener.this);
 		}
 
 		@Override
 		public void onFailure(int reason) {
-			if (retry == false) {
-				manager.discoverPeers(channel, this);
-				retry = true;
-			} else {
-				Log.d(TAG, "DiscoverPeers False");
-			}
+			Log.d(TAG, "DiscoverPeers False");
 		}
 	}
 
@@ -102,6 +97,8 @@ public class WifiDirectStudentListener extends WifiDirectDefaultListener
 					groupOwnerDevices.add(device);
 				}
 			}
+			
+			Log.d("Test", "FindGroupOwners : "+groupOwnerDevices.size());
 
 			if (OurPreferenceManager.getInstance().isStudent() == true
 					&& getConnected() == false) {
@@ -128,7 +125,7 @@ public class WifiDirectStudentListener extends WifiDirectDefaultListener
 											new DiscoverListener());
 								}
 							}
-						}, 300000); // 5 Minute
+						}, 30000); // 5 Minute
 					}
 				}
 
@@ -173,6 +170,8 @@ public class WifiDirectStudentListener extends WifiDirectDefaultListener
 		@Override
 		public void onSuccess() {
 			Log.d(TAG, "Success Connect Group");
+			
+			manager.requestConnectionInfo(channel, WifiDirectStudentListener.this);
 		}
 
 		@Override
@@ -188,6 +187,7 @@ public class WifiDirectStudentListener extends WifiDirectDefaultListener
 
 	@Override
 	public void onConnectionInfoAvailable(WifiP2pInfo info) {
+		Log.d(TAG, "ConnectionInfoAvailable");
 		WifiDirectWrapper.getInstance().setInfo(info);
 
 		DataManagerFactory.getDataManager().getMetaInfo();

@@ -29,6 +29,8 @@ public class OurApplication extends Application {
 
 		// 화면 정보
 		ScreenInfo.create(this);
+		
+		DataManagerFactory.getDataManager().startService(this);
 	}
 
 	public static boolean isTestMode() {
@@ -37,9 +39,9 @@ public class OurApplication extends Application {
 	
 	@Override
 	public void onTerminate() {
-		super.onTerminate();
-		
 		DataManagerFactory.getDataManager().stopService(this);
+		
+		super.onTerminate();
 	}
 
 	public static OurApplication getInstance() {

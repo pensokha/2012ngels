@@ -48,8 +48,19 @@
             android:name=".ui.pages.SettingActivity"
             android:screenOrientation="landscape" android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
 
+        <service android:name="org.our.android.ouracademy.download.DownloadService"
+            android:exported="false" >
+			<intent-filter>
+				<action android:name="org.our.android.ouracademy.download.DOWNLOAD_SERVICE" />
+			</intent-filter>
+		</service>
+		
         <service
-            android:name=".p2p.P2PService"
+            android:name=".service.TeacherService"
+            android:enabled="true" />
+        
+        <service
+            android:name=".service.StudentService"
             android:enabled="true" />
         
         <receiver android:name=".broadreceiver.PowerReceiver">
@@ -59,13 +70,6 @@
                 <action android:name="android.intent.action.ACTION_SHUTDOWN"/>
             </intent-filter>
         </receiver>
-        
-        <service android:name="org.our.android.ouracademy.download.DownloadService"
-            android:exported="false" >
-			<intent-filter>
-				<action android:name="org.our.android.ouracademy.download.DOWNLOAD_SERVICE" />
-			</intent-filter>
-		</service>
 		
 		<receiver android:name="org.our.android.ouracademy.download.ServiceStartReceiver">
     		<intent-filter>
