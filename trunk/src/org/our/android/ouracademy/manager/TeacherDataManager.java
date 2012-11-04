@@ -32,10 +32,12 @@ public class TeacherDataManager extends DataManager {
 	 * wifi group
 	 */
 	@Override
-	public void startService(Context ctx) {
-		super.startService(ctx);
+	public synchronized void startService(Context ctx) {
+		if (isStarted() == false) {
+			super.startService(ctx);
 
-		getMetaInfo();
+			getMetaInfo();
+		}
 	}
 
 	/*********
@@ -69,7 +71,7 @@ public class TeacherDataManager extends DataManager {
 	}
 
 	@Override
-	public void cancleDownload(OurContents content) {
+	public void cancelDownload(OurContents content) {
 		// TODO Auto-generated method stub
 
 	}

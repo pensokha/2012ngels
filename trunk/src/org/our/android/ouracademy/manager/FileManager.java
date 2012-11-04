@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.RandomAccessFile;
 import java.util.ArrayList;
 
 import org.our.android.ouracademy.OurDefine;
@@ -36,50 +37,65 @@ public class FileManager {
 		}
 		return null;
 	}
-	
-	public static String getFileRealPath(String fileName){
-		return STRSAVEPATH+fileName;
+
+	public static String getFileRealPath(String fileName) {
+		return STRSAVEPATH + fileName;
 	}
-	
-	public static String getRealPathFromContentId(String contentId){
+
+	public static RandomAccessFile getRandomAccessFile(String contentId,
+			String mode) throws FileNotFoundException {
+		File dir = new File(STRSAVEPATH);
+		
+		if(dir.exists() == false){
+			dir.mkdirs();
+		}
+
+		return new RandomAccessFile(
+				FileManager.getRealPathFromContentId(contentId), mode);
+	}
+
+	public static String getRealPathFromContentId(String contentId) {
+
 		return getFileRealPath(getFileName(contentId));
 	}
-	
-	public static String getContentId(String fileName){
-		return fileName.replace("."+OurDefine.VIDEO_FORMAT_MP4, "");
+
+	public static String getContentId(String fileName) {
+		return fileName.replace("." + OurDefine.VIDEO_FORMAT_MP4, "");
 	}
-	
-	public static String getFileName(String contentId){
-		return contentId+"."+OurDefine.VIDEO_FORMAT_MP4;
+
+	public static String getFileName(String contentId) {
+		return contentId + "." + OurDefine.VIDEO_FORMAT_MP4;
 	}
-	
-	public static ArrayList<OurVideoFile> getVideoFiles(){
+
+	public static ArrayList<OurVideoFile> getVideoFiles() {
 		ArrayList<OurVideoFile> videoFiles = new ArrayList<OurVideoFile>();
 		String[] fileNameList = getList();
-		
-		File file;
-		OurVideoFile videoFile;
-		for(int i = 0; i < fileNameList.length; i++){
-			videoFile = new OurVideoFile();
-			file = new File(getFileRealPath(fileNameList[i]));
-			
-			videoFile.setName(fileNameList[i]);
-			videoFile.setContentId(getContentId(fileNameList[i]));
-			videoFile.setSize(file.length());
-			
-			videoFiles.add(videoFile);
+
+		if (fileNameList != null) {
+			File file;
+			OurVideoFile videoFile;
+			for (int i = 0; i < fileNameList.length; i++) {
+				videoFile = new OurVideoFile();
+				file = new File(getFileRealPath(fileNameList[i]));
+
+				videoFile.setName(fileNameList[i]);
+				videoFile.setContentId(getContentId(fileNameList[i]));
+				videoFile.setSize(file.length());
+
+				videoFiles.add(videoFile);
+			}
 		}
-		
+
 		return videoFiles;
 	}
-	
-	public static void removeFiles(ArrayList<OurVideoFile> videoFiles){
-		if(videoFiles != null){
+
+	public static void removeFiles(ArrayList<OurVideoFile> videoFiles) {
+		if (videoFiles != null) {
 			File file;
-			for(OurVideoFile videoFile : videoFiles){
+			for (OurVideoFile videoFile : videoFiles) {
 				file = new File(getFileRealPath(videoFile.getName()));
-				
-				if(file.exists()){
+
+				if (file.exists()) {
 					file.delete();
 				}
 			}

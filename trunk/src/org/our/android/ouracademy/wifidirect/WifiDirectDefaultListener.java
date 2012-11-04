@@ -33,6 +33,7 @@ public abstract class WifiDirectDefaultListener implements WifiDirectListener,
 
 	@Override
 	public void onDisableP2p() {
+		Log.d("Test", "onDisableP2p");
 		if (dialogOn == true) {
 			new AlertDialog.Builder(context)
 					.setTitle("Do you want to set wifidirect?")

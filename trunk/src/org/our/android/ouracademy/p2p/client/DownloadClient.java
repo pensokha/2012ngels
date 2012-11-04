@@ -49,8 +49,7 @@ public class DownloadClient extends P2PClient {
 	@Override
 	protected void responseProcess(Socket socket) throws IOException {
 		InputStream inputStream = socket.getInputStream();
-		RandomAccessFile rand = new RandomAccessFile(
-				FileManager.getRealPathFromContentId(content.getId()), "rws");
+		RandomAccessFile rand = FileManager.getRandomAccessFile(content.getId(), "rws");
 		rand.seek(content.getDownloadedSize());
 
 		byte buf[] = new byte[OurDefine.SOCKET_BUFFER_SIZE];
@@ -81,6 +80,14 @@ public class DownloadClient extends P2PClient {
 
 		context.sendBroadcast(intent);
 	}
+	
+	private void sendCancelDownload() {
+		intent.putExtra(OurDataChangeReceiver.ACTION,
+				OurDataChangeReceiver.ACTION_CANCEL_DOWNLOADING);
+		intent.putExtra(OurDataChangeReceiver.CONTENT_ID, content.getId());
+
+		context.sendBroadcast(intent);
+	}
 
 	@Override
 	public void onInterrupted() {
@@ -91,6 +98,10 @@ public class DownloadClient extends P2PClient {
 		ContentDAO contentDao = new ContentDAO();
 		try {
 			contentDao.updateDownloadedSize(content);
+			
+			if(content.getSize() != content.getDownloadedSize()){
+				sendCancelDownload();
+			}
 		} catch (DAOException e) {
 			e.printStackTrace();
 		}
