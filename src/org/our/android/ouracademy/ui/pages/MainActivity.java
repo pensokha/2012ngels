@@ -225,9 +225,6 @@ public class MainActivity extends BaseActivity {
 		OurContents content = getContentFromViewList(contentId);
 		if(content != null){
 			content.fileStatus = OurContents.FileStatus.DOWNLOADING;
-			if (detailView.getListAdapter() != null) {
-				detailView.getListAdapter().notifyDataSetChanged();
-			}
 			
 			if (content.getDownloadedSize() <= downloadedSize) {
 				content.setDownloadedSize(downloadedSize);
