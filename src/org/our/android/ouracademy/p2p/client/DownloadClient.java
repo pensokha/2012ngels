@@ -18,12 +18,13 @@ import org.our.android.ouracademy.ui.pages.MainActivity.OurDataChangeReceiver;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 public class DownloadClient extends P2PClient {
 	private OurContents content;
 	private Context context;
 	private Intent intent;
+	
+	private long notiSize = 0;
 
 	public DownloadClient(String serverAddress, OurContents content,
 			Context context) {
@@ -60,7 +61,9 @@ public class DownloadClient extends P2PClient {
 			rand.write(buf, 0, len);
 			totalSize += len;
 			content.setDownloadedSize(totalSize);
-			sendDownload(totalSize);
+			if(notiSize + OurDefine.SOCKET_BUFFER_SIZE < totalSize){
+				sendDownload(totalSize);
+			}
 			if (Thread.currentThread().isInterrupted()) {
 				break;
 			}
@@ -74,6 +77,7 @@ public class DownloadClient extends P2PClient {
 	}
 
 	private void sendDownload(long downloadSize) {
+		notiSize = downloadSize;
 		intent.putExtra(OurDataChangeReceiver.ACTION,
 				OurDataChangeReceiver.ACTION_DOWNLOADING);
 		intent.putExtra(OurDataChangeReceiver.CONTENT_ID, content.getId());
@@ -102,6 +106,8 @@ public class DownloadClient extends P2PClient {
 			
 			if(content.getSize() != content.getDownloadedSize()){
 				sendCancelDownload();
+			}else{
+				sendDownload(content.getDownloadedSize());
 			}
 		} catch (DAOException e) {
 			e.printStackTrace();
