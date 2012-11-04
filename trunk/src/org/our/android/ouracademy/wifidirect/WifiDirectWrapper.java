@@ -20,7 +20,6 @@ import android.widget.Toast;
  * 
  */
 public class WifiDirectWrapper {
-	private static final String TAG = "WifiDirectWrapper";
 
 	private static WifiDirectWrapper instance = new WifiDirectWrapper();
 
@@ -181,9 +180,5 @@ public class WifiDirectWrapper {
 						Toast.LENGTH_LONG).show();
 			}
 		}
-	}
-
-	public void download(String contentId) {
-//		new DownloadFileAsyncTask().execute(contentId);
 	}
 }

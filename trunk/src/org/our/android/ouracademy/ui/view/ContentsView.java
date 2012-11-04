@@ -15,7 +15,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Message;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -79,7 +78,6 @@ public class ContentsView extends RelativeLayout implements OnClickListener {
 
 	public void setContentsData(OurContents ourContents_) {
 		reset();
-		Log.d("Test", "getView");
 		this.ourContents = ourContents_;
 		if (ourContents.fileStatus == FileStatus.DOWNLOADED) { //파일이 존재
 			contentsLayout.setBackgroundResource(R.drawable.btn_main_book_selector);

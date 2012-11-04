@@ -7,17 +7,10 @@
 
 package org.our.android.ouracademy.p2p;
 
-import java.io.*;
-import java.net.*;
-import java.util.concurrent.*;
+import java.io.Closeable;
+import java.net.Socket;
 
 public class P2PManager {
-
-	public static void runServer() {
-		//추후에 Thread Pooling 방식으로 변경한다. 
-		Executor executor = Executors.newSingleThreadExecutor();
-		executor.execute(new P2PServer());
-	}
 
 	/**
 	 * 

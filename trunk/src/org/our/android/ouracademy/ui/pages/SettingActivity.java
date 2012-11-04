@@ -7,7 +7,6 @@ import org.our.android.ouracademy.ui.adapter.WiFiListAdapter;
 import org.our.android.ouracademy.ui.view.SetupMainView;
 import org.our.android.ouracademy.ui.view.SetupMainView.SetupMainViewListener;
 import org.our.android.ouracademy.ui.view.SetupWifiListItemVew;
-import org.our.android.ouracademy.wifidirect.WifiDirectWrapper;
 
 import android.content.Context;
 import android.content.Intent;
@@ -30,29 +29,22 @@ public class SettingActivity extends BaseActivity {
 	ListView wifiListView;
 	WiFiListAdapter listAdapter;
 	
-	WifiDirectWrapper wifiDirectWrapper;
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		initUI();
 		
 		context = this;
-		wifiDirectWrapper = WifiDirectWrapper.getInstance();
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		
-		wifiDirectWrapper.register(context);
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
-
-		wifiDirectWrapper.unregister();
 	}
 
 	@Override

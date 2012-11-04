@@ -10,17 +10,17 @@ import org.our.android.ouracademy.asynctask.CallbackTask;
 import org.our.android.ouracademy.asynctask.CallbackTask.OurCallback;
 import org.our.android.ouracademy.model.OurContents;
 
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
 public abstract class DataManager {
 	private ArrayList<ExecutorPair> taskList = new ArrayList<DataManager.ExecutorPair>();
 	protected Context context;
-
-	public void syncFileAndDatabase() {
-
-	}
+	
+	protected ComponentName serviceName;
 
 	abstract public void getMetaInfo();
 
@@ -43,6 +43,13 @@ public abstract class DataManager {
 			if (pair.future.isDone() == false) {
 				pair.executor.shutdownNow();
 			}
+		}
+		
+		if (serviceName != null) {
+			Intent intent = new Intent();
+			intent.setComponent(serviceName);
+
+			context.stopService(intent);
 		}
 	}
 

@@ -1,36 +1,16 @@
 package org.our.android.ouracademy.ui.pages;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.Socket;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.our.android.ouracademy.OurDefine;
 import org.our.android.ouracademy.OurPreferenceManager;
-import org.our.android.ouracademy.R;
-import org.our.android.ouracademy.manager.FileManager;
-import org.our.android.ouracademy.manager.OurDownloadManager;
-import org.our.android.ouracademy.p2p.JSONProtocol;
-import org.our.android.ouracademy.p2p.P2PManager;
-import org.our.android.ouracademy.p2p.P2PService;
-import org.our.android.ouracademy.p2p.action.DownloadFile;
-import org.our.android.ouracademy.ui.adapter.ContentsListAdapter;
 import org.our.android.ouracademy.ui.adapter.ContentsListAdapterOld;
 import org.our.android.ouracademy.util.DbManager;
 import org.our.android.ouracademy.wifidirect.WifiDirectWrapper;
 
-import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -46,8 +26,6 @@ import android.widget.AbsoluteLayout;
 import android.widget.AbsoluteLayout.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.CursorAdapter;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -144,24 +122,6 @@ public class MainActivityOld extends BaseActivity {
 		
 	}
 
-	// tmp method
-	private void startP2pService() {
-		if (pref.isTeacher() && serviceName == null) {
-			serviceName = startService(new Intent(this, P2PService.class));
-		}
-	}
-
-	private void stopP2pService() {
-		if (serviceName != null) {
-			Intent intent = new Intent();
-			intent.setComponent(serviceName);
-
-			if (stopService(intent)) {
-				Log.d(TAG, "Stop P2p Service");
-			}
-			serviceName = null;
-		}
-	}
 
 //	// tmp method
 //	private void alertMode() {
@@ -209,8 +169,6 @@ public class MainActivityOld extends BaseActivity {
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-
-		stopP2pService();
 	}
 	
 	private void setDetailLayoutImageCache(LayoutParams params) {
