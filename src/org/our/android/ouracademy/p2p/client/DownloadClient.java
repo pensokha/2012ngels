@@ -18,6 +18,7 @@ import org.our.android.ouracademy.ui.pages.MainActivity.OurDataChangeReceiver;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 public class DownloadClient extends P2PClient {
 	private OurContents content;

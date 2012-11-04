@@ -15,11 +15,6 @@ public abstract class CallbackTask implements Runnable {
 	public void run() {
 		proceed();
 		
-		if(Thread.currentThread().isInterrupted()){
-			onInterrupted();
-			return ;
-		}
-		
 		for(OurCallback callback : callbackList){
 			callback.callback();
 		}
