@@ -26,6 +26,7 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 
+
 /**
  * 
  * @author JiHoon, Moon
@@ -92,24 +93,7 @@ public class MainActivity extends BaseActivity {
 
 	private void initContentsLayout() {
 		detailView = new MainDetailView(this);
-		detailView.dragWidth = 513; //
 		detailLayout.addView(detailView);
-		
-		Button button = new Button(this);
-		button.setText("notify");
-		button.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				ArrayList<OurContents> dd = detailView.getContentList();
-				OurContents our = new OurContents();
-				our.setId("11");
-				our.setSubjectEng("11");
-				dd.add(our);
-				
-				detailView.getListAdapter().notifyDataSetChanged(dd);
-			}
-		});
-		detailLayout.addView(button, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 	}
 
 	@Override

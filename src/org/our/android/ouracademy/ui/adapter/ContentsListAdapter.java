@@ -27,7 +27,6 @@ public class ContentsListAdapter extends BaseAdapter  {
 	public static final int CELL_PER_ITEM = 2;
 	
 	class ObjViewHolder {
-		TextView tagTitle;
 		ContentsView[] itemHolderList = new ContentsView[CELL_PER_ITEM];
 	}
 	
@@ -81,7 +80,6 @@ public class ContentsListAdapter extends BaseAdapter  {
 				dd.addView(contentsView);
 			}
 			
-			holder.tagTitle = (TextView)convertView.findViewById(R.id.txt_list_tag);
 			convertView.setTag(holder);
 		} else {
 			holder = (ObjViewHolder)convertView.getTag();

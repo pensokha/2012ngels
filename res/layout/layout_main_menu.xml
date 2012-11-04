@@ -4,6 +4,40 @@
     android:layout_height="fill_parent"
     android:background="@drawable/menu_bg01" >
 
+    <RelativeLayout
+        android:id="@+id/top_menu"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/menu_bg03" >
+
+        <ImageButton
+            android:id="@+id/guide_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="37dp"
+            android:background="@drawable/btn_main_guide_selector" />
+
+        <ImageButton
+            android:id="@+id/setting_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="37dp"
+            android:background="@drawable/btn_main_setting_selector" />
+
+        <ImageButton
+            android:id="@+id/refresh_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@drawable/btn_main_refresh_selector" />
+    </RelativeLayout>
+
+    <!--
     <TextView
         android:id="@+id/main_menu_txt"
         style="@style/fontstyle_txt_main_category_title"
@@ -14,13 +48,14 @@
         android:drawableLeft="@drawable/list_icon_category"
         android:drawablePadding="7dp"
         android:gravity="center_vertical"
-        android:text="@string/category_upper_case" />
+        android:text="@string/category_upper_case" />
+    -->
 
     <ListView
         android:id="@+id/category_listview"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_below="@id/main_menu_txt"
+        android:layout_below="@id/top_menu"
         android:layout_marginLeft="25.33dp"
         android:layout_marginRight="20.67dp"
         android:cacheColorHint="#00000000"
@@ -28,24 +63,22 @@
         android:listSelector="@android:color/transparent"
         android:overScrollMode="never" />
 
-    <Button
+    <RelativeLayout 
         android:id="@+id/main_menu_apply_btn"
-        style="@style/fontstyle_txt_main_apply_btn"
-        android:layout_width="306dp"
-        android:layout_height="62dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="13.33dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/btn_main_apply_selector"
-        android:text="@string/apply" />
-
-    <ImageButton
-        android:id="@+id/setting_btn"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="20.67dp"
-        android:background="@drawable/btn_main_setting_selector" />
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/btn_main_apply_selector">
+        <TextView
+	        style="@style/fontstyle_txt_main_apply_btn"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_centerInParent="true"
+	        android:drawableLeft="@drawable/menu_icon_apply01"
+	        android:drawablePadding="7dp"
+	        android:gravity="center"
+	        android:text="@string/apply" />
+    </RelativeLayout>
+    
 
 </RelativeLayout>
