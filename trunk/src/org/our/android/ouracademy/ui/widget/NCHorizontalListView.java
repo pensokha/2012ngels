@@ -145,14 +145,34 @@ public class NCHorizontalListView extends AdapterView<ListAdapter> {
 	private void addAndMeasureChild(final View child, int viewPos) {
 
 		LayoutParams params = child.getLayoutParams();
+		int     childWidth;
+        int     childWidthMeasureSpec;
+        int     childHeight;
+        int     childHeightMeasureSpec;
+        
 		if (params == null) {
-			params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+			params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 		}
+		
+		childWidth = getWidth();
+        childWidthMeasureSpec = MeasureSpec.AT_MOST;
+         
+        if (params.height == LayoutParams.WRAP_CONTENT) {
+            childHeight = getHeight();
+            childHeightMeasureSpec = MeasureSpec.AT_MOST;
+             
+        } else if (params.height == LayoutParams.FILL_PARENT) {
+            childHeight = getHeight();
+            childHeightMeasureSpec = MeasureSpec.EXACTLY;
+             
+        } else {
+            childHeight = params.height;
+            childHeightMeasureSpec = MeasureSpec.EXACTLY;
+        }
 
 		addViewInLayout(child, viewPos, params, true);
-
-		child.measure(MeasureSpec.makeMeasureSpec(getWidth(), MeasureSpec.AT_MOST),
-			MeasureSpec.makeMeasureSpec(getHeight(), MeasureSpec.AT_MOST));
+		child.measure(MeasureSpec.makeMeasureSpec(childWidth, childWidthMeasureSpec),
+                MeasureSpec.makeMeasureSpec(childHeight, childHeightMeasureSpec));
 	}
 
 	@Override

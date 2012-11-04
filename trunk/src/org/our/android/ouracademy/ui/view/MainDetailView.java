@@ -133,7 +133,7 @@ public class MainDetailView extends RelativeLayout {
 		
         decoyImage = new ImageView(getContext());
         
-        HorizontalListView listView = (HorizontalListView) findViewById(R.id.horizontal_listview);
+        NCHorizontalListView listView = (NCHorizontalListView) findViewById(R.id.horizontal_listview);
         contentsListAdapter = new ContentsListAdapter(getContext(), getContensListData());
         listView.setAdapter(contentsListAdapter);
         
