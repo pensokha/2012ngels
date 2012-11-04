@@ -16,6 +16,7 @@ import org.our.android.ouracademy.wifidirect.WifiDirectWrapper;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.wifi.WifiManager;
 
 public class StudentDataManager extends DataManager {
 	private static StudentDataManager instance = new StudentDataManager();
@@ -43,6 +44,10 @@ public class StudentDataManager extends DataManager {
 	public synchronized void startService(Context context) {
 		if (isStarted() == false) {
 			super.startService(context);
+			
+			WifiManager wifi = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+			wifi.disconnect();
+			
 
 			CallbackTask syncAndContentNoti = new SyncAndContentNoti(context);
 			syncAndContentNoti.addCallback(callback);
