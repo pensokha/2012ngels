@@ -2,11 +2,13 @@ package org.our.android.ouracademy.ui.view;
 
 import java.util.ArrayList;
 
+import org.our.android.ouracademy.OurDefine;
 import org.our.android.ouracademy.R;
 import org.our.android.ouracademy.dao.ContentDAO;
 import org.our.android.ouracademy.dao.DAOException;
 import org.our.android.ouracademy.model.OurContents;
 import org.our.android.ouracademy.ui.adapter.ContentsListAdapter;
+import org.our.android.ouracademy.ui.widget.HorizontalListView;
 import org.our.android.ouracademy.ui.widget.NCHorizontalListView;
 
 import android.content.Context;
@@ -48,7 +50,8 @@ public class MainDetailView extends RelativeLayout {
 	ListView contentsListview;
 	ContentsListAdapter contentsListAdapter;
 	
-	public int dragWidth = 0;				//Drag field witdh
+	private boolean isFristLoad = true;
+	
 	
 	ArrayList<OurContents> contentsList;
 	
@@ -130,10 +133,30 @@ public class MainDetailView extends RelativeLayout {
 		
         decoyImage = new ImageView(getContext());
         
-        NCHorizontalListView listView = (NCHorizontalListView) findViewById(R.id.horizontal_listview);
+        HorizontalListView listView = (HorizontalListView) findViewById(R.id.horizontal_listview);
         contentsListAdapter = new ContentsListAdapter(getContext(), getContensListData());
         listView.setAdapter(contentsListAdapter);
+        
+        setDetailLayoutXPosition(OurDefine.DETAIL_ANI_END_X);
+        menuStatus = MenuStatus.VISIBLE_MENU;
 	}
+	
+//	@Override
+//	public void onWindowFocusChanged(boolean hasFocus) {
+//		super.onWindowFocusChanged(hasFocus);
+//	    if (isFristLoad) {
+//	    	isFristLoad = false;
+//	    	//시작히 카테고리 보여주고 0.3초뒤에 메뉴를 닫는다.
+//	        setDetailLayoutXPosition(OurDefine.DETAIL_ANI_END_X);
+//	        Handler aniHandler = new Handler();
+//	        aniHandler.postDelayed(new Runnable() {
+//				@Override
+//				public void run() {
+//					hideManuAnimation(OurDefine.DETAIL_ANI_WIDTH);
+//				}
+//			}, 300);
+//	    }
+//	}
 	
 	public void onClickMenu() {
 		if (menuStatus == MenuStatus.MOVING_MENU) {
@@ -143,9 +166,9 @@ public class MainDetailView extends RelativeLayout {
 		setDetailLayoutImageCache(params);
 
 		if (menuStatus == MenuStatus.VISIBLE_MENU) {
-			hideManuAnimation(dragWidth);
+			hideManuAnimation(OurDefine.DETAIL_ANI_WIDTH);
 		} else if (menuStatus == MenuStatus.INVISIBLE_MENU) {
-			openMenuAnimation(dragWidth);
+			openMenuAnimation(OurDefine.DETAIL_ANI_WIDTH);
 		}
 	}
 	
@@ -184,7 +207,7 @@ public class MainDetailView extends RelativeLayout {
 			@Override
 			public void onAnimationEnd(Animation animation) {
 				menuStatus = MenuStatus.VISIBLE_MENU;
-				setDetailLayoutXPosition(dragWidth);
+				setDetailLayoutXPosition(OurDefine.DETAIL_ANI_END_X);
 				detailRootLayout.removeView(decoyImage);
 
 				hideMenuBtn.setClickable(true);
@@ -213,7 +236,7 @@ public class MainDetailView extends RelativeLayout {
 			@Override
 			public void onAnimationEnd(Animation animation) {
 				menuStatus = MenuStatus.INVISIBLE_MENU;
-				setDetailLayoutXPosition(0);
+				setDetailLayoutXPosition(OurDefine.DETAIL_ANI_START_X);
 				detailRootLayout.removeView(decoyImage);
 
 				hideMenuBtn.setClickable(false);
@@ -263,7 +286,7 @@ public class MainDetailView extends RelativeLayout {
 				AbsoluteLayout.LayoutParams params;
 				params = (AbsoluteLayout.LayoutParams)decoyImage.getLayoutParams();
 				int posX = params.x + moveEnd - moveStart;
-				if (0 < posX && posX < dragWidth) {
+				if (OurDefine.DETAIL_ANI_START_X < posX && posX < OurDefine.DETAIL_ANI_END_X) {
 					params.x = posX;
 					decoyImage.setLayoutParams(params);
 				}
@@ -277,18 +300,18 @@ public class MainDetailView extends RelativeLayout {
 					int posX = params.x;
 
 					if (menuStatus == MenuStatus.VISIBLE_MENU) { //하단화면이 보이는 경우
-						if (posX == dragWidth) {
+						if (posX == OurDefine.DETAIL_ANI_END_X) {
 							hideManuAnimation(posX);
-						} else if (posX > (dragWidth * 0.7)) {
-							openMenuAnimation(dragWidth - posX);
+						} else if (posX > (OurDefine.DETAIL_ANI_END_X * 0.7)) {
+							openMenuAnimation(OurDefine.DETAIL_ANI_END_X - posX);
 						} else {
-							hideManuAnimation(posX);
+							hideManuAnimation(posX - OurDefine.DETAIL_ANI_START_X);
 						}
 					} else if (menuStatus == MenuStatus.INVISIBLE_MENU) { //상단화면이 보이는 경우
-						if (posX < (dragWidth * 0.3)) {
-							hideManuAnimation(posX);
+						if (posX < (OurDefine.DETAIL_ANI_END_X * 0.3)) {
+							hideManuAnimation(posX - OurDefine.DETAIL_ANI_START_X);
 						} else {
-							openMenuAnimation(dragWidth - posX);
+							openMenuAnimation(OurDefine.DETAIL_ANI_END_X - posX);
 						}
 					}
 				} else if (touchStatus == TouchStatus.START_DRAGGING) { //decoyImage가 이동하지 않은 경우

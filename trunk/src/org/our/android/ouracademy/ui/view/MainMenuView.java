@@ -24,7 +24,6 @@ import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -38,11 +37,10 @@ public class MainMenuView extends FrameLayout implements OnClickListener {
 	ArrayList<OurCategory> categoryList = null;
 	ListView listView;
 	TextView categoryTxtView;
-	Button applyButton;
+	View applyButton;
 
 	int aniResId = -1;
 	
-
 	CategoryListAdapter adapter;
 
 	public MainMenuView(Context context) {
@@ -80,8 +78,12 @@ public class MainMenuView extends FrameLayout implements OnClickListener {
 
 		listView = (ListView)findViewById(R.id.category_listview);
 
-		View apply = LayoutInflater.from(getContext()).inflate(R.layout.main_menu_dummy_item, null);
-		listView.addFooterView(apply);
+		View header = LayoutInflater.from(getContext()).inflate(R.layout.layout_category_header_item, null);
+		header.setTag(false);
+		listView.addHeaderView(header);
+		
+		View footer = LayoutInflater.from(getContext()).inflate(R.layout.main_menu_dummy_item, null);
+		listView.addFooterView(footer);
 
 		adapter = new CategoryListAdapter(getContext(), R.layout.layout_category_list_item,
 			getCategoryListData());
@@ -90,7 +92,28 @@ public class MainMenuView extends FrameLayout implements OnClickListener {
 		listView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> list, View view, int position, long id) {
-				OurCategory ourCategory = categoryList.get(position);
+				//except header
+				if (position == 0) {
+					boolean isChecked = (Boolean)(view.getTag());
+					View checkImg = view.findViewById(R.id.category_check);
+					if (isChecked) {
+						checkImg.setVisibility(View.GONE);
+					} else {
+						checkImg.setVisibility(View.VISIBLE);
+					}
+					for (OurCategory ourCategory : categoryList) {
+						if (isChecked) {
+							ourCategory.isChecked = false;
+						} else {
+							ourCategory.isChecked = true;
+						}
+					}
+					view.setTag(!isChecked);
+					adapter.notifyDataSetChanged();
+					return;
+				}
+				
+				OurCategory ourCategory = categoryList.get(position - 1);
 				if (ourCategory.isChecked) {
 					ourCategory.isChecked = false;
 				} else {
@@ -103,16 +126,18 @@ public class MainMenuView extends FrameLayout implements OnClickListener {
 		listView.setOnScrollListener(onScrollChangedListener);
 		listView.setOnTouchListener(onTouchListener);
 
-		applyButton = (Button)findViewById(R.id.main_menu_apply_btn);
+		applyButton = findViewById(R.id.main_menu_apply_btn);
 
+		View guideBtn = findViewById(R.id.guide_btn);
+		View refreshBtn = findViewById(R.id.refresh_btn);
 		View settingBtn = findViewById(R.id.setting_btn);
+		guideBtn.setOnClickListener(this);
+		refreshBtn.setOnClickListener(this);
 		settingBtn.setOnClickListener(this);
 	}
 
 	public void setApplyBtnListener(OnClickListener onClickListener) {
-		if (applyButton != null) {
-			applyButton.setOnClickListener(onClickListener);
-		}
+		applyButton.setOnClickListener(onClickListener);
 	}
 
 	boolean isVisibleLastItem;
@@ -123,7 +148,6 @@ public class MainMenuView extends FrameLayout implements OnClickListener {
 			if (event.getAction() == MotionEvent.ACTION_DOWN) {
 			} else if (event.getAction() == MotionEvent.ACTION_MOVE) {
 				if (applyButton != null) {
-//					applyButton.setVisibility(View.GONE);
 					startAnimation(false);
 				}
 			} else if (event.getAction() == MotionEvent.ACTION_UP) {
@@ -131,7 +155,6 @@ public class MainMenuView extends FrameLayout implements OnClickListener {
 				if (listView.getLastVisiblePosition() == listView.getCount() - 1) {
 					isVisibleLastItem = true;
 				}
-//				applyButton.setVisibility(View.VISIBLE);
 				startAnimation(true);
 			}
 			return false;
@@ -165,14 +188,22 @@ public class MainMenuView extends FrameLayout implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		Intent intent = new Intent(getContext(), SettingActivity.class);
-		intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-		Activity activity = (Activity)getContext();
-		activity.startActivityForResult(intent, 1);
+		int id = v.getId();
+		switch(id) {
+		case R.id.guide_btn:
+			break;
+		case R.id.refresh_btn:
+			break;
+		case R.id.setting_btn:
+			Intent intent = new Intent(getContext(), SettingActivity.class);
+			intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+			Activity activity = (Activity)getContext();
+			activity.startActivityForResult(intent, 1);
+			break;
+		}
 	}
 
 	public void startAnimation(boolean showView) {
-
 		if (showView) {
 			// 보이고 있는 데 또 보여라는 요청 들오면 해당 애니메이션 무시.
 			if (aniResId == R.anim.push_up_in) {
