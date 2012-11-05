@@ -5,6 +5,7 @@ import java.util.concurrent.Executors;
 
 import org.our.android.ouracademy.p2p.P2PServer;
 
+import android.content.Intent;
 import android.util.Log;
 
 public class TeacherService extends OurService {
@@ -19,7 +20,13 @@ public class TeacherService extends OurService {
 		Executor executor = Executors.newSingleThreadExecutor();
 		executor.execute(sever);
 	}
-
+	
+	@Override
+	public int onStartCommand(Intent intent, int flags, int startId) {
+		super.onStartCommand(intent, flags, startId);
+		return START_STICKY;
+	}
+	
 	@Override
 	public void onDestroy() {
 		super.onDestroy();

@@ -191,7 +191,7 @@ public class WifiDirectStudentListener extends WifiDirectDefaultListener
 
 	@Override
 	public void onConnectionInfoAvailable(WifiP2pInfo info) {
-		Log.d(TAG, "ConnectionInfoAvailable");
+		Log.d(TAG, "ConnectionInfoAvailable : "+info);
 		WifiDirectWrapper.getInstance().setInfo(info);
 
 		DataManagerFactory.getDataManager().getMetaInfo();

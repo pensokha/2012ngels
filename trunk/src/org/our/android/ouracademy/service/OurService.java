@@ -17,7 +17,7 @@ public class OurService extends Service {
 		wifiDirect = WifiDirectWrapper.getInstance();
 		wifiDirect.setService(this);
 	}
-
+	
 	@Override
 	public IBinder onBind(Intent intent) {
 		return null;
