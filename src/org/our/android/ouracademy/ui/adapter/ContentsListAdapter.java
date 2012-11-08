@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.TextView;
 
 /**
 *
@@ -76,8 +75,8 @@ public class ContentsListAdapter extends BaseAdapter  {
 				ContentsView contentsView = new ContentsView(context);
 				holder.itemHolderList[idx] = contentsView;
 				
-				ViewGroup dd = (ViewGroup)convertView.findViewById(layoutIds[idx]);
-				dd.addView(contentsView);
+				ViewGroup viewGroup = (ViewGroup)convertView.findViewById(layoutIds[idx]);
+				viewGroup.addView(contentsView);
 			}
 			
 			convertView.setTag(holder);
@@ -89,15 +88,15 @@ public class ContentsListAdapter extends BaseAdapter  {
 		
 		//set Layout data & ui
 		for (int i = 0; i < CELL_PER_ITEM; i++) {
-			final int currentPositionOfItem = position * CELL_PER_ITEM + i;
-			final ContentsView contentsView = holder.itemHolderList[i];
+			int currentPositionOfItem = position * CELL_PER_ITEM + i;
+			ContentsView contentsView = holder.itemHolderList[i];
 			OurContents curModel = contentsList.get(currentPositionOfItem);
 			
 			if (currentPositionOfItem < itemSize) {
-				contentsView.setVisibility(View.VISIBLE);
+				contentsView.setAllVisibility(View.VISIBLE);
 				contentsView.setContentsData(curModel);
 			} else {
-				contentsView.setVisibility(View.GONE);
+				contentsView.setAllVisibility(View.GONE);
 			}
 		}
 		return convertView;

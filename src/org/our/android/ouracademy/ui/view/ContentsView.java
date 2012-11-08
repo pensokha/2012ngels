@@ -8,6 +8,7 @@ import org.our.android.ouracademy.manager.FileManager;
 import org.our.android.ouracademy.model.OurContents;
 import org.our.android.ouracademy.model.OurContents.FileStatus;
 import org.our.android.ouracademy.ui.pages.MediaPlayerPage;
+import org.our.android.ouracademy.util.MatchCategoryColor;
 import org.our.android.ouracademy.util.NetworkState;
 import org.our.android.ouracademy.youtubedownloader.YoutubeContentsTask;
 import org.our.android.ouracademy.youtubedownloader.YoutubeContentsTaskCallback;
@@ -20,6 +21,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -34,8 +36,11 @@ import android.widget.TextView;
 public class ContentsView extends RelativeLayout implements OnClickListener {
 	ImageView thumbnail;
 	RelativeLayout contentsLayout;
-	TextView title;
+	TextView categoryText;
+	TextView subjectText;
+	ViewGroup progressLayout;
 	ProgressBar progressBar;
+	TextView progressText;
 	Button cancelBtn;
 
 	OurContents ourContents = null;
@@ -59,11 +64,13 @@ public class ContentsView extends RelativeLayout implements OnClickListener {
 	}
 
 	private void initUI() {
-		LayoutInflater.from(getContext()).inflate(
-				R.layout.layout_contents_book_view, this, true);
+		LayoutInflater.from(getContext()).inflate(R.layout.layout_contents_book_view, this, true);
 		thumbnail = (ImageView) findViewById(R.id.thumbnail);
 		contentsLayout = (RelativeLayout) findViewById(R.id.book);
-		title = (TextView) findViewById(R.id.title);
+		categoryText = (TextView) findViewById(R.id.category_text);
+		subjectText = (TextView) findViewById(R.id.subject_text);
+		progressLayout = (ViewGroup)findViewById(R.id.progress_layout);
+		progressText = (TextView) findViewById(R.id.progress_text);
 		progressBar = (ProgressBar) findViewById(R.id.progressbar);
 		cancelBtn = (Button) findViewById(R.id.cancel_btn);
 
@@ -71,51 +78,62 @@ public class ContentsView extends RelativeLayout implements OnClickListener {
 		cancelBtn.setOnClickListener(this);
 	}
 
-	public void setVisibility(int visibility) {
+	public void setAllVisibility(int visibility) {
 		thumbnail.setVisibility(visibility);
 		contentsLayout.setVisibility(visibility);
-		title.setVisibility(visibility);
+		categoryText.setVisibility(visibility);
+		subjectText.setVisibility(visibility);
+		progressLayout.setVisibility(visibility);
+		progressText.setVisibility(visibility);
 		progressBar.setVisibility(visibility);
 		cancelBtn.setVisibility(visibility);
 	}
+	
 
 	public void setContentsData(OurContents ourContents_) {
 		reset();
 		this.ourContents = ourContents_;
 		if (ourContents.fileStatus == FileStatus.DOWNLOADED) { // 파일이 존재
-			contentsLayout
-					.setBackgroundResource(R.drawable.btn_main_book_selector);
-			progressBar.setVisibility(View.INVISIBLE);
+			contentsLayout.setBackgroundResource(MatchCategoryColor.getCategoryMatchColorId(ourContents.getSelectedCategoryId()));
+//			contentsLayout.setBackgroundResource(R.drawable.btn_main_book_selector_07);
+			setProgressLayoutVisible(false);
 			cancelBtn.setVisibility(View.INVISIBLE);
-		} else if (ourContents.fileStatus == FileStatus.DOWNLOADING) { // 파일
-																		// 다운로드
-																		// 중
+		} else if (ourContents.fileStatus == FileStatus.DOWNLOADING) { 
 			contentsLayout.setBackgroundResource(R.drawable.book_download02);
-			progressBar.setVisibility(View.VISIBLE);
+			setProgressLayoutVisible(true);
 			cancelBtn.setVisibility(View.VISIBLE);
 
-			progressBar
-					.setProgress((int) (ourContents_.getDownloadedSize() * 100 / ourContents_
-							.getSize()));
+			progressBar.setProgress((int) (ourContents.getDownloadedSize() * 100 / ourContents.getSize()));
 		} else { // 파일이 없는 경우
-
-			contentsLayout
-					.setBackgroundResource(R.drawable.btn_main_book_download_selector);
-			progressBar.setVisibility(View.INVISIBLE);
+			contentsLayout.setBackgroundResource(R.drawable.btn_main_book_download_selector);
+			setProgressLayoutVisible(false);
 			cancelBtn.setVisibility(View.INVISIBLE);
 		}
-		title.setText(ourContents.getSubjectEng());
+		categoryText.setText(ourContents.getId());
+		subjectText.setText(ourContents.getSubjectEng());
 	}
 
 	// AdapterView에서 데이타를 init
 	private void reset() {
 		ourContents = null;
-		// progressBar.setProgress(0);
+//		progressBar.setProgress(0);
 		if (progressUpdateHandler != null) {
 			progressUpdateHandler.removeMessages(0);
 		}
 		if (contentsTask != null) {
 			contentsTask.cancel(true);
+		}
+	}
+	
+	private void setProgressLayoutVisible(boolean setVisible) {
+		if (setVisible) {
+			progressLayout.setVisibility(View.VISIBLE);
+			progressText.setVisibility(View.VISIBLE);
+			progressBar.setVisibility(View.VISIBLE);
+		} else {
+			progressLayout.setVisibility(View.GONE);
+			progressText.setVisibility(View.GONE);
+			progressBar.setVisibility(View.GONE);
 		}
 	}
 
@@ -126,13 +144,11 @@ public class ContentsView extends RelativeLayout implements OnClickListener {
 		case R.id.book:
 			// if exsit file. play
 			if (ourContents.fileStatus == FileStatus.DOWNLOADED) {
-				String filePath = FileManager
-						.getRealPathFromContentId(ourContents.getId());
+				String filePath = FileManager.getRealPathFromContentId(ourContents.getId());
 
 				Intent intent = new Intent(getContext(), MediaPlayerPage.class);
 				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				intent.putExtra(MediaPlayerPage.INTENTKEY_STR_VIDEO_FILE_PATH,
-						filePath);
+				intent.putExtra(MediaPlayerPage.INTENTKEY_STR_VIDEO_FILE_PATH, filePath);
 				intent.putExtra(MediaPlayerPage.INTENTKEY_STR_VIDEO_FILE_NAME,
 						ourContents.getSubjectEng());
 				getContext().startActivity(intent);
@@ -145,12 +161,10 @@ public class ContentsView extends RelativeLayout implements OnClickListener {
 				if (NetworkState.isWifiDirectConnected()) {
 
 					ourContents.fileStatus = FileStatus.DOWNLOADING;
-					contentsLayout
-							.setBackgroundResource(R.drawable.book_download02);
-					progressBar.setVisibility(View.VISIBLE);
+					contentsLayout.setBackgroundResource(R.drawable.book_download02);
+					setProgressLayoutVisible(true);
 
-					progressBar
-							.setProgress((int) (ourContents.getDownloadedSize() * 100 / ourContents
+					progressBar.setProgress((int) (ourContents.getDownloadedSize() * 100 / ourContents
 									.getSize()));
 
 					DataManagerFactory.getDataManager().download(ourContents);

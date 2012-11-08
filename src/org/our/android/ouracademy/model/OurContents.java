@@ -23,7 +23,9 @@ public class OurContents implements OurJSONModel {
 	private String subtitleUrl;
 	private long size;
 	private ArrayList<String> categoryIdList;
+	private String selectedCategoryId;
 	private long downloadedSize;
+	
 	
 	public enum FileStatus {
 		NONE, DOWNLOADING, DOWNLOADED
@@ -108,6 +110,14 @@ public class OurContents implements OurJSONModel {
 		} else {
 			fileStatus = FileStatus.NONE;
 		}
+	}
+	
+	public String getSelectedCategoryId() {
+		return selectedCategoryId;
+	}
+
+	public void setSelectedCategoryId(String selectedCategoryId) {
+		this.selectedCategoryId = selectedCategoryId;
 	}
 
 	@Override
