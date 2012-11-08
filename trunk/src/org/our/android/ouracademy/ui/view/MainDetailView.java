@@ -8,7 +8,6 @@ import org.our.android.ouracademy.dao.ContentDAO;
 import org.our.android.ouracademy.dao.DAOException;
 import org.our.android.ouracademy.model.OurContents;
 import org.our.android.ouracademy.ui.adapter.ContentsListAdapter;
-import org.our.android.ouracademy.ui.widget.HorizontalListView;
 import org.our.android.ouracademy.ui.widget.NCHorizontalListView;
 
 import android.content.Context;
