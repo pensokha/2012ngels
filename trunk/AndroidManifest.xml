@@ -46,7 +46,7 @@
             android:screenOrientation="landscape" />
         <activity
             android:name=".ui.pages.SettingActivity"
-            android:screenOrientation="landscape" android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+            android:screenOrientation="landscape" android:theme="@android:style/Theme.Translucent.NoTitleBar" android:windowSoftInputMode="adjustResize"/>
 
         <service android:name="org.our.android.ouracademy.download.DownloadService"
             android:exported="false" >

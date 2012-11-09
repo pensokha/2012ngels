@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="453.33dp"
-    android:layout_height="61.33dp"
-    android:background="@drawable/setup_bg02"
+    android:layout_width="525.82dp"
+    android:layout_height="69.11dp"
+    android:background="@drawable/setup_bg023"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:paddingLeft="24dp"
-    android:paddingRight="24dp" >
+    android:paddingLeft="30.05dp"
+    android:paddingRight="27.79dp" >
 
     <ImageView
         android:id="@+id/userIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="10dp"
-        android:src="@drawable/setup_icon_wifi_teacher01" />
+        android:layout_marginRight="15.02dp"
+        android:src="@drawable/setup_icon_connectmem01" />
 
     <TextView
         android:id="@+id/directId"

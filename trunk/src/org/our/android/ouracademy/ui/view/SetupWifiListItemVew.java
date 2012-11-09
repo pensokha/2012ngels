@@ -52,9 +52,9 @@ public class SetupWifiListItemVew extends LinearLayout {
 
 	private void setUserIconImg(boolean teacher) {
 		if (teacher) {
-			userIcon.setImageResource(R.drawable.setup_icon_wifi_teacher01);
+			userIcon.setImageResource(R.drawable.setup_icon_connectmem01);
 		} else {
-			userIcon.setImageResource(R.drawable.setup_icon_wifi_student02);
+			userIcon.setImageResource(R.drawable.setup_icon_connectmem01);
 		}
 	}
 

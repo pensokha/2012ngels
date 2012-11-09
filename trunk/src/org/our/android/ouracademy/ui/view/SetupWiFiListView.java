@@ -3,6 +3,7 @@ package org.our.android.ouracademy.ui.view;
 import org.our.android.ouracademy.R;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -80,5 +81,15 @@ public class SetupWiFiListView extends LinearLayout implements View.OnClickListe
 
 	public void setOnSetupWiFiListViewListener(SetupWiFiListViewListener callback) {
 		listener = callback;
+	}
+
+	public void setTitleText(String title) {
+		if (titleText != null && !TextUtils.isEmpty(title)) {
+			titleText.setText(title);
+		}
+	}
+
+	public void setTitleImgResource(int id) {
+		titleIcon.setImageResource(id);
 	}
 }

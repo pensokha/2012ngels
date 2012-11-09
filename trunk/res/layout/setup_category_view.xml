@@ -6,184 +6,204 @@
     android:gravity="center"
     android:orientation="vertical" >
 
-    <include
-        android:id="@+id/title"
-        android:layout_width="453.33dp"
-        android:layout_height="61.33dp"
-        layout="@layout/setup_list_item_title" />
-
-    <RelativeLayout
-        android:layout_width="453.33dp"
-        android:layout_height="111.33dp"
-        android:background="@drawable/setup_bg02"
-        android:paddingLeft="24dp"
-        android:paddingRight="24dp" >
-
-        <ImageView
-            android:id="@+id/modeIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="16dp"
-            android:src="@drawable/setup_icon_mode" />
-
-        <TextView
-            android:id="@+id/mode"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="16dp"
-            android:layout_toRightOf="@id/modeIcon"
-            android:text="MODE"
-            android:textColor="#887257"
-            android:textSize="20dp" />
-
-        <LinearLayout
-            android:id="@+id/teacherBtn"
-            android:layout_width="202.67dp"
-            android:layout_height="46.67dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_marginBottom="13.33dp"
-            android:layout_marginTop="13.33dp"
-            android:background="@drawable/btn_state_setup_mode_left"
-            android:gravity="center"
-            android:orientation="horizontal" >
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:src="@drawable/setup_icon_mode_teacher01" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:shadowColor="#fdfdfd"
-                android:shadowDy="1"
-                android:shadowRadius="1"
-                android:text="Teacher"
-                android:textColor="#aa8e75"
-                android:textSize="20dp" />
-        </LinearLayout>
+    <LinearLayout
+        android:layout_width="525.82dp"
+        android:layout_height="77.37dp"
+        android:background="@drawable/setup_bg01"
+        android:paddingLeft="12.77dp"
+        android:paddingTop="12.77dp" >
 
         <LinearLayout
             android:id="@+id/studentBtn"
-            android:layout_width="202.67dp"
-            android:layout_height="46.67dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginBottom="13.33dp"
-            android:layout_marginTop="13.33dp"
-            android:layout_toRightOf="@id/teacherBtn"
-            android:background="@drawable/btn_state_setup_mode_right"
-            android:gravity="center"
-            android:orientation="horizontal" >
+            android:layout_width="217.84dp"
+            android:layout_height="64.6dp"
+            android:background="@drawable/btn_state_setup_tab"
+            android:gravity="center" >
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:src="@drawable/setup_icon_mode_student02" />
+                android:layout_marginRight="9dp"
+                android:src="@drawable/setup_icon_tab_student" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:shadowColor="#fdfdfd"
+                android:shadowColor="#ffffff"
                 android:shadowDy="1"
                 android:shadowRadius="1"
                 android:text="Student"
-                android:textColor="#aa8e75"
-                android:textSize="20dp" />
+                android:textColor="@color/setup_tap_textcolor"
+                android:textSize="25.54dp" />
         </LinearLayout>
-    </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/teacherBtn"
+            android:layout_width="217.84dp"
+            android:layout_height="64.6dp"
+            android:layout_marginLeft="11.27dp"
+            android:background="@drawable/btn_state_setup_tab"
+            android:gravity="center" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="9dp"
+                android:src="@drawable/setup_icon_tab_teacher" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:shadowColor="#ffffff"
+                android:shadowDy="1"
+                android:shadowRadius="1"
+                android:text="Teacher"
+                android:textColor="@color/setup_tap_textcolor"
+                android:textSize="25.54dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/closeBtn"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/setup_btn_close" />
+        </LinearLayout>
+    </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/network"        
-        android:layout_width="453.33dp"
-        android:layout_height="61.33dp"
+        android:id="@+id/studentView"
+        android:layout_width="525.82dp"
+        android:layout_height="223.85dp"
         android:background="@drawable/setup_bg02"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingLeft="24dp"
-        android:paddingRight="24dp" >
+        android:orientation="horizontal" 
+        android:visibility="gone">
 
-        <ImageView
+        <LinearLayout
+            android:id="@+id/networkBtn"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="8dp"
-            android:src="@drawable/setup_icon_wifi01" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Network"
-            android:textColor="#887257"
-            android:textSize="20dp" />
+            android:orientation="vertical"
+            android:paddingLeft="76.62dp"
+            android:paddingRight="51.08dp"
+            android:paddingTop="31dp" >
 
-        <TextView
-            android:id="@+id/netText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="13.33dp"
-            android:text="WIFI Direct ID (1)"
-            android:textColor="#aa8e75"
-            android:textSize="20dp" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/setup_btn_network" />
 
-        <ImageView
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:shadowColor="#ffffff"
+                android:shadowDy="1"
+                android:shadowRadius="1"
+                android:text="Network"
+                android:textColor="#887257"
+                android:textSize="19.53dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/datasyncBtn"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/setup_arrow01" />
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingLeft="51.08dp"
+            android:paddingRight="76.62dp"
+            android:paddingTop="31dp" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/setup_btn_datasync" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:shadowColor="#ffffff"
+                android:shadowDy="1"
+                android:shadowRadius="1"
+                android:text="Data Sync"
+                android:textColor="#887257"
+                android:textSize="19.53dp" />
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/delete"
-        android:layout_width="453.33dp"
-        android:layout_height="61.33dp"
+        android:id="@+id/teacheView"
+        android:layout_width="525.82dp"
+        android:layout_height="223.85dp"
         android:background="@drawable/setup_bg02"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingLeft="24dp"
-        android:paddingRight="24dp" >
+        android:gravity="center_horizontal"
+        android:orientation="horizontal" >
 
-        <ImageView
+        <LinearLayout
+            android:id="@+id/connectedStudentBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="8dp"
-            android:src="@drawable/setup_icon_delete" />
+               android:orientation="vertical"
+            android:paddingTop="31dp" >
 
-        <TextView
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/setup_btn_connectmem" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:shadowColor="#ffffff"
+                android:shadowDy="1"
+                android:shadowRadius="1"
+                android:text="Connected Student"
+                android:textColor="#887257"
+                android:textSize="19.53dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/deleteBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Delete"
-            android:textColor="#887257"
-            android:textSize="20dp" />
+            android:layout_marginLeft="103.66dp"
+            android:orientation="vertical"
+            android:paddingTop="31dp" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/setup_btn_delete" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:shadowColor="#ffffff"
+                android:shadowDy="1"
+                android:shadowRadius="1"
+                android:text="Delete"
+                android:textColor="#887257"
+                android:textSize="19.53dp" />
+        </LinearLayout>
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/dataSync"        
-        android:layout_width="453.33dp"
-        android:layout_height="61.33dp"
-        android:background="@drawable/setup_bg02"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingLeft="24dp"
-        android:paddingRight="24dp" >
+    <include
+        android:id="@+id/data_sync_view"
+        layout="@layout/data_sync"
+        android:visibility="gone" />
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="8dp"
-            android:src="@drawable/setup_icon_sync" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Data Sync"
-            android:textColor="#887257"
-            android:textSize="20dp" />
-    </LinearLayout>
+    <include
+        android:id="@+id/password_view"
+        layout="@layout/password_view"
+        android:visibility="gone" />
 
 </LinearLayout>
