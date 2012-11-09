@@ -28,12 +28,12 @@ public class SettingActivity extends BaseActivity {
 
 	ListView wifiListView;
 	WiFiListAdapter listAdapter;
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		initUI();
-		
+
 		context = this;
 	}
 
@@ -66,14 +66,13 @@ public class SettingActivity extends BaseActivity {
 		wifiListView.setCacheColorHint(Color.parseColor("#00000000"));
 		listAdapter = new WiFiListAdapter();
 		wifiListView.setAdapter(listAdapter);
+		wifiListView.setDividerHeight(0);
 		wifiListView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				if (view instanceof SetupWifiListItemVew) {
-					SetupWifiListItemVew item = (SetupWifiListItemVew)view;
-					mainView.setNetworkIdText(item.getDirectId());
-					mainView.previousView();
+					// TODO 
 				}
 			}
 		});
@@ -101,11 +100,11 @@ public class SettingActivity extends BaseActivity {
 
 		@Override
 		public void onClickDataSyncCell() {
-			Intent intent = new Intent();
-			intent.putExtra(INTENTKEY_ACTION_DATA_SYNC, true);
-			setResult(RESULT_OK, intent);
-
-			finish();
+//			Intent intent = new Intent();
+//			intent.putExtra(INTENTKEY_ACTION_DATA_SYNC, true);
+//			setResult(RESULT_OK, intent);
+//
+//			finish();
 		}
 
 		@Override
@@ -114,17 +113,17 @@ public class SettingActivity extends BaseActivity {
 			boolean change = false;
 			if (teacher && pref.isStudent()) {
 				change = true;
-			} else if(teacher == false && pref.isTeacher()){
+			} else if (teacher == false && pref.isTeacher()) {
 				change = true;
 			}
-			
-			if(change){
+
+			if (change) {
 				DataManager dataManager = DataManagerFactory.getDataManager();
 				dataManager.stopService(context);
-				
-				if(teacher){
+
+				if (teacher) {
 					pref.setTeacherMode();
-				}else{
+				} else {
 					pref.setStudentMode();
 				}
 				dataManager = DataManagerFactory.getDataManager();

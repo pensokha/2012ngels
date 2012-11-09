@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="525.82dp"
+    android:layout_height="223.85dp"
+    android:background="@drawable/setup_bg02" >
+
+    <ImageView
+        android:id="@+id/icon_datasync"
+        android:layout_width="79.62dp"
+        android:layout_height="33.05dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="21.78dp"
+        android:layout_marginTop="33.80dp"
+        android:src="@drawable/setup_icon_datasync" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/icon_datasync"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <org.our.android.ouracademy.ui.view.RoundProgress
+            xmlns:link="http://schemas.android.com/apk/res/org.our.android.ouracademy"
+            android:id="@+id/progress"
+            android:layout_width="353.05dp"
+            android:layout_height="17.28dp"
+            android:clickable="true"
+            android:focusable="true"
+            link:max="100"
+            link:progress="23"
+            link:progressDrawable="@drawable/round_progress_clip"
+            link:track="@drawable/setup_datasync_progress01" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15.02dp"
+            android:shadowColor="#ffffff"
+            android:shadowDy="1"
+            android:shadowRadius="1"
+            android:text="23%"
+            android:textColor="#9b8770"
+            android:textSize="22.54dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/cancel"
+        android:layout_width="184.04dp"
+        android:layout_height="55.59dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="34.55dp"
+        android:background="@drawable/btn_state_setup_cancel"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/setup_icon_cancel" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="7.51dp"
+            android:shadowColor="#ffffff"
+            android:shadowDy="1"
+            android:shadowRadius="1"
+            android:text="Cancel"
+            android:textColor="#9b8770"
+            android:textSize="24dp" />
+    </LinearLayout>
+
+</RelativeLayout>

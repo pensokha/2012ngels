@@ -6,8 +6,10 @@ import org.our.android.ouracademy.ui.view.SetupWiFiListView.SetupWiFiListViewLis
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -63,7 +65,14 @@ public class SetupMainView extends LinearLayout {
 			categoryView = new SetupCategoryView(getContext());
 			categoryView.setOnSetupCategoryViewListener(categoryListener);
 		}
-		viewFlipper.addView(categoryView);
+
+		LinearLayout view = new LinearLayout(getContext());
+		ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+		view.setLayoutParams(params);
+		view.setGravity(Gravity.CENTER);
+		view.addView(categoryView);
+
+		viewFlipper.addView(view);
 
 		if (wifiListView == null) {
 			wifiListView = new SetupWiFiListView(getContext());
@@ -128,15 +137,22 @@ public class SetupMainView extends LinearLayout {
 						listener.onClickModeBtn(false);
 					}
 					break;
-				case R.id.network:
+				case R.id.networkBtn:
+					wifiListView.setTitleText("WI-FI");
+					wifiListView.setTitleImgResource(R.drawable.setup_icon_title02);
 					nextView();
 					break;
-				case R.id.delete:
+				case R.id.connectedStudentBtn:
+					wifiListView.setTitleText("Connected Student");
+					wifiListView.setTitleImgResource(R.drawable.setup_icon_tab01_nor);
+					nextView();
+					break;
+				case R.id.deleteBtn:
 					if (listener != null) {
 						listener.onClickDeleteCell();
 					}
 					break;
-				case R.id.dataSync:
+				case R.id.datasyncBtn:
 					if (listener != null) {
 						listener.onClickDataSyncCell();
 					}
@@ -162,9 +178,5 @@ public class SetupMainView extends LinearLayout {
 
 	public void setOnSetupMainViewListener(SetupMainViewListener callback) {
 		listener = callback;
-	}
-
-	public void setNetworkIdText(String id) {
-		categoryView.setNetworkIdText(id);
 	}
 }
