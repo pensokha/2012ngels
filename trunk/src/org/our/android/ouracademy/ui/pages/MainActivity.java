@@ -79,6 +79,7 @@ public class MainActivity extends BaseActivity {
 		setContentView(R.layout.activity_main);
 
 		menuLayout = (ViewGroup) findViewById(R.id.layout_main_menu);
+
 		detailLayout = (ViewGroup) findViewById(R.id.layout_main_detail);
 
 		initMenuLayout();
@@ -299,7 +300,6 @@ public class MainActivity extends BaseActivity {
 					contents.add(content);
 				}
 
-				contents.addAll(contentsFromDB);
 				if (detailView.getListAdapter() != null) {
 					detailView.getListAdapter().notifyDataSetChanged();
 				}
