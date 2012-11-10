@@ -1,9 +1,10 @@
-package org.our.android.ouracademy.download;
+package org.our.android.ouracademy.downloader;
 
 import java.io.File;
 
 import org.our.android.ouracademy.R;
-import org.our.android.ouracademy.download.JobManager.Entry;
+import org.our.android.ouracademy.downloader.IDownloadService;
+import org.our.android.ouracademy.downloader.JobManager.Entry;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -22,12 +23,12 @@ import android.widget.RemoteViews;
 
 public class DownloadService extends Service {
 
-	public static final String DOWNLOAD_SERVICE = "org.our.android.ouracademy.download.DOWNLOAD_SERVICE";
+	public static final String DOWNLOAD_SERVICE = "org.our.android.ouracademy.downloader.DOWNLOAD_SERVICE";
 	public static final String DATATYPE_ID = "id://myhost/id";
-	public static final String ACTION_DOWNLOAD_COMPLETED = "org.our.android.ouracademy.download.ACTION_DOWNLOAD_COMPLETED";
-	public static final String ACTION_DOWNLOAD_FAILED = "org.our.android.ouracademy.download.ACTION_DOWNLOAD_FAILED";
-	public static final String ACTION_NOTIFICATION_CLICKED = "org.our.android.ouracademy.download.ACTION_NOTIFICATION_CLICKED";
-	public static final String ACTION_NOTIFICATION_CLEARED = "org.our.android.ouracademy.download.ACTION_NOTIFICATION_CLEARED";
+	public static final String ACTION_DOWNLOAD_COMPLETED = "org.our.android.ouracademy.downloader.ACTION_DOWNLOAD_COMPLETED";
+	public static final String ACTION_DOWNLOAD_FAILED = "org.our.android.ouracademy.downloader.ACTION_DOWNLOAD_FAILED";
+	public static final String ACTION_NOTIFICATION_CLICKED = "org.our.android.ouracademy.downloader.ACTION_NOTIFICATION_CLICKED";
+	public static final String ACTION_NOTIFICATION_CLEARED = "org.our.android.ouracademy.downloader.ACTION_NOTIFICATION_CLEARED";
 	
 	public static final String INTEXTRA_ID = "id";
 	static final String BOOLEANEXTRA_LOCAL = "local";

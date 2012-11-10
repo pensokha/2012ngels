@@ -1,7 +1,9 @@
-package org.our.android.ouracademy.download;
+package org.our.android.ouracademy.downloader;
 
 import java.io.File;
 import java.io.IOException;
+
+import org.our.android.ouracademy.downloader.IDownloadService;
 
 import android.content.ComponentName;
 import android.content.Context;

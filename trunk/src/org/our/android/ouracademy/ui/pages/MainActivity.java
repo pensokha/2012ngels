@@ -79,7 +79,6 @@ public class MainActivity extends BaseActivity {
 		setContentView(R.layout.activity_main);
 
 		menuLayout = (ViewGroup) findViewById(R.id.layout_main_menu);
-
 		detailLayout = (ViewGroup) findViewById(R.id.layout_main_detail);
 
 		initMenuLayout();

@@ -17,5 +17,8 @@
     
     <string name="category_upper_case">CATEGORY</string>
     <string name="apply">Apply</string>
+    
+    <string name="contents_download">DOWNLOAD</string>
+    <string name="contents_empty_guide">There is no contents\nto download or play.</string>
 
 </resources>

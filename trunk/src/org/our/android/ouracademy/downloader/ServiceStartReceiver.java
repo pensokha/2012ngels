@@ -1,4 +1,4 @@
-package org.our.android.ouracademy.download;
+package org.our.android.ouracademy.downloader;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

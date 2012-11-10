@@ -1,69 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="291.46dp"
-    android:layout_height="199.81dp" >
-    <ImageView
-        android:id="@+id/thumbnail"
-        android:layout_width="200.00dp"
-        android:layout_height="95.00dp"
-        android:layout_marginLeft="64.00dp"
-        android:layout_marginTop="24.33dp"
-        android:background="@android:color/black" />
-    <RelativeLayout
-        android:id="@+id/book"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/btn_main_book_selector" >
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="311.98dp"
+    android:layout_height="210.08dp" >
+    <RelativeLayout 
+        android:layout_width="291.46dp"
+    	android:layout_height="199.81dp"
+    	android:layout_marginTop="14.27dp"
+    	android:layout_marginRight="20.52dp">
+        <ImageView
+	        android:id="@+id/thumbnail"
+	        android:layout_width="200.00dp"
+	        android:layout_height="95.00dp"
+	        android:layout_marginLeft="64.00dp"
+	        android:layout_marginTop="24.33dp"
+	        android:background="@android:color/black" />
+	    <RelativeLayout
+	        android:id="@+id/book"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:background="@drawable/btn_main_book_selector" >
+	    </RelativeLayout>
+	    <TextView
+	        android:id="@+id/download_text"
+	        style="@style/fontstyle_txt_main_download_txt"
+	        android:layout_width="200.00dp"
+	        android:layout_height="wrap_content"
+	        android:layout_marginLeft="64.00dp"
+	        android:layout_marginTop="88dp"
+	        android:gravity="center"
+	        android:text="@string/contents_download" />
+	    <TextView
+	        android:id="@+id/subject_text"
+	        style="@style/fontstyle_txt_main_contenst_txt"
+	        android:layout_width="199.06dp"
+	        android:layout_height="64.60dp"
+	        android:layout_marginLeft="62.35dp"
+	        android:layout_marginTop="123.19dp"
+	        android:gravity="center" />
+	
+	    <org.our.android.ouracademy.ui.widget.VerticalTextView
+	        android:id="@+id/category_text"
+	        style="@style/fontstyle_txt_main_contenst_txt"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_alignParentTop="true"
+	        android:layout_marginLeft="15dp"
+	        android:layout_marginTop="18dp" />
+		<LinearLayout 
+		    android:id="@+id/progress_layout"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:gravity="center"
+		    android:layout_marginTop="49.58dp"
+		    android:layout_marginLeft="74.67dp"
+		    android:orientation="vertical" >
+	        <TextView 
+	            android:id="@+id/progress_text"
+	            android:layout_width="wrap_content"
+		    	android:layout_height="wrap_content"
+		    	style="@style/fontstyle_txt_main_progress_txt"
+		    	android:text="10%"/>
+		    <ProgressBar
+		        android:id="@+id/progressbar"
+		        style="@style/Widget.Pogressbar"
+		        android:layout_width="180dp"
+		        android:layout_height="11.33dp"
+		        android:layout_marginTop="10dp"
+		        android:max="100"
+		        android:progress="0"
+		        android:secondaryProgress="0" />
+		</LinearLayout>
     </RelativeLayout>
-
-    <TextView
-        android:id="@+id/subject_text"
-        style="@style/fontstyle_txt_main_contenst_txt"
-        android:layout_width="199.06dp"
-        android:layout_height="64.60dp"
-        android:layout_marginLeft="62.35dp"
-        android:layout_marginTop="123.19dp"
-        android:gravity="center" />
-
-    <org.our.android.ouracademy.ui.widget.VerticalTextView
-        android:id="@+id/category_text"
-        style="@style/fontstyle_txt_main_contenst_txt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="18dp" />
-	<LinearLayout 
-	    android:id="@+id/progress_layout"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:gravity="center"
-	    android:layout_marginTop="49.58dp"
-	    android:layout_marginLeft="74.67dp"
-	    android:orientation="vertical" >
-        <TextView 
-            android:id="@+id/progress_text"
-            android:layout_width="wrap_content"
-	    	android:layout_height="wrap_content"
-	    	style="@style/fontstyle_txt_main_progress_txt"
-	    	android:text="10%"/>
-	    <ProgressBar
-	        android:id="@+id/progressbar"
-	        style="@style/Widget.Pogressbar"
-	        android:layout_width="180dp"
-	        android:layout_height="11.33dp"
-	        android:layout_marginTop="10dp"
-	        android:max="100"
-	        android:progress="0"
-	        android:secondaryProgress="0" />
-	</LinearLayout>
     
- 
     <Button
         android:id="@+id/cancel_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_marginLeft="252dp"
         android:background="@drawable/btn_main_book_cancel_selector" />
-</RelativeLayout>
+</FrameLayout>

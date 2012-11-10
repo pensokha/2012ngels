@@ -71,7 +71,7 @@
             </intent-filter>
         </receiver>
 		
-		<receiver android:name="org.our.android.ouracademy.download.ServiceStartReceiver">
+		<receiver android:name=".downloader.ServiceStartReceiver">
     		<intent-filter>
     			<action android:name="android.intent.action.BOOT_COMPLETED"/>
     		</intent-filter>

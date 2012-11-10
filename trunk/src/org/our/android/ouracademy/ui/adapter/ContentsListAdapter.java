@@ -93,10 +93,10 @@ public class ContentsListAdapter extends BaseAdapter  {
 			OurContents curModel = contentsList.get(currentPositionOfItem);
 			
 			if (currentPositionOfItem < itemSize) {
-				contentsView.setAllVisibility(View.VISIBLE);
+				contentsView.setAllVisibility(contentsView, View.VISIBLE);
 				contentsView.setContentsData(curModel);
 			} else {
-				contentsView.setAllVisibility(View.GONE);
+				contentsView.setAllVisibility(contentsView, View.GONE);
 			}
 		}
 		return convertView;
