@@ -6,6 +6,13 @@ import org.our.android.ouracademy.R;
 import org.our.android.ouracademy.model.OurCategory;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.text.Html;
+import android.text.Html.ImageGetter;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,7 +54,10 @@ public class CategoryListAdapter extends ArrayAdapter<OurCategory> {
 		
 		OurCategory ourCategory = getItem(position);
 		
-		itemHolder.txt.setText(ourCategory.getCategoryTitleEng());
+//		Spanned category = Html.fromHtml(ourCategory.getCategoryTitleEng() + "<img src=\"icon\" width=50 height=50>", imageGetter, null);
+		CharSequence category = Html.fromHtml(context.getResources().getString(R.string.category_name_num, 
+				ourCategory.getCategoryTitleEng(), ourCategory.getNumOfContents()));
+		itemHolder.txt.setText(category);
 		itemHolder.icon.setImageResource(R.drawable.subject_icon_math);
 		
 		if (ourCategory.isChecked) {
@@ -58,5 +68,25 @@ public class CategoryListAdapter extends ArrayAdapter<OurCategory> {
 		
 		return convertView;
 	}
-
+	
+	
+	ImageGetter imageGetter = new ImageGetter() {
+		@Override
+		public Drawable getDrawable(String source) {
+			if (("icon").equals(source)) {
+//				TextView text = new TextView(context);
+//				text.setText("7");
+//				text.setBackgroundResource(R.drawable.book_download_progress01);
+//				text.buildDrawingCache();
+//				text.requestLayout();
+//				Bitmap bitmap = text.getDrawingCache();
+//				Drawable drawable = (Drawable)new BitmapDrawable(text.getResources(), bitmap); 
+				
+				Drawable drawable = getContext().getResources().getDrawable(R.drawable.book_download_progress01);
+				drawable.setBounds( 0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight() );
+				return drawable;
+			}
+			return null;
+		}
+	};
 }
