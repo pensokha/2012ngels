@@ -19,212 +19,450 @@ public final class R {
         public static final int push_up_out=0x7f040007;
     }
     public static final class attr {
+        /** <p>Must be an integer value, such as "<code>100</code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int max=0x7f010001;
+        /** <p>Must be an integer value, such as "<code>100</code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int progress=0x7f010000;
+        /** <p>Must be an integer value, such as "<code>100</code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int progressDrawable=0x7f010002;
+        /** <p>Must be an integer value, such as "<code>100</code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int track=0x7f010003;
+    }
+    public static final class color {
+        public static final int setup_tap_textcolor=0x7f070000;
     }
     public static final class drawable {
         public static final int book01_nor=0x7f020000;
         public static final int book01_press=0x7f020001;
-        public static final int book_download01_nor=0x7f020002;
-        public static final int book_download01_press=0x7f020003;
-        public static final int book_download02=0x7f020004;
-        public static final int btn_main_apply_selector=0x7f020005;
-        public static final int btn_main_book_download_selector=0x7f020006;
-        public static final int btn_main_book_selector=0x7f020007;
-        public static final int btn_main_setting_selector=0x7f020008;
-        public static final int btn_state_play_close=0x7f020009;
-        public static final int btn_state_play_more=0x7f02000a;
-        public static final int btn_state_play_normal=0x7f02000b;
-        public static final int btn_state_play_sound=0x7f02000c;
-        public static final int btn_state_play_stop=0x7f02000d;
-        public static final int btn_state_setup_back=0x7f02000e;
-        public static final int btn_state_setup_mode_left=0x7f02000f;
-        public static final int btn_state_setup_mode_right=0x7f020010;
-        public static final int custom_progressbar=0x7f020011;
-        public static final int custom_seek_bar=0x7f020012;
-        public static final int ic_action_search=0x7f020013;
-        public static final int ic_launcher=0x7f020014;
-        public static final int list_bg01=0x7f020015;
-        public static final int list_bg02=0x7f020016;
-        public static final int list_bg03=0x7f020017;
-        public static final int list_bg04=0x7f020018;
-        public static final int list_bg06=0x7f020019;
-        public static final int list_bg_drawable=0x7f02001a;
-        public static final int list_bg_table04=0x7f02001b;
-        public static final int list_bottom_bg_drawable=0x7f02001c;
-        public static final int list_icon_category=0x7f02001d;
-        public static final int list_icon_menu01=0x7f02001e;
-        public static final int list_icon_menu02=0x7f02001f;
-        public static final int list_tag01=0x7f020020;
-        public static final int menu_bg01=0x7f020021;
-        public static final int menu_bg02=0x7f020022;
-        public static final int menu_btn_apply01_nor=0x7f020023;
-        public static final int menu_btn_apply01_press=0x7f020024;
-        public static final int menu_btn_apply02_nor=0x7f020025;
-        public static final int menu_btn_apply02_press=0x7f020026;
-        public static final int menu_btn_setup_nor=0x7f020027;
-        public static final int menu_btn_setup_press=0x7f020028;
-        public static final int menu_icon_check=0x7f020029;
-        public static final int player_bg01=0x7f02002a;
-        public static final int player_bg02=0x7f02002b;
-        public static final int player_bg03=0x7f02002c;
-        public static final int player_bg04=0x7f02002d;
-        public static final int player_btn_bottom01_nor=0x7f02002e;
-        public static final int player_btn_bottom01_open=0x7f02002f;
-        public static final int player_btn_bottom01_press=0x7f020030;
-        public static final int player_btn_bottom02_nor=0x7f020031;
-        public static final int player_btn_bottom02_press=0x7f020032;
-        public static final int player_btn_play_nor=0x7f020033;
-        public static final int player_btn_play_press=0x7f020034;
-        public static final int player_btn_stop_nor=0x7f020035;
-        public static final int player_btn_stop_press=0x7f020036;
-        public static final int player_btn_top01_nor=0x7f020037;
-        public static final int player_btn_top01_press=0x7f020038;
-        public static final int player_ctrl_sound01=0x7f020039;
-        public static final int player_ctrl_sound02=0x7f02003a;
-        public static final int player_ctrl_sound03=0x7f02003b;
-        public static final int player_ctrl_time01=0x7f02003c;
-        public static final int player_ctrl_time02=0x7f02003d;
-        public static final int player_ctrl_time03=0x7f02003e;
-        public static final int player_icon_close=0x7f02003f;
-        public static final int player_icon_more=0x7f020040;
-        public static final int player_icon_sound01=0x7f020041;
-        public static final int player_icon_sound02=0x7f020042;
-        public static final int player_icon_sound03=0x7f020043;
-        public static final int player_icon_sound04=0x7f020044;
-        public static final int player_icon_sound05=0x7f020045;
-        public static final int seek=0x7f020046;
-        public static final int seek_bkg=0x7f020047;
-        public static final int seek_thumb=0x7f020048;
-        public static final int setup_arrow01=0x7f020049;
-        public static final int setup_bg01=0x7f02004a;
-        public static final int setup_bg02=0x7f02004b;
-        public static final int setup_bg03=0x7f02004c;
-        public static final int setup_btn_back01_nor=0x7f02004d;
-        public static final int setup_btn_back01_press=0x7f02004e;
-        public static final int setup_btn_close=0x7f02004f;
-        public static final int setup_btn_mode01_nor=0x7f020050;
-        public static final int setup_btn_mode01_press=0x7f020051;
-        public static final int setup_btn_mode02_nor=0x7f020052;
-        public static final int setup_btn_mode02_press=0x7f020053;
-        public static final int setup_icon_delete=0x7f020054;
-        public static final int setup_icon_mode=0x7f020055;
-        public static final int setup_icon_mode_student02=0x7f020056;
-        public static final int setup_icon_mode_teacher01=0x7f020057;
-        public static final int setup_icon_sync=0x7f020058;
-        public static final int setup_icon_title01=0x7f020059;
-        public static final int setup_icon_title02=0x7f02005a;
-        public static final int setup_icon_wifi01=0x7f02005b;
-        public static final int setup_icon_wifi02=0x7f02005c;
-        public static final int setup_icon_wifi03=0x7f02005d;
-        public static final int setup_icon_wifi04=0x7f02005e;
-        public static final int setup_icon_wifi05=0x7f02005f;
-        public static final int setup_icon_wifi_student02=0x7f020060;
-        public static final int setup_icon_wifi_teacher01=0x7f020061;
-        public static final int subject_icon_english=0x7f020062;
-        public static final int subject_icon_math=0x7f020063;
-        public static final int subject_icon_music=0x7f020064;
-        public static final int subject_icon_science=0x7f020065;
-        public static final int subject_icon_writing=0x7f020066;
+        public static final int book02_nor=0x7f020002;
+        public static final int book02_press=0x7f020003;
+        public static final int book03_nor=0x7f020004;
+        public static final int book03_press=0x7f020005;
+        public static final int book04_nor=0x7f020006;
+        public static final int book04_press=0x7f020007;
+        public static final int book05_nor=0x7f020008;
+        public static final int book05_press=0x7f020009;
+        public static final int book06_nor=0x7f02000a;
+        public static final int book06_press=0x7f02000b;
+        public static final int book07_nor=0x7f02000c;
+        public static final int book07_press=0x7f02000d;
+        public static final int book08_nor=0x7f02000e;
+        public static final int book08_press=0x7f02000f;
+        public static final int book09_nor=0x7f020010;
+        public static final int book09_press=0x7f020011;
+        public static final int book10_nor=0x7f020012;
+        public static final int book10_press=0x7f020013;
+        public static final int book_delete_nor=0x7f020014;
+        public static final int book_delete_press=0x7f020015;
+        public static final int book_download01_nor=0x7f020016;
+        public static final int book_download01_press=0x7f020017;
+        public static final int book_download02=0x7f020018;
+        public static final int book_download_progress01=0x7f020019;
+        public static final int book_download_progress02=0x7f02001a;
+        public static final int btn_main_apply_selector=0x7f02001b;
+        public static final int btn_main_book_cancel_selector=0x7f02001c;
+        public static final int btn_main_book_download_selector=0x7f02001d;
+        public static final int btn_main_book_selector=0x7f02001e;
+        public static final int btn_main_book_selector_01=0x7f02001f;
+        public static final int btn_main_book_selector_02=0x7f020020;
+        public static final int btn_main_book_selector_03=0x7f020021;
+        public static final int btn_main_book_selector_04=0x7f020022;
+        public static final int btn_main_book_selector_05=0x7f020023;
+        public static final int btn_main_book_selector_06=0x7f020024;
+        public static final int btn_main_book_selector_07=0x7f020025;
+        public static final int btn_main_book_selector_08=0x7f020026;
+        public static final int btn_main_book_selector_09=0x7f020027;
+        public static final int btn_main_book_selector_10=0x7f020028;
+        public static final int btn_main_guide_selector=0x7f020029;
+        public static final int btn_main_refresh_selector=0x7f02002a;
+        public static final int btn_main_setting_selector=0x7f02002b;
+        public static final int btn_state_play_close=0x7f02002c;
+        public static final int btn_state_play_more=0x7f02002d;
+        public static final int btn_state_play_normal=0x7f02002e;
+        public static final int btn_state_play_sound=0x7f02002f;
+        public static final int btn_state_play_stop=0x7f020030;
+        public static final int btn_state_setup_back=0x7f020031;
+        public static final int btn_state_setup_cancel=0x7f020032;
+        public static final int btn_state_setup_mode_left=0x7f020033;
+        public static final int btn_state_setup_mode_right=0x7f020034;
+        public static final int btn_state_setup_tab=0x7f020035;
+        public static final int custom_progressbar=0x7f020036;
+        public static final int custom_seek_bar=0x7f020037;
+        public static final int ic_action_search=0x7f020038;
+        public static final int ic_launcher=0x7f020039;
+        public static final int list_bg=0x7f02003a;
+        public static final int list_bg01=0x7f02003b;
+        public static final int list_bg02=0x7f02003c;
+        public static final int list_bg03=0x7f02003d;
+        public static final int list_bg04=0x7f02003e;
+        public static final int list_bg06=0x7f02003f;
+        public static final int list_bg_drawable=0x7f020040;
+        public static final int list_bg_nocontent=0x7f020041;
+        public static final int list_bg_table04=0x7f020042;
+        public static final int list_bottom_bg_drawable=0x7f020043;
+        public static final int list_icon_category=0x7f020044;
+        public static final int list_icon_menu01=0x7f020045;
+        public static final int list_icon_menu02=0x7f020046;
+        public static final int list_icon_menu03=0x7f020047;
+        public static final int list_tag01=0x7f020048;
+        public static final int menu_bg01=0x7f020049;
+        public static final int menu_bg02=0x7f02004a;
+        public static final int menu_bg03=0x7f02004b;
+        public static final int menu_btn_apply01_nor=0x7f02004c;
+        public static final int menu_btn_apply01_press=0x7f02004d;
+        public static final int menu_btn_guide_nor=0x7f02004e;
+        public static final int menu_btn_guide_press=0x7f02004f;
+        public static final int menu_btn_refresh_nor=0x7f020050;
+        public static final int menu_btn_refresh_press=0x7f020051;
+        public static final int menu_btn_setup_nor=0x7f020052;
+        public static final int menu_btn_setup_press=0x7f020053;
+        public static final int menu_icon_allcheck=0x7f020054;
+        public static final int menu_icon_apply01=0x7f020055;
+        public static final int menu_icon_check=0x7f020056;
+        public static final int menu_icon_num01=0x7f020057;
+        public static final int player_bg01=0x7f020058;
+        public static final int player_bg02=0x7f020059;
+        public static final int player_bg03=0x7f02005a;
+        public static final int player_bg04=0x7f02005b;
+        public static final int player_bg05=0x7f02005c;
+        public static final int player_bg06=0x7f02005d;
+        public static final int player_btn_bottom01_nor=0x7f02005e;
+        public static final int player_btn_bottom01_open=0x7f02005f;
+        public static final int player_btn_bottom01_press=0x7f020060;
+        public static final int player_btn_bottom02_nor=0x7f020061;
+        public static final int player_btn_bottom02_press=0x7f020062;
+        public static final int player_btn_play_nor=0x7f020063;
+        public static final int player_btn_play_press=0x7f020064;
+        public static final int player_btn_stop_nor=0x7f020065;
+        public static final int player_btn_stop_press=0x7f020066;
+        public static final int player_btn_top01_nor=0x7f020067;
+        public static final int player_btn_top01_press=0x7f020068;
+        public static final int player_btn_top02_nor=0x7f020069;
+        public static final int player_btn_top02_press=0x7f02006a;
+        public static final int player_ctrl_sound01=0x7f02006b;
+        public static final int player_ctrl_sound02=0x7f02006c;
+        public static final int player_ctrl_sound03=0x7f02006d;
+        public static final int player_ctrl_time01=0x7f02006e;
+        public static final int player_ctrl_time02=0x7f02006f;
+        public static final int player_ctrl_time03=0x7f020070;
+        public static final int player_icon_close=0x7f020071;
+        public static final int player_icon_guide=0x7f020072;
+        public static final int player_icon_more=0x7f020073;
+        public static final int player_icon_sound01=0x7f020074;
+        public static final int player_icon_sound02=0x7f020075;
+        public static final int player_icon_sound03=0x7f020076;
+        public static final int player_icon_sound04=0x7f020077;
+        public static final int player_icon_sound05=0x7f020078;
+        public static final int round_progress_clip=0x7f020079;
+        public static final int seek=0x7f02007a;
+        public static final int seek_bkg=0x7f02007b;
+        public static final int seek_thumb=0x7f02007c;
+        public static final int setup_arrow01=0x7f02007d;
+        public static final int setup_bg01=0x7f02007e;
+        public static final int setup_bg02=0x7f02007f;
+        public static final int setup_bg022=0x7f020080;
+        public static final int setup_bg023=0x7f020081;
+        public static final int setup_bg03=0x7f020082;
+        public static final int setup_btn01_nor=0x7f020083;
+        public static final int setup_btn01_press=0x7f020084;
+        public static final int setup_btn_back01_nor=0x7f020085;
+        public static final int setup_btn_back01_press=0x7f020086;
+        public static final int setup_btn_close=0x7f020087;
+        public static final int setup_btn_connectmem=0x7f020088;
+        public static final int setup_btn_datasync=0x7f020089;
+        public static final int setup_btn_delete=0x7f02008a;
+        public static final int setup_btn_mode01_nor=0x7f02008b;
+        public static final int setup_btn_mode01_press=0x7f02008c;
+        public static final int setup_btn_mode02_nor=0x7f02008d;
+        public static final int setup_btn_mode02_press=0x7f02008e;
+        public static final int setup_btn_network=0x7f02008f;
+        public static final int setup_datasync_progress01=0x7f020090;
+        public static final int setup_datasync_progress02=0x7f020091;
+        public static final int setup_icon_cancel=0x7f020092;
+        public static final int setup_icon_complete=0x7f020093;
+        public static final int setup_icon_connectmem01=0x7f020094;
+        public static final int setup_icon_datasync=0x7f020095;
+        public static final int setup_icon_delete=0x7f020096;
+        public static final int setup_icon_mode=0x7f020097;
+        public static final int setup_icon_mode_student02=0x7f020098;
+        public static final int setup_icon_mode_teacher01=0x7f020099;
+        public static final int setup_icon_sync=0x7f02009a;
+        public static final int setup_icon_tab01_nor=0x7f02009b;
+        public static final int setup_icon_tab01_press=0x7f02009c;
+        public static final int setup_icon_tab02_nor=0x7f02009d;
+        public static final int setup_icon_tab02_press=0x7f02009e;
+        public static final int setup_icon_tab_student=0x7f02009f;
+        public static final int setup_icon_tab_teacher=0x7f0200a0;
+        public static final int setup_icon_title01=0x7f0200a1;
+        public static final int setup_icon_title02=0x7f0200a2;
+        public static final int setup_icon_wifi01=0x7f0200a3;
+        public static final int setup_icon_wifi02=0x7f0200a4;
+        public static final int setup_icon_wifi03=0x7f0200a5;
+        public static final int setup_icon_wifi04=0x7f0200a6;
+        public static final int setup_icon_wifi05=0x7f0200a7;
+        public static final int setup_icon_wifi_student02=0x7f0200a8;
+        public static final int setup_icon_wifi_teacher01=0x7f0200a9;
+        public static final int setup_password01=0x7f0200aa;
+        public static final int setup_password02=0x7f0200ab;
+        public static final int setup_password03=0x7f0200ac;
+        public static final int setup_password04=0x7f0200ad;
+        public static final int setup_tab_nor=0x7f0200ae;
+        public static final int setup_tab_press=0x7f0200af;
+        public static final int subject_icon=0x7f0200b0;
+        public static final int subject_icon_art=0x7f0200b1;
+        public static final int subject_icon_english=0x7f0200b2;
+        public static final int subject_icon_history=0x7f0200b3;
+        public static final int subject_icon_khmer=0x7f0200b4;
+        public static final int subject_icon_math=0x7f0200b5;
+        public static final int subject_icon_music=0x7f0200b6;
+        public static final int subject_icon_science=0x7f0200b7;
+        public static final int subject_icon_writing=0x7f0200b8;
     }
     public static final class id {
-        public static final int backBtn=0x7f08002e;
-        public static final int book=0x7f080007;
-        public static final int bottomBar=0x7f080019;
-        public static final int category_check=0x7f080005;
-        public static final int category_icon=0x7f080003;
-        public static final int category_listview=0x7f080015;
-        public static final int category_txt=0x7f080004;
-        public static final int closeBtn=0x7f080025;
-        public static final int dataSync=0x7f08002d;
-        public static final int delete=0x7f08002c;
-        public static final int drag_layout=0x7f08000f;
-        public static final int drag_layout_txt=0x7f080010;
-        public static final int hide_menu_btn=0x7f080012;
-        public static final int horizontal_listview=0x7f080011;
-        public static final int layout_content_01=0x7f08000b;
-        public static final int layout_content_02=0x7f08000c;
-        public static final int layout_detail=0x7f08000e;
-        public static final int layout_main_detail=0x7f080001;
-        public static final int layout_main_menu=0x7f080000;
-        public static final int layout_root_detail=0x7f08000d;
-        public static final int list=0x7f080024;
-        public static final int main_menu_apply_btn=0x7f080014;
-        public static final int main_menu_txt=0x7f080013;
-        public static final int menu_settings=0x7f080031;
-        public static final int mode=0x7f080028;
-        public static final int modeIcon=0x7f080027;
-        public static final int moreBtn=0x7f080023;
-        public static final int network=0x7f08002b;
-        public static final int play=0x7f08001b;
-        public static final int playerCenter=0x7f08001a;
-        public static final int progress=0x7f08001f;
-        public static final int progressbar=0x7f080009;
-        public static final int remainingTime=0x7f080020;
-        public static final int runTime=0x7f08001e;
-        public static final int setting_btn=0x7f080016;
-        public static final int soundBtn=0x7f080021;
-        public static final int soundControll=0x7f08001c;
-        public static final int soundIcon=0x7f080022;
-        public static final int soundVolume=0x7f08001d;
-        public static final int studentBtn=0x7f08002a;
-        public static final int subject=0x7f080026;
-        public static final int surface=0x7f080017;
-        public static final int teacherBtn=0x7f080029;
-        public static final int thumbnail=0x7f080006;
-        public static final int title=0x7f080008;
-        public static final int titleBar=0x7f080018;
-        public static final int titleIcon=0x7f08002f;
-        public static final int titleText=0x7f080030;
-        public static final int txt_list_tag=0x7f08000a;
-        public static final int viewFlipper=0x7f080002;
+        public static final int app=0x7f090048;
+        public static final int appIcon=0x7f090049;
+        public static final int backBtn=0x7f090042;
+        public static final int book=0x7f09000a;
+        public static final int bottomBar=0x7f090023;
+        public static final int cancel=0x7f090005;
+        public static final int cancel_btn=0x7f090011;
+        public static final int category_check=0x7f090008;
+        public static final int category_icon=0x7f090006;
+        public static final int category_listview=0x7f09001f;
+        public static final int category_text=0x7f09000d;
+        public static final int category_txt=0x7f090007;
+        public static final int closeBtn=0x7f09002f;
+        public static final int connectedStudentBtn=0x7f09003e;
+        public static final int data_sync_view=0x7f090040;
+        public static final int datasyncBtn=0x7f09003c;
+        public static final int deleteBtn=0x7f09003f;
+        public static final int description=0x7f09004b;
+        public static final int directId=0x7f090046;
+        public static final int download_text=0x7f09000b;
+        public static final int drag_layout=0x7f090016;
+        public static final int drag_layout_txt=0x7f090017;
+        public static final int empty_guide_text=0x7f090019;
+        public static final int first=0x7f090030;
+        public static final int fourth=0x7f090033;
+        public static final int guide_btn=0x7f09001c;
+        public static final int hide_menu_btn=0x7f09001a;
+        public static final int horizontal_listview=0x7f090018;
+        public static final int icon_datasync=0x7f090003;
+        public static final int layout_content_01=0x7f090012;
+        public static final int layout_content_02=0x7f090013;
+        public static final int layout_detail=0x7f090015;
+        public static final int layout_main_detail=0x7f090001;
+        public static final int layout_main_menu=0x7f090000;
+        public static final int layout_root_detail=0x7f090014;
+        public static final int list=0x7f09002d;
+        public static final int main_menu_apply_btn=0x7f090020;
+        public static final int menu_settings=0x7f09004d;
+        public static final int moreBtn=0x7f09002c;
+        public static final int networkBtn=0x7f09003b;
+        public static final int notification=0x7f09004a;
+        public static final int password_view=0x7f090041;
+        public static final int play=0x7f090025;
+        public static final int playerCenter=0x7f090024;
+        public static final int progress=0x7f090004;
+        public static final int progress_bar=0x7f09004c;
+        public static final int progress_drawable_image_view=0x7f090037;
+        public static final int progress_layout=0x7f09000e;
+        public static final int progress_text=0x7f09000f;
+        public static final int progressbar=0x7f090010;
+        public static final int refresh_btn=0x7f09001e;
+        public static final int remainingTime=0x7f090029;
+        public static final int runTime=0x7f090028;
+        public static final int second=0x7f090031;
+        public static final int setting_btn=0x7f09001d;
+        public static final int soundBtn=0x7f09002a;
+        public static final int soundControll=0x7f090026;
+        public static final int soundIcon=0x7f09002b;
+        public static final int soundVolume=0x7f090027;
+        public static final int studentBtn=0x7f090038;
+        public static final int studentView=0x7f09003a;
+        public static final int subject=0x7f090035;
+        public static final int subject_text=0x7f09000c;
+        public static final int surface=0x7f090021;
+        public static final int teacheView=0x7f09003d;
+        public static final int teacherBtn=0x7f090039;
+        public static final int third=0x7f090032;
+        public static final int thumb=0x7f090034;
+        public static final int thumbnail=0x7f090009;
+        public static final int title=0x7f09002e;
+        public static final int titleBar=0x7f090022;
+        public static final int titleIcon=0x7f090043;
+        public static final int titleText=0x7f090044;
+        public static final int top_menu=0x7f09001b;
+        public static final int track_image_view=0x7f090036;
+        public static final int userIcon=0x7f090045;
+        public static final int viewFlipper=0x7f090002;
+        public static final int wifiIcon=0x7f090047;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
         public static final int activity_setting=0x7f030001;
-        public static final int layout_category_list_item=0x7f030002;
-        public static final int layout_contents_book_view=0x7f030003;
-        public static final int layout_contents_list_item=0x7f030004;
-        public static final int layout_main_detail=0x7f030005;
-        public static final int layout_main_menu=0x7f030006;
-        public static final int media_player=0x7f030007;
-        public static final int media_player_bottom=0x7f030008;
-        public static final int media_player_top=0x7f030009;
-        public static final int player_list_item=0x7f03000a;
-        public static final int setup_category_view=0x7f03000b;
-        public static final int setup_list_item_title=0x7f03000c;
-        public static final int setup_list_item_wifi=0x7f03000d;
-        public static final int setup_wifi_list_view=0x7f03000e;
+        public static final int data_sync=0x7f030002;
+        public static final int layout_category_header_item=0x7f030003;
+        public static final int layout_category_list_item=0x7f030004;
+        public static final int layout_contents_book_view=0x7f030005;
+        public static final int layout_contents_list_item=0x7f030006;
+        public static final int layout_main_detail=0x7f030007;
+        public static final int layout_main_menu=0x7f030008;
+        public static final int main_menu_dummy_item=0x7f030009;
+        public static final int media_player=0x7f03000a;
+        public static final int media_player_bottom=0x7f03000b;
+        public static final int media_player_top=0x7f03000c;
+        public static final int password_view=0x7f03000d;
+        public static final int player_list_item=0x7f03000e;
+        public static final int round_progress=0x7f03000f;
+        public static final int setup_category_view=0x7f030010;
+        public static final int setup_list_item_title=0x7f030011;
+        public static final int setup_list_item_wifi=0x7f030012;
+        public static final int setup_wifi_list_view=0x7f030013;
+        public static final int status_bar_ongoing_download_notification=0x7f030014;
     }
     public static final class menu {
-        public static final int activity_main=0x7f070000;
+        public static final int activity_main=0x7f080000;
     }
     public static final class string {
         public static final int app_name=0x7f050000;
-        public static final int apply=0x7f050008;
-        public static final int category_upper_case=0x7f050007;
-        public static final int finish_application=0x7f050004;
+        public static final int apply=0x7f05000b;
+        public static final int category_upper_case=0x7f05000a;
+        public static final int contents_download=0x7f05000c;
+        public static final int contents_empty_guide=0x7f05000d;
+        public static final int dialog_link_save=0x7f050004;
+        public static final int download_complete=0x7f050005;
+        public static final int download_unsuccessful=0x7f050006;
+        public static final int finish_application=0x7f050007;
         public static final int hello_world=0x7f050001;
-        public static final int list=0x7f050006;
+        public static final int list=0x7f050009;
         /**  main 
+ main 
          */
-        public static final int menu=0x7f050005;
+        public static final int menu=0x7f050008;
         public static final int menu_settings=0x7f050002;
         public static final int title_activity_main=0x7f050003;
     }
     public static final class style {
-        public static final int AppTheme=0x7f06000a;
+        public static final int AppTheme=0x7f06000e;
         public static final int Common_Font_Style=0x7f060000;
         /**  불투명한 배경을 사용한다면 menifest Activity에 추가하자(기본 배경을 제거하여 Activity 그리기 성능 향상)  
          */
-        public static final int Theme_NoBackground=0x7f06000b;
-        public static final int Theme_NoTitleNoBackground=0x7f06000c;
-        public static final int Widget_Pogressbar=0x7f060009;
-        public static final int Widget_SeekBar_Normal=0x7f060007;
-        public static final int Widget_SeekBar_Sound=0x7f060008;
-        public static final int fontstyle_txt_main_apply_btn=0x7f060006;
-        public static final int fontstyle_txt_main_category_item_title=0x7f060005;
-        public static final int fontstyle_txt_main_category_title=0x7f060004;
+        public static final int Theme_NoBackground=0x7f06000f;
+        public static final int Theme_NoTitleNoBackground=0x7f060010;
+        public static final int Widget_Pogressbar=0x7f06000d;
+        public static final int Widget_SeekBar_Normal=0x7f06000b;
+        public static final int Widget_SeekBar_Sound=0x7f06000c;
+        public static final int fontstyle_txt_main_apply_btn=0x7f060007;
+        public static final int fontstyle_txt_main_category_item_title=0x7f060006;
+        public static final int fontstyle_txt_main_category_title=0x7f060005;
+        public static final int fontstyle_txt_main_contenst_title=0x7f060004;
         public static final int fontstyle_txt_main_contenst_txt=0x7f060003;
+        public static final int fontstyle_txt_main_download_txt=0x7f060009;
+        public static final int fontstyle_txt_main_empty_guide_txt=0x7f06000a;
         public static final int fontstyle_txt_main_list_tag=0x7f060002;
         public static final int fontstyle_txt_main_menu=0x7f060001;
+        public static final int fontstyle_txt_main_progress_txt=0x7f060008;
     }
+    public static final class styleable {
+        /** Attributes that can be used with a NCRoundProgress.
+           <p>Includes the following attributes:</p>
+           <table>
+           <colgroup align="left" />
+           <colgroup align="left" />
+           <tr><th>Attribute</th><th>Description</th></tr>
+           <tr><td><code>{@link #NCRoundProgress_max org.our.android.ouracademy:max}</code></td><td></td></tr>
+           <tr><td><code>{@link #NCRoundProgress_progress org.our.android.ouracademy:progress}</code></td><td></td></tr>
+           <tr><td><code>{@link #NCRoundProgress_progressDrawable org.our.android.ouracademy:progressDrawable}</code></td><td></td></tr>
+           <tr><td><code>{@link #NCRoundProgress_track org.our.android.ouracademy:track}</code></td><td></td></tr>
+           </table>
+           @see #NCRoundProgress_max
+           @see #NCRoundProgress_progress
+           @see #NCRoundProgress_progressDrawable
+           @see #NCRoundProgress_track
+         */
+        public static final int[] NCRoundProgress = {
+            0x7f010000, 0x7f010001, 0x7f010002, 0x7f010003
+        };
+        /**
+          <p>This symbol is the offset where the {@link org.our.android.ouracademy.R.attr#max}
+          attribute's value can be found in the {@link #NCRoundProgress} array.
+
+
+          <p>Must be an integer value, such as "<code>100</code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name android:max
+        */
+        public static final int NCRoundProgress_max = 1;
+        /**
+          <p>This symbol is the offset where the {@link org.our.android.ouracademy.R.attr#progress}
+          attribute's value can be found in the {@link #NCRoundProgress} array.
+
+
+          <p>Must be an integer value, such as "<code>100</code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name android:progress
+        */
+        public static final int NCRoundProgress_progress = 0;
+        /**
+          <p>This symbol is the offset where the {@link org.our.android.ouracademy.R.attr#progressDrawable}
+          attribute's value can be found in the {@link #NCRoundProgress} array.
+
+
+          <p>Must be an integer value, such as "<code>100</code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name android:progressDrawable
+        */
+        public static final int NCRoundProgress_progressDrawable = 2;
+        /**
+          <p>This symbol is the offset where the {@link org.our.android.ouracademy.R.attr#track}
+          attribute's value can be found in the {@link #NCRoundProgress} array.
+
+
+          <p>Must be an integer value, such as "<code>100</code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name android:track
+        */
+        public static final int NCRoundProgress_track = 3;
+    };
 }

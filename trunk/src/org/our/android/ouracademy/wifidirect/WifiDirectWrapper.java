@@ -1,17 +1,20 @@
 package org.our.android.ouracademy.wifidirect;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import org.our.android.ouracademy.OurPreferenceManager;
-import org.our.android.ouracademy.wifidirect.WifiDirectStudentListener.GroupOwnerFoundListener;
 
 import android.content.Context;
 import android.content.IntentFilter;
+import android.net.wifi.p2p.WifiP2pDevice;
+import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.ActionListener;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.net.wifi.p2p.WifiP2pManager.ChannelListener;
+import android.net.wifi.p2p.WifiP2pManager.PeerListListener;
 import android.widget.Toast;
 
 /*********
@@ -31,7 +34,6 @@ public class WifiDirectWrapper {
 
 	private WrapperChannelListener channelListener = new WrapperChannelListener();
 	private WiFiDirectBroadcastReceiver receiver;
-	private ArrayList<GroupOwnerFoundListener> groupOwnerFoundListenr;
 
 	private WifiDirectWrapper() {
 		intentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
@@ -72,26 +74,32 @@ public class WifiDirectWrapper {
 		this.info = info;
 	}
 
-	public ArrayList<GroupOwnerFoundListener> getGroupOwnerFoundListenr() {
-		return groupOwnerFoundListenr;
-	}
-
-	public void addGroupOwnerFoundListenr(
-			GroupOwnerFoundListener groupOwnerFoundListenr) {
-		this.groupOwnerFoundListenr.add(groupOwnerFoundListenr);
-	}
-
-	public void removeGroupOwnerFoundListenr(
-			GroupOwnerFoundListener groupOwnerFoundListenr) {
-		this.groupOwnerFoundListenr.remove(groupOwnerFoundListenr);
-	}
-
 	public String getOwnerIP() {
 		if (info != null && info.groupOwnerAddress != null) {
 			return info.groupOwnerAddress.getHostAddress();
 		} else {
 			return null;
 		}
+	}
+	
+	public void findConnectedStudent(final FindDeviceListner listener){
+		manager.requestPeers(channel, new PeerListListener() {
+			@Override
+			public void onPeersAvailable(WifiP2pDeviceList peers) {
+				Collection<WifiP2pDevice> devices = peers.getDeviceList();
+				ArrayList<WifiP2pDevice> connectedStudents = new ArrayList<WifiP2pDevice>();
+				for (WifiP2pDevice device : devices) {
+					if(device.status == WifiP2pDevice.CONNECTED){
+						connectedStudents.add(device);
+					}
+				}
+				listener.onFindDevice(connectedStudents);
+			}
+		});
+	}
+	
+	public interface FindDeviceListner{
+		public void onFindDevice(ArrayList<WifiP2pDevice> devices);
 	}
 
 	public void discoverPeers() {

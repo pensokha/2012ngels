@@ -1,7 +1,10 @@
 package org.our.android.ouracademy.ui.adapter;
 
+import java.util.ArrayList;
+
 import org.our.android.ouracademy.ui.view.SetupWifiListItemVew;
 
+import android.net.wifi.p2p.WifiP2pDevice;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -13,16 +16,38 @@ import android.widget.BaseAdapter;
  *
  */
 public class WiFiListAdapter extends BaseAdapter {
+	
+	public ArrayList<WifiP2pDevice> deviceList;
+	
+	public WiFiListAdapter() {
+		super();
+		
+		this.deviceList = new ArrayList<WifiP2pDevice>();
+	}
+	
+	public WiFiListAdapter(ArrayList<WifiP2pDevice> deviceList) {
+		super();
+		
+		if(deviceList == null){
+			this.deviceList = new ArrayList<WifiP2pDevice>();
+		}else{
+			this.deviceList = deviceList;
+		}
+	}
 
 	@Override
 	public int getCount() {
-		// test code
-		return 10;
+		if(deviceList == null)
+			return 0;
+		
+		return deviceList.size();
 	}
 
 	@Override
 	public Object getItem(int position) {
-		return null;
+		if(deviceList == null)
+			return null;
+		return deviceList.get(position);
 	}
 
 	@Override
@@ -38,8 +63,7 @@ public class WiFiListAdapter extends BaseAdapter {
 
 		if (convertView instanceof SetupWifiListItemVew) {
 			SetupWifiListItemVew view = (SetupWifiListItemVew)convertView;
-			String testId = position + " ";
-			view.setData(true, testId, 0);
+			view.setData(true, deviceList.get(position).deviceName, 0);
 		}
 
 		return convertView;
