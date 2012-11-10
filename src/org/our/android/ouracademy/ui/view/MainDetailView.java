@@ -4,8 +4,6 @@ import java.util.ArrayList;
 
 import org.our.android.ouracademy.OurDefine;
 import org.our.android.ouracademy.R;
-import org.our.android.ouracademy.dao.ContentDAO;
-import org.our.android.ouracademy.dao.DAOException;
 import org.our.android.ouracademy.model.OurContents;
 import org.our.android.ouracademy.ui.adapter.ContentsListAdapter;
 import org.our.android.ouracademy.ui.widget.NCHorizontalListView;
@@ -52,7 +50,7 @@ public class MainDetailView extends RelativeLayout {
 	private boolean isFristLoad = true;
 	
 	
-	ArrayList<OurContents> contentsList;
+	ArrayList<OurContents> contentsList = new ArrayList<OurContents>();
 	
 	public enum TouchStatus {
 		START_DRAGGING,
@@ -92,17 +90,6 @@ public class MainDetailView extends RelativeLayout {
 		return contentsListview;
 	}
 	
-	private ArrayList<OurContents> getContensListData() {
-		ContentDAO contentDao = new ContentDAO();
-		try {
-			contentsList = contentDao.getDuplicatedContents(null);
-		} catch (DAOException e) {
-			e.printStackTrace();
-			contentsList = new ArrayList<OurContents>();
-		}
-		return contentsList;
-	}
-	
 	private void initUI() {
 		LayoutInflater.from(getContext()).inflate(R.layout.layout_main_detail, this, true);
 		
@@ -133,7 +120,7 @@ public class MainDetailView extends RelativeLayout {
         decoyImage = new ImageView(getContext());
         
         NCHorizontalListView listView = (NCHorizontalListView) findViewById(R.id.horizontal_listview);
-        contentsListAdapter = new ContentsListAdapter(getContext(), getContensListData());
+        contentsListAdapter = new ContentsListAdapter(getContext(), contentsList);
         listView.setAdapter(contentsListAdapter);
         
         setDetailLayoutXPosition(OurDefine.DETAIL_ANI_END_X);

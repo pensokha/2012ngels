@@ -74,7 +74,7 @@ public class MainMenuView extends FrameLayout implements OnClickListener {
 		MatchCategoryColor.matchColor(categoryList);
 		return categoryList;
 	}
-
+	
 	private void initUI() {
 		LayoutInflater.from(getContext()).inflate(R.layout.layout_main_menu, this, true);
 

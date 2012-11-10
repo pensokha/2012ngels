@@ -94,7 +94,7 @@ public class ContentsView extends RelativeLayout implements OnClickListener {
 		reset();
 		this.ourContents = ourContents_;
 		if (ourContents.fileStatus == FileStatus.DOWNLOADED) { // 파일이 존재
-			contentsLayout.setBackgroundResource(MatchCategoryColor.getCategoryMatchColorId(ourContents.getSelectedCategoryId()));
+			contentsLayout.setBackgroundResource(MatchCategoryColor.getCategoryMatchColorId(ourContents.selectedCategory == null ? "" : ourContents.selectedCategory.getCategoryId()));
 //			contentsLayout.setBackgroundResource(R.drawable.btn_main_book_selector_07);
 			setProgressLayoutVisible(false);
 			cancelBtn.setVisibility(View.INVISIBLE);
@@ -109,7 +109,7 @@ public class ContentsView extends RelativeLayout implements OnClickListener {
 			setProgressLayoutVisible(false);
 			cancelBtn.setVisibility(View.INVISIBLE);
 		}
-		categoryText.setText(ourContents.getId());
+		categoryText.setText(ourContents.selectedCategory == null ? "" : ourContents.selectedCategory.getCategoryTitleEng());
 		subjectText.setText(ourContents.getSubjectEng());
 	}
 

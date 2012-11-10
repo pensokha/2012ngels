@@ -2,6 +2,7 @@ package org.our.android.ouracademy.dao;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import org.our.android.ouracademy.model.OurCategory;
 import org.our.android.ouracademy.model.OurContentCategory;
@@ -60,7 +61,7 @@ public class ContentDAO {
 
 			while (cursor.moveToNext()) {
 				OurContents content = new OurContents();
-				
+
 				setContentDataFromCursor(cursor, content);
 
 				contents.add(content);
@@ -72,8 +73,9 @@ public class ContentDAO {
 
 		return contents;
 	}
-	
-	public void setContentDataFromCursor(Cursor cursor, OurContents content) throws SQLException{
+
+	public void setContentDataFromCursor(Cursor cursor, OurContents content)
+			throws SQLException {
 		content.setId(cursor.getString(cursor.getColumnIndex(ID_KEY)));
 		content.setSubjectEng(cursor.getString(cursor
 				.getColumnIndex(SUBJECT_ENG_KEY)));
@@ -87,8 +89,7 @@ public class ContentDAO {
 		content.setDownloadedSize(cursor.getLong(cursor
 				.getColumnIndex(DOWNLOADED_SIZE_KEY)));
 
-		content.setDownloaded(content.getSize() == content
-				.getDownloadedSize());
+		content.setDownloaded(content.getSize() == content.getDownloadedSize());
 
 	}
 
@@ -149,10 +150,11 @@ public class ContentDAO {
 		return contents;
 	}
 
-	public String getDuplicatedContentsQuery(ArrayList<OurCategory> selectedCategories){
+	public String getDuplicatedContentsQuery(
+			HashMap<String, OurCategory> selectedCategories) {
 		StringBuffer sql = new StringBuffer();
 		sql.append(" SELECT ");
-		for(int i = 0; i < CONTENT_FIELDS.length; i++){
+		for (int i = 0; i < CONTENT_FIELDS.length; i++) {
 			sql.append(CONTENT_FIELDS[i]);
 			sql.append(",");
 		}
@@ -165,14 +167,18 @@ public class ContentDAO {
 		sql.append(ID_KEY);
 		sql.append("=");
 		sql.append(CONTENT_ID_KEY);
-		if(selectedCategories != null){
+		if (selectedCategories != null && selectedCategories.size() > 0) {
 			sql.append(" WHERE ");
-			sql.append(CONTENT_ID_KEY);
-			sql.append(" IN (");
-			for(OurCategory category : selectedCategories){
+			sql.append(CATEGORY_ID_KEY);
+			sql.append(" IN ('");
+			Iterator<String> categoryIds = selectedCategories.keySet()
+					.iterator();
+			sql.append(categoryIds.next());
+			sql.append("'");
+			while (categoryIds.hasNext()) {
+				sql.append(",'");
+				sql.append(categoryIds.next());
 				sql.append("'");
-				sql.append(category.getCategoryId());
-				sql.append("',");
 			}
 			sql.append(")");
 		}
@@ -182,20 +188,28 @@ public class ContentDAO {
 
 		return sql.toString();
 	}
-	
-	public ArrayList<OurContents> getDuplicatedContents(ArrayList<OurCategory> selectedCategories) throws DAOException {
-		
+
+	public ArrayList<OurContents> getDuplicatedContents(
+			HashMap<String, OurCategory> selectedCategories)
+			throws DAOException {
+
 		ArrayList<OurContents> contents = new ArrayList<OurContents>();
+		if(selectedCategories == null || selectedCategories.size() == 0){
+			return contents;
+		}
+		
 		SQLiteDatabase db = dbManager.getDB();
 
-		Cursor cursor = db.rawQuery(getDuplicatedContentsQuery(selectedCategories), null);
+		Cursor cursor = db.rawQuery(
+				getDuplicatedContentsQuery(selectedCategories), null);
 		while (cursor.moveToNext()) {
 			OurContents content = new OurContents();
-			
+
 			setContentDataFromCursor(cursor, content);
-			
-			content.setSelectedCategoryId(cursor.getString(cursor.getColumnIndex(CATEGORY_ID_KEY)));
-			
+
+			content.selectedCategory = selectedCategories.get(cursor
+					.getString(cursor.getColumnIndex(CATEGORY_ID_KEY)));
+
 			contents.add(content);
 		}
 

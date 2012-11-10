@@ -1,6 +1,7 @@
 package org.our.android.ouracademy.ui.pages;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.our.android.ouracademy.R;
 import org.our.android.ouracademy.dao.CategoryDAO;
@@ -24,7 +25,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
-
 /**
  * 
  * @author JiHoon, Moon
@@ -42,6 +42,9 @@ public class MainActivity extends BaseActivity {
 
 	private static boolean closeFlag = false;
 
+	private HashMap<String, OurCategory> selectedCategories = new HashMap<String, OurCategory>();
+	private HashMap<String, ArrayList<OurContents>> contentsHashMap = new HashMap<String, ArrayList<OurContents>>();
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -55,10 +58,10 @@ public class MainActivity extends BaseActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		
+
 		DataManagerFactory.getDataManager().syncFileAndDatabase();
 	}
-	
+
 	@Override
 	protected void onPause() {
 		super.onPause();
@@ -152,6 +155,17 @@ public class MainActivity extends BaseActivity {
 	OnClickListener applyBtnClickListener = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
+			ArrayList<OurCategory> categories = menuView.getCategories();
+			if (categories != null) {
+				selectedCategories.clear();
+				for (OurCategory category : categories) {
+					if (category.isChecked) {
+						selectedCategories.put(category.getCategoryId(),
+								category);
+					}
+				}
+			}
+			reloadContents();
 			detailView.onClickMenu();
 		}
 	};
@@ -196,43 +210,44 @@ public class MainActivity extends BaseActivity {
 			}
 		}
 	}
-	
-	private OurContents getContentFromViewList(String contentId){
-		ArrayList<OurContents> contents = detailView.getContentList();
-		if (contents != null) {
-			for (OurContents content : contents) {
-				if (content.getId().equals(contentId)) {
-					return content;
-				}
-			}
+
+	private ArrayList<OurContents> getContentsFromHashMap(String contentId) {
+		if (contentsHashMap.containsKey(contentId)) {
+			return contentsHashMap.get(contentId);
 		}
 		return null;
 	}
 
 	private void cancelDownloading(String contentId) {
-		OurContents content = getContentFromViewList(contentId);
-		if(content != null){
-			content.fileStatus = OurContents.FileStatus.NONE;
+		ArrayList<OurContents> contents = getContentsFromHashMap(contentId);
+		if (contents != null) {
+			for (OurContents content : contents) {
+				content.fileStatus = OurContents.FileStatus.NONE;
+			}
+			
 			if (detailView.getListAdapter() != null) {
 				detailView.getListAdapter().notifyDataSetChanged();
 			}
 		}
 	}
-	
+
 	private void updateDownloadSize(String contentId, long downloadedSize) {
-		OurContents content = getContentFromViewList(contentId);
-		if(content != null){
-			content.fileStatus = OurContents.FileStatus.DOWNLOADING;
+		ArrayList<OurContents> contents = getContentsFromHashMap(contentId);
+		if (contents != null) {
+			for (OurContents content : contents) {
+				content.fileStatus = OurContents.FileStatus.DOWNLOADING;
+
+				if (content.getDownloadedSize() <= downloadedSize) {
+					content.setDownloadedSize(downloadedSize);
+
+					if (content.getDownloadedSize() == content.getSize()) {
+						content.fileStatus = OurContents.FileStatus.DOWNLOADED;
+					}
+				}
+			}
 			
-			if (content.getDownloadedSize() <= downloadedSize) {
-				content.setDownloadedSize(downloadedSize);
-				
-				if (content.getDownloadedSize() == content.getSize()) {
-					content.fileStatus = OurContents.FileStatus.DOWNLOADED;
-				}
-				if (detailView.getListAdapter() != null) {
-					detailView.getListAdapter().notifyDataSetChanged();
-				}
+			if (detailView.getListAdapter() != null) {
+				detailView.getListAdapter().notifyDataSetChanged();
 			}
 		}
 	}
@@ -259,10 +274,34 @@ public class MainActivity extends BaseActivity {
 		if (contents != null) {
 			try {
 				ArrayList<OurContents> contentsFromDB = new ContentDAO()
-						.getOnlyContents();
+						.getDuplicatedContents(selectedCategories);
+				HashMap<String, Long> downloadingContents = new HashMap<String, Long>();
+				for (OurContents content : contents) {
+					if (content.fileStatus == OurContents.FileStatus.DOWNLOADING) {
+						downloadingContents.put(content.getId(),
+								content.getDownloadedSize());
+					}
+				}
 				contents.clear();
+				contentsHashMap.clear();
+
+				for (OurContents content : contentsFromDB) {
+					if (contentsHashMap.containsKey(content.getId()) == false) {
+						contentsHashMap.put(content.getId(),
+								new ArrayList<OurContents>());
+					}
+					if (downloadingContents.containsKey(content.getId())) {
+						content.fileStatus = OurContents.FileStatus.DOWNLOADING;
+						content.setDownloadedSize(downloadingContents
+								.get(content.getId()));
+					}
+
+					contentsHashMap.get(content.getId()).add(content);
+					contents.add(content);
+				}
+
 				contents.addAll(contentsFromDB);
-				if (detailView.getListAdapter() != null) { 
+				if (detailView.getListAdapter() != null) {
 					detailView.getListAdapter().notifyDataSetChanged();
 				}
 			} catch (DAOException e) {
@@ -270,6 +309,5 @@ public class MainActivity extends BaseActivity {
 			}
 		}
 	}
-	
-	
+
 }
