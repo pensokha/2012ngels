@@ -95,7 +95,7 @@ public class MainDetailView extends RelativeLayout {
 	private ArrayList<OurContents> getContensListData() {
 		ContentDAO contentDao = new ContentDAO();
 		try {
-			contentsList = contentDao.getContents();
+			contentsList = contentDao.getDuplicatedContents(null);
 		} catch (DAOException e) {
 			e.printStackTrace();
 			contentsList = new ArrayList<OurContents>();
