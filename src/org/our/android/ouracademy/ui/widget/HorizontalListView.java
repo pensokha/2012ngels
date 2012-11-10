@@ -58,6 +58,9 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
 	private OnItemClickListener mOnItemClicked;
 	private OnItemLongClickListener mOnItemLongClicked;
 	private boolean mDataChanged = false;
+	
+	int action = -1;
+	float x = -1;
 
 	public HorizontalListView(Context context) {
 		super(context);
@@ -312,10 +315,29 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
 		requestLayout();
 	}
 
+	/**
+	 *
+	 * @author JiHoon, Moon on NTS
+	 *
+	 */
 	@Override
 	public boolean dispatchTouchEvent(MotionEvent ev) {
-		boolean handled = super.dispatchTouchEvent(ev);
-		handled |= mGesture.onTouchEvent(ev);
+		boolean handled = mGesture.onTouchEvent(ev);
+
+		if (ev.getAction() == 1) {
+			if (action == 0 || Math.abs(ev.getX() - x) < 10) {
+				super.dispatchTouchEvent(ev);
+			} else {
+				ev.setAction(MotionEvent.ACTION_CANCEL);
+				super.dispatchTouchEvent(ev);
+			}
+		} else if (ev.getAction() == 0) {
+			super.dispatchTouchEvent(ev);
+			x = ev.getX();
+		}
+
+		action = ev.getAction();
+
 		return handled;
 	}
 	
@@ -353,6 +375,11 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
 			return HorizontalListView.this.onFling(e1, e2, velocityX, velocityY);
 		}
 
+		/**
+		 *
+		 * @author JiHoon, Moon on NTS
+		 *
+		 */
 		@Override
 		public boolean onScroll(MotionEvent e1, MotionEvent e2,
 				float distanceX, float distanceY) {
@@ -360,6 +387,11 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
 			synchronized (HorizontalListView.this) {
 				mNextX += (int)distanceX;
 			}
+			
+			for (int i = 0; i < getChildCount(); i++) {
+				getChildAt(i).setPressed(false);
+			}
+			
 			requestLayout();
 
 			return true;

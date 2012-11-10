@@ -23,6 +23,8 @@ public class ContentsListAdapter extends BaseAdapter  {
 	
 	private LayoutInflater inflater;
 	
+	private View emptyView;
+	
 	public static final int CELL_PER_ITEM = 2;
 	
 	class ObjViewHolder {
@@ -36,6 +38,10 @@ public class ContentsListAdapter extends BaseAdapter  {
 		this.contentsList = contentsList;
 		
 		inflater = LayoutInflater.from(context);
+	}
+	
+	public void setEmptyView(View view) {
+		emptyView = view;
 	}
 	
 	@Override
@@ -102,8 +108,25 @@ public class ContentsListAdapter extends BaseAdapter  {
 		return convertView;
 	}
 	
+	@Override
+	public void notifyDataSetChanged() {
+		checkItemList();
+		super.notifyDataSetChanged();
+	}
+	
 	public void notifyDataSetChanged(ArrayList<OurContents> contentsList) {
 		this.contentsList = contentsList;
+		checkItemList();
 		super.notifyDataSetChanged();
+	}
+	
+	public void checkItemList() {
+		if (emptyView != null) {
+			if (contentsList.isEmpty()) {
+				emptyView.setVisibility(View.VISIBLE);
+			} else {
+				emptyView.setVisibility(View.INVISIBLE);
+			}
+		}
 	}
 }

@@ -26,6 +26,7 @@ import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -87,8 +88,7 @@ public class MainMenuView extends FrameLayout implements OnClickListener {
 		View footer = LayoutInflater.from(getContext()).inflate(R.layout.main_menu_dummy_item, null);
 		listView.addFooterView(footer);
 
-		adapter = new CategoryListAdapter(getContext(), R.layout.layout_category_list_item,
-			getCategoryListData());
+		adapter = new CategoryListAdapter(getContext(), R.layout.layout_category_list_item, getCategoryListData());
 
 		listView.setAdapter(adapter);
 		listView.setOnItemClickListener(new OnItemClickListener() {
@@ -97,11 +97,11 @@ public class MainMenuView extends FrameLayout implements OnClickListener {
 				//except header
 				if (position == 0) {
 					boolean isChecked = (Boolean)(view.getTag());
-					View checkImg = view.findViewById(R.id.category_check);
+					ImageView checkImg = (ImageView)view.findViewById(R.id.category_check);
 					if (isChecked) {
-						checkImg.setVisibility(View.GONE);
+						checkImg.setImageResource(R.drawable.menu_icon_allcheck_off);
 					} else {
-						checkImg.setVisibility(View.VISIBLE);
+						checkImg.setImageResource(R.drawable.menu_icon_allcheck);
 					}
 					for (OurCategory ourCategory : categoryList) {
 						if (isChecked) {
