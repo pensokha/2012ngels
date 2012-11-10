@@ -28,7 +28,7 @@ import android.util.Log;
 public class WifiDirectStudentListener extends WifiDirectDefaultListener
 		implements PeerListListener, ConnectionInfoListener {
 	private static final String TAG = "WifiDirectStudentListener";
-	private static final int MAX_RETRY_COUNT = 100;
+	private static final int MAX_RETRY_COUNT = 0; //자동으로 선생님을 찾는 기능 제거
 	private int retryCount = 0;
 	private Handler handler;
 
