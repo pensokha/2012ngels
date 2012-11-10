@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import org.our.android.ouracademy.OurPreferenceManager;
 import org.our.android.ouracademy.manager.DataManagerFactory;
+import org.our.android.ouracademy.wifidirect.WifiDirectWrapper.FindDeviceListener;
 
 import android.content.Context;
 import android.net.wifi.WpsInfo;
@@ -31,6 +32,7 @@ public class WifiDirectStudentListener extends WifiDirectDefaultListener
 	private static final int MAX_RETRY_COUNT = 0; // 자동으로 선생님을 찾 하는 기능 제거
 	private int retryCount = 0;
 	private Handler handler;
+	private FindDeviceListener foundListener;
 
 	public WifiDirectStudentListener(Context context, WifiP2pManager manager,
 			Channel channel) {
@@ -67,9 +69,13 @@ public class WifiDirectStudentListener extends WifiDirectDefaultListener
 	@Override
 	public void onPeerChanged() {
 		Log.d(TAG, "onPeerChange");
-		if (manager != null && getConnected() == false) {
+		if (manager != null) {
 			manager.requestPeers(channel, this);
 		}
+	}
+
+	public void setFoundListener(FindDeviceListener foundListener) {
+		this.foundListener = foundListener;
 	}
 
 	@Override
@@ -92,51 +98,53 @@ public class WifiDirectStudentListener extends WifiDirectDefaultListener
 	@Override
 	public void onPeersAvailable(WifiP2pDeviceList peers) {
 		Log.d(TAG, "onPeersAvailable");
-		if (getConnected() == false) {
-			Collection<WifiP2pDevice> devices = peers.getDeviceList();
+		Collection<WifiP2pDevice> devices = peers.getDeviceList();
 
-			ArrayList<WifiP2pDevice> groupOwnerDevices = new ArrayList<WifiP2pDevice>();
-			for (WifiP2pDevice device : devices) {
-				if (device.isGroupOwner()) {
-					groupOwnerDevices.add(device);
-				}
+		ArrayList<WifiP2pDevice> groupOwnerDevices = new ArrayList<WifiP2pDevice>();
+		for (WifiP2pDevice device : devices) {
+			if (device.isGroupOwner()) {
+				groupOwnerDevices.add(device);
 			}
+		}
 
-			Log.d("Test", "FindGroupOwners : " + groupOwnerDevices.size());
+		if (OurPreferenceManager.getInstance().isStudent() == true
+				&& getConnected() == false) {
+			if (groupOwnerDevices.size() == 1) {
+				WifiP2pConfig config = new WifiP2pConfig();
+				config.deviceAddress = groupOwnerDevices.get(0).deviceAddress;
+				config.wps.setup = WpsInfo.PBC;
 
-			if (OurPreferenceManager.getInstance().isStudent() == true
-					&& getConnected() == false) {
-				if (groupOwnerDevices.size() == 1) {
-					WifiP2pConfig config = new WifiP2pConfig();
-					config.deviceAddress = groupOwnerDevices.get(0).deviceAddress;
-					config.wps.setup = WpsInfo.PBC;
+				manager.connect(channel, config, new StudenetConnectListener());
+			} else if (groupOwnerDevices.size() == 0
+					&& retryCount < MAX_RETRY_COUNT) {
+				if (handler == null) {
+					retryCount++;
 
-					manager.connect(channel, config,
-							new StudenetConnectListener(config));
-				} else if (groupOwnerDevices.size() == 0
-						&& retryCount <= MAX_RETRY_COUNT) {
-					if (handler == null) {
-						retryCount++;
-
-						handler = new Handler();
-						handler.postDelayed(new Runnable() {
-							@Override
-							public void run() {
-								handler = null;
-								if (getConnected() == true && manager != null
-										&& channel != null) {
-									manager.discoverPeers(channel,
-											new DiscoverListener());
-								}
+					handler = new Handler();
+					handler.postDelayed(new Runnable() {
+						@Override
+						public void run() {
+							handler = null;
+							if (getConnected() == true && manager != null
+									&& channel != null) {
+								manager.discoverPeers(channel,
+										new DiscoverListener());
 							}
-						}, 30000); // 5 Minute
-					}
-				}
-
-				if (groupOwnerDevices.size() > 0) {
-					retryCount = 0;
+						}
+					}, 30000); // 5 Minute
 				}
 			}
+
+			if (groupOwnerDevices.size() > 0) {
+				retryCount = 0;
+			}
+		}
+
+		if (foundListener != null) {
+			Log.d("Test", "find1");
+			foundListener.onFindDevice(groupOwnerDevices);
+		} else {
+			Log.d("Test", "find2");
 		}
 	}
 
@@ -146,11 +154,11 @@ public class WifiDirectStudentListener extends WifiDirectDefaultListener
 	 * 
 	 */
 	private class StudenetConnectListener implements ActionListener {
-		private boolean retry = false;
-		private WifiP2pConfig config;
+		// private boolean retry = false;
+		// private WifiP2pConfig config;
 
-		public StudenetConnectListener(WifiP2pConfig config) {
-			this.config = config;
+		public StudenetConnectListener() {
+			// this.config = config;
 		}
 
 		@Override
@@ -163,12 +171,12 @@ public class WifiDirectStudentListener extends WifiDirectDefaultListener
 
 		@Override
 		public void onFailure(int reason) {
-			if (retry == false) {
-				manager.connect(channel, config, this);
-				retry = true;
-			} else {
-				Log.d(TAG, "False Connect Group");
-			}
+			// if (retry == false) {
+			// manager.connect(channel, config, this);
+			// retry = true;
+			// } else {
+			Log.d(TAG, "False Connect Group");
+			// }
 		}
 	}
 
