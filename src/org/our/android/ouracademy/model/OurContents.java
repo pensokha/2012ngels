@@ -23,9 +23,8 @@ public class OurContents implements OurJSONModel {
 	private String subtitleUrl;
 	private long size;
 	private ArrayList<String> categoryIdList;
-	private String selectedCategoryId;
 	private long downloadedSize;
-	
+	private String selectedCategoryId;
 	
 	public enum FileStatus {
 		NONE, DOWNLOADING, DOWNLOADED
