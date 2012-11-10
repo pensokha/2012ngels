@@ -2,6 +2,8 @@ package org.our.android.ouracademy.model;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.our.android.ouracademy.OurApplication;
+import org.our.android.ouracademy.OurDefine;
 
 public class OurCategory implements OurJSONModel {
 	public static final String CATEGORY_ID_JSON_KEY = "ID";
@@ -102,6 +104,20 @@ public class OurCategory implements OurJSONModel {
 
 	public void setCategoryParent(String categoryParent) {
 		this.categoryParent = categoryParent;
+	}
+	
+	public String getCategoryTitle() {
+		if (OurDefine.LOCALE_LANGUAGE_KHMER.equals(OurApplication.getInstance().getLocaleLangueage())) {
+			return categoryTitleKmr;
+		}
+		return categoryTitleEng;
+	}
+	
+	public String getCategoryDescription() {
+		if (OurDefine.LOCALE_LANGUAGE_KHMER.equals(OurApplication.getInstance().getLocaleLangueage())) {
+			return categoryDescriptionKmr;
+		}
+		return categoryDescriptionEng;
 	}
 
 	@Override

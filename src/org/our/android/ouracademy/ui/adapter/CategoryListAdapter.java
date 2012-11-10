@@ -56,7 +56,7 @@ public class CategoryListAdapter extends ArrayAdapter<OurCategory> {
 		
 //		Spanned category = Html.fromHtml(ourCategory.getCategoryTitleEng() + "<img src=\"icon\" width=50 height=50>", imageGetter, null);
 		CharSequence category = Html.fromHtml(context.getResources().getString(R.string.category_name_num, 
-				ourCategory.getCategoryTitleEng(), ourCategory.getNumOfContents()));
+				ourCategory.getCategoryTitle(), ourCategory.getNumOfContents()));
 		itemHolder.txt.setText(category);
 		itemHolder.icon.setImageResource(R.drawable.subject_icon_math);
 		

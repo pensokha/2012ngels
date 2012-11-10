@@ -3,6 +3,7 @@ package org.our.android.ouracademy.ui.pages;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.our.android.ouracademy.OurApplication;
 import org.our.android.ouracademy.R;
 import org.our.android.ouracademy.dao.CategoryDAO;
 import org.our.android.ouracademy.dao.ContentDAO;
@@ -58,7 +59,7 @@ public class MainActivity extends BaseActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-
+		String dd = OurApplication.getInstance().getLocaleLangueage();
 		DataManagerFactory.getDataManager().syncFileAndDatabase();
 	}
 

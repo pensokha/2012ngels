@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.our.android.ouracademy.OurApplication;
+import org.our.android.ouracademy.OurDefine;
 
 public class OurContents implements OurJSONModel {
 	public static final String CONTENTS_ID_JSON_KEY = "ID";
@@ -110,6 +112,13 @@ public class OurContents implements OurJSONModel {
 		} else {
 			fileStatus = FileStatus.NONE;
 		}
+	}
+	
+	public String getSubject() {
+		if (OurDefine.LOCALE_LANGUAGE_KHMER.equals(OurApplication.getInstance().getLocaleLangueage())) {
+			return subjectKmr;
+		}
+		return subjectEng;
 	}
 	
 	@Override

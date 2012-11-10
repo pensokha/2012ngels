@@ -5,6 +5,7 @@ import org.our.android.ouracademy.util.DbManager;
 import org.our.android.ouracademy.util.ScreenInfo;
 
 import android.app.Application;
+import android.text.TextUtils;
 import android.util.Log;
 
 /**
@@ -15,6 +16,8 @@ import android.util.Log;
 public class OurApplication extends Application {
 	private static boolean isTestMode = true;
 	private static OurApplication mOurApplication;
+	
+	private String localeLangueage; 
 
 	@Override
 	public void onCreate() {
@@ -31,6 +34,8 @@ public class OurApplication extends Application {
 		ScreenInfo.create(this);
 		
 		DataManagerFactory.getDataManager().startService(this);
+		
+		updateLocaleLangueage();
 	}
 
 	public static boolean isTestMode() {
@@ -48,7 +53,17 @@ public class OurApplication extends Application {
 		if (null == mOurApplication) {
 			Log.d("Application", "Application was killed!!!");
 		}
-
 		return mOurApplication;
+	}
+	
+	public void updateLocaleLangueage() {
+		localeLangueage = getResources().getConfiguration().locale.getDisplayLanguage();
+	}
+	
+	public String getLocaleLangueage() {
+		if (TextUtils.isEmpty(localeLangueage)) {
+			updateLocaleLangueage();
+		}
+		return localeLangueage;
 	}
 }
