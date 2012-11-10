@@ -10,7 +10,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="2.67dp"
         android:background="@drawable/list_icon_category" />
 
     <TextView
@@ -19,7 +18,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="8dp"
         android:layout_toRightOf="@id/category_icon"
         android:text="@string/category_upper_case" />
 
@@ -30,7 +28,6 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="7dp"
-        android:src="@drawable/menu_icon_allcheck"
-        android:visibility="gone" />
+        android:src="@drawable/menu_icon_allcheck_off" />
 
 </RelativeLayout>

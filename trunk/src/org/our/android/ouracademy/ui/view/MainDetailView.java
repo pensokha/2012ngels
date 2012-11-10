@@ -46,7 +46,7 @@ public class MainDetailView extends RelativeLayout {
 
 	private int aniDuration = 200;
 	
-	ListView contentsListview;
+	NCHorizontalListView horizontalListView;
 	ContentsListAdapter contentsListAdapter;
 	
 	private boolean isFristLoad = true;
@@ -83,12 +83,12 @@ public class MainDetailView extends RelativeLayout {
 		return contentsList;
 	}
 	
-	public ContentsListAdapter getListAdapter(){
-		return contentsListAdapter;
+	public NCHorizontalListView getList(){
+		return horizontalListView;
 	}
 	
-	public ListView getListView(){
-		return contentsListview;
+	public ContentsListAdapter getListAdapter(){
+		return contentsListAdapter;
 	}
 	
 	private void initUI() {
@@ -122,9 +122,10 @@ public class MainDetailView extends RelativeLayout {
 		
         decoyImage = new ImageView(getContext());
         
-        NCHorizontalListView listView = (NCHorizontalListView) findViewById(R.id.horizontal_listview);
+        horizontalListView = (NCHorizontalListView) findViewById(R.id.horizontal_listview);
         contentsListAdapter = new ContentsListAdapter(getContext(), contentsList);
-        listView.setAdapter(contentsListAdapter);
+        contentsListAdapter.setEmptyView(emptyView);
+        horizontalListView.setAdapter(contentsListAdapter);
         
         setDetailLayoutXPosition(OurDefine.DETAIL_ANI_END_X);
         menuStatus = MenuStatus.VISIBLE_MENU;
