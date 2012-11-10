@@ -24,7 +24,7 @@ public class OurApplication extends Application {
 
 		OurPreferenceManager pref = OurPreferenceManager.getInstance();
 		pref.initPreferenceData(this);
-		
+//		pref.setTeacherMode();
 		DbManager.getInstance().open(this);
 
 		// 화면 정보

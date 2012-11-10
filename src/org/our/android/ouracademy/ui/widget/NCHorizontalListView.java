@@ -40,7 +40,7 @@ public class NCHorizontalListView extends AdapterView<ListAdapter> {
 	boolean completeFinishAction = true;
 	private Handler handler;
 	private Runnable finished;
-	
+
 	private boolean dataChanged = false;
 
 	boolean isBounceEnabled = false;
@@ -72,11 +72,13 @@ public class NCHorizontalListView extends AdapterView<ListAdapter> {
 		if (getLayoutParams().height == LayoutParams.WRAP_CONTENT) {
 			View child = listAdapter.getView(0, null, this);
 			if (child != null) {
-				child.measure(MeasureSpec.makeMeasureSpec(getWidth(), MeasureSpec.AT_MOST),
-					MeasureSpec.makeMeasureSpec(getHeight(), MeasureSpec.AT_MOST));
+				child.measure(MeasureSpec.makeMeasureSpec(getWidth(),
+						MeasureSpec.AT_MOST), MeasureSpec.makeMeasureSpec(
+						getHeight(), MeasureSpec.AT_MOST));
 
 				childHeight = child.getMeasuredHeight();
-				setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), childHeight);
+				setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec),
+						childHeight);
 			}
 		}
 
@@ -86,7 +88,8 @@ public class NCHorizontalListView extends AdapterView<ListAdapter> {
 	}
 
 	@Override
-	public void setOnItemSelectedListener(AdapterView.OnItemSelectedListener listener) {
+	public void setOnItemSelectedListener(
+			AdapterView.OnItemSelectedListener listener) {
 		onItemSelected = listener;
 	}
 
@@ -121,7 +124,7 @@ public class NCHorizontalListView extends AdapterView<ListAdapter> {
 
 	@Override
 	public View getSelectedView() {
-		//TODO: implement
+		// TODO: implement
 		return null;
 	}
 
@@ -139,50 +142,53 @@ public class NCHorizontalListView extends AdapterView<ListAdapter> {
 
 	@Override
 	public void setSelection(int position) {
-		//TODO: implement
+		// TODO: implement
 	}
 
 	private void addAndMeasureChild(final View child, int viewPos) {
 
 		LayoutParams params = child.getLayoutParams();
-		int     childWidth;
-        int     childWidthMeasureSpec;
-        int     childHeight;
-        int     childHeightMeasureSpec;
-        
+		int childWidth;
+		int childWidthMeasureSpec;
+		int childHeight;
+		int childHeightMeasureSpec;
+
 		if (params == null) {
-			params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+			params = new LayoutParams(LayoutParams.FILL_PARENT,
+					LayoutParams.FILL_PARENT);
 		}
-		
+
 		childWidth = getWidth();
-        childWidthMeasureSpec = MeasureSpec.AT_MOST;
-         
-        if (params.height == LayoutParams.WRAP_CONTENT) {
-            childHeight = getHeight();
-            childHeightMeasureSpec = MeasureSpec.AT_MOST;
-             
-        } else if (params.height == LayoutParams.FILL_PARENT) {
-            childHeight = getHeight();
-            childHeightMeasureSpec = MeasureSpec.EXACTLY;
-             
-        } else {
-            childHeight = params.height;
-            childHeightMeasureSpec = MeasureSpec.EXACTLY;
-        }
+		childWidthMeasureSpec = MeasureSpec.AT_MOST;
+
+		if (params.height == LayoutParams.WRAP_CONTENT) {
+			childHeight = getHeight();
+			childHeightMeasureSpec = MeasureSpec.AT_MOST;
+
+		} else if (params.height == LayoutParams.FILL_PARENT) {
+			childHeight = getHeight();
+			childHeightMeasureSpec = MeasureSpec.EXACTLY;
+
+		} else {
+			childHeight = params.height;
+			childHeightMeasureSpec = MeasureSpec.EXACTLY;
+		}
 
 		addViewInLayout(child, viewPos, params, true);
-		child.measure(MeasureSpec.makeMeasureSpec(childWidth, childWidthMeasureSpec),
-                MeasureSpec.makeMeasureSpec(childHeight, childHeightMeasureSpec));
+		child.measure(MeasureSpec.makeMeasureSpec(childWidth,
+				childWidthMeasureSpec), MeasureSpec.makeMeasureSpec(
+				childHeight, childHeightMeasureSpec));
 	}
 
 	@Override
-	protected synchronized void onLayout(boolean changed, int left, int top, int right, int bottom) {
+	protected synchronized void onLayout(boolean changed, int left, int top,
+			int right, int bottom) {
 		super.onLayout(changed, left, top, right, bottom);
 
 		if (listAdapter == null) {
 			return;
 		}
-		
+
 		if (dataChanged) {
 			int oldCurrentX = currentX;
 			initView();
@@ -253,12 +259,15 @@ public class NCHorizontalListView extends AdapterView<ListAdapter> {
 					}
 
 					View child = getChildAt(0);
-					int halfWidth = child.getWidth() / 2;
+					if (child != null) {
+						int halfWidth = child.getWidth() / 2;
 
-					if (Math.abs(displayOffset) < halfWidth) {
-						scrollTo(currentX + displayOffset, 500);
-					} else {
-						scrollTo(currentX + (child.getWidth() + displayOffset), 500);
+						if (Math.abs(displayOffset) < halfWidth) {
+							scrollTo(currentX + displayOffset, 500);
+						} else {
+							scrollTo(currentX
+									+ (child.getWidth() + displayOffset), 500);
+						}
 					}
 
 					completeFinishAction = true;
@@ -287,10 +296,13 @@ public class NCHorizontalListView extends AdapterView<ListAdapter> {
 		if (edge == 0 && rightViewIndex > 0) {
 			for (int i = 0; i < rightViewIndex; i++) {
 				View view = listAdapter.getView(i, null, this);
-				view.measure(MeasureSpec.makeMeasureSpec(getWidth(), MeasureSpec.AT_MOST),
-					MeasureSpec.makeMeasureSpec(getHeight(), MeasureSpec.AT_MOST));
+				if (view != null) {
+					view.measure(MeasureSpec.makeMeasureSpec(getWidth(),
+							MeasureSpec.AT_MOST), MeasureSpec.makeMeasureSpec(
+							getHeight(), MeasureSpec.AT_MOST));
 
-				edge += view.getMeasuredWidth();
+					edge += view.getMeasuredWidth();
+				}
 			}
 		}
 
@@ -308,7 +320,8 @@ public class NCHorizontalListView extends AdapterView<ListAdapter> {
 	private void fillListRight(int rightEdge, final int dx) {
 
 		if (isBounceEnabled) {
-			while (rightEdge + dx < getWidth() && rightViewIndex < listAdapter.getCount() + 2) {
+			while (rightEdge + dx < getWidth()
+					&& rightViewIndex < listAdapter.getCount() + 2) {
 
 				View child;
 				if (rightViewIndex == 0) {
@@ -316,7 +329,8 @@ public class NCHorizontalListView extends AdapterView<ListAdapter> {
 				} else if (rightViewIndex == listAdapter.getCount() + 1) {
 					child = getDummyButtonView();
 				} else {
-					child = listAdapter.getView(rightViewIndex - 1, removedViewQueue.poll(), this);
+					child = listAdapter.getView(rightViewIndex - 1,
+							removedViewQueue.poll(), this);
 				}
 				addAndMeasureChild(child, -1);
 				rightEdge += child.getMeasuredWidth();
@@ -330,8 +344,10 @@ public class NCHorizontalListView extends AdapterView<ListAdapter> {
 				maxX = 0;
 			}
 		} else {
-			while (rightEdge + dx < getWidth() && rightViewIndex < listAdapter.getCount()) {
-				View child = listAdapter.getView(rightViewIndex, removedViewQueue.poll(), this);
+			while (rightEdge + dx < getWidth()
+					&& rightViewIndex < listAdapter.getCount()) {
+				View child = listAdapter.getView(rightViewIndex,
+						removedViewQueue.poll(), this);
 				addAndMeasureChild(child, -1);
 				rightEdge += child.getMeasuredWidth();
 
@@ -356,7 +372,8 @@ public class NCHorizontalListView extends AdapterView<ListAdapter> {
 				if (leftViewIndex == 0) {
 					child = getDummyButtonView();
 				} else {
-					child = listAdapter.getView(leftViewIndex - 1, removedViewQueue.poll(), this);
+					child = listAdapter.getView(leftViewIndex - 1,
+							removedViewQueue.poll(), this);
 				}
 				addAndMeasureChild(child, 0);
 
@@ -366,7 +383,8 @@ public class NCHorizontalListView extends AdapterView<ListAdapter> {
 			}
 		} else {
 			while (leftEdge + dx > 0 && leftViewIndex >= 0) {
-				View child = listAdapter.getView(leftViewIndex, removedViewQueue.poll(), this);
+				View child = listAdapter.getView(leftViewIndex,
+						removedViewQueue.poll(), this);
 				addAndMeasureChild(child, 0);
 				leftEdge -= child.getMeasuredWidth();
 				leftViewIndex--;
@@ -377,8 +395,8 @@ public class NCHorizontalListView extends AdapterView<ListAdapter> {
 
 	private Button getDummyButtonView() {
 		Button v = new Button(context);
-		LinearLayout.LayoutParams parm = new LinearLayout.LayoutParams(getDummyWidth(),
-			LinearLayout.LayoutParams.WRAP_CONTENT);
+		LinearLayout.LayoutParams parm = new LinearLayout.LayoutParams(
+				getDummyWidth(), LinearLayout.LayoutParams.WRAP_CONTENT);
 		parm.setMargins(0, 0, 0, 0);
 		v.setWidth((getWidth() / 2 - 5));
 		v.setHeight(30);
@@ -417,7 +435,8 @@ public class NCHorizontalListView extends AdapterView<ListAdapter> {
 			for (int i = 0; i < getChildCount(); i++) {
 				View child = getChildAt(i);
 				int childWidth = child.getMeasuredWidth();
-				child.layout(left, 0, left + childWidth, child.getMeasuredHeight());
+				child.layout(left, 0, left + childWidth,
+						child.getMeasuredHeight());
 				left += childWidth;
 			}
 		}
@@ -455,10 +474,10 @@ public class NCHorizontalListView extends AdapterView<ListAdapter> {
 	}
 
 	protected boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
-		float velocityY) {
+			float velocityY) {
 
 		synchronized (NCHorizontalListView.this) {
-			scroller.fling(nextX, 0, (int)-velocityX, 0, 0, maxX, 0, 0);
+			scroller.fling(nextX, 0, (int) -velocityX, 0, 0, maxX, 0, 0);
 		}
 		requestLayout();
 
@@ -479,19 +498,20 @@ public class NCHorizontalListView extends AdapterView<ListAdapter> {
 
 		@Override
 		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
-			float velocityY) {
+				float velocityY) {
 			isFling = true;
-			return NCHorizontalListView.this.onFling(e1, e2, velocityX, velocityY);
+			return NCHorizontalListView.this.onFling(e1, e2, velocityX,
+					velocityY);
 		}
 
 		@Override
 		public boolean onScroll(MotionEvent e1, MotionEvent e2,
-			float distanceX, float distanceY) {
+				float distanceX, float distanceY) {
 
 			completeFinishAction = false;
 
 			synchronized (NCHorizontalListView.this) {
-				nextX += (int)distanceX;
+				nextX += (int) distanceX;
 			}
 			requestLayout();
 
@@ -509,12 +529,15 @@ public class NCHorizontalListView extends AdapterView<ListAdapter> {
 				int top = child.getTop();
 				int bottom = child.getBottom();
 				viewRect.set(left, top, right, bottom);
-				if (viewRect.contains((int)e.getX(), (int)e.getY())) {
+				if (viewRect.contains((int) e.getX(), (int) e.getY())) {
 					if (onItemClicked != null) {
-						onItemClicked.onItemClick(NCHorizontalListView.this, child, leftViewIndex + 1 + i, 0);
+						onItemClicked.onItemClick(NCHorizontalListView.this,
+								child, leftViewIndex + 1 + i, 0);
 					}
 					if (onItemSelected != null) {
-						onItemSelected.onItemSelected(NCHorizontalListView.this, child, leftViewIndex + 1 + i, 0);
+						onItemSelected.onItemSelected(
+								NCHorizontalListView.this, child, leftViewIndex
+										+ 1 + i, 0);
 					}
 
 					break;
