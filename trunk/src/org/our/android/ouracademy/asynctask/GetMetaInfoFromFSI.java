@@ -36,8 +36,6 @@ public class GetMetaInfoFromFSI extends SyncAndReloadNoti{
 	public static void getMetaInfoProcesses(OurMetaInfo metaInfo, Context context) throws DAOException{
 		switch (metaInfo.getResponseCode()) {
 		case OurMetaInfo.RES_CODE_SUCCESS:
-			OurPreferenceManager.getInstance().setVersion(metaInfo.getVersion());
-			
 			DbManager dbManager = DbManager.getInstance();
 			CategoryDAO categoryDao = new CategoryDAO();
 			ContentDAO contentDao = new ContentDAO();
@@ -57,7 +55,7 @@ public class GetMetaInfoFromFSI extends SyncAndReloadNoti{
 			if(dbManager.endTransaction() == false){
 				throw new DAOException("fail end transaction");
 			}
-			
+			OurPreferenceManager.getInstance().setVersion(metaInfo.getVersion());
 			break;
 		case OurMetaInfo.RES_CODE_DONT_NEED_UPDATE:
 			break;

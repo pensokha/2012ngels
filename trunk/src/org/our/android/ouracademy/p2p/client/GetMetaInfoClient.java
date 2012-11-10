@@ -37,6 +37,7 @@ public class GetMetaInfoClient extends P2PClientJSON {
 	@Override
 	protected void parseResponse(String jsonResponse) throws IOException,
 			JSONException {
+		System.out.println(jsonResponse);
 		JSONObject jsonObject = new JSONObject(jsonResponse);
 		OurMetaInfo metaInfo = new OurMetaInfo();
 		metaInfo.setFromJSONObject(jsonObject);
