@@ -20,7 +20,6 @@ import android.view.animation.AnimationSet;
 import android.view.animation.TranslateAnimation;
 import android.widget.AbsoluteLayout;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -125,6 +124,7 @@ public class MainDetailView extends RelativeLayout {
         horizontalListView = (NCHorizontalListView) findViewById(R.id.horizontal_listview);
         contentsListAdapter = new ContentsListAdapter(getContext(), contentsList);
         contentsListAdapter.setEmptyView(emptyView);
+        contentsListAdapter.setHorizontalListView(horizontalListView);
         horizontalListView.setAdapter(contentsListAdapter);
         
         setDetailLayoutXPosition(OurDefine.DETAIL_ANI_END_X);

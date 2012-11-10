@@ -73,6 +73,7 @@ public class CategoryListAdapter extends ArrayAdapter<OurCategory> {
 		@Override
 		public Drawable getDrawable(String source) {
 			if (("icon").equals(source)) {
+				//Don't work
 //				TextView text = new TextView(context);
 //				text.setText("7");
 //				text.setBackgroundResource(R.drawable.book_download_progress01);
@@ -80,7 +81,7 @@ public class CategoryListAdapter extends ArrayAdapter<OurCategory> {
 //				text.requestLayout();
 //				Bitmap bitmap = text.getDrawingCache();
 //				Drawable drawable = (Drawable)new BitmapDrawable(text.getResources(), bitmap); 
-				
+				//work
 				Drawable drawable = getContext().getResources().getDrawable(R.drawable.book_download_progress01);
 				drawable.setBounds( 0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight() );
 				return drawable;

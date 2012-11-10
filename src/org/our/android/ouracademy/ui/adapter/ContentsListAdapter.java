@@ -5,10 +5,12 @@ import java.util.ArrayList;
 import org.our.android.ouracademy.R;
 import org.our.android.ouracademy.model.OurContents;
 import org.our.android.ouracademy.ui.view.ContentsView;
+import org.our.android.ouracademy.ui.widget.NCHorizontalListView;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
@@ -27,6 +29,10 @@ public class ContentsListAdapter extends BaseAdapter  {
 	
 	public static final int CELL_PER_ITEM = 2;
 	
+	public static final int FOOTER = 1;
+	
+	NCHorizontalListView horizontalListView;
+	
 	class ObjViewHolder {
 		ContentsView[] itemHolderList = new ContentsView[CELL_PER_ITEM];
 	}
@@ -44,14 +50,18 @@ public class ContentsListAdapter extends BaseAdapter  {
 		emptyView = view;
 	}
 	
+	public void setHorizontalListView(NCHorizontalListView horizontalListView) {
+		this.horizontalListView = horizontalListView;
+	}
+	
 	@Override
 	public int getCount() {
-		if (contentsList == null) {
+		if (contentsList == null || contentsList.isEmpty()) {
 			return 0;	
 		}
 		int count = contentsList.size() / CELL_PER_ITEM;
 		count = count + (contentsList.size() % CELL_PER_ITEM > 0 ? 1 : 0);
-		return count;
+		return count + FOOTER;
 	}
 
 	@Override
@@ -72,9 +82,22 @@ public class ContentsListAdapter extends BaseAdapter  {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
+		//footer
+		if (position == getCount() - 1) {
+			convertView = inflater.inflate(R.layout.layout_contents_list_footer, null);
+			convertView.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					if (horizontalListView != null) {
+						horizontalListView.smoothScrollToFirstView();
+					}
+				}
+			});
+			return convertView;
+		}
 		//set view holder pattern
 		ObjViewHolder holder = new ObjViewHolder();;
-		if (convertView == null) {
+		if (convertView == null || convertView.getTag() == null) {
 			convertView = inflater.inflate(R.layout.layout_contents_list_item, null);
 			
 			for (int idx = 0; idx < CELL_PER_ITEM; idx++) {

@@ -14,6 +14,7 @@
     <!-- main -->
     <string name="menu">MENU</string>
     <string name="list">LIST</string>
+    <string name="back">BACK</string>
     
     <string name="category_upper_case">CATEGORY</string>
     <string name="apply">Apply</string>
