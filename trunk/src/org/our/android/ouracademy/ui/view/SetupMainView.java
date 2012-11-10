@@ -127,16 +127,6 @@ public class SetupMainView extends LinearLayout {
 						listener.onClickCloseBtn();
 					}
 					break;
-				case R.id.teacherBtn:
-					if (listener != null) {
-						listener.onClickModeBtn(true);
-					}
-					break;
-				case R.id.studentBtn:
-					if (listener != null) {
-						listener.onClickModeBtn(false);
-					}
-					break;
 				case R.id.networkBtn:
 					wifiListView.setTitleText("WI-FI");
 					wifiListView.setTitleImgResource(R.drawable.setup_icon_title02);
@@ -157,6 +147,13 @@ public class SetupMainView extends LinearLayout {
 						listener.onClickDataSyncCell();
 					}
 					break;
+			}
+		}
+
+		@Override
+		public void onClickModeBtn(boolean teacher) {
+			if (listener != null) {
+				listener.onClickModeBtn(teacher);
 			}
 		}
 	};

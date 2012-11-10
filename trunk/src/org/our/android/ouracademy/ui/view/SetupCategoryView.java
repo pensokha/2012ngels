@@ -1,5 +1,6 @@
 package org.our.android.ouracademy.ui.view;
 
+import org.our.android.ouracademy.OurPreferenceManager;
 import org.our.android.ouracademy.R;
 import org.our.android.ouracademy.ui.view.PasswordEditText.EditTextListener;
 import org.our.android.ouracademy.ui.view.PasswordEditText.PointColor;
@@ -27,6 +28,8 @@ public class SetupCategoryView extends LinearLayout implements View.OnClickListe
 	 */
 	public interface SetupCategoryViewListener {
 		void onClickBtn(View view);
+		
+		void onClickModeBtn(boolean teacher);
 	};
 
 	LinearLayout closeBtn;
@@ -72,12 +75,19 @@ public class SetupCategoryView extends LinearLayout implements View.OnClickListe
 		teacherBtn.setOnClickListener(this);
 		studentBtn = (LinearLayout)findViewById(R.id.studentBtn);
 		studentBtn.setOnClickListener(this);
-		studentBtn.setSelected(true);
 
 		studentView = (LinearLayout)findViewById(R.id.studentView);
-		studentView.setVisibility(View.VISIBLE);
 		teacheView = (LinearLayout)findViewById(R.id.teacheView);
-		teacheView.setVisibility(View.GONE);
+		
+		if(OurPreferenceManager.getInstance().isTeacher()){
+			studentView.setVisibility(View.GONE);
+			teacheView.setVisibility(View.VISIBLE);
+			teacherBtn.setSelected(true);
+		}else{
+			studentView.setVisibility(View.VISIBLE);
+			teacheView.setVisibility(View.GONE);
+			studentBtn.setSelected(true);
+		}
 
 		networkBtn = (LinearLayout)findViewById(R.id.networkBtn);
 		networkBtn.setOnClickListener(this);
@@ -127,18 +137,24 @@ public class SetupCategoryView extends LinearLayout implements View.OnClickListe
 				if (first.isKeyboardVisible()) {
 					first.hideKeyboard();
 				}
+				listener.onClickModeBtn(false);
 				break;
 
 			case R.id.teacherBtn:
 				studentBtn.setSelected(false);
 				teacherBtn.setSelected(true);
 
-				passwordView.setVisibility(View.VISIBLE);
+				
 				studentView.setVisibility(View.GONE);
-				teacheView.setVisibility(View.GONE);
 				dataSyncView.setVisibility(View.GONE);
-
-				initPasswordView();
+				if(OurPreferenceManager.getInstance().isTeacher()){
+					passwordView.setVisibility(View.GONE);
+					teacheView.setVisibility(View.VISIBLE);
+				}else{
+					passwordView.setVisibility(View.VISIBLE);
+					teacheView.setVisibility(View.GONE);
+					initPasswordView();
+				}
 				break;
 
 			case R.id.datasyncBtn:
@@ -217,6 +233,7 @@ public class SetupCategoryView extends LinearLayout implements View.OnClickListe
 					passwordView.setVisibility(View.GONE);
 					studentView.setVisibility(View.GONE);
 					teacheView.setVisibility(View.VISIBLE);
+					listener.onClickModeBtn(true);
 				}
 			}, 1000);
 
