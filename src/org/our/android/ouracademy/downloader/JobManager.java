@@ -1,4 +1,4 @@
-package org.our.android.ouracademy.download;
+package org.our.android.ouracademy.downloader;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;

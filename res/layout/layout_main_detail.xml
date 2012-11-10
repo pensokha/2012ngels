@@ -37,6 +37,18 @@
                 android:layout_height="fill_parent"
                 android:layout_toRightOf="@id/drag_layout"
                 android:background="@drawable/list_bg" />
+            
+            <TextView 
+                android:id="@+id/empty_guide_text"
+                android:layout_width="362.82dp"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="27.04dp"
+                android:background="@drawable/list_bg_nocontent"
+                android:gravity="center_horizontal"
+                android:paddingTop="110dp"
+                style="@style/fontstyle_txt_main_empty_guide_txt"
+                android:text="@string/contents_empty_guide" />
 
             <LinearLayout
                 android:id="@+id/hide_menu_btn"

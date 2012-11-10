@@ -37,7 +37,9 @@ public class MainDetailView extends RelativeLayout {
 	
 	private ViewGroup hideMenuBtn;
 	
-	private TextView dragLayoutTxt = null;
+	private TextView dragLayoutTxt;
+	
+	private View emptyView;
 
 	private int moveStart;
 	private int moveEnd;
@@ -48,7 +50,6 @@ public class MainDetailView extends RelativeLayout {
 	ContentsListAdapter contentsListAdapter;
 	
 	private boolean isFristLoad = true;
-	
 	
 	ArrayList<OurContents> contentsList = new ArrayList<OurContents>();
 	
@@ -92,6 +93,8 @@ public class MainDetailView extends RelativeLayout {
 	
 	private void initUI() {
 		LayoutInflater.from(getContext()).inflate(R.layout.layout_main_detail, this, true);
+		
+		emptyView = findViewById(R.id.empty_guide_text);
 		
 		detailRootLayout = (ViewGroup)findViewById(R.id.layout_root_detail);
 		detailLayout = (ViewGroup)findViewById(R.id.layout_detail);

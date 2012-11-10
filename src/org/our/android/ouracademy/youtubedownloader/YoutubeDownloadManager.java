@@ -3,7 +3,7 @@ package org.our.android.ouracademy.youtubedownloader;
 import java.util.HashMap;
 
 import org.our.android.ouracademy.OurApplication;
-import org.our.android.ouracademy.download.DownloadRequest;
+import org.our.android.ouracademy.downloader.DownloadRequest;
 import org.our.android.ouracademy.model.OurContents;
 
 import android.content.Context;
