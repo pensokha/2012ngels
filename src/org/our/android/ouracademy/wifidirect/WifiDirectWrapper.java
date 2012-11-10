@@ -15,6 +15,7 @@ import android.net.wifi.p2p.WifiP2pManager.ActionListener;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.net.wifi.p2p.WifiP2pManager.ChannelListener;
 import android.net.wifi.p2p.WifiP2pManager.PeerListListener;
+import android.util.Log;
 import android.widget.Toast;
 
 /*********
@@ -34,6 +35,7 @@ public class WifiDirectWrapper {
 
 	private WrapperChannelListener channelListener = new WrapperChannelListener();
 	private WiFiDirectBroadcastReceiver receiver;
+	private WifiDirectDefaultListener wifidirectListener;
 
 	private WifiDirectWrapper() {
 		intentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
@@ -82,14 +84,15 @@ public class WifiDirectWrapper {
 		}
 	}
 	
-	public void findConnectedStudent(final FindDeviceListner listener){
+
+	public void findConnectedStudent(final FindDeviceListener listener) {
 		manager.requestPeers(channel, new PeerListListener() {
 			@Override
 			public void onPeersAvailable(WifiP2pDeviceList peers) {
 				Collection<WifiP2pDevice> devices = peers.getDeviceList();
 				ArrayList<WifiP2pDevice> connectedStudents = new ArrayList<WifiP2pDevice>();
 				for (WifiP2pDevice device : devices) {
-					if(device.status == WifiP2pDevice.CONNECTED){
+					if (device.status == WifiP2pDevice.CONNECTED) {
 						connectedStudents.add(device);
 					}
 				}
@@ -97,8 +100,26 @@ public class WifiDirectWrapper {
 			}
 		});
 	}
-	
-	public interface FindDeviceListner{
+
+	public void findTeacher(final FindDeviceListener listener) {
+		
+		((WifiDirectStudentListener)wifidirectListener).setFoundListener(listener);
+		
+		manager.discoverPeers(channel, new ActionListener() {
+			@Override
+			public void onSuccess() {
+				Log.d("Test", "success");
+				
+			}
+
+			@Override
+			public void onFailure(int reason) {
+				Log.d("Test", "fail : "+reason);
+			}
+		});
+	}
+
+	public interface FindDeviceListener {
 		public void onFindDevice(ArrayList<WifiP2pDevice> devices);
 	}
 
@@ -108,14 +129,16 @@ public class WifiDirectWrapper {
 
 	private WifiDirectDefaultListener getWifiDirectListner() {
 		if (OurPreferenceManager.getInstance().isTeacher()) {
-			return new WifiDirectTeacherListener(context, manager, channel);
+			wifidirectListener = new WifiDirectTeacherListener(context,
+					manager, channel);
 		} else {
-			return new WifiDirectStudentListener(context, manager, channel);
+			wifidirectListener = new WifiDirectStudentListener(context,
+					manager, channel);
 		}
-
+		return wifidirectListener;
 	}
-	
-	public void setService(Context context){
+
+	public void setService(Context context) {
 		register(context);
 	}
 
@@ -132,16 +155,16 @@ public class WifiDirectWrapper {
 
 	public void register(Context context) {
 		if (context != null) {
-			if(isInitSuccess() == false){
+			if (isInitSuccess() == false) {
 				init(context);
 			}
-			
+
 			if (receiver != null) {
 				unregister();
 			}
 			receiver = new WiFiDirectBroadcastReceiver(getWifiDirectListner());
 			context.registerReceiver(receiver, intentFilter);
-			
+
 			this.context = context;
 		}
 	}

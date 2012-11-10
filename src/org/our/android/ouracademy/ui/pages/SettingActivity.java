@@ -10,7 +10,7 @@ import org.our.android.ouracademy.ui.view.SetupMainView;
 import org.our.android.ouracademy.ui.view.SetupMainView.SetupMainViewListener;
 import org.our.android.ouracademy.ui.view.SetupWifiListItemVew;
 import org.our.android.ouracademy.wifidirect.WifiDirectWrapper;
-import org.our.android.ouracademy.wifidirect.WifiDirectWrapper.FindDeviceListner;
+import org.our.android.ouracademy.wifidirect.WifiDirectWrapper.FindDeviceListener;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -149,26 +149,35 @@ public class SettingActivity extends BaseActivity {
 			progressDialog = ProgressDialog.show(SettingActivity.this,
 					"finding connected student", "finding....", true, false, null);
 			
-			WifiDirectWrapper.getInstance().findConnectedStudent(
-					new FindDeviceListner() {
-
-						@Override
-						public void onFindDevice(
-								ArrayList<WifiP2pDevice> devices) {
-							if(listAdapter.deviceList != null){
-								listAdapter.deviceList.clear();
-								listAdapter.deviceList.addAll(devices);
-								listAdapter.notifyDataSetChanged();
-							}
-							progressDialog.dismiss();
-						}
-					});
+			WifiDirectWrapper.getInstance().findConnectedStudent(findWifiDirectPeerListener);
 		}
 
 		@Override
 		public void onClickFindTeacher() {
-			// TODO Auto-generated method stub
+			if (progressDialog != null && progressDialog.isShowing()) {
+				progressDialog.dismiss();
+			}
+			progressDialog = ProgressDialog.show(SettingActivity.this,
+					"finding teacher", "finding....", true, true, null);
+			
+			listAdapter.deviceList.clear();
+			listAdapter.notifyDataSetChanged();
+			
+			WifiDirectWrapper.getInstance().findTeacher(findWifiDirectPeerListener);
+		}
+	};
+	
+	private FindDeviceListener findWifiDirectPeerListener = new FindDeviceListener() {
 
+		@Override
+		public void onFindDevice(
+				ArrayList<WifiP2pDevice> devices) {
+			if(listAdapter.deviceList != null && devices != null){
+				listAdapter.deviceList.clear();
+				listAdapter.deviceList.addAll(devices);
+				listAdapter.notifyDataSetChanged();
+			}
+			progressDialog.dismiss();
 		}
 	};
 
