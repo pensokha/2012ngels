@@ -21,7 +21,7 @@
     <string name="contents_download">DOWNLOAD</string>
     <string name="contents_empty_guide">There is no contents\nto download or play.</string>
     
-    <string name="category_name_num">%1$s &lt;font color=&quot;#000000&quot;&gt;%2$s&lt;/font&gt;</string>
+    <string name="category_name_num">%1$s &lt;font color=&quot;#c9f31f&quot;&gt;%2$s&lt;/font&gt;</string>
     <string name="category_name_num1">%1$s &lt;img src=&quot;icon&quot;/img&gt;</string>
 
 </resources>

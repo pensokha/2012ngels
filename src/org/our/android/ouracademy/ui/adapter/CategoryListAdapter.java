@@ -69,7 +69,6 @@ public class CategoryListAdapter extends ArrayAdapter<OurCategory> {
 		return convertView;
 	}
 	
-	
 	ImageGetter imageGetter = new ImageGetter() {
 		@Override
 		public Drawable getDrawable(String source) {
