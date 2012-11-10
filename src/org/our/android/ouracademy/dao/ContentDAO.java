@@ -3,6 +3,7 @@ package org.our.android.ouracademy.dao;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.our.android.ouracademy.model.OurCategory;
 import org.our.android.ouracademy.model.OurContentCategory;
 import org.our.android.ouracademy.model.OurContents;
 import org.our.android.ouracademy.util.DbManager;
@@ -59,21 +60,8 @@ public class ContentDAO {
 
 			while (cursor.moveToNext()) {
 				OurContents content = new OurContents();
-				content.setId(cursor.getString(cursor.getColumnIndex(ID_KEY)));
-				content.setSubjectEng(cursor.getString(cursor
-						.getColumnIndex(SUBJECT_ENG_KEY)));
-				content.setSubjectKmr(cursor.getString(cursor
-						.getColumnIndex(SUBJECT_KMR_KEY)));
-				content.setContentUrl(cursor.getString(cursor
-						.getColumnIndex(CONTENT_URL_KEY)));
-				content.setSubtitleUrl(cursor.getString(cursor
-						.getColumnIndex(SUBTITLE_URL_KEY)));
-				content.setSize(cursor.getLong(cursor.getColumnIndex(SIZE_KEY)));
-				content.setDownloadedSize(cursor.getLong(cursor
-						.getColumnIndex(DOWNLOADED_SIZE_KEY)));
-
-				content.setDownloaded(content.getSize() == content
-						.getDownloadedSize());
+				
+				setContentDataFromCursor(cursor, content);
 
 				contents.add(content);
 			}
@@ -83,6 +71,25 @@ public class ContentDAO {
 		}
 
 		return contents;
+	}
+	
+	public void setContentDataFromCursor(Cursor cursor, OurContents content) throws SQLException{
+		content.setId(cursor.getString(cursor.getColumnIndex(ID_KEY)));
+		content.setSubjectEng(cursor.getString(cursor
+				.getColumnIndex(SUBJECT_ENG_KEY)));
+		content.setSubjectKmr(cursor.getString(cursor
+				.getColumnIndex(SUBJECT_KMR_KEY)));
+		content.setContentUrl(cursor.getString(cursor
+				.getColumnIndex(CONTENT_URL_KEY)));
+		content.setSubtitleUrl(cursor.getString(cursor
+				.getColumnIndex(SUBTITLE_URL_KEY)));
+		content.setSize(cursor.getLong(cursor.getColumnIndex(SIZE_KEY)));
+		content.setDownloadedSize(cursor.getLong(cursor
+				.getColumnIndex(DOWNLOADED_SIZE_KEY)));
+
+		content.setDownloaded(content.getSize() == content
+				.getDownloadedSize());
+
 	}
 
 	public void updateDownloadedSize(OurContents content) throws DAOException {
@@ -137,6 +144,59 @@ public class ContentDAO {
 
 			contents.get(contentIndex).getCategoryIdList()
 					.add(contentCategory.getCategoryId());
+		}
+
+		return contents;
+	}
+
+	public String getDuplicatedContentsQuery(ArrayList<OurCategory> selectedCategories){
+		StringBuffer sql = new StringBuffer();
+		sql.append(" SELECT ");
+		for(int i = 0; i < CONTENT_FIELDS.length; i++){
+			sql.append(CONTENT_FIELDS[i]);
+			sql.append(",");
+		}
+		sql.append(CATEGORY_ID_KEY);
+		sql.append(" FROM ");
+		sql.append(CONTENT_TABLE_NAME);
+		sql.append(" LEFT JOIN ");
+		sql.append(CONTENT_CATEGORY_TABLE_NAME);
+		sql.append(" ON ");
+		sql.append(ID_KEY);
+		sql.append("=");
+		sql.append(CONTENT_ID_KEY);
+		if(selectedCategories != null){
+			sql.append(" WHERE ");
+			sql.append(CONTENT_ID_KEY);
+			sql.append(" IN (");
+			for(OurCategory category : selectedCategories){
+				sql.append("'");
+				sql.append(category.getCategoryId());
+				sql.append("',");
+			}
+			sql.append(")");
+		}
+		sql.append(" ORDER BY ");
+		sql.append(CATEGORY_ID_KEY);
+		sql.append(" ASC");
+
+		return sql.toString();
+	}
+	
+	public ArrayList<OurContents> getDuplicatedContents(ArrayList<OurCategory> selectedCategories) throws DAOException {
+		
+		ArrayList<OurContents> contents = new ArrayList<OurContents>();
+		SQLiteDatabase db = dbManager.getDB();
+
+		Cursor cursor = db.rawQuery(getDuplicatedContentsQuery(selectedCategories), null);
+		while (cursor.moveToNext()) {
+			OurContents content = new OurContents();
+			
+			setContentDataFromCursor(cursor, content);
+			
+			content.setSelectedCategoryId(cursor.getString(cursor.getColumnIndex(CATEGORY_ID_KEY)));
+			
+			contents.add(content);
 		}
 
 		return contents;
