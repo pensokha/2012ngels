@@ -19,6 +19,15 @@ public class OurCategory implements OurJSONModel {
 	private String categoryDescriptionEng;
 	private String categoryDescriptionKmr;
 	private String categoryParent;
+	private String numOfContents = "0";
+
+	public String getNumOfContents() {
+		return numOfContents;
+	}
+
+	public void setNumOfContents(String numOfContents) {
+		this.numOfContents = numOfContents;
+	}
 
 	public boolean isChecked = false;
 
