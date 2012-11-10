@@ -24,7 +24,8 @@ public class OurContents implements OurJSONModel {
 	private long size;
 	private ArrayList<String> categoryIdList;
 	private long downloadedSize;
-	private String selectedCategoryId;
+	
+	public OurCategory selectedCategory;
 	
 	public enum FileStatus {
 		NONE, DOWNLOADING, DOWNLOADED
@@ -111,14 +112,6 @@ public class OurContents implements OurJSONModel {
 		}
 	}
 	
-	public String getSelectedCategoryId() {
-		return selectedCategoryId;
-	}
-
-	public void setSelectedCategoryId(String selectedCategoryId) {
-		this.selectedCategoryId = selectedCategoryId;
-	}
-
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
