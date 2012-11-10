@@ -17,6 +17,8 @@ public class OurDefine {
 	public static final int DETAIL_ANI_END_X = 513;
 	public static final int DETAIL_ANI_WIDTH = DETAIL_ANI_END_X - DETAIL_ANI_START_X;
 	
+	public static final String LOCALE_LANGUAGE_KHMER = "";
+	
 	public static final String getContentFilePath(String fileName) {
 		String path = Environment.getExternalStorageDirectory().getAbsolutePath() + 
 		"/" + CONTENTS_FOLDER_NAME + "/" + fileName;

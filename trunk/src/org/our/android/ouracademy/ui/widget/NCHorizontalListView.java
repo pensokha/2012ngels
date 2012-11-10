@@ -8,6 +8,7 @@ import android.database.DataSetObserver;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.MotionEvent;
@@ -297,9 +298,10 @@ public class NCHorizontalListView extends AdapterView<ListAdapter> {
 			for (int i = 0; i < rightViewIndex; i++) {
 				View view = listAdapter.getView(i, null, this);
 				if (view != null) {
-					view.measure(MeasureSpec.makeMeasureSpec(getWidth(),
-							MeasureSpec.AT_MOST), MeasureSpec.makeMeasureSpec(
-							getHeight(), MeasureSpec.AT_MOST));
+					Log.d("TEST", "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" + view.toString());
+					int widthMeasureSpec = MeasureSpec.makeMeasureSpec(getWidth(),	MeasureSpec.AT_MOST); 
+					int heightMaesureSpec =MeasureSpec.makeMeasureSpec(getHeight(), MeasureSpec.AT_MOST);
+					view.measure(widthMeasureSpec, heightMaesureSpec);
 
 					edge += view.getMeasuredWidth();
 				}
@@ -539,7 +541,6 @@ public class NCHorizontalListView extends AdapterView<ListAdapter> {
 								NCHorizontalListView.this, child, leftViewIndex
 										+ 1 + i, 0);
 					}
-
 					break;
 				}
 

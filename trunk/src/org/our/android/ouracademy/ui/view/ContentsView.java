@@ -111,8 +111,8 @@ public class ContentsView extends RelativeLayout implements OnClickListener {
 			cancelBtn.setVisibility(View.INVISIBLE);
 			downloadText.setVisibility(View.VISIBLE);
 		}
-		categoryText.setText(ourContents.selectedCategory == null ? "" : ourContents.selectedCategory.getCategoryTitleEng());
-		subjectText.setText(ourContents.getSubjectEng());
+		categoryText.setText(ourContents.selectedCategory == null ? "" : ourContents.selectedCategory.getCategoryTitle());
+		subjectText.setText(ourContents.getSubject());
 	}
 
 	// AdapterView에서 데이타를 init
@@ -152,7 +152,7 @@ public class ContentsView extends RelativeLayout implements OnClickListener {
 				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				intent.putExtra(MediaPlayerPage.INTENTKEY_STR_VIDEO_FILE_PATH, filePath);
 				intent.putExtra(MediaPlayerPage.INTENTKEY_STR_VIDEO_FILE_NAME,
-						ourContents.getSubjectEng());
+						ourContents.getSubject());
 				getContext().startActivity(intent);
 				// if file downloading
 			} else if (ourContents.fileStatus == FileStatus.DOWNLOADING) {
