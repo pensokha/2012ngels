@@ -34,6 +34,10 @@ public class SetupMainView extends LinearLayout {
 		void onClickDeleteCell();
 
 		void onClickDataSyncCell();
+		
+		void onClickFindConnectedStudent();
+		
+		void onClickFindTeacher();
 	};
 
 	ViewFlipper viewFlipper;
@@ -131,11 +135,17 @@ public class SetupMainView extends LinearLayout {
 					wifiListView.setTitleText("WI-FI");
 					wifiListView.setTitleImgResource(R.drawable.setup_icon_title02);
 					nextView();
+					if(listener != null){
+						listener.onClickFindTeacher();
+					}
 					break;
 				case R.id.connectedStudentBtn:
 					wifiListView.setTitleText("Connected Student");
 					wifiListView.setTitleImgResource(R.drawable.setup_icon_tab01_nor);
 					nextView();
+					if(listener != null){
+						listener.onClickFindConnectedStudent();
+					}
 					break;
 				case R.id.deleteBtn:
 					if (listener != null) {

@@ -28,7 +28,7 @@ import android.util.Log;
 public class WifiDirectStudentListener extends WifiDirectDefaultListener
 		implements PeerListListener, ConnectionInfoListener {
 	private static final String TAG = "WifiDirectStudentListener";
-	private static final int MAX_RETRY_COUNT = 0; //자동으로 선생님을 찾는 기능 제거
+	private static final int MAX_RETRY_COUNT = 0; // 자동으로 선생님을 찾 하는 기능 제거
 	private int retryCount = 0;
 	private Handler handler;
 
@@ -78,11 +78,11 @@ public class WifiDirectStudentListener extends WifiDirectDefaultListener
 
 		manager.requestConnectionInfo(channel, this);
 	}
-	
+
 	@Override
 	public void onDisConnected() {
 		super.onDisConnected();
-		
+
 		WifiDirectWrapper.getInstance().setInfo(null);
 		if (manager != null) {
 			manager.discoverPeers(channel, new DiscoverListener());
@@ -101,8 +101,8 @@ public class WifiDirectStudentListener extends WifiDirectDefaultListener
 					groupOwnerDevices.add(device);
 				}
 			}
-			
-			Log.d("Test", "FindGroupOwners : "+groupOwnerDevices.size());
+
+			Log.d("Test", "FindGroupOwners : " + groupOwnerDevices.size());
 
 			if (OurPreferenceManager.getInstance().isStudent() == true
 					&& getConnected() == false) {
@@ -137,25 +137,7 @@ public class WifiDirectStudentListener extends WifiDirectDefaultListener
 					retryCount = 0;
 				}
 			}
-
-			ArrayList<GroupOwnerFoundListener> groupOwnerFoundListner = WifiDirectWrapper
-					.getInstance().getGroupOwnerFoundListenr();
-			if (groupOwnerFoundListner != null) {
-				for (GroupOwnerFoundListener groupOwnerFoundListenr : WifiDirectWrapper
-						.getInstance().getGroupOwnerFoundListenr()) {
-					groupOwnerFoundListenr.onFound(groupOwnerDevices);
-				}
-			}
 		}
-	}
-
-	/*****
-	 * 
-	 * @author hyeongseokLim
-	 * 
-	 */
-	public interface GroupOwnerFoundListener {
-		public void onFound(ArrayList<WifiP2pDevice> groupOwnerDevices);
 	}
 
 	/**********
@@ -174,8 +156,9 @@ public class WifiDirectStudentListener extends WifiDirectDefaultListener
 		@Override
 		public void onSuccess() {
 			Log.d(TAG, "Success Connect Group");
-			
-			manager.requestConnectionInfo(channel, WifiDirectStudentListener.this);
+
+			manager.requestConnectionInfo(channel,
+					WifiDirectStudentListener.this);
 		}
 
 		@Override
@@ -191,7 +174,7 @@ public class WifiDirectStudentListener extends WifiDirectDefaultListener
 
 	@Override
 	public void onConnectionInfoAvailable(WifiP2pInfo info) {
-		Log.d(TAG, "ConnectionInfoAvailable : "+info);
+		Log.d(TAG, "ConnectionInfoAvailable : " + info);
 		WifiDirectWrapper.getInstance().setInfo(info);
 
 		DataManagerFactory.getDataManager().getMetaInfo();

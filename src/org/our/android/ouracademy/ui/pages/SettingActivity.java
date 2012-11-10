@@ -1,5 +1,7 @@
 package org.our.android.ouracademy.ui.pages;
 
+import java.util.ArrayList;
+
 import org.our.android.ouracademy.OurPreferenceManager;
 import org.our.android.ouracademy.manager.DataManager;
 import org.our.android.ouracademy.manager.DataManagerFactory;
@@ -7,11 +9,15 @@ import org.our.android.ouracademy.ui.adapter.WiFiListAdapter;
 import org.our.android.ouracademy.ui.view.SetupMainView;
 import org.our.android.ouracademy.ui.view.SetupMainView.SetupMainViewListener;
 import org.our.android.ouracademy.ui.view.SetupWifiListItemVew;
+import org.our.android.ouracademy.wifidirect.WifiDirectWrapper;
+import org.our.android.ouracademy.wifidirect.WifiDirectWrapper.FindDeviceListner;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.wifi.p2p.WifiP2pDevice;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -28,6 +34,8 @@ public class SettingActivity extends BaseActivity {
 
 	ListView wifiListView;
 	WiFiListAdapter listAdapter;
+
+	ProgressDialog progressDialog = null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -62,7 +70,8 @@ public class SettingActivity extends BaseActivity {
 
 	private void createListView() {
 		wifiListView = mainView.getListView();
-		wifiListView.setSelector(new ColorDrawable(Color.parseColor("#00000000")));
+		wifiListView.setSelector(new ColorDrawable(Color
+				.parseColor("#00000000")));
 		wifiListView.setCacheColorHint(Color.parseColor("#00000000"));
 		listAdapter = new WiFiListAdapter();
 		wifiListView.setAdapter(listAdapter);
@@ -70,9 +79,10 @@ public class SettingActivity extends BaseActivity {
 		wifiListView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
 				if (view instanceof SetupWifiListItemVew) {
-					// TODO 
+					// TODO
 				}
 			}
 		});
@@ -100,11 +110,11 @@ public class SettingActivity extends BaseActivity {
 
 		@Override
 		public void onClickDataSyncCell() {
-//			Intent intent = new Intent();
-//			intent.putExtra(INTENTKEY_ACTION_DATA_SYNC, true);
-//			setResult(RESULT_OK, intent);
-//
-//			finish();
+			// Intent intent = new Intent();
+			// intent.putExtra(INTENTKEY_ACTION_DATA_SYNC, true);
+			// setResult(RESULT_OK, intent);
+			//
+			// finish();
 		}
 
 		@Override
@@ -129,6 +139,36 @@ public class SettingActivity extends BaseActivity {
 				dataManager = DataManagerFactory.getDataManager();
 				dataManager.startService(context);
 			}
+		}
+
+		@Override
+		public void onClickFindConnectedStudent() {
+			if (progressDialog != null && progressDialog.isShowing()) {
+				progressDialog.dismiss();
+			}
+			progressDialog = ProgressDialog.show(SettingActivity.this,
+					"finding connected student", "finding....", true, false, null);
+			
+			WifiDirectWrapper.getInstance().findConnectedStudent(
+					new FindDeviceListner() {
+
+						@Override
+						public void onFindDevice(
+								ArrayList<WifiP2pDevice> devices) {
+							if(listAdapter.deviceList != null){
+								listAdapter.deviceList.clear();
+								listAdapter.deviceList.addAll(devices);
+								listAdapter.notifyDataSetChanged();
+							}
+							progressDialog.dismiss();
+						}
+					});
+		}
+
+		@Override
+		public void onClickFindTeacher() {
+			// TODO Auto-generated method stub
+
 		}
 	};
 
