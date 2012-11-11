@@ -34,6 +34,10 @@ public class WiFiListAdapter extends BaseAdapter {
 			this.deviceList = deviceList;
 		}
 	}
+	
+	public ArrayList<WifiP2pDevice> getDeviceList() {
+		return deviceList;
+	}
 
 	@Override
 	public int getCount() {
@@ -63,7 +67,7 @@ public class WiFiListAdapter extends BaseAdapter {
 
 		if (convertView instanceof SetupWifiListItemVew) {
 			SetupWifiListItemVew view = (SetupWifiListItemVew)convertView;
-			view.setData(true, deviceList.get(position).deviceName, 0);
+			view.setData(true, deviceList.get(position).deviceName, (deviceList.get(position).status == WifiP2pDevice.CONNECTED ? 0 : 3));
 		}
 
 		return convertView;
