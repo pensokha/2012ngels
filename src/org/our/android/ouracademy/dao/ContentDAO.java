@@ -43,8 +43,9 @@ public class ContentDAO {
 	private static final String[] CONTENT_FIELDS = { ID_KEY, SUBJECT_ENG_KEY,
 			SUBJECT_KMR_KEY, CONTENT_URL_KEY, SUBTITLE_URL_KEY, SIZE_KEY,
 			DOWNLOADED_SIZE_KEY };
-	
-	private static final String[] CONTENT_CATEGORY_FIELDS = { CONTENT_ID_KEY, CATEGORY_ID_KEY };
+
+	private static final String[] CONTENT_CATEGORY_FIELDS = { CONTENT_ID_KEY,
+			CATEGORY_ID_KEY };
 
 	private DbManager dbManager;
 
@@ -112,8 +113,8 @@ public class ContentDAO {
 		ArrayList<OurContentCategory> contentCategories = new ArrayList<OurContentCategory>();
 		try {
 			SQLiteDatabase db = dbManager.getDB();
-			Cursor cursor = db.query(CONTENT_CATEGORY_TABLE_NAME, CONTENT_CATEGORY_FIELDS, null,
-					null, null, null, null);
+			Cursor cursor = db.query(CONTENT_CATEGORY_TABLE_NAME,
+					CONTENT_CATEGORY_FIELDS, null, null, null, null, null);
 
 			while (cursor.moveToNext()) {
 				OurContentCategory contentCategory = new OurContentCategory();
@@ -140,13 +141,15 @@ public class ContentDAO {
 			contentIdMap.put(contents.get(i).getId(), i);
 		}
 
-		int contentIndex = 0;
+		Integer contentIndex;
 		ArrayList<OurContentCategory> contentCategories = getContentCategories();
 		for (OurContentCategory contentCategory : contentCategories) {
 			contentIndex = contentIdMap.get(contentCategory.getContentId());
 
-			contents.get(contentIndex).getCategoryIdList()
-					.add(contentCategory.getCategoryId());
+			if (contentIndex != null) {
+				contents.get(contentIndex).getCategoryIdList()
+						.add(contentCategory.getCategoryId());
+			}
 		}
 
 		return contents;
@@ -196,10 +199,10 @@ public class ContentDAO {
 			throws DAOException {
 
 		ArrayList<OurContents> contents = new ArrayList<OurContents>();
-		if(selectedCategories == null || selectedCategories.size() == 0){
+		if (selectedCategories == null || selectedCategories.size() == 0) {
 			return contents;
 		}
-		
+
 		SQLiteDatabase db = dbManager.getDB();
 
 		Cursor cursor = db.rawQuery(
