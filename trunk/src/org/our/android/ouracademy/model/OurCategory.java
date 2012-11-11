@@ -21,13 +21,13 @@ public class OurCategory implements OurJSONModel {
 	private String categoryDescriptionEng;
 	private String categoryDescriptionKmr;
 	private String categoryParent;
-	private String numOfContents = "0";
+	private int numOfContents = 0;
 
-	public String getNumOfContents() {
+	public int getNumOfContents() {
 		return numOfContents;
 	}
 
-	public void setNumOfContents(String numOfContents) {
+	public void setNumOfContents(int numOfContents) {
 		this.numOfContents = numOfContents;
 	}
 
