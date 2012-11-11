@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.our.android.ouracademy.OurPreferenceManager;
+import org.our.android.ouracademy.util.NetworkState;
 
 import android.content.Context;
 import android.content.IntentFilter;
+import android.net.wifi.WpsInfo;
+import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pInfo;
@@ -145,6 +148,62 @@ public class WifiDirectWrapper {
 	public void unsetService(ActionListener listener) {
 		unregister();
 		disconnect(listener);
+	}
+	
+	public void connectAfterChecking(final WifiP2pDevice device){
+		if(NetworkState.isWifiDirectConnected()){
+			disconnect(new ActionListener() {
+				@Override
+				public void onSuccess() {
+					Log.d("Test", "remove success");
+					connect(device);
+				}
+				
+				@Override
+				public void onFailure(int reason) {
+					Log.d("Test", "remove false");
+				}
+			});
+		}else{
+			connect(device);
+		}
+	}
+	
+	public void connectAfterCancel(final WifiP2pDevice device){
+		manager.cancelConnect(channel, new ActionListener() {
+			
+			@Override
+			public void onSuccess() {
+				Log.d("Cancle", "success");
+				connect(device);
+			}
+			
+			@Override
+			public void onFailure(int reason) {
+				Log.d("Cancle", "failur");
+				connect(device);
+			}
+		});
+	}
+	
+	public void connect(WifiP2pDevice device){
+		WifiP2pConfig config = new WifiP2pConfig();
+		config.deviceAddress = device.deviceAddress;
+		config.wps.setup = WpsInfo.PBC;
+		
+		manager.connect(channel, config, new ActionListener() {
+			
+			@Override
+			public void onSuccess() {
+				Log.d("Test", "Success Connect Group");
+				manager.requestConnectionInfo(channel, (WifiDirectStudentListener)wifidirectListener);
+			}
+			
+			@Override
+			public void onFailure(int reason) {
+				Log.d("Test", "False Connect Group");
+			}
+		});
 	}
 
 	public void disconnect(ActionListener listener) {

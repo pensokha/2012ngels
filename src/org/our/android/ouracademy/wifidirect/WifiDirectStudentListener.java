@@ -97,7 +97,7 @@ public class WifiDirectStudentListener extends WifiDirectDefaultListener
 
 	@Override
 	public void onPeersAvailable(WifiP2pDeviceList peers) {
-		Log.d(TAG, "onPeersAvailable");
+		Log.d(TAG, "onPeersAvailable :" +peers.toString());
 		Collection<WifiP2pDevice> devices = peers.getDeviceList();
 
 		ArrayList<WifiP2pDevice> groupOwnerDevices = new ArrayList<WifiP2pDevice>();
@@ -114,7 +114,7 @@ public class WifiDirectStudentListener extends WifiDirectDefaultListener
 				config.deviceAddress = groupOwnerDevices.get(0).deviceAddress;
 				config.wps.setup = WpsInfo.PBC;
 
-				manager.connect(channel, config, new StudenetConnectListener());
+//				manager.connect(channel, config, new StudenetConnectListener());
 			} else if (groupOwnerDevices.size() == 0
 					&& retryCount < MAX_RETRY_COUNT) {
 				if (handler == null) {

@@ -9,6 +9,7 @@ import org.our.android.ouracademy.ui.adapter.WiFiListAdapter;
 import org.our.android.ouracademy.ui.view.SetupMainView;
 import org.our.android.ouracademy.ui.view.SetupMainView.SetupMainViewListener;
 import org.our.android.ouracademy.ui.view.SetupWifiListItemVew;
+import org.our.android.ouracademy.util.NetworkState;
 import org.our.android.ouracademy.wifidirect.WifiDirectWrapper;
 import org.our.android.ouracademy.wifidirect.WifiDirectWrapper.FindDeviceListener;
 
@@ -82,7 +83,19 @@ public class SettingActivity extends BaseActivity {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				if (view instanceof SetupWifiListItemVew) {
-					// TODO
+					WifiP2pDevice device = listAdapter.getDeviceList().get(
+							position);
+
+					if (NetworkState.isWifiDirectConnected()) {
+						if (device.status == WifiP2pDevice.CONNECTED) {
+							WifiDirectWrapper.getInstance().disconnect(null);
+						}
+					}else{
+						if (device.status != WifiP2pDevice.CONNECTED
+								&& device.status == WifiP2pDevice.AVAILABLE) {
+							WifiDirectWrapper.getInstance().connectAfterCancel(device);
+						}
+					}
 				}
 			}
 		});
@@ -147,9 +160,11 @@ public class SettingActivity extends BaseActivity {
 				progressDialog.dismiss();
 			}
 			progressDialog = ProgressDialog.show(SettingActivity.this,
-					"finding connected student", "finding....", true, false, null);
-			
-			WifiDirectWrapper.getInstance().findConnectedStudent(findWifiDirectPeerListener);
+					"finding connected student", "finding....", true, false,
+					null);
+
+			WifiDirectWrapper.getInstance().findConnectedStudent(
+					findWifiDirectPeerListener);
 		}
 
 		@Override
@@ -159,20 +174,20 @@ public class SettingActivity extends BaseActivity {
 			}
 			progressDialog = ProgressDialog.show(SettingActivity.this,
 					"finding teacher", "finding....", true, true, null);
-			
+
 			listAdapter.deviceList.clear();
 			listAdapter.notifyDataSetChanged();
-			
-			WifiDirectWrapper.getInstance().findTeacher(findWifiDirectPeerListener);
+
+			WifiDirectWrapper.getInstance().findTeacher(
+					findWifiDirectPeerListener);
 		}
 	};
-	
+
 	private FindDeviceListener findWifiDirectPeerListener = new FindDeviceListener() {
 
 		@Override
-		public void onFindDevice(
-				ArrayList<WifiP2pDevice> devices) {
-			if(listAdapter.deviceList != null && devices != null){
+		public void onFindDevice(ArrayList<WifiP2pDevice> devices) {
+			if (listAdapter.deviceList != null && devices != null) {
 				listAdapter.deviceList.clear();
 				listAdapter.deviceList.addAll(devices);
 				listAdapter.notifyDataSetChanged();
