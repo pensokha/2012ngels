@@ -37,20 +37,6 @@
             android:background="@drawable/btn_main_refresh_selector" />
     </RelativeLayout>
 
-    <!--
-    <TextView
-        android:id="@+id/main_menu_txt"
-        style="@style/fontstyle_txt_main_category_title"
-        android:layout_width="wrap_content"
-        android:layout_height="57.33dp"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="25.33dp"
-        android:drawableLeft="@drawable/list_icon_category"
-        android:drawablePadding="7dp"
-        android:gravity="center_vertical"
-        android:text="@string/category_upper_case" />
-    -->
-
     <ListView
         android:id="@+id/category_listview"
         android:layout_width="fill_parent"
@@ -63,6 +49,12 @@
         android:listSelector="@android:color/transparent"
         android:overScrollMode="never" />
 
+    <ImageView 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/menu_bg04"/>
+    <!-- 
     <RelativeLayout 
         android:id="@+id/main_menu_apply_btn"
         android:layout_width="fill_parent"
@@ -79,6 +71,6 @@
 	        android:gravity="center"
 	        android:text="@string/apply" />
     </RelativeLayout>
-    
+     -->
 
 </RelativeLayout>
