@@ -6,13 +6,8 @@ import org.our.android.ouracademy.R;
 import org.our.android.ouracademy.model.OurCategory;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.text.Html;
 import android.text.Html.ImageGetter;
-import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +25,7 @@ public class CategoryListAdapter extends ArrayAdapter<OurCategory> {
 	
 	class ItemHolder {
     	TextView txt;
+    	TextView txtNum;
     	ImageView icon;
     	ImageView check;
     }
@@ -45,6 +41,7 @@ public class CategoryListAdapter extends ArrayAdapter<OurCategory> {
 		if (convertView == null) {
 			convertView = LayoutInflater.from(getContext()).inflate(R.layout.layout_category_list_item, parent, false);
 			itemHolder.txt = (TextView) convertView.findViewById(R.id.category_txt);
+			itemHolder.txtNum = (TextView) convertView.findViewById(R.id.category_num_txt);
 			itemHolder.icon = (ImageView) convertView.findViewById(R.id.category_icon);
 			itemHolder.check = (ImageView) convertView.findViewById(R.id.category_check);
 			convertView.setTag(itemHolder);
@@ -55,9 +52,10 @@ public class CategoryListAdapter extends ArrayAdapter<OurCategory> {
 		OurCategory ourCategory = getItem(position);
 		
 //		Spanned category = Html.fromHtml(ourCategory.getCategoryTitleEng() + "<img src=\"icon\" width=50 height=50>", imageGetter, null);
-		CharSequence category = Html.fromHtml(context.getResources().getString(R.string.category_name_num, 
-				ourCategory.getCategoryTitle(), ourCategory.getNumOfContents()));
-		itemHolder.txt.setText(category);
+//		CharSequence category = Html.fromHtml(context.getResources().getString(R.string.category_name_num, 
+//				ourCategory.getCategoryTitle(), ourCategory.getNumOfContents()));
+		itemHolder.txt.setText(ourCategory.getCategoryDescription());
+		itemHolder.txtNum.setText(String.valueOf(ourCategory.getNumOfContents()));
 		itemHolder.icon.setImageResource(R.drawable.subject_icon_math);
 		
 		if (ourCategory.isChecked) {

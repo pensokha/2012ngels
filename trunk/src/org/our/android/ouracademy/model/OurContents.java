@@ -12,10 +12,15 @@ public class OurContents implements OurJSONModel {
 	public static final String CONTENTS_ID_JSON_KEY = "ID";
 	public static final String SUBJECT_ENG_JSON_KEY = "SubjectEnglish";
 	public static final String SUBJECT_KMR_JSON_KEY = "SubjectKhmer";
+	public static final String TOPIC_ID_JSON_KEY = "TopicId";
+	public static final String TOPIC_TITLE_ENG_JSON_KEY = "TopicTitleEnglish";
+	public static final String TOPIC_TITLE_KMR_JSON_KEY = "TopicTitleKhmer";
+	public static final String CONTENTS_DESCRIPTION_ENG_JSON_KEY = "DescriptionEnglish";
+	public static final String CONTENTS_DESCRIPTION_KMR_JSON_KEY = "DescriptionKhmer";
 	public static final String CONTENT_URL_JSON_KEY = "ContentUrl";
 	public static final String SUBTITLE_URL_JSON_KEY = "SubTitleFileUrl";
-	public static final String SIZE_JSON_KEY = "Size";
 	public static final String CATEGORY_ID_LIST_JSON_KEY = "CategoryIDList";
+	public static final String SIZE_JSON_KEY = "Size";
 	public static final String DOWNLOAD_POINT_JSON_KEY = "DownloadPoint";
 
 	private String id;
@@ -26,6 +31,12 @@ public class OurContents implements OurJSONModel {
 	private long size;
 	private ArrayList<String> categoryIdList;
 	private long downloadedSize;
+	
+	private String topicId;
+	private String topicTitleEng;
+	private String topicTitleKmr;
+	private String descriptionEng;
+	private String descriptionKmr;
 	
 	public OurCategory selectedCategory;
 	
@@ -85,6 +96,46 @@ public class OurContents implements OurJSONModel {
 	public void setSize(long size) {
 		this.size = size;
 	}
+	
+	public String getTopicId() {
+		return topicId;
+	}
+
+	public void setTopicId(String topicId) {
+		this.topicId = topicId;
+	}
+
+	public String getTopicTitleEng() {
+		return topicTitleEng;
+	}
+
+	public void setTopicTitleEng(String topicTitleEng) {
+		this.topicTitleEng = topicTitleEng;
+	}
+
+	public String getTopicTitleKmr() {
+		return topicTitleKmr;
+	}
+
+	public void setTopicTitleKmr(String topicTitleKmr) {
+		this.topicTitleKmr = topicTitleKmr;
+	}
+
+	public String getDescriptionEng() {
+		return descriptionEng;
+	}
+
+	public void setDescriptionEng(String descriptionEng) {
+		this.descriptionEng = descriptionEng;
+	}
+
+	public String getDescriptionKmr() {
+		return descriptionKmr;
+	}
+
+	public void setDescriptionKmr(String descriptionKmr) {
+		this.descriptionKmr = descriptionKmr;
+	}
 
 	public ArrayList<String> getCategoryIdList() {
 		if(categoryIdList == null){
@@ -134,6 +185,18 @@ public class OurContents implements OurJSONModel {
 		builder.append(contentUrl);
 		builder.append(", subtitleUrl=");
 		builder.append(subtitleUrl);
+		
+		builder.append(", topicId=");
+		builder.append(topicId);
+		builder.append(", topicTitleEng=");
+		builder.append(topicTitleEng);
+		builder.append(", topicTitleKmr=");
+		builder.append(topicTitleKmr);
+		builder.append(", descriptionEng=");
+		builder.append(descriptionEng);
+		builder.append(", descriptionKmr=");
+		builder.append(descriptionKmr);
+		
 		builder.append(", size=");
 		builder.append(size);
 		builder.append(", categoryIdList=");
@@ -152,6 +215,13 @@ public class OurContents implements OurJSONModel {
 		jsonObject.put(CONTENTS_ID_JSON_KEY, id);
 		jsonObject.put(SUBJECT_ENG_JSON_KEY, subjectEng);
 		jsonObject.put(SUBJECT_KMR_JSON_KEY, subjectKmr);
+		
+		jsonObject.put(TOPIC_ID_JSON_KEY, topicId);
+		jsonObject.put(TOPIC_TITLE_ENG_JSON_KEY, topicTitleEng);
+		jsonObject.put(TOPIC_TITLE_KMR_JSON_KEY, topicTitleKmr);
+		jsonObject.put(CONTENTS_DESCRIPTION_ENG_JSON_KEY, descriptionEng);
+		jsonObject.put(CONTENTS_DESCRIPTION_KMR_JSON_KEY, descriptionKmr);
+		
 		jsonObject.put(CONTENT_URL_JSON_KEY, contentUrl);
 		jsonObject.put(SUBTITLE_URL_JSON_KEY, subtitleUrl);
 		jsonObject.put(SIZE_JSON_KEY, size);
@@ -172,6 +242,13 @@ public class OurContents implements OurJSONModel {
 		id = json.getString(CONTENTS_ID_JSON_KEY);
 		subjectEng = json.getString(SUBJECT_ENG_JSON_KEY);
 		subjectKmr = json.getString(SUBJECT_KMR_JSON_KEY);
+		
+		topicId = json.getString(TOPIC_ID_JSON_KEY);
+		topicTitleEng = json.getString(TOPIC_TITLE_ENG_JSON_KEY);
+		topicTitleKmr = json.getString(TOPIC_TITLE_KMR_JSON_KEY);
+		descriptionEng = json.getString(CONTENTS_DESCRIPTION_ENG_JSON_KEY);
+		descriptionKmr = json.getString(CONTENTS_DESCRIPTION_KMR_JSON_KEY);
+		
 		contentUrl = json.getString(CONTENT_URL_JSON_KEY);
 		subtitleUrl = json.getString(SUBTITLE_URL_JSON_KEY);
 		size = json.getLong(SIZE_JSON_KEY);

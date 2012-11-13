@@ -62,10 +62,19 @@
         <item name="android:shadowRadius">1</item>
     </style>
 
-    <style name="fontstyle_txt_main_category_item_title" parent="Common_Font_Style">
+    <style name="fontstyle_txt_main_category_item" parent="Common_Font_Style">
         <item name="android:textColor">#ffffff</item>
         <item name="android:textSize">20dp</item>
         <item name="android:shadowColor">#333333</item>
+        <item name="android:shadowDx">0</item>
+        <item name="android:shadowDy">1</item>
+        <item name="android:shadowRadius">1</item>
+    </style>
+    <style name="fontstyle_txt_main_category_item_num" parent="Common_Font_Style">
+        <item name="android:textColor">#222222</item>
+        <item name="android:textSize">18.03dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:shadowColor">#777777</item>
         <item name="android:shadowDx">0</item>
         <item name="android:shadowDy">1</item>
         <item name="android:shadowRadius">1</item>

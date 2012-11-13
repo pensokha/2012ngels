@@ -25,6 +25,12 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
+/**
+ * 
+ * 
+ * @author jyeon
+ *
+ */
 public class SettingActivity extends BaseActivity {
 	private Context context;
 
@@ -71,8 +77,7 @@ public class SettingActivity extends BaseActivity {
 
 	private void createListView() {
 		wifiListView = mainView.getListView();
-		wifiListView.setSelector(new ColorDrawable(Color
-				.parseColor("#00000000")));
+		wifiListView.setSelector(new ColorDrawable(Color.parseColor("#00000000")));
 		wifiListView.setCacheColorHint(Color.parseColor("#00000000"));
 		listAdapter = new WiFiListAdapter();
 		wifiListView.setAdapter(listAdapter);

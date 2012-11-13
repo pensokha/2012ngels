@@ -28,6 +28,7 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="7dp"
-        android:src="@drawable/menu_icon_allcheck_off" />
+        android:src="@drawable/menu_icon_allcheck_off" 
+        android:visibility="gone"/>
 
 </RelativeLayout>

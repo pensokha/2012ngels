@@ -15,18 +15,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.animation.Animation;
-import android.view.animation.Animation.AnimationListener;
-import android.view.animation.AnimationUtils;
-import android.widget.AbsListView;
-import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -85,8 +78,8 @@ public class MainMenuView extends FrameLayout implements OnClickListener {
 		header.setTag(false);
 		listView.addHeaderView(header);
 		
-		View footer = LayoutInflater.from(getContext()).inflate(R.layout.main_menu_dummy_item, null);
-		listView.addFooterView(footer);
+//		View footer = LayoutInflater.from(getContext()).inflate(R.layout.main_menu_dummy_item, null);
+//		listView.addFooterView(footer);
 
 		adapter = new CategoryListAdapter(getContext(), R.layout.layout_category_list_item, getCategoryListData());
 
@@ -94,41 +87,27 @@ public class MainMenuView extends FrameLayout implements OnClickListener {
 		listView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> list, View view, int position, long id) {
-				//except header
-				if (position == 0) {
-					boolean isChecked = (Boolean)(view.getTag());
-					ImageView checkImg = (ImageView)view.findViewById(R.id.category_check);
-					if (isChecked) {
-						checkImg.setImageResource(R.drawable.menu_icon_allcheck_off);
-					} else {
-						checkImg.setImageResource(R.drawable.menu_icon_allcheck);
-					}
-					for (OurCategory ourCategory : categoryList) {
-						if (isChecked) {
-							ourCategory.isChecked = false;
-						} else {
-							ourCategory.isChecked = true;
-						}
-					}
-					view.setTag(!isChecked);
-					adapter.notifyDataSetChanged();
+				if (categoryList.isEmpty() || position == 0) {
 					return;
 				}
 				
-				OurCategory ourCategory = categoryList.get(position - 1);
-				if (ourCategory.isChecked) {
-					ourCategory.isChecked = false;
-				} else {
-					ourCategory.isChecked = true;
+				for (int i = 0; i < categoryList.size(); i++) {
+					OurCategory ourCategory = categoryList.get(i);
+					if (position - 1 == i) {
+						ourCategory.isChecked = true;
+					} else {
+						ourCategory.isChecked = false;
+					}
 				}
 				adapter.notifyDataSetChanged();
+				onApplyClickListener.onClick(null);
 			}
 		});
 
-		listView.setOnScrollListener(onScrollChangedListener);
-		listView.setOnTouchListener(onTouchListener);
+//		listView.setOnScrollListener(onScrollChangedListener);
+//		listView.setOnTouchListener(onTouchListener);
 
-		applyButton = findViewById(R.id.main_menu_apply_btn);
+//		applyButton = findViewById(R.id.main_menu_apply_btn);
 
 		View guideBtn = findViewById(R.id.guide_btn);
 		View refreshBtn = findViewById(R.id.refresh_btn);
@@ -138,56 +117,12 @@ public class MainMenuView extends FrameLayout implements OnClickListener {
 		settingBtn.setOnClickListener(this);
 	}
 
+	OnClickListener onApplyClickListener;
 	public void setApplyBtnListener(OnClickListener onClickListener) {
-		applyButton.setOnClickListener(onClickListener);
+		this.onApplyClickListener = onClickListener;
+//		applyButton.setOnClickListener(onClickListener);
 	}
-
-	boolean isVisibleLastItem;
-
-	OnTouchListener onTouchListener = new OnTouchListener() {
-		@Override
-		public boolean onTouch(View v, MotionEvent event) {
-			if (event.getAction() == MotionEvent.ACTION_DOWN) {
-			} else if (event.getAction() == MotionEvent.ACTION_MOVE) {
-				if (applyButton != null) {
-					startAnimation(false);
-				}
-			} else if (event.getAction() == MotionEvent.ACTION_UP) {
-				isVisibleLastItem = false;
-				if (listView.getLastVisiblePosition() == listView.getCount() - 1) {
-					isVisibleLastItem = true;
-				}
-				startAnimation(true);
-			}
-			return false;
-		}
-	};
-
-	OnScrollListener onScrollChangedListener = new OnScrollListener() {
-		@Override
-		public void onScroll(AbsListView view, int firstVisibleItem,
-				int visibleItemCount, int totalItemCount) {
-		}
-
-		@Override
-		public void onScrollStateChanged(final AbsListView view, int scrollState) {
-			if (scrollState == OnScrollListener.SCROLL_STATE_IDLE) {
-				if (isVisibleLastItem) {
-					listView.postDelayed(new Runnable() {
-						@Override
-						public void run() {
-							listView.smoothScrollToPosition(listView.getCount() - 1);
-						}
-					}, 100);
-				}
-			} else if (scrollState == OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
-
-			} else if (scrollState == OnScrollListener.SCROLL_STATE_FLING) {
-
-			}
-		}
-	};
-
+	
 	@Override
 	public void onClick(View v) {
 		int id = v.getId();
@@ -205,53 +140,98 @@ public class MainMenuView extends FrameLayout implements OnClickListener {
 		}
 	}
 
-	public void startAnimation(boolean showView) {
-		if (showView) {
-			// 보이고 있는 데 또 보여라는 요청 들오면 해당 애니메이션 무시.
-			if (aniResId == R.anim.push_up_in) {
-				return;
-			}
-			aniResId = R.anim.push_up_in;
-		} else {
-			// push up out 애니메이션을 수행했는데 또 요청이 들어오면 무시한다.
-			if (this.isShown() == false || aniResId == R.anim.push_up_out) {
-				return;
-			}
-			aniResId = R.anim.push_up_out;
-		}
+//	boolean isVisibleLastItem;
+//
+//	OnTouchListener onTouchListener = new OnTouchListener() {
+//		@Override
+//		public boolean onTouch(View v, MotionEvent event) {
+//			if (event.getAction() == MotionEvent.ACTION_DOWN) {
+//			} else if (event.getAction() == MotionEvent.ACTION_MOVE) {
+//				if (applyButton != null) {
+//					startAnimation(false);
+//				}
+//			} else if (event.getAction() == MotionEvent.ACTION_UP) {
+//				isVisibleLastItem = false;
+//				if (listView.getLastVisiblePosition() == listView.getCount() - 1) {
+//					isVisibleLastItem = true;
+//				}
+//				startAnimation(true);
+//			}
+//			return false;
+//		}
+//	};
+//
+//	OnScrollListener onScrollChangedListener = new OnScrollListener() {
+//		@Override
+//		public void onScroll(AbsListView view, int firstVisibleItem,
+//				int visibleItemCount, int totalItemCount) {
+//		}
+//
+//		@Override
+//		public void onScrollStateChanged(final AbsListView view, int scrollState) {
+//			if (scrollState == OnScrollListener.SCROLL_STATE_IDLE) {
+//				if (isVisibleLastItem) {
+//					listView.postDelayed(new Runnable() {
+//						@Override
+//						public void run() {
+//							listView.smoothScrollToPosition(listView.getCount() - 1);
+//						}
+//					}, 100);
+//				}
+//			} else if (scrollState == OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+//
+//			} else if (scrollState == OnScrollListener.SCROLL_STATE_FLING) {
+//
+//			}
+//		}
+//	};
 
-		Animation animation = AnimationUtils.loadAnimation(getContext(), aniResId);
-		animation.setAnimationListener(animationListener);
-		animation.setDuration(300);
-
-		applyButton.startAnimation(animation);
-	}
-
-	public void beforeAnimation() {
-		applyButton.setVisibility(View.VISIBLE);
-	}
-
-	public void afterAnimation() {
-		if (aniResId == R.anim.push_up_out) {
-			applyButton.setVisibility(View.GONE);
-		}
-	}
-
-	AnimationListener animationListener = new AnimationListener() {
-
-		@Override
-		public void onAnimationStart(Animation animation) {
-			beforeAnimation();
-		}
-
-		@Override
-		public void onAnimationEnd(Animation animation) {
-			afterAnimation();
-		}
-
-		@Override
-		public void onAnimationRepeat(Animation animation) {
-
-		}
-	};
+//	public void startAnimation(boolean showView) {
+//		if (showView) {
+//			// 보이고 있는 데 또 보여라는 요청 들오면 해당 애니메이션 무시.
+//			if (aniResId == R.anim.push_up_in) {
+//				return;
+//			}
+//			aniResId = R.anim.push_up_in;
+//		} else {
+//			// push up out 애니메이션을 수행했는데 또 요청이 들어오면 무시한다.
+//			if (this.isShown() == false || aniResId == R.anim.push_up_out) {
+//				return;
+//			}
+//			aniResId = R.anim.push_up_out;
+//		}
+//
+//		Animation animation = AnimationUtils.loadAnimation(getContext(), aniResId);
+//		animation.setAnimationListener(animationListener);
+//		animation.setDuration(300);
+//
+//		applyButton.startAnimation(animation);
+//	}
+//
+//	public void beforeAnimation() {
+//		applyButton.setVisibility(View.VISIBLE);
+//	}
+//
+//	public void afterAnimation() {
+//		if (aniResId == R.anim.push_up_out) {
+//			applyButton.setVisibility(View.GONE);
+//		}
+//	}
+//
+//	AnimationListener animationListener = new AnimationListener() {
+//		@Override
+//		public void onAnimationStart(Animation animation) {
+//			beforeAnimation();
+//		}
+//
+//		@Override
+//		public void onAnimationEnd(Animation animation) {
+//			afterAnimation();
+//		}
+//
+//		@Override
+//		public void onAnimationRepeat(Animation animation) {
+//
+//		}
+//	};
 }

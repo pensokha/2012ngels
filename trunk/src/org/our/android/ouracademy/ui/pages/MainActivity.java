@@ -167,7 +167,7 @@ public class MainActivity extends BaseActivity {
 				}
 			}
 			reloadContents();
-			detailView.onClickMenu();
+//			detailView.onClickMenu();
 		}
 	};
 
