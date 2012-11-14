@@ -12,7 +12,7 @@ public class OurContents implements OurJSONModel {
 	public static final String CONTENTS_ID_JSON_KEY = "ID";
 	public static final String SUBJECT_ENG_JSON_KEY = "SubjectEnglish";
 	public static final String SUBJECT_KMR_JSON_KEY = "SubjectKhmer";
-	public static final String TOPIC_ID_JSON_KEY = "TopicId";
+	public static final String TOPIC_ID_JSON_KEY = "TopicID";
 	public static final String TOPIC_TITLE_ENG_JSON_KEY = "TopicTitleEnglish";
 	public static final String TOPIC_TITLE_KMR_JSON_KEY = "TopicTitleKhmer";
 	public static final String CONTENTS_DESCRIPTION_ENG_JSON_KEY = "DescriptionEnglish";
@@ -20,7 +20,7 @@ public class OurContents implements OurJSONModel {
 	public static final String CONTENT_URL_JSON_KEY = "ContentUrl";
 	public static final String SUBTITLE_URL_JSON_KEY = "SubTitleFileUrl";
 	public static final String CATEGORY_ID_LIST_JSON_KEY = "CategoryIDList";
-	public static final String SIZE_JSON_KEY = "Size";
+	public static final String SIZE_JSON_KEY = "ContentFileSize";
 	public static final String DOWNLOAD_POINT_JSON_KEY = "DownloadPoint";
 
 	private String id;
