@@ -15,20 +15,20 @@ import android.widget.TextView;
  * @author jyeon
  *
  */
-public class SetupWifiListItemVew extends LinearLayout {
+public class SetupWifiListItemView extends LinearLayout {
 
 	ImageView userIcon, wifiIcon;
 	TextView directId;
 
 	String id;
 
-	public SetupWifiListItemVew(Context context) {
+	public SetupWifiListItemView(Context context) {
 		super(context);
 
 		init();
 	}
 
-	public SetupWifiListItemVew(Context context, AttributeSet attrs) {
+	public SetupWifiListItemView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 
 		init();
@@ -82,7 +82,8 @@ public class SetupWifiListItemVew extends LinearLayout {
 	private void setDirectIdText(String id) {
 		if (!TextUtils.isEmpty(id)) {
 			StringBuilder sb = new StringBuilder();
-			sb.append("WI-FI Direct ID (");
+			sb.append(getContext().getResources().getString(R.string.wi_fi_direct_id));
+			sb.append("(");
 			sb.append(id);
 			sb.append(")");
 			directId.setText(sb.toString());

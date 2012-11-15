@@ -132,7 +132,7 @@ public class SetupMainView extends LinearLayout {
 					}
 					break;
 				case R.id.networkBtn:
-					wifiListView.setTitleText("WI-FI");
+					wifiListView.setTitleText(getContext().getResources().getString(R.string.wi_fi));
 					wifiListView.setTitleImgResource(R.drawable.setup_icon_title02);
 					nextView();
 					if(listener != null){
@@ -140,7 +140,7 @@ public class SetupMainView extends LinearLayout {
 					}
 					break;
 				case R.id.connectedStudentBtn:
-					wifiListView.setTitleText("Connected Student");
+					wifiListView.setTitleText(getContext().getResources().getString(R.string.connected_student));
 					wifiListView.setTitleImgResource(R.drawable.setup_icon_tab01_nor);
 					nextView();
 					if(listener != null){

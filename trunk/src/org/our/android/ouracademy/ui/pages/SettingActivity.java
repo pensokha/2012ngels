@@ -3,12 +3,13 @@ package org.our.android.ouracademy.ui.pages;
 import java.util.ArrayList;
 
 import org.our.android.ouracademy.OurPreferenceManager;
+import org.our.android.ouracademy.R;
 import org.our.android.ouracademy.manager.DataManager;
 import org.our.android.ouracademy.manager.DataManagerFactory;
 import org.our.android.ouracademy.ui.adapter.WiFiListAdapter;
 import org.our.android.ouracademy.ui.view.SetupMainView;
 import org.our.android.ouracademy.ui.view.SetupMainView.SetupMainViewListener;
-import org.our.android.ouracademy.ui.view.SetupWifiListItemVew;
+import org.our.android.ouracademy.ui.view.SetupWifiListItemView;
 import org.our.android.ouracademy.util.NetworkState;
 import org.our.android.ouracademy.wifidirect.WifiDirectWrapper;
 import org.our.android.ouracademy.wifidirect.WifiDirectWrapper.FindDeviceListener;
@@ -87,7 +88,7 @@ public class SettingActivity extends BaseActivity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				if (view instanceof SetupWifiListItemVew) {
+				if (view instanceof SetupWifiListItemView) {
 					WifiP2pDevice device = listAdapter.getDeviceList().get(
 							position);
 
@@ -106,9 +107,9 @@ public class SettingActivity extends BaseActivity {
 		});
 	}
 
-	public void onClickMode(View view) {
-		showSingleShortToast("모드 설정");
-	}
+//	public void onClickMode(View view) {
+//		showSingleShortToast("모드 설정");
+//	}
 
 	SetupMainViewListener listener = new SetupMainViewListener() {
 
@@ -165,7 +166,9 @@ public class SettingActivity extends BaseActivity {
 				progressDialog.dismiss();
 			}
 			progressDialog = ProgressDialog.show(SettingActivity.this,
-					"finding connected student", "finding....", true, false,
+					context.getResources().getString(R.string.finding_student),
+					context.getResources().getString(R.string.finding),
+					true, false,
 					null);
 
 			WifiDirectWrapper.getInstance().findConnectedStudent(
@@ -178,7 +181,9 @@ public class SettingActivity extends BaseActivity {
 				progressDialog.dismiss();
 			}
 			progressDialog = ProgressDialog.show(SettingActivity.this,
-					"finding teacher", "finding....", true, true, null);
+					context.getResources().getString(R.string.finding_student),
+					context.getResources().getString(R.string.finding),
+					true, true, null);
 
 			listAdapter.deviceList.clear();
 			listAdapter.notifyDataSetChanged();

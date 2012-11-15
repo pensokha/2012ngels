@@ -7,6 +7,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import org.our.android.ouracademy.OurPreferenceManager;
+import org.our.android.ouracademy.R;
 import org.our.android.ouracademy.asynctask.CallbackTask;
 import org.our.android.ouracademy.asynctask.CallbackTask.OurCallback;
 import org.our.android.ouracademy.asynctask.SyncAndContentNoti;
@@ -29,7 +30,7 @@ public abstract class DataManager {
 	protected ComponentName serviceName;
 
 	abstract public void getMetaInfo();
-
+	
 	public void syncFileAndDatabase() {
 		if (context != null) {
 			executeRunnable(new SyncAndContentNoti(context));
@@ -37,21 +38,19 @@ public abstract class DataManager {
 	}
 
 	public synchronized void startService(Context context) {
-		Toast.makeText(
-				context,
-				"StartService"
-						+ (OurPreferenceManager.getInstance().isTeacher() ? "Teacher"
-								: "Student"), Toast.LENGTH_SHORT).show();
+		Toast.makeText(context,	context.getResources().getString(R.string.start_service) + 
+				(OurPreferenceManager.getInstance().isTeacher() ? 
+						context.getResources().getString(R.string.tearche) : 
+							context.getResources().getString(R.string.student)), Toast.LENGTH_SHORT).show();
 		this.started = true;
 		this.context = context;
 	}
 
 	public synchronized void stopService(Context context) {
-		Toast.makeText(
-				context,
-				"StopService"
-						+ (OurPreferenceManager.getInstance().isTeacher() ? "Teacher"
-								: "Student"), Toast.LENGTH_SHORT).show();
+		Toast.makeText(context, context.getResources().getString(R.string.stop_service) +
+				(OurPreferenceManager.getInstance().isTeacher() ? 
+						context.getResources().getString(R.string.tearche) :
+							context.getResources().getString(R.string.student)), Toast.LENGTH_SHORT).show();
 		for (ExecutorPair pair : taskList) {
 			if (pair.future.isDone() == false) {
 				pair.executor.shutdownNow();

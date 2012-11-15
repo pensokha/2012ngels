@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.our.android.ouracademy.OurPreferenceManager;
+import org.our.android.ouracademy.R;
 import org.our.android.ouracademy.util.NetworkState;
 
 import android.content.Context;
@@ -253,7 +254,7 @@ public class WifiDirectWrapper {
 			} else {
 				Toast.makeText(
 						context,
-						"Severe! Channel is probably lost premanently. Try Disable/Re-Enable P2P.",
+						context.getResources().getString(R.string.channerl_disconnected_message),
 						Toast.LENGTH_LONG).show();
 			}
 		}
