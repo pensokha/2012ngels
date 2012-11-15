@@ -25,6 +25,11 @@ public class ContentDAO {
 	public final static String CONTENT_URL_KEY = "content_url";
 	public final static String SUBTITLE_URL_KEY = "sub_title_url";
 	public final static String SIZE_KEY = "size";
+	public final static String TOPIC_ID_KEY = "topic_id";
+	public final static String TOPIC_TITLE_ENG_KEY = "topic_title_eng";
+	public final static String TOPIC_TITLE_KMR_KEY = "topic_title_kmr";
+	public final static String DESCRIPTION_ENG_KEY = "description_eng";
+	public final static String DESCRIPTION_KMR_KEY = "description_kmr";
 	public final static String DOWNLOADED_SIZE_KEY = "downloaded_size";
 
 	public final static String CONTENT_ID_KEY = "content_id";
@@ -34,15 +39,20 @@ public class ContentDAO {
 			+ CONTENT_TABLE_NAME + "(" + ID_KEY + " VARCHAR PRIMARY KEY, "
 			+ SUBJECT_ENG_KEY + " VARCHAR, " + SUBJECT_KMR_KEY + " VARCHAR, "
 			+ CONTENT_URL_KEY + " VARCHAR, " + SUBTITLE_URL_KEY + " VARCHAR, "
-			+ SIZE_KEY + " INTEGER," + DOWNLOADED_SIZE_KEY + " INTEGER);";
+			+ SIZE_KEY + " INTEGER," + DOWNLOADED_SIZE_KEY + " INTEGER, "
+			+ TOPIC_ID_KEY + " VARCHAR, " + TOPIC_TITLE_ENG_KEY + " VARCHAR, "
+			+ TOPIC_TITLE_KMR_KEY + " VARCHAR, " + DESCRIPTION_ENG_KEY
+			+ " VARCHAR, " + DESCRIPTION_KMR_KEY + " VARCHAR);";
 
 	public static final String CONTENT_CATEGORY_DDL = "CREATE TABLE "
 			+ CONTENT_CATEGORY_TABLE_NAME + "(" + CONTENT_ID_KEY + " VARCHAR, "
-			+ CATEGORY_ID_KEY + " VARCHAR);";
+			+ CATEGORY_ID_KEY + " VARCHAR, PRIMARY KEY(" + CATEGORY_ID_KEY
+			+ " ASC," + CONTENT_ID_KEY + ")); ";
 
 	private static final String[] CONTENT_FIELDS = { ID_KEY, SUBJECT_ENG_KEY,
 			SUBJECT_KMR_KEY, CONTENT_URL_KEY, SUBTITLE_URL_KEY, SIZE_KEY,
-			DOWNLOADED_SIZE_KEY };
+			DOWNLOADED_SIZE_KEY, TOPIC_ID_KEY, TOPIC_TITLE_ENG_KEY,
+			TOPIC_TITLE_KMR_KEY, DESCRIPTION_ENG_KEY, DESCRIPTION_KMR_KEY };
 
 	private static final String[] CONTENT_CATEGORY_FIELDS = { CONTENT_ID_KEY,
 			CATEGORY_ID_KEY };
@@ -91,6 +101,15 @@ public class ContentDAO {
 		content.setSize(cursor.getLong(cursor.getColumnIndex(SIZE_KEY)));
 		content.setDownloadedSize(cursor.getLong(cursor
 				.getColumnIndex(DOWNLOADED_SIZE_KEY)));
+		content.setTopicId(cursor.getString(cursor.getColumnIndex(TOPIC_ID_KEY)));
+		content.setTopicTitleEng(cursor.getString(cursor
+				.getColumnIndex(TOPIC_TITLE_ENG_KEY)));
+		content.setTopicTitleKmr(cursor.getString(cursor
+				.getColumnIndex(TOPIC_TITLE_KMR_KEY)));
+		content.setDescriptionEng(cursor.getString(cursor
+				.getColumnIndex(DESCRIPTION_ENG_KEY)));
+		content.setDescriptionKmr(cursor.getString(cursor
+				.getColumnIndex(DESCRIPTION_KMR_KEY)));
 
 		content.setDownloaded(content.getSize() == content.getDownloadedSize());
 
@@ -231,6 +250,11 @@ public class ContentDAO {
 			dbRow.add(CONTENT_URL_KEY, content.getContentUrl());
 			dbRow.add(SUBTITLE_URL_KEY, content.getSubtitleUrl());
 			dbRow.add(SIZE_KEY, Long.toString(content.getSize()));
+			dbRow.add(TOPIC_ID_KEY, content.getTopicId());
+			dbRow.add(TOPIC_TITLE_ENG_KEY, content.getTopicTitleEng());
+			dbRow.add(TOPIC_TITLE_KMR_KEY, content.getTopicTitleKmr());
+			dbRow.add(DESCRIPTION_ENG_KEY, content.getDescriptionEng());
+			dbRow.add(DESCRIPTION_KMR_KEY, content.getDescriptionKmr());
 
 			if (isAddedDownloadedSize) {
 				dbRow.add(DOWNLOADED_SIZE_KEY,

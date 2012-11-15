@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 import org.our.android.ouracademy.asynctask.CallbackTask;
 import org.our.android.ouracademy.asynctask.CallbackTask.OurCallback;
-import org.our.android.ouracademy.asynctask.SyncAndContentNoti;
+import org.our.android.ouracademy.asynctask.GetMetaInfoFromFSI;
 import org.our.android.ouracademy.model.OurContents;
 import org.our.android.ouracademy.p2p.client.DownloadClient;
 import org.our.android.ouracademy.p2p.client.GetMetaInfoClient;
@@ -45,7 +45,7 @@ public class StudentDataManager extends DataManager {
 			
 			super.startService(context);
 
-			CallbackTask syncAndContentNoti = new SyncAndContentNoti(context);
+			CallbackTask syncAndContentNoti = new GetMetaInfoFromFSI(context);
 			syncAndContentNoti.addCallback(callback);
 			executeRunnable(syncAndContentNoti);
 		}
