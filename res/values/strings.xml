@@ -24,5 +24,25 @@
     
     <string name="category_name_num">%1$s &lt;font color=&quot;#c9f31f&quot;&gt;%2$s&lt;/font&gt;</string>
     <string name="category_name_num1">%1$s &lt;img src=&quot;icon&quot;/img&gt;</string>
-
+    
+    <!-- DataManager -->
+    <string name="start_service">Start Service</string>
+    <string name="stop_service">Stop Service</string>
+    <string name="tearche">Teacher</string>
+    <string name="student">Student</string>
+    
+    <!-- SettingActivity -->
+	<string name="finding_student">Finding connected student</string>
+	<string name="finding_teacher">Finding teacher</string>
+	<string name="finding">Finding...</string>
+	
+	<!-- SetupMainView -->
+	<string name="wi_fi">WI-FI</string>
+	<string name="connected_student">Connected Student</string>
+	
+	<!-- SepupWifiListItemView -->
+	<string name="wi_fi_direct_id">WI-FI Direct ID</string>
+	<!-- WifiDirectWrapper -->
+	<string name="channerl_disconnected_message">Severe! Channel is probably lost premanently. Try Disable/Re-Enable P2P.</string>
+	
 </resources>

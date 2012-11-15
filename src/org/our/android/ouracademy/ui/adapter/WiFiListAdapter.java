@@ -2,7 +2,7 @@ package org.our.android.ouracademy.ui.adapter;
 
 import java.util.ArrayList;
 
-import org.our.android.ouracademy.ui.view.SetupWifiListItemVew;
+import org.our.android.ouracademy.ui.view.SetupWifiListItemView;
 
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.view.View;
@@ -62,11 +62,11 @@ public class WiFiListAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		if (convertView == null) {
-			convertView = new SetupWifiListItemVew(parent.getContext());
+			convertView = new SetupWifiListItemView(parent.getContext());
 		}
 
-		if (convertView instanceof SetupWifiListItemVew) {
-			SetupWifiListItemVew view = (SetupWifiListItemVew)convertView;
+		if (convertView instanceof SetupWifiListItemView) {
+			SetupWifiListItemView view = (SetupWifiListItemView)convertView;
 			view.setData(true, deviceList.get(position).deviceName, (deviceList.get(position).status == WifiP2pDevice.CONNECTED ? 0 : 3));
 		}
 
