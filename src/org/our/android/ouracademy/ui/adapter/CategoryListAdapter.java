@@ -3,6 +3,7 @@ package org.our.android.ouracademy.ui.adapter;
 import java.util.ArrayList;
 
 import org.our.android.ouracademy.R;
+import org.our.android.ouracademy.constants.MatchCategoryIcon;
 import org.our.android.ouracademy.model.OurCategory;
 
 import android.content.Context;
@@ -54,9 +55,10 @@ public class CategoryListAdapter extends ArrayAdapter<OurCategory> {
 //		Spanned category = Html.fromHtml(ourCategory.getCategoryTitleEng() + "<img src=\"icon\" width=50 height=50>", imageGetter, null);
 //		CharSequence category = Html.fromHtml(context.getResources().getString(R.string.category_name_num, 
 //				ourCategory.getCategoryTitle(), ourCategory.getNumOfContents()));
-		itemHolder.txt.setText(ourCategory.getCategoryDescription());
+		itemHolder.txt.setText(ourCategory.getCategoryTitle());
 		itemHolder.txtNum.setText(String.valueOf(ourCategory.getNumOfContents()));
-		itemHolder.icon.setImageResource(R.drawable.subject_icon_math);
+		int categoryIconId = MatchCategoryIcon.getMatchIcon(ourCategory.getCategoryId());
+		itemHolder.icon.setImageResource(categoryIconId);
 		
 		if (ourCategory.isChecked) {
 			itemHolder.check.setVisibility(View.VISIBLE);

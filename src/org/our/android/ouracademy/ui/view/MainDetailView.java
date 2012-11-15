@@ -2,8 +2,8 @@ package org.our.android.ouracademy.ui.view;
 
 import java.util.ArrayList;
 
-import org.our.android.ouracademy.OurDefine;
 import org.our.android.ouracademy.R;
+import org.our.android.ouracademy.constants.CommonConstants;
 import org.our.android.ouracademy.model.OurContents;
 import org.our.android.ouracademy.ui.adapter.ContentsListAdapter;
 import org.our.android.ouracademy.ui.widget.NCHorizontalListView;
@@ -127,7 +127,7 @@ public class MainDetailView extends RelativeLayout {
         contentsListAdapter.setHorizontalListView(horizontalListView);
         horizontalListView.setAdapter(contentsListAdapter);
         
-        setDetailLayoutXPosition(OurDefine.DETAIL_ANI_END_X);
+        setDetailLayoutXPosition(CommonConstants.DETAIL_ANI_END_X);
         menuStatus = MenuStatus.VISIBLE_MENU;
 	}
 	
@@ -156,9 +156,9 @@ public class MainDetailView extends RelativeLayout {
 		setDetailLayoutImageCache(params);
 
 		if (menuStatus == MenuStatus.VISIBLE_MENU) {
-			hideManuAnimation(OurDefine.DETAIL_ANI_WIDTH);
+			hideManuAnimation(CommonConstants.DETAIL_ANI_WIDTH);
 		} else if (menuStatus == MenuStatus.INVISIBLE_MENU) {
-			openMenuAnimation(OurDefine.DETAIL_ANI_WIDTH);
+			openMenuAnimation(CommonConstants.DETAIL_ANI_WIDTH);
 		}
 	}
 	
@@ -197,7 +197,7 @@ public class MainDetailView extends RelativeLayout {
 			@Override
 			public void onAnimationEnd(Animation animation) {
 				menuStatus = MenuStatus.VISIBLE_MENU;
-				setDetailLayoutXPosition(OurDefine.DETAIL_ANI_END_X);
+				setDetailLayoutXPosition(CommonConstants.DETAIL_ANI_END_X);
 				detailRootLayout.removeView(decoyImage);
 
 				hideMenuBtn.setClickable(true);
@@ -226,7 +226,7 @@ public class MainDetailView extends RelativeLayout {
 			@Override
 			public void onAnimationEnd(Animation animation) {
 				menuStatus = MenuStatus.INVISIBLE_MENU;
-				setDetailLayoutXPosition(OurDefine.DETAIL_ANI_START_X);
+				setDetailLayoutXPosition(CommonConstants.DETAIL_ANI_START_X);
 				detailRootLayout.removeView(decoyImage);
 
 				hideMenuBtn.setClickable(false);
@@ -276,7 +276,7 @@ public class MainDetailView extends RelativeLayout {
 				AbsoluteLayout.LayoutParams params;
 				params = (AbsoluteLayout.LayoutParams)decoyImage.getLayoutParams();
 				int posX = params.x + moveEnd - moveStart;
-				if (OurDefine.DETAIL_ANI_START_X < posX && posX < OurDefine.DETAIL_ANI_END_X) {
+				if (CommonConstants.DETAIL_ANI_START_X < posX && posX < CommonConstants.DETAIL_ANI_END_X) {
 					params.x = posX;
 					decoyImage.setLayoutParams(params);
 				}
@@ -290,18 +290,18 @@ public class MainDetailView extends RelativeLayout {
 					int posX = params.x;
 
 					if (menuStatus == MenuStatus.VISIBLE_MENU) { //하단화면이 보이는 경우
-						if (posX == OurDefine.DETAIL_ANI_END_X) {
+						if (posX == CommonConstants.DETAIL_ANI_END_X) {
 							hideManuAnimation(posX);
-						} else if (posX > (OurDefine.DETAIL_ANI_END_X * 0.7)) {
-							openMenuAnimation(OurDefine.DETAIL_ANI_END_X - posX);
+						} else if (posX > (CommonConstants.DETAIL_ANI_END_X * 0.7)) {
+							openMenuAnimation(CommonConstants.DETAIL_ANI_END_X - posX);
 						} else {
-							hideManuAnimation(posX - OurDefine.DETAIL_ANI_START_X);
+							hideManuAnimation(posX - CommonConstants.DETAIL_ANI_START_X);
 						}
 					} else if (menuStatus == MenuStatus.INVISIBLE_MENU) { //상단화면이 보이는 경우
-						if (posX < (OurDefine.DETAIL_ANI_END_X * 0.3)) {
-							hideManuAnimation(posX - OurDefine.DETAIL_ANI_START_X);
+						if (posX < (CommonConstants.DETAIL_ANI_END_X * 0.3)) {
+							hideManuAnimation(posX - CommonConstants.DETAIL_ANI_START_X);
 						} else {
-							openMenuAnimation(OurDefine.DETAIL_ANI_END_X - posX);
+							openMenuAnimation(CommonConstants.DETAIL_ANI_END_X - posX);
 						}
 					}
 				} else if (touchStatus == TouchStatus.START_DRAGGING) { //decoyImage가 이동하지 않은 경우

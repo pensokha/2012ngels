@@ -3,12 +3,12 @@ package org.our.android.ouracademy.ui.view;
 import java.util.ArrayList;
 
 import org.our.android.ouracademy.R;
+import org.our.android.ouracademy.constants.MatchCategoryColor;
 import org.our.android.ouracademy.dao.CategoryDAO;
 import org.our.android.ouracademy.dao.DAOException;
 import org.our.android.ouracademy.model.OurCategory;
 import org.our.android.ouracademy.ui.adapter.CategoryListAdapter;
 import org.our.android.ouracademy.ui.pages.SettingActivity;
-import org.our.android.ouracademy.util.MatchCategoryColor;
 
 import android.app.Activity;
 import android.content.Context;

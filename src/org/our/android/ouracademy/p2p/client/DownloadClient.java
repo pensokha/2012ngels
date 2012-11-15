@@ -7,7 +7,7 @@ import java.net.Socket;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.our.android.ouracademy.OurDefine;
+import org.our.android.ouracademy.constants.CommonConstants;
 import org.our.android.ouracademy.dao.ContentDAO;
 import org.our.android.ouracademy.dao.DAOException;
 import org.our.android.ouracademy.manager.FileManager;
@@ -54,14 +54,14 @@ public class DownloadClient extends P2PClient {
 		RandomAccessFile rand = FileManager.getRandomAccessFile(content.getId(), "rws");
 		rand.seek(content.getDownloadedSize());
 
-		byte buf[] = new byte[OurDefine.SOCKET_BUFFER_SIZE];
+		byte buf[] = new byte[CommonConstants.SOCKET_BUFFER_SIZE];
 		long totalSize = content.getDownloadedSize();
 		int len;
 		while ((len = inputStream.read(buf)) != -1) {
 			rand.write(buf, 0, len);
 			totalSize += len;
 			content.setDownloadedSize(totalSize);
-			if(notiSize + OurDefine.SOCKET_BUFFER_SIZE < totalSize){
+			if(notiSize + CommonConstants.SOCKET_BUFFER_SIZE < totalSize){
 				sendDownload(totalSize);
 			}
 			if (Thread.currentThread().isInterrupted()) {

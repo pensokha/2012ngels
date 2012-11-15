@@ -8,7 +8,7 @@ import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 
-import org.our.android.ouracademy.OurDefine;
+import org.our.android.ouracademy.constants.CommonConstants;
 import org.our.android.ouracademy.model.OurVideoFile;
 
 import android.os.Environment;
@@ -60,11 +60,11 @@ public class FileManager {
 	}
 
 	public static String getContentId(String fileName) {
-		return fileName.replace("." + OurDefine.VIDEO_FORMAT_MP4, "");
+		return fileName.replace("." + CommonConstants.VIDEO_FORMAT_MP4, "");
 	}
 
 	public static String getFileName(String contentId) {
-		return contentId + "." + OurDefine.VIDEO_FORMAT_MP4;
+		return contentId + "." + CommonConstants.VIDEO_FORMAT_MP4;
 	}
 
 	public static ArrayList<OurVideoFile> getVideoFiles() {

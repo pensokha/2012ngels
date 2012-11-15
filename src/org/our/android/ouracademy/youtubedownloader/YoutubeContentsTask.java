@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.our.android.ouracademy.OurDefine;
+import org.our.android.ouracademy.constants.CommonConstants;
 
 import android.os.AsyncTask;
 
@@ -49,7 +49,7 @@ public class YoutubeContentsTask extends AsyncTask<String, String, ArrayList<Vid
 		for (Videos video : videoList) {
 			String type = video.type;
 			String resolution = video.resolution;
-			if ((OurDefine.VIDEO_FORMAT_MP4).equals(type) && (OurDefine.VIDEO_RESOLUTION_MIDIUM).equals(resolution)) {
+			if ((CommonConstants.VIDEO_FORMAT_MP4).equals(type) && (CommonConstants.VIDEO_RESOLUTION_MIDIUM).equals(resolution)) {
 				url = encodeURI(video.url);
 				break;
 			}
