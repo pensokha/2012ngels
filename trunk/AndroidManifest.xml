@@ -4,11 +4,7 @@
     android:versionName="1.0" >
 
     <supports-screens
-        android:anyDensity="true"
-        android:largeScreens="true"
-        android:normalScreens="true"
         android:resizeable="true"
-        android:smallScreens="true"
         android:xlargeScreens="true" />
 
     <uses-sdk
@@ -23,59 +19,62 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.ACCESS_ALL_DOWNLOADS"/>
+    <uses-permission android:name="android.permission.ACCESS_ALL_DOWNLOADS" />
 
     <application
         android:name=".OurApplication"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/Theme.NoTitleNoBackground" >
+        android:theme="@style/Theme.NoTitleNoBackground"
+        android:allowBackup="true" >
         <activity
-            android:name=".ui.pages.MainActivity"
-            android:label="@string/title_activity_main"
-            android:screenOrientation="landscape" >
+            android:name=".ui.pages.SplashActivity"
+            android:screenOrientation="sensorLandscape" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
+            android:name=".ui.pages.MainActivity"
+            android:label="Media Player Page"
+            android:screenOrientation="sensorLandscape" />
+        <activity
             android:name=".ui.pages.MediaPlayerPage"
             android:label="Media Player Page"
-            android:screenOrientation="landscape" />
-        <activity
-            android:name=".ui.pages.SettingActivity"
-            android:screenOrientation="landscape" android:theme="@android:style/Theme.Translucent.NoTitleBar" android:windowSoftInputMode="adjustResize"/>
+            android:screenOrientation="sensorLandscape" />
+		<activity
+			android:name=".ui.pages.SettingActivity"
+			android:screenOrientation="sensorLandscape"
+			android:theme="@android:style/Theme.Translucent.NoTitleBar"
+			android:windowSoftInputMode="adjustResize" />
 
-        <service android:name="org.our.android.ouracademy.download.DownloadService"
-            android:exported="false" >
+		<service
+			android:name="org.our.android.ouracademy.download.DownloadService"
+			android:exported="false" >
 			<intent-filter>
 				<action android:name="org.our.android.ouracademy.download.DOWNLOAD_SERVICE" />
 			</intent-filter>
 		</service>
-		
-        <service
-            android:name=".service.TeacherService"
-            android:enabled="true" />
-        
-        <service
-            android:name=".service.StudentService"
-            android:enabled="true" />
-        
-        <receiver android:name=".broadreceiver.PowerReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.ACTION_BOOT_COMPLETED"/>
-                <action android:name="android.intent.action.ACTION_REBOOT"/>
-                <action android:name="android.intent.action.ACTION_SHUTDOWN"/>
-            </intent-filter>
-        </receiver>
-		
-		<receiver android:name=".downloader.ServiceStartReceiver">
-    		<intent-filter>
-    			<action android:name="android.intent.action.BOOT_COMPLETED"/>
-    		</intent-filter>
-    	</receiver>
+		<service
+			android:name=".service.TeacherService"
+			android:enabled="true" />
+		<service
+			android:name=".service.StudentService"
+			android:enabled="true" />
+
+		<receiver android:name=".broadreceiver.PowerReceiver" >
+			<intent-filter>
+				<action android:name="android.intent.action.ACTION_BOOT_COMPLETED" />
+				<action android:name="android.intent.action.ACTION_REBOOT" />
+				<action android:name="android.intent.action.ACTION_SHUTDOWN" />
+			</intent-filter>
+		</receiver>
+		<receiver android:name=".downloader.ServiceStartReceiver" >
+			<intent-filter>
+				<action android:name="android.intent.action.BOOT_COMPLETED" />
+			</intent-filter>
+		</receiver>
     </application>
 
 </manifest>
