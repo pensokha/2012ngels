@@ -8,6 +8,7 @@ import org.our.android.ouracademy.ui.view.ContentsView;
 import org.our.android.ouracademy.ui.widget.NCHorizontalListView;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -82,6 +83,7 @@ public class ContentsListAdapter extends BaseAdapter  {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
+		Log.d("TEST", "!!!!!!!!!!!!!! : " + position + " getCount() : " + getCount() + " contentsList.size() : " + contentsList.size());
 		//footer
 		if (position == getCount() - 1) {
 			convertView = inflater.inflate(R.layout.layout_contents_list_footer, null);
@@ -119,9 +121,9 @@ public class ContentsListAdapter extends BaseAdapter  {
 		for (int i = 0; i < CELL_PER_ITEM; i++) {
 			int currentPositionOfItem = position * CELL_PER_ITEM + i;
 			ContentsView contentsView = holder.itemHolderList[i];
-			OurContents curModel = contentsList.get(currentPositionOfItem);
 			
 			if (currentPositionOfItem < itemSize) {
+				OurContents curModel = contentsList.get(currentPositionOfItem);
 				contentsView.setAllVisibility(contentsView, View.VISIBLE);
 				contentsView.setContentsData(curModel);
 			} else {
