@@ -17,7 +17,7 @@ public class MatchCategoryIcon {
 	
 	static int elseIcon = R.drawable.subject_icon;
 	
-	static int[] categoryIconIds = {
+	static final int[] categoryIconIds = {
 		R.drawable.subject_icon_math,
 		R.drawable.subject_icon_english,
 		R.drawable.subject_icon_art,
@@ -28,7 +28,7 @@ public class MatchCategoryIcon {
 		R.drawable.subject_icon_writing,
 	};
 	
-	static String[] categoryIds = {
+	static final public String[] categoryIds = {
 		"001",			//math
 		"002",			//english
 		"003",			//art

@@ -117,7 +117,7 @@ public class MainDetailView extends RelativeLayout {
 			}
 		});
         
-        hideMenuBtn.setClickable(false);
+        hideMenuBtn.setClickable(true);
 		
         decoyImage = new ImageView(getContext());
         

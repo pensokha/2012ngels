@@ -21,6 +21,8 @@ public class CommonConstants {
 	
 	public static final String META_FILE_NAME = "our.txt";
 	
+	public static final String DEFAULT_LOAD_CATEGORY_ID = MatchCategoryIcon.categoryIds[0];
+	
 	public static final String getContentFilePath(String fileName) {
 		String path = Environment.getExternalStorageDirectory().getAbsolutePath() + 
 		"/" + CONTENTS_FOLDER_NAME + "/" + fileName;

@@ -1,5 +1,8 @@
 package org.our.android.ouracademy;
 
+import org.our.android.ouracademy.constants.CommonConstants;
+import org.our.android.ouracademy.constants.MatchCategoryIcon;
+
 import android.app.Activity;
 import android.content.ContextWrapper;
 import android.content.SharedPreferences;
@@ -17,6 +20,7 @@ public class OurPreferenceManager {
 	public final static String PREFERENCE_KEY = "our";
 	private static final String MODE = "MODE";
 	private static final String VERSION = "VERSION";
+	private static final String LAST_SELECETED_CATEGORY = "LAST_SELECETED_CATEGORY";
 
 	/***
 	 * 
@@ -179,5 +183,13 @@ public class OurPreferenceManager {
 
 	public int getVersion() {
 		return getIntValue(VERSION);
+	}
+	
+	public boolean setSelecetedCategory(String categoryId) {
+		return setStringValue(LAST_SELECETED_CATEGORY, categoryId);
+	}
+	
+	public String getSelecetedCategory() {
+		return getStringValue(LAST_SELECETED_CATEGORY, CommonConstants.DEFAULT_LOAD_CATEGORY_ID);
 	}
 }

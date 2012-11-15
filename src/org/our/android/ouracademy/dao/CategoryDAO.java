@@ -3,6 +3,7 @@ package org.our.android.ouracademy.dao;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.our.android.ouracademy.OurPreferenceManager;
 import org.our.android.ouracademy.model.OurCategory;
 import org.our.android.ouracademy.model.OurContentCategory;
 import org.our.android.ouracademy.util.DbManager;
@@ -73,6 +74,9 @@ public class CategoryDAO {
 			SQLiteDatabase db = dbManager.getDB();
 			Cursor cursor = db.query(CATEGORY_TABLE_NAME, CATEGORY_FIELDS,
 					null, null, null, null, null);
+			
+			//get last Selected category
+			String laseSeletedCategoryId = OurPreferenceManager.getInstance().getSelecetedCategory();
 
 			while (cursor.moveToNext()) {
 				OurCategory category = new OurCategory();
@@ -90,6 +94,10 @@ public class CategoryDAO {
 						.getColumnIndex(TITLE_KMR_KEY)));
 				category.setCategoryParent(cursor.getString(cursor
 						.getColumnIndex(PARENT_ID_KEY)));
+				
+				if (cursor.getString(cursor.getColumnIndex(ID_KEY)).equals(laseSeletedCategoryId)) {
+					category.isChecked = true;
+				}
 
 				categories.add(category);
 			}

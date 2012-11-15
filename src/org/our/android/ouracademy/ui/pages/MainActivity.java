@@ -85,6 +85,9 @@ public class MainActivity extends BaseActivity {
 
 		initMenuLayout();
 		initContentsLayout();
+		
+		//road saved last selected category.
+		applyBtnClickListener.onClick(null);
 	}
 
 	private void initMenuLayout() {
@@ -264,6 +267,9 @@ public class MainActivity extends BaseActivity {
 				if (menuView.getAdapter() != null) {
 					menuView.getAdapter().notifyDataSetChanged();
 				}
+				
+				//road last selected category.
+				applyBtnClickListener.onClick(null);
 			} catch (DAOException e) {
 				e.printStackTrace();
 			}
