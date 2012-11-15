@@ -38,11 +38,13 @@ public class FSIDAO {
 			metaInfo.setFromJSONObject(jsonObject);
 		} catch (JSONException e) {
 			e.printStackTrace();
-			throw new DAOException("Fail Getting MetaInfo from FSI");
+			throw new DAOException("Fail Getting MetaInfo from File");
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
+			throw new DAOException("Fail Getting MetaInfo from File");
 		} catch (IOException e) {
 			e.printStackTrace();
+			throw new DAOException("Fail Getting MetaInfo from File");
 		} finally {
 			P2PManager.close(br);
 			P2PManager.close(fr);

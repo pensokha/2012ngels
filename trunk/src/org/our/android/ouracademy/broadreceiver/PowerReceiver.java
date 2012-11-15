@@ -12,13 +12,13 @@ public class PowerReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		String action = intent.getAction();
-
+		
 		DataManager dataManager = DataManagerFactory.getDataManager();
 		if (action.equals(Intent.ACTION_REBOOT)
 				|| action.equals(Intent.ACTION_SHUTDOWN)) {
 			dataManager.onPowerOff(context);
 		} else if (action.equals(Intent.ACTION_BOOT_COMPLETED)) {
-			dataManager.onPowerOn(context);
+//			dataManager.onPowerOn(context);
 		} else {
 			//Do noting
 		}
