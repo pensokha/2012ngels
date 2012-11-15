@@ -2,6 +2,7 @@ package org.our.android.ouracademy.ui.view;
 
 import java.util.ArrayList;
 
+import org.our.android.ouracademy.OurPreferenceManager;
 import org.our.android.ouracademy.R;
 import org.our.android.ouracademy.constants.MatchCategoryColor;
 import org.our.android.ouracademy.dao.CategoryDAO;
@@ -95,6 +96,9 @@ public class MainMenuView extends FrameLayout implements OnClickListener {
 					OurCategory ourCategory = categoryList.get(i);
 					if (position - 1 == i) {
 						ourCategory.isChecked = true;
+						
+						//Save Selected Item
+						OurPreferenceManager.getInstance().setSelecetedCategory(ourCategory.getCategoryId());
 					} else {
 						ourCategory.isChecked = false;
 					}
@@ -119,8 +123,11 @@ public class MainMenuView extends FrameLayout implements OnClickListener {
 
 	OnClickListener onApplyClickListener;
 	public void setApplyBtnListener(OnClickListener onClickListener) {
-		this.onApplyClickListener = onClickListener;
-//		applyButton.setOnClickListener(onClickListener);
+		if (onClickListener != null) {
+			this.onApplyClickListener = onClickListener;
+//			applyButton.setOnClickListener(onClickListener);
+		}
+		
 	}
 	
 	@Override
