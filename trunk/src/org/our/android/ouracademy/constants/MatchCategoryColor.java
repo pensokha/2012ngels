@@ -1,4 +1,4 @@
-package org.our.android.ouracademy.util;
+package org.our.android.ouracademy.constants;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,19 +27,7 @@ public class MatchCategoryColor {
 			R.drawable.btn_main_book_selector_09,
 			R.drawable.btn_main_book_selector_10 };
 	
-	static int[] categoryIconIds = {
-		R.drawable.subject_icon,
-		R.drawable.subject_icon_art,
-		R.drawable.subject_icon_english,
-		R.drawable.subject_icon_history,
-		R.drawable.subject_icon_khmer,
-		R.drawable.subject_icon_math,
-		R.drawable.subject_icon_music,
-		R.drawable.subject_icon_science,
-		R.drawable.subject_icon_writing
-	};
-	
-	public static void matchColor(ArrayList<OurCategory> categoryList) {
+	public static synchronized void matchColor(ArrayList<OurCategory> categoryList) {
 		if (categoryList == null || categoryList.isEmpty()) {
 			return;
 		}

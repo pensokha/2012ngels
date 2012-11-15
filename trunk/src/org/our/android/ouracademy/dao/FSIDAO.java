@@ -7,7 +7,7 @@ import java.io.IOException;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.our.android.ouracademy.OurDefine;
+import org.our.android.ouracademy.constants.CommonConstants;
 import org.our.android.ouracademy.manager.FileManager;
 import org.our.android.ouracademy.model.OurMetaInfo;
 import org.our.android.ouracademy.p2p.P2PManager;
@@ -25,7 +25,7 @@ public class FSIDAO {
 		FileReader fr = null;
 		BufferedReader br = null;
 		try {
-			fr = new FileReader(FileManager.STRSAVEPATH + OurDefine.META_FILE_NAME);
+			fr = new FileReader(FileManager.STRSAVEPATH + CommonConstants.META_FILE_NAME);
 			br = new BufferedReader(fr);
 			
 			StringBuffer sb = new StringBuffer();

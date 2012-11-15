@@ -6,7 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.our.android.ouracademy.OurApplication;
-import org.our.android.ouracademy.OurDefine;
+import org.our.android.ouracademy.constants.CommonConstants;
 
 public class OurContents implements OurJSONModel {
 	public static final String CONTENTS_ID_JSON_KEY = "ID";
@@ -166,7 +166,7 @@ public class OurContents implements OurJSONModel {
 	}
 	
 	public String getSubject() {
-		if (OurDefine.LOCALE_LANGUAGE_KHMER.equals(OurApplication.getInstance().getLocaleLangueage())) {
+		if (CommonConstants.LOCALE_LANGUAGE_KHMER.equals(OurApplication.getInstance().getLocaleLangueage())) {
 			return subjectKmr;
 		}
 		return subjectEng;

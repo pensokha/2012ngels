@@ -4,7 +4,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 
-import org.our.android.ouracademy.OurDefine;
+import org.our.android.ouracademy.constants.CommonConstants;
 import org.our.android.ouracademy.model.OurContents;
 
 import android.app.DownloadManager;
@@ -52,8 +52,8 @@ public class YoutubeDownloadManagerOld {
 		
 		request.setTitle(ourContents.getSubjectEng());
 		request.setDescription("Downloading...");
-		request.setDestinationInExternalPublicDir(OurDefine.CONTENTS_FOLDER_NAME, ourContents.getId());
-		Environment.getExternalStoragePublicDirectory(OurDefine.CONTENTS_FOLDER_NAME).mkdirs();
+		request.setDestinationInExternalPublicDir(CommonConstants.CONTENTS_FOLDER_NAME, ourContents.getId());
+		Environment.getExternalStoragePublicDirectory(CommonConstants.CONTENTS_FOLDER_NAME).mkdirs();
 		
 		long downloadID = downloadManager.enqueue(request);
 		downloadMap.put(ourContents.getId(), downloadID);

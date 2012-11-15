@@ -1,13 +1,13 @@
 package org.our.android.ouracademy.ui.view;
 
 import org.our.android.ouracademy.R;
+import org.our.android.ouracademy.constants.MatchCategoryColor;
 import org.our.android.ouracademy.handler.WeakRefHandler;
 import org.our.android.ouracademy.manager.DataManagerFactory;
 import org.our.android.ouracademy.manager.FileManager;
 import org.our.android.ouracademy.model.OurContents;
 import org.our.android.ouracademy.model.OurContents.FileStatus;
 import org.our.android.ouracademy.ui.pages.MediaPlayerPage;
-import org.our.android.ouracademy.util.MatchCategoryColor;
 import org.our.android.ouracademy.util.NetworkState;
 import org.our.android.ouracademy.youtubedownloader.YoutubeContentsTask;
 
