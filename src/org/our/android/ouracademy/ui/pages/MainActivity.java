@@ -8,6 +8,7 @@ import org.our.android.ouracademy.R;
 import org.our.android.ouracademy.dao.CategoryDAO;
 import org.our.android.ouracademy.dao.ContentDAO;
 import org.our.android.ouracademy.dao.DAOException;
+import org.our.android.ouracademy.manager.DataManager;
 import org.our.android.ouracademy.manager.DataManagerFactory;
 import org.our.android.ouracademy.model.OurCategory;
 import org.our.android.ouracademy.model.OurContents;
@@ -187,6 +188,7 @@ public class MainActivity extends BaseActivity {
 		public static final int ACTION_CONTENT_CHANGED = 2;
 		public static final int ACTION_DOWNLOADING = 3;
 		public static final int ACTION_CANCEL_DOWNLOADING = 4;
+		public static final int ACTION_SYNC_DATA = 5;
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
@@ -208,9 +210,50 @@ public class MainActivity extends BaseActivity {
 					break;
 				case ACTION_CANCEL_DOWNLOADING:
 					cancelDownloading(intent.getStringExtra(CONTENT_ID));
+					break;
+				case ACTION_SYNC_DATA:
+					syncData();
+					break;
 				default:
 					break;
 				}
+			}
+		}
+	}
+	
+	private void syncData(){
+		ArrayList<OurContents> contents = detailView.getContentList();
+		if(contents != null){
+			DataManager dataManager = DataManagerFactory.getDataManager();
+			HashMap<String, Integer> syncContents = new HashMap<String, Integer>();
+			for(OurContents content : contents){
+				if(content.fileStatus == OurContents.FileStatus.NONE){
+					content.fileStatus = OurContents.FileStatus.DOWNLOADING;
+					
+					dataManager.download(content);
+					
+					syncContents.put(content.getId(), 1);
+				}else if(content.fileStatus == OurContents.FileStatus.DOWNLOADING){
+					syncContents.put(content.getId(), 1);
+				}
+			}
+			
+			if (detailView.getListAdapter() != null) {
+				detailView.getList().setAdapter(detailView.getListAdapter());
+				detailView.getListAdapter().notifyDataSetChanged();
+			}
+			
+			ContentDAO contentDao = new ContentDAO();
+			try {
+				ArrayList<OurContents> undownloadedContents = contentDao.getUndownloadedContents();
+				
+				for(OurContents content : undownloadedContents){
+					if(syncContents.containsKey(content.getId()) == false){
+						dataManager.download(content);
+					}
+				}
+			} catch (DAOException e) {
+				e.printStackTrace();
 			}
 		}
 	}
@@ -309,7 +352,7 @@ public class MainActivity extends BaseActivity {
 
 				if (detailView.getListAdapter() != null) {
 					detailView.getList().setAdapter(detailView.getListAdapter());
-					detailView.getListAdapter().checkItemList();
+					detailView.getListAdapter().notifyDataSetChanged();
 				}
 			} catch (DAOException e) {
 				e.printStackTrace();
