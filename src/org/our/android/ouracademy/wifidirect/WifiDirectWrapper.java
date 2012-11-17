@@ -227,6 +227,10 @@ public class WifiDirectWrapper {
 					}
 					
 					notiListener(teacherMap);
+					
+					if(teacherMap.size() != devices.size()){
+						findTeacher();
+					}
 				}
 			});
 			wifidirectListener = studentListener;

@@ -22,6 +22,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pManager.ActionListener;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -177,34 +178,39 @@ public class SettingActivity extends BaseActivity {
 
 		@Override
 		public void onClickFindConnectedStudent() {
-			if (progressDialog != null && progressDialog.isShowing()) {
-				progressDialog.dismiss();
-			}
-			progressDialog = ProgressDialog.show(SettingActivity.this,
-					context.getResources().getString(R.string.finding_student),
-					context.getResources().getString(R.string.finding),
-					true, false,
-					null);
+			showProgress(R.string.finding_student);
 
 			WifiDirectWrapper.getInstance().findConnectedStudent();
 		}
 
 		@Override
 		public void onClickFindTeacher() {
-			if (progressDialog != null && progressDialog.isShowing()) {
-				progressDialog.dismiss();
-			}
-			progressDialog = ProgressDialog.show(SettingActivity.this,
-					context.getResources().getString(R.string.finding_student),
-					context.getResources().getString(R.string.finding),
-					true, true, null);
-
-			listAdapter.deviceList.clear();
-			listAdapter.notifyDataSetChanged();
+			showProgress(R.string.finding_teacher);
 
 			WifiDirectWrapper.getInstance().findTeacher();
 		}
 	};
+	
+	private void showProgress(int titleResourceId){
+		if (progressDialog != null && progressDialog.isShowing()) {
+			progressDialog.dismiss();
+		}
+		progressDialog = ProgressDialog.show(SettingActivity.this,
+				context.getResources().getString(titleResourceId),
+				context.getResources().getString(R.string.finding),
+				true, true, null);
+		
+		Handler handler = new Handler();
+		handler.postDelayed(new Runnable() {
+			
+			@Override
+			public void run() {
+				if (progressDialog != null && progressDialog.isShowing()) {
+					progressDialog.dismiss();
+				}
+			}
+		}, 5000);
+	}
 
 	private FindDeviceListener findWifiDirectPeerListener = new FindDeviceListener() {
 

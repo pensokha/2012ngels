@@ -7,9 +7,11 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import org.our.android.ouracademy.asynctask.CallbackTask;
+import org.our.android.ouracademy.asynctask.GetMetaInfoFromMetaFile;
 import org.our.android.ouracademy.asynctask.CallbackTask.OurCallback;
 import org.our.android.ouracademy.asynctask.SyncAndContentNoti;
 import org.our.android.ouracademy.model.OurContents;
+import org.our.android.ouracademy.service.OurP2PService;
 
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -27,7 +29,7 @@ public abstract class DataManager {
 	protected ComponentName serviceName;
 
 	abstract public void getMetaInfo();
-	
+
 	public void syncFileAndDatabase() {
 		if (context != null) {
 			executeRunnable(new SyncAndContentNoti(context));
@@ -35,9 +37,33 @@ public abstract class DataManager {
 	}
 
 	public synchronized void startService(Context context) {
-		this.started = true;
-		this.context = context;
+		if (this.started == false) {
+			this.started = true;
+			this.context = context;
+
+			CallbackTask syncAndContentNoti = new GetMetaInfoFromMetaFile(
+					context);
+			syncAndContentNoti.addCallback(startServiceCallback);
+			executeRunnable(syncAndContentNoti);
+		}
+		
+		Log.d("Service~~~", "started : " + started);
 	}
+
+	public void startOnlyService() {
+		Log.d("Service~~~", "Started!!!" + serviceName);
+		if (serviceName == null) {
+			serviceName = context.startService(new Intent(context,
+					OurP2PService.class));
+		}
+	}
+
+	private OurCallback startServiceCallback = new OurCallback() {
+		@Override
+		public void callback() {
+			startOnlyService();
+		}
+	};
 
 	public synchronized void stopService(Context context) {
 		for (ExecutorPair pair : taskList) {
@@ -46,7 +72,7 @@ public abstract class DataManager {
 			}
 		}
 
-		//Stop Service 
+		// Stop Service
 		if (serviceName != null) {
 			Intent intent = new Intent();
 			intent.setComponent(serviceName);
@@ -73,9 +99,15 @@ public abstract class DataManager {
 		return started;
 	}
 
-	abstract public void onPowerOn(Context context);
+	public void onPowerOn(Context context) {
+		this.context = context;
 
-	abstract public void onPowerOff(Context context);
+		startOnlyService();
+	}
+
+	public void onPowerOff(Context context) {
+		stopService(context);
+	}
 
 	abstract public void download(OurContents content);
 

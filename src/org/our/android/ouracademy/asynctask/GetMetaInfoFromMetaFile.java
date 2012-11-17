@@ -11,8 +11,8 @@ import org.our.android.ouracademy.util.DbManager;
 import android.content.Context;
 
 
-public class GetMetaInfoFromFSI extends SyncAndReloadNoti{
-	public GetMetaInfoFromFSI(Context context){
+public class GetMetaInfoFromMetaFile extends SyncAndReloadNoti{
+	public GetMetaInfoFromMetaFile(Context context){
 		super(context);
 	}
 
@@ -23,7 +23,7 @@ public class GetMetaInfoFromFSI extends SyncAndReloadNoti{
 			OurMetaInfo metaInfo = fsiDao.getMetaInfo();
 			
 			if(Thread.currentThread().isInterrupted() == false){
-				GetMetaInfoFromFSI.getMetaInfoProcesses(metaInfo, context);
+				GetMetaInfoFromMetaFile.getMetaInfoProcesses(metaInfo, context);
 			}
 			super.proceed();
 		} catch (DAOException e) {
