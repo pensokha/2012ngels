@@ -18,7 +18,7 @@ public class PowerReceiver extends BroadcastReceiver {
 				|| action.equals(Intent.ACTION_SHUTDOWN)) {
 			dataManager.onPowerOff(context);
 		} else if (action.equals(Intent.ACTION_BOOT_COMPLETED)) {
-//			dataManager.onPowerOn(context);
+			dataManager.onPowerOn(context);
 		} else {
 			//Do noting
 		}

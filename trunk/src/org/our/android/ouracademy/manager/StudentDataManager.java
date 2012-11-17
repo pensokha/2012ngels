@@ -5,16 +5,13 @@ import java.util.HashMap;
 
 import org.our.android.ouracademy.asynctask.CallbackTask;
 import org.our.android.ouracademy.asynctask.CallbackTask.OurCallback;
-import org.our.android.ouracademy.asynctask.GetMetaInfoFromFSI;
 import org.our.android.ouracademy.model.OurContents;
 import org.our.android.ouracademy.p2p.client.DownloadClient;
 import org.our.android.ouracademy.p2p.client.GetMetaInfoClient;
-import org.our.android.ouracademy.service.StudentService;
 import org.our.android.ouracademy.ui.pages.MainActivity.OurDataChangeReceiver;
 import org.our.android.ouracademy.util.NetworkState;
 import org.our.android.ouracademy.wifidirect.WifiDirectWrapper;
 
-import android.content.Context;
 import android.content.Intent;
 
 public class StudentDataManager extends DataManager {
@@ -26,41 +23,6 @@ public class StudentDataManager extends DataManager {
 	}
 
 	@Override
-	public void onPowerOn(Context context) {
-		// Do noting
-	}
-
-	@Override
-	public void onPowerOff(Context context) {
-		stopService(context);
-	}
-
-	/*******
-	 * When : start main page, change mode 1. register wifi receiver, find
-	 * teacher 2. if find teacher, get meta info 3. sync file and db
-	 */
-	@Override
-	public synchronized void startService(Context context) {
-		if (isStarted() == false) {
-			
-			super.startService(context);
-
-			CallbackTask syncAndContentNoti = new GetMetaInfoFromFSI(context);
-			syncAndContentNoti.addCallback(callback);
-			executeRunnable(syncAndContentNoti);
-		}
-	}
-
-	/**********
-	 * When : onPowerOff, aplication stop, change mode 1. unregister wifi
-	 * receiver -> donwload false
-	 */
-	@Override
-	public void stopService(Context context) {
-		super.stopService(context);
-	}
-
-	@Override
 	public void getMetaInfo() {
 		String ownerIp = WifiDirectWrapper.getInstance().getOwnerIP();
 
@@ -68,14 +30,6 @@ public class StudentDataManager extends DataManager {
 			executeRunnable(new GetMetaInfoClient(ownerIp, context));
 		}
 	}
-
-	private OurCallback callback = new OurCallback() {
-		@Override
-		public void callback() {
-			serviceName = context.startService(new Intent(context,
-					StudentService.class));
-		}
-	};
 
 	@Override
 	public void download(OurContents content) {

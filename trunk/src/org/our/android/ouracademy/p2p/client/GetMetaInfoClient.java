@@ -6,7 +6,7 @@ import java.io.IOException;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.our.android.ouracademy.OurPreferenceManager;
-import org.our.android.ouracademy.asynctask.GetMetaInfoFromFSI;
+import org.our.android.ouracademy.asynctask.GetMetaInfoFromMetaFile;
 import org.our.android.ouracademy.asynctask.SyncAndReloadNoti;
 import org.our.android.ouracademy.constants.CommonConstants;
 import org.our.android.ouracademy.dao.DAOException;
@@ -46,7 +46,7 @@ public class GetMetaInfoClient extends P2PClientJSON {
 		metaInfo.setFromJSONObject(jsonObject);
 
 		try {
-			GetMetaInfoFromFSI.getMetaInfoProcesses(metaInfo, context);
+			GetMetaInfoFromMetaFile.getMetaInfoProcesses(metaInfo, context);
 			
 			if (metaInfo.getResponseCode() == OurMetaInfo.RES_CODE_SUCCESS) {
 				FileWriter wr = null;

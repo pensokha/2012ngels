@@ -63,7 +63,6 @@ public class WifiDirectStudentListener extends WifiDirectDefaultListener
 	public void onPeerChanged() {
 		Log.d(TAG, "onPeerChange");
 		if (manager != null) {
-//			WifiDirectWrapper.getInstance().discoverService();
 			manager.requestPeers(channel, this);
 		}
 	}

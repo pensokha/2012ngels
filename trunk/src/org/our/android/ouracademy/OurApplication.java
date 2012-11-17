@@ -33,6 +33,7 @@ public class OurApplication extends Application {
 		// 화면 정보
 		ScreenInfo.create(this);
 		
+		Log.d("Test", "onCreate");
 		DataManagerFactory.getDataManager().startService(this);
 		
 		updateLocaleLangueage();
