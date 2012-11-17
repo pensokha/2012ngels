@@ -239,11 +239,33 @@ public class ContentDAO {
 
 		return contents;
 	}
+	
+	public ArrayList<OurContents> getUndownloadedContents() throws DAOException {
+
+		ArrayList<OurContents> contents = new ArrayList<OurContents>();
+
+		SQLiteDatabase db = dbManager.getDB();
+
+		Cursor cursor = db.query(CONTENT_TABLE_NAME,
+				CONTENT_FIELDS, DOWNLOADED_SIZE_KEY + "!=" + SIZE_KEY, null, null, null, null);
+		
+		OurContents content; 
+		while (cursor.moveToNext()) {
+			content = new OurContents();
+
+			setContentDataFromCursor(cursor, content);
+
+			contents.add(content);
+		}
+
+		return contents;
+	}
 
 	public void insertContents(ArrayList<OurContents> contents,
 			boolean isAddedDownloadedSize) throws DAOException {
+		DbRow dbRow;
 		for (OurContents content : contents) {
-			DbRow dbRow = new DbRow();
+			dbRow = new DbRow();
 			dbRow.add(ID_KEY, content.getId());
 			dbRow.add(SUBJECT_ENG_KEY, content.getSubjectEng());
 			dbRow.add(SUBJECT_KMR_KEY, content.getSubjectKmr());

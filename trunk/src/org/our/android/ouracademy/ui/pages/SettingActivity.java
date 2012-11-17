@@ -7,6 +7,7 @@ import org.our.android.ouracademy.R;
 import org.our.android.ouracademy.manager.DataManager;
 import org.our.android.ouracademy.manager.DataManagerFactory;
 import org.our.android.ouracademy.ui.adapter.WiFiListAdapter;
+import org.our.android.ouracademy.ui.pages.MainActivity.OurDataChangeReceiver;
 import org.our.android.ouracademy.ui.view.SetupMainView;
 import org.our.android.ouracademy.ui.view.SetupMainView.SetupMainViewListener;
 import org.our.android.ouracademy.ui.view.SetupWifiListItemView;
@@ -145,11 +146,9 @@ public class SettingActivity extends BaseActivity {
 
 		@Override
 		public void onClickDataSyncCell() {
-			// Intent intent = new Intent();
-			// intent.putExtra(INTENTKEY_ACTION_DATA_SYNC, true);
-			// setResult(RESULT_OK, intent);
-			//
-			// finish();
+			Intent intent = new Intent(OurDataChangeReceiver.OUR_DATA_CHANGED);
+			intent.putExtra(OurDataChangeReceiver.ACTION, OurDataChangeReceiver.ACTION_SYNC_DATA);
+			context.sendBroadcast(intent);
 		}
 
 		@Override
