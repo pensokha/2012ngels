@@ -28,4 +28,6 @@ public class CommonConstants {
 		"/" + CONTENTS_FOLDER_NAME + "/" + fileName;
 		return path;
 	}
+	
+	public static final int MAX_CONNECTION = 7;
 }

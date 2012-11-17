@@ -20,7 +20,7 @@ public class P2PServer implements Runnable {
 	private static final int SERVER_NUM = CommonConstants.P2P_SERVER_PORT.length;
 
 	private ServerSocket serverSock;
-
+	
 	/**
 	 * 
 	 */

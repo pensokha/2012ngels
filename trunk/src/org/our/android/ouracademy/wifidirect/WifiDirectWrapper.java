@@ -2,9 +2,13 @@ package org.our.android.ouracademy.wifidirect;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 import org.our.android.ouracademy.OurPreferenceManager;
 import org.our.android.ouracademy.R;
+import org.our.android.ouracademy.constants.CommonConstants;
 import org.our.android.ouracademy.util.NetworkState;
 
 import android.content.Context;
@@ -18,7 +22,10 @@ import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.ActionListener;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.net.wifi.p2p.WifiP2pManager.ChannelListener;
+import android.net.wifi.p2p.WifiP2pManager.DnsSdTxtRecordListener;
 import android.net.wifi.p2p.WifiP2pManager.PeerListListener;
+import android.net.wifi.p2p.nsd.WifiP2pDnsSdServiceInfo;
+import android.net.wifi.p2p.nsd.WifiP2pDnsSdServiceRequest;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -28,8 +35,11 @@ import android.widget.Toast;
  * 
  */
 public class WifiDirectWrapper {
+	private static final String CONNECTED_COUNT_KEY = "connected_count";
 
 	private static WifiDirectWrapper instance = new WifiDirectWrapper();
+	private HashMap<String, WifiP2pDevice> teacherMap = new HashMap<String, WifiP2pDevice>();
+	private ArrayList<FindDeviceListener> findDeviceListenerList = new ArrayList<FindDeviceListener>();
 
 	private final IntentFilter intentFilter = new IntentFilter();
 	private WifiP2pManager manager;
@@ -87,44 +97,99 @@ public class WifiDirectWrapper {
 			return null;
 		}
 	}
-	
 
-	public void findConnectedStudent(final FindDeviceListener listener) {
+	public void findConnectedStudent() {
 		manager.requestPeers(channel, new PeerListListener() {
 			@Override
 			public void onPeersAvailable(WifiP2pDeviceList peers) {
 				Collection<WifiP2pDevice> devices = peers.getDeviceList();
-				ArrayList<WifiP2pDevice> connectedStudents = new ArrayList<WifiP2pDevice>();
+				
+				HashMap<String, WifiP2pDevice> connectedStudents = new HashMap<String, WifiP2pDevice>();
 				for (WifiP2pDevice device : devices) {
 					if (device.status == WifiP2pDevice.CONNECTED) {
-						connectedStudents.add(device);
+						connectedStudents.put(device.deviceAddress, device);
 					}
 				}
-				listener.onFindDevice(connectedStudents);
+				notiListener(connectedStudents);
 			}
 		});
 	}
+	
+	public void addFindDeviceListener(FindDeviceListener listener){
+		findDeviceListenerList.add(listener);
+	}
+	
+	public void removeFindDeviceListener(FindDeviceListener listener){
+		findDeviceListenerList.remove(listener);
+	}
+	
+	private void notiListener(HashMap<String, WifiP2pDevice> data){
+		for(FindDeviceListener listener : findDeviceListenerList){
+			listener.onFindDevice(data);
+		}
+	}
 
-	public void findTeacher(final FindDeviceListener listener) {
-		
-		((WifiDirectStudentListener)wifidirectListener).setFoundListener(listener);
-		
-		manager.discoverPeers(channel, new ActionListener() {
-			@Override
-			public void onSuccess() {
-				Log.d("Test", "success");
-				
+	private DnsSdTxtRecordListener txtListener;
+
+	public void findTeacher() {
+
+		synchronized (WifiDirectWrapper.this) {
+			if (txtListener == null) {
+				txtListener = new DnsSdTxtRecordListener() {
+
+					@Override
+					public void onDnsSdTxtRecordAvailable(String fullDomain,
+							Map<String, String> record, WifiP2pDevice device) {
+						if (device.isGroupOwner()) {
+							Log.d("Service", device.toString() + ":"+record.toString());
+							int connected_count = Integer.parseInt(record
+									.get(CONNECTED_COUNT_KEY));
+							if (CommonConstants.MAX_CONNECTION >= connected_count) {
+								if(teacherMap.containsKey(device.deviceAddress) == false){
+									teacherMap.put(device.deviceAddress, device);
+								}
+							}else{
+								if(teacherMap.containsKey(device.deviceAddress)){
+									teacherMap.remove(device.deviceAddress);
+								}
+							}
+						}
+						notiListener(teacherMap);
+					}
+				};
 			}
 
-			@Override
-			public void onFailure(int reason) {
-				Log.d("Test", "fail : "+reason);
-			}
-		});
+			manager.setDnsSdResponseListeners(channel, null, txtListener);
+		}
+
+		manager.addServiceRequest(channel,
+				WifiP2pDnsSdServiceRequest.newInstance(), new ActionListener() {
+
+					@Override
+					public void onSuccess() {
+						manager.discoverServices(channel, new ActionListener() {
+
+							@Override
+							public void onSuccess() {
+								Log.d("Test", "discoverServices success");
+							}
+
+							@Override
+							public void onFailure(int reason) {
+								Log.d("Test", "discoverServices failure");
+							}
+						});
+					}
+
+					@Override
+					public void onFailure(int reason) {
+						Log.d("Test", "addServiceRequest failure");
+					}
+				});
 	}
 
 	public interface FindDeviceListener {
-		public void onFindDevice(ArrayList<WifiP2pDevice> devices);
+		public void onFindDevice(HashMap<String, WifiP2pDevice> devices);
 	}
 
 	public void discoverPeers() {
@@ -136,8 +201,35 @@ public class WifiDirectWrapper {
 			wifidirectListener = new WifiDirectTeacherListener(context,
 					manager, channel);
 		} else {
-			wifidirectListener = new WifiDirectStudentListener(context,
-					manager, channel);
+			WifiDirectStudentListener studentListener = new WifiDirectStudentListener(
+					context, manager, channel);
+
+			studentListener.setFoundListener(new FindDeviceListener() {
+				@Override
+				public void onFindDevice(HashMap<String, WifiP2pDevice> devices) {
+					synchronized (WifiDirectWrapper.this.teacherMap) {
+						Iterator<String> teacherAddressesIt = teacherMap.keySet().iterator();
+						
+						String address;
+						ArrayList<String> dontFindAddress = new ArrayList<String>();
+						while(teacherAddressesIt.hasNext()){
+							address = teacherAddressesIt.next();
+							if(devices.containsKey(address)){
+								teacherMap.get(address).status = devices.get(address).status;
+							}else{
+								dontFindAddress.add(address);
+							}
+						}
+						
+						for(String removeAddress : dontFindAddress){
+							teacherMap.remove(removeAddress);
+						}
+					}
+					
+					notiListener(teacherMap);
+				}
+			});
+			wifidirectListener = studentListener;
 		}
 		return wifidirectListener;
 	}
@@ -150,35 +242,35 @@ public class WifiDirectWrapper {
 		unregister();
 		disconnect(listener);
 	}
-	
-	public void connectAfterChecking(final WifiP2pDevice device){
-		if(NetworkState.isWifiDirectConnected()){
+
+	public void connectAfterChecking(final WifiP2pDevice device) {
+		if (NetworkState.isWifiDirectConnected()) {
 			disconnect(new ActionListener() {
 				@Override
 				public void onSuccess() {
 					Log.d("Test", "remove success");
 					connect(device);
 				}
-				
+
 				@Override
 				public void onFailure(int reason) {
 					Log.d("Test", "remove false");
 				}
 			});
-		}else{
+		} else {
 			connect(device);
 		}
 	}
-	
-	public void connectAfterCancel(final WifiP2pDevice device){
+
+	public void connectAfterCancel(final WifiP2pDevice device) {
 		manager.cancelConnect(channel, new ActionListener() {
-			
+
 			@Override
 			public void onSuccess() {
 				Log.d("Cancle", "success");
 				connect(device);
 			}
-			
+
 			@Override
 			public void onFailure(int reason) {
 				Log.d("Cancle", "failur");
@@ -186,20 +278,21 @@ public class WifiDirectWrapper {
 			}
 		});
 	}
-	
-	public void connect(WifiP2pDevice device){
+
+	public void connect(WifiP2pDevice device) {
 		WifiP2pConfig config = new WifiP2pConfig();
 		config.deviceAddress = device.deviceAddress;
 		config.wps.setup = WpsInfo.PBC;
-		
+
 		manager.connect(channel, config, new ActionListener() {
-			
+
 			@Override
 			public void onSuccess() {
 				Log.d("Test", "Success Connect Group");
-				manager.requestConnectionInfo(channel, (WifiDirectStudentListener)wifidirectListener);
+				manager.requestConnectionInfo(channel,
+						(WifiDirectStudentListener) wifidirectListener);
 			}
-			
+
 			@Override
 			public void onFailure(int reason) {
 				Log.d("Test", "False Connect Group");
@@ -254,9 +347,48 @@ public class WifiDirectWrapper {
 			} else {
 				Toast.makeText(
 						context,
-						context.getResources().getString(R.string.channerl_disconnected_message),
+						context.getResources().getString(
+								R.string.channerl_disconnected_message),
 						Toast.LENGTH_LONG).show();
 			}
 		}
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public void startRegistration(final int connected_count) {
+		Log.d("Test", "startRegistration");
+		manager.clearLocalServices(channel, new ActionListener() {
+
+			@Override
+			public void onSuccess() {
+				Map record = new HashMap();
+				record.put(CONNECTED_COUNT_KEY,
+						Integer.toString(connected_count));
+
+				WifiP2pDnsSdServiceInfo serviceInfo = WifiP2pDnsSdServiceInfo
+						.newInstance("_our_p2p", "_ipp._tcp", record);
+
+				manager.addLocalService(channel, serviceInfo,
+						new ActionListener() {
+
+							@Override
+							public void onSuccess() {
+								Log.d("AddService", "addLocalService success");
+							}
+
+							@Override
+							public void onFailure(int reason) {
+								Log.d("AddService", "addLocalService false");
+							}
+						});
+
+			}
+
+			@Override
+			public void onFailure(int reason) {
+				Log.d("Test", "startRegistration onFailure");
+			}
+		});
+
 	}
 }

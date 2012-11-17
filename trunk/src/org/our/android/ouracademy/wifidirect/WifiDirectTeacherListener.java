@@ -1,11 +1,16 @@
 package org.our.android.ouracademy.wifidirect;
 
+import java.util.Collection;
+
 import android.content.Context;
+import android.net.wifi.p2p.WifiP2pDevice;
+import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.ActionListener;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener;
+import android.net.wifi.p2p.WifiP2pManager.PeerListListener;
 import android.util.Log;
 
 /********
@@ -29,7 +34,26 @@ public class WifiDirectTeacherListener extends WifiDirectDefaultListener {
 	@Override
 	public void onPeerChanged() {
 		Log.d("Test", "onPeerChanged");
-		// Noting do
+		
+		if(manager != null){
+			manager.requestPeers(channel, new PeerListListener() {
+				
+				@Override
+				public void onPeersAvailable(WifiP2pDeviceList peers) {
+					Collection<WifiP2pDevice> devices = peers.getDeviceList();
+					
+					int connected_count = 0;
+					for(WifiP2pDevice device : devices){
+						if(device.status == WifiP2pDevice.CONNECTED){
+							connected_count++;
+						}
+					}
+					
+					WifiDirectWrapper.getInstance().startRegistration(connected_count);
+				}
+				
+			});
+		}
 	}
 
 	/********
@@ -50,6 +74,7 @@ public class WifiDirectTeacherListener extends WifiDirectDefaultListener {
 					@Override
 					public void onSuccess() {
 						Log.d(TAG, "Success Create Group");
+						WifiDirectWrapper.getInstance().startRegistration(0);
 					}
 					
 					@Override
@@ -74,6 +99,7 @@ public class WifiDirectTeacherListener extends WifiDirectDefaultListener {
 		@Override
 		public void onSuccess() {
 			Log.d(TAG, "Success Create Group");
+			WifiDirectWrapper.getInstance().startRegistration(0);
 		}
 		
 		@Override
