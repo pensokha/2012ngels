@@ -1,6 +1,6 @@
 package org.our.android.ouracademy.ui.pages;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.our.android.ouracademy.OurPreferenceManager;
 import org.our.android.ouracademy.R;
@@ -20,6 +20,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.wifi.p2p.WifiP2pDevice;
+import android.net.wifi.p2p.WifiP2pManager.ActionListener;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -56,11 +57,15 @@ public class SettingActivity extends BaseActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		
+		WifiDirectWrapper.getInstance().addFindDeviceListener(findWifiDirectPeerListener);
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
+		
+		WifiDirectWrapper.getInstance().removeFindDeviceListener(findWifiDirectPeerListener);
 	}
 
 	@Override
@@ -94,7 +99,17 @@ public class SettingActivity extends BaseActivity {
 
 					if (NetworkState.isWifiDirectConnected()) {
 						if (device.status == WifiP2pDevice.CONNECTED) {
-							WifiDirectWrapper.getInstance().disconnect(null);
+							WifiDirectWrapper.getInstance().disconnect(new ActionListener() {
+								@Override
+								public void onSuccess() {
+									WifiDirectWrapper.getInstance().findTeacher();
+								}
+								
+								@Override
+								public void onFailure(int reason) {
+									
+								}
+							});
 						}
 					}else{
 						if (device.status != WifiP2pDevice.CONNECTED
@@ -171,8 +186,7 @@ public class SettingActivity extends BaseActivity {
 					true, false,
 					null);
 
-			WifiDirectWrapper.getInstance().findConnectedStudent(
-					findWifiDirectPeerListener);
+			WifiDirectWrapper.getInstance().findConnectedStudent();
 		}
 
 		@Override
@@ -188,21 +202,22 @@ public class SettingActivity extends BaseActivity {
 			listAdapter.deviceList.clear();
 			listAdapter.notifyDataSetChanged();
 
-			WifiDirectWrapper.getInstance().findTeacher(
-					findWifiDirectPeerListener);
+			WifiDirectWrapper.getInstance().findTeacher();
 		}
 	};
 
 	private FindDeviceListener findWifiDirectPeerListener = new FindDeviceListener() {
 
 		@Override
-		public void onFindDevice(ArrayList<WifiP2pDevice> devices) {
+		public void onFindDevice(HashMap<String, WifiP2pDevice> devices) {
 			if (listAdapter.deviceList != null && devices != null) {
 				listAdapter.deviceList.clear();
-				listAdapter.deviceList.addAll(devices);
+				listAdapter.deviceList.addAll(devices.values());
 				listAdapter.notifyDataSetChanged();
 			}
-			progressDialog.dismiss();
+			if (progressDialog != null && progressDialog.isShowing()) {
+				progressDialog.dismiss();
+			}
 		}
 	};
 
