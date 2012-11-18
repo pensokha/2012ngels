@@ -40,7 +40,7 @@ public class MainActivity extends BaseActivity {
 	MainMenuView menuView;
 
 	private OurDataChangeReceiver reciever;
-	private final IntentFilter intentFilter = new IntentFilter();;
+	private final IntentFilter intentFilter = new IntentFilter();
 
 	private static boolean closeFlag = false;
 
@@ -224,36 +224,15 @@ public class MainActivity extends BaseActivity {
 	private void syncData(){
 		ArrayList<OurContents> contents = detailView.getContentList();
 		if(contents != null){
-			DataManager dataManager = DataManagerFactory.getDataManager();
-			HashMap<String, Integer> syncContents = new HashMap<String, Integer>();
 			for(OurContents content : contents){
 				if(content.fileStatus == OurContents.FileStatus.NONE){
 					content.fileStatus = OurContents.FileStatus.DOWNLOADING;
-					
-					dataManager.download(content);
-					
-					syncContents.put(content.getId(), 1);
-				}else if(content.fileStatus == OurContents.FileStatus.DOWNLOADING){
-					syncContents.put(content.getId(), 1);
 				}
 			}
 			
 			if (detailView.getListAdapter() != null) {
 				detailView.getList().setAdapter(detailView.getListAdapter());
 				detailView.getListAdapter().notifyDataSetChanged();
-			}
-			
-			ContentDAO contentDao = new ContentDAO();
-			try {
-				ArrayList<OurContents> undownloadedContents = contentDao.getUndownloadedContents();
-				
-				for(OurContents content : undownloadedContents){
-					if(syncContents.containsKey(content.getId()) == false){
-						dataManager.download(content);
-					}
-				}
-			} catch (DAOException e) {
-				e.printStackTrace();
 			}
 		}
 	}

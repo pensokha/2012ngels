@@ -1,11 +1,15 @@
 package org.our.android.ouracademy.ui.pages;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.our.android.ouracademy.OurPreferenceManager;
 import org.our.android.ouracademy.R;
+import org.our.android.ouracademy.dao.ContentDAO;
+import org.our.android.ouracademy.dao.DAOException;
 import org.our.android.ouracademy.manager.DataManager;
 import org.our.android.ouracademy.manager.DataManagerFactory;
+import org.our.android.ouracademy.model.OurContents;
 import org.our.android.ouracademy.ui.adapter.WiFiListAdapter;
 import org.our.android.ouracademy.ui.pages.MainActivity.OurDataChangeReceiver;
 import org.our.android.ouracademy.ui.view.SetupMainView;
@@ -16,8 +20,10 @@ import org.our.android.ouracademy.wifidirect.WifiDirectWrapper;
 import org.our.android.ouracademy.wifidirect.WifiDirectWrapper.FindDeviceListener;
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.wifi.p2p.WifiP2pDevice;
@@ -33,7 +39,7 @@ import android.widget.ListView;
  * 
  * 
  * @author jyeon
- *
+ * 
  */
 public class SettingActivity extends BaseActivity {
 	private Context context;
@@ -48,26 +54,51 @@ public class SettingActivity extends BaseActivity {
 
 	ProgressDialog progressDialog = null;
 
+	private BroadcastReceiver reciever;
+	private final IntentFilter intentFilter = new IntentFilter();
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		initUI();
 
 		context = this;
+
+		reciever = new BroadcastReceiver() {
+
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				if (OurDataChangeReceiver.OUR_DATA_CHANGED.equals(intent
+						.getAction())) {
+					switch (intent
+							.getIntExtra(OurDataChangeReceiver.ACTION, -1)) {
+					case OurDataChangeReceiver.ACTION_DOWNLOADING:
+						break;
+					}
+				}
+			}
+		};
+		intentFilter.addAction(OurDataChangeReceiver.OUR_DATA_CHANGED);
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		
-		WifiDirectWrapper.getInstance().addFindDeviceListener(findWifiDirectPeerListener);
+
+		WifiDirectWrapper.getInstance().addFindDeviceListener(
+				findWifiDirectPeerListener);
+
+		registerReceiver(reciever, intentFilter);
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
-		
-		WifiDirectWrapper.getInstance().removeFindDeviceListener(findWifiDirectPeerListener);
+
+		WifiDirectWrapper.getInstance().removeFindDeviceListener(
+				findWifiDirectPeerListener);
+
+		unregisterReceiver(reciever);
 	}
 
 	@Override
@@ -85,7 +116,8 @@ public class SettingActivity extends BaseActivity {
 
 	private void createListView() {
 		wifiListView = mainView.getListView();
-		wifiListView.setSelector(new ColorDrawable(Color.parseColor("#00000000")));
+		wifiListView.setSelector(new ColorDrawable(Color
+				.parseColor("#00000000")));
 		wifiListView.setCacheColorHint(Color.parseColor("#00000000"));
 		listAdapter = new WiFiListAdapter();
 		wifiListView.setAdapter(listAdapter);
@@ -101,22 +133,25 @@ public class SettingActivity extends BaseActivity {
 
 					if (NetworkState.isWifiDirectConnected()) {
 						if (device.status == WifiP2pDevice.CONNECTED) {
-							WifiDirectWrapper.getInstance().disconnect(new ActionListener() {
-								@Override
-								public void onSuccess() {
-									WifiDirectWrapper.getInstance().findTeacher();
-								}
-								
-								@Override
-								public void onFailure(int reason) {
-									
-								}
-							});
+							WifiDirectWrapper.getInstance().disconnect(
+									new ActionListener() {
+										@Override
+										public void onSuccess() {
+											WifiDirectWrapper.getInstance()
+													.findTeacher();
+										}
+
+										@Override
+										public void onFailure(int reason) {
+
+										}
+									});
 						}
-					}else{
+					} else {
 						if (device.status != WifiP2pDevice.CONNECTED
 								&& device.status == WifiP2pDevice.AVAILABLE) {
-							WifiDirectWrapper.getInstance().connectAfterCancel(device);
+							WifiDirectWrapper.getInstance().connectAfterCancel(
+									device);
 						}
 					}
 				}
@@ -124,9 +159,9 @@ public class SettingActivity extends BaseActivity {
 		});
 	}
 
-//	public void onClickMode(View view) {
-//		showSingleShortToast("모드 설정");
-//	}
+	// public void onClickMode(View view) {
+	// showSingleShortToast("모드 설정");
+	// }
 
 	SetupMainViewListener listener = new SetupMainViewListener() {
 
@@ -147,8 +182,23 @@ public class SettingActivity extends BaseActivity {
 		@Override
 		public void onClickDataSyncCell() {
 			Intent intent = new Intent(OurDataChangeReceiver.OUR_DATA_CHANGED);
-			intent.putExtra(OurDataChangeReceiver.ACTION, OurDataChangeReceiver.ACTION_SYNC_DATA);
+			intent.putExtra(OurDataChangeReceiver.ACTION,
+					OurDataChangeReceiver.ACTION_SYNC_DATA);
 			context.sendBroadcast(intent);
+
+			DataManager dataManager = DataManagerFactory.getDataManager();
+
+			ContentDAO contentDao = new ContentDAO();
+			try {
+				ArrayList<OurContents> undownloadedContents = contentDao
+						.getUndownloadedContents();
+
+				for (OurContents content : undownloadedContents) {
+					dataManager.download(content);
+				}
+			} catch (DAOException e) {
+				e.printStackTrace();
+			}
 		}
 
 		@Override
@@ -189,19 +239,18 @@ public class SettingActivity extends BaseActivity {
 			WifiDirectWrapper.getInstance().findTeacher();
 		}
 	};
-	
-	private void showProgress(int titleResourceId){
+
+	private void showProgress(int titleResourceId) {
 		if (progressDialog != null && progressDialog.isShowing()) {
 			progressDialog.dismiss();
 		}
-		progressDialog = ProgressDialog.show(SettingActivity.this,
-				context.getResources().getString(titleResourceId),
-				context.getResources().getString(R.string.finding),
-				true, true, null);
-		
+		progressDialog = ProgressDialog.show(SettingActivity.this, context
+				.getResources().getString(titleResourceId), context
+				.getResources().getString(R.string.finding), true, true, null);
+
 		Handler handler = new Handler();
 		handler.postDelayed(new Runnable() {
-			
+
 			@Override
 			public void run() {
 				if (progressDialog != null && progressDialog.isShowing()) {
