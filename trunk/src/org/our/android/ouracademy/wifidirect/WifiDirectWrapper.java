@@ -103,7 +103,7 @@ public class WifiDirectWrapper {
 			@Override
 			public void onPeersAvailable(WifiP2pDeviceList peers) {
 				Collection<WifiP2pDevice> devices = peers.getDeviceList();
-				
+
 				HashMap<String, WifiP2pDevice> connectedStudents = new HashMap<String, WifiP2pDevice>();
 				for (WifiP2pDevice device : devices) {
 					if (device.status == WifiP2pDevice.CONNECTED) {
@@ -114,17 +114,17 @@ public class WifiDirectWrapper {
 			}
 		});
 	}
-	
-	public void addFindDeviceListener(FindDeviceListener listener){
+
+	public void addFindDeviceListener(FindDeviceListener listener) {
 		findDeviceListenerList.add(listener);
 	}
-	
-	public void removeFindDeviceListener(FindDeviceListener listener){
+
+	public void removeFindDeviceListener(FindDeviceListener listener) {
 		findDeviceListenerList.remove(listener);
 	}
-	
-	private void notiListener(HashMap<String, WifiP2pDevice> data){
-		for(FindDeviceListener listener : findDeviceListenerList){
+
+	private void notiListener(HashMap<String, WifiP2pDevice> data) {
+		for (FindDeviceListener listener : findDeviceListenerList) {
 			listener.onFindDevice(data);
 		}
 	}
@@ -141,15 +141,19 @@ public class WifiDirectWrapper {
 					public void onDnsSdTxtRecordAvailable(String fullDomain,
 							Map<String, String> record, WifiP2pDevice device) {
 						if (device.isGroupOwner()) {
-							Log.d("Service", device.toString() + ":"+record.toString());
+							Log.d("Service",
+									device.toString() + ":" + record.toString());
 							int connected_count = Integer.parseInt(record
 									.get(CONNECTED_COUNT_KEY));
 							if (CommonConstants.MAX_CONNECTION >= connected_count) {
-								if(teacherMap.containsKey(device.deviceAddress) == false){
-									teacherMap.put(device.deviceAddress, device);
+								if (teacherMap
+										.containsKey(device.deviceAddress) == false) {
+									teacherMap
+											.put(device.deviceAddress, device);
 								}
-							}else{
-								if(teacherMap.containsKey(device.deviceAddress)){
+							} else {
+								if (teacherMap
+										.containsKey(device.deviceAddress)) {
 									teacherMap.remove(device.deviceAddress);
 								}
 							}
@@ -157,35 +161,37 @@ public class WifiDirectWrapper {
 						notiListener(teacherMap);
 					}
 				};
-			}
 
-			manager.setDnsSdResponseListeners(channel, null, txtListener);
-		}
-
-		manager.addServiceRequest(channel,
-				WifiP2pDnsSdServiceRequest.newInstance(), new ActionListener() {
-
-					@Override
-					public void onSuccess() {
-						manager.discoverServices(channel, new ActionListener() {
+				manager.setDnsSdResponseListeners(channel, null, txtListener);
+				manager.addServiceRequest(channel,
+						WifiP2pDnsSdServiceRequest.newInstance(),
+						new ActionListener() {
 
 							@Override
 							public void onSuccess() {
-								Log.d("Test", "discoverServices success");
+								Log.d("Test", "addServiceRequest success");
 							}
 
 							@Override
 							public void onFailure(int reason) {
-								Log.d("Test", "discoverServices failure");
+								Log.d("Test", "addServiceRequest failure");
 							}
 						});
-					}
+			}
+		}
 
-					@Override
-					public void onFailure(int reason) {
-						Log.d("Test", "addServiceRequest failure");
-					}
-				});
+		manager.discoverServices(channel, new ActionListener() {
+
+			@Override
+			public void onSuccess() {
+				Log.d("Test", "discoverServices success");
+			}
+
+			@Override
+			public void onFailure(int reason) {
+				Log.d("Test", "discoverServices failure");
+			}
+		});
 	}
 
 	public interface FindDeviceListener {
@@ -208,28 +214,30 @@ public class WifiDirectWrapper {
 				@Override
 				public void onFindDevice(HashMap<String, WifiP2pDevice> devices) {
 					synchronized (WifiDirectWrapper.this.teacherMap) {
-						Iterator<String> teacherAddressesIt = teacherMap.keySet().iterator();
-						
+						Iterator<String> teacherAddressesIt = teacherMap
+								.keySet().iterator();
+
 						String address;
 						ArrayList<String> dontFindAddress = new ArrayList<String>();
-						while(teacherAddressesIt.hasNext()){
+						while (teacherAddressesIt.hasNext()) {
 							address = teacherAddressesIt.next();
-							if(devices.containsKey(address)){
-								teacherMap.get(address).status = devices.get(address).status;
-							}else{
+							if (devices.containsKey(address)) {
+								teacherMap.get(address).status = devices
+										.get(address).status;
+							} else {
 								dontFindAddress.add(address);
 							}
 						}
-						
-						for(String removeAddress : dontFindAddress){
+
+						for (String removeAddress : dontFindAddress) {
 							teacherMap.remove(removeAddress);
 						}
 					}
-					
+
 					notiListener(teacherMap);
-					
-					if(teacherMap.size() != devices.size()){
-						findTeacher();
+
+					if (teacherMap.size() != devices.size()) {
+						// findTeacher();
 					}
 				}
 			});
