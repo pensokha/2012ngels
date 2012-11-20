@@ -74,6 +74,24 @@ public class NetworkState {
 		}
 		return (false);
 	}
+	
+	static public boolean isWifiAvailable(Context context) {
+		// NetworkInfo mobile = null;
+		NetworkInfo wifi = null;
+		try {
+			ConnectivityManager manager = (ConnectivityManager) context
+					.getSystemService(Context.CONNECTIVITY_SERVICE);
+			if (manager != null) {
+				wifi = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+				if (wifi.isAvailable()) {
+					return (true);
+				}
+			}
+		} catch (Exception err) {
+			err.printStackTrace();
+		}
+		return (false);
+	}
 
 	static public boolean isWifiConnected(Context context) {
 		// NetworkInfo mobile = null;
