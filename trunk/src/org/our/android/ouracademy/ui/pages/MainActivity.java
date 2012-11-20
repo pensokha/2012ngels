@@ -195,6 +195,7 @@ public class MainActivity extends BaseActivity {
 		public static final int ACTION_DOWNLOADING = 3;
 		public static final int ACTION_CANCEL_DOWNLOADING = 4;
 		public static final int ACTION_SYNC_DATA = 5;
+		public static final int ACTION_ERROR_DOWNLOADING = 6;
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
@@ -215,6 +216,7 @@ public class MainActivity extends BaseActivity {
 							intent.getLongExtra(DOWNLAD_SIZE, 0));
 					break;
 				case ACTION_CANCEL_DOWNLOADING:
+				case ACTION_ERROR_DOWNLOADING:
 					cancelDownloading(intent.getStringExtra(CONTENT_ID));
 					break;
 				case ACTION_SYNC_DATA:

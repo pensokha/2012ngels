@@ -57,15 +57,12 @@ public class DownloadClient extends P2PClient {
 		byte buf[] = new byte[CommonConstants.SOCKET_BUFFER_SIZE];
 		long totalSize = content.getDownloadedSize();
 		int len;
-		while ((len = inputStream.read(buf)) != -1) {
+		while ((len = inputStream.read(buf)) != -1 || (Thread.currentThread().isInterrupted() == false)) {
 			rand.write(buf, 0, len);
 			totalSize += len;
 			content.setDownloadedSize(totalSize);
 			if(notiSize + CommonConstants.SOCKET_BUFFER_SIZE < totalSize){
 				sendDownload(totalSize);
-			}
-			if (Thread.currentThread().isInterrupted()) {
-				break;
 			}
 		}
 		rand.close();
@@ -93,6 +90,14 @@ public class DownloadClient extends P2PClient {
 
 		context.sendBroadcast(intent);
 	}
+	
+	private void sendErrorDownload() {
+		intent.putExtra(OurDataChangeReceiver.ACTION,
+				OurDataChangeReceiver.ACTION_ERROR_DOWNLOADING);
+		intent.putExtra(OurDataChangeReceiver.CONTENT_ID, content.getId());
+
+		context.sendBroadcast(intent);
+	}
 
 	@Override
 	public void onInterrupted() {
@@ -105,7 +110,11 @@ public class DownloadClient extends P2PClient {
 			contentDao.updateDownloadedSize(content);
 			
 			if(content.getSize() != content.getDownloadedSize()){
-				sendCancelDownload();
+				if(Thread.currentThread().isInterrupted()){
+					sendErrorDownload();
+				}else{
+					sendCancelDownload();
+				}
 			}else{
 				sendDownload(content.getDownloadedSize());
 			}
