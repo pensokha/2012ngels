@@ -66,11 +66,11 @@
         </RelativeLayout>
     </AbsoluteLayout>
     <!-- Right shadow Image -->
-
+<!-- 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:layout_alignParentRight="true"
         android:background="@drawable/list_bg04" />
-
+ -->
 </RelativeLayout>

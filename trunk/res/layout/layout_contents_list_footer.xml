@@ -1,16 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/footer_layout"
     android:layout_width="wrap_content"
-    android:layout_height="fill_parent"
-    android:background="@drawable/list_bg02" >
-    <TextView
-        style="@style/fontstyle_txt_main_menu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:drawableTop="@drawable/list_icon_menu04"
-        android:gravity="center"
-        android:text="@string/back" />
-
+	android:layout_height="fill_parent" >
+	<ImageView 
+	    android:id="@+id/footer_bg"
+	    android:layout_width="wrap_content"
+	    android:layout_height="fill_parent"
+	    android:layout_alignParentLeft="true"
+	    android:background="@drawable/list_bg09" />
+	<ImageView 
+	    android:id="@+id/footer_shadow"
+	    android:layout_width="wrap_content"
+	    android:layout_height="fill_parent"
+	    android:layout_alignParentLeft="true"
+	    android:background="@drawable/list_bg08" />
+	<RelativeLayout
+	    android:id="@+id/footer_layout"
+	    android:layout_toRightOf="@id/footer_bg"
+	    android:layout_width="wrap_content"
+	    android:layout_height="fill_parent"
+	    android:background="@drawable/list_bg07" >
+	    <TextView
+	        style="@style/fontstyle_txt_main_menu"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_centerInParent="true"
+	        android:drawableTop="@drawable/list_icon_menu04"
+	        android:gravity="center"
+	        android:text="@string/back" />
+	</RelativeLayout>
 </RelativeLayout>

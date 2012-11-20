@@ -3,12 +3,12 @@ package org.our.android.ouracademy.ui.pages;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.our.android.ouracademy.OurApplication;
 import org.our.android.ouracademy.R;
+import org.our.android.ouracademy.broadreceiver.WifiStatusReceiver;
+import org.our.android.ouracademy.broadreceiver.WifiStatusReceiver.OnChangeNetworkStatusListener;
 import org.our.android.ouracademy.dao.CategoryDAO;
 import org.our.android.ouracademy.dao.ContentDAO;
 import org.our.android.ouracademy.dao.DAOException;
-import org.our.android.ouracademy.manager.DataManager;
 import org.our.android.ouracademy.manager.DataManagerFactory;
 import org.our.android.ouracademy.model.OurCategory;
 import org.our.android.ouracademy.model.OurContents;
@@ -19,6 +19,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -40,6 +41,7 @@ public class MainActivity extends BaseActivity {
 	MainMenuView menuView;
 
 	private OurDataChangeReceiver reciever;
+	private WifiStatusReceiver wifiReciever;
 	private final IntentFilter intentFilter = new IntentFilter();
 
 	private static boolean closeFlag = false;
@@ -55,12 +57,15 @@ public class MainActivity extends BaseActivity {
 		reciever = new OurDataChangeReceiver();
 		intentFilter.addAction(OurDataChangeReceiver.OUR_DATA_CHANGED);
 		registerReceiver(reciever, intentFilter);
+		
+		wifiReciever = new WifiStatusReceiver(getBaseContext());
+		wifiReciever.setOnChangeNetworkStatusListener(networkSatusListener);
+		registerReceiver(wifiReciever, new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		String dd = OurApplication.getInstance().getLocaleLangueage();
 		DataManagerFactory.getDataManager().syncFileAndDatabase();
 	}
 
@@ -75,6 +80,7 @@ public class MainActivity extends BaseActivity {
 		super.onDestroy();
 
 		unregisterReceiver(reciever);
+		unregisterReceiver(wifiReciever);
 	}
 
 	private void initUI() {
@@ -338,5 +344,12 @@ public class MainActivity extends BaseActivity {
 			}
 		}
 	}
+	
+	OnChangeNetworkStatusListener networkSatusListener = new OnChangeNetworkStatusListener() {
+		@Override
+		public void OnChanged(int status) {
+			menuView.setRefreshBtnStatus(status);
+		}
+	};
 
 }
