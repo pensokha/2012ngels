@@ -163,6 +163,11 @@ public class SetupCategoryView extends LinearLayout implements View.OnClickListe
 			case R.id.networkBtn:
 			case R.id.connectedStudentBtn:
 			case R.id.deleteBtn:
+				// park
+				if (listener != null) {
+					listener.onClickBtn(view);
+				}
+				break;
 			case R.id.closeBtn:
 				if (listener != null) {
 					listener.onClickBtn(view);

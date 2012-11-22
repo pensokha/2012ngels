@@ -20,7 +20,6 @@ import android.widget.ListAdapter;
 import android.widget.Scroller;
 
 public class NCHorizontalListView extends AdapterView<ListAdapter> {
-
 	Context context;
 
 	protected ListAdapter listAdapter;
@@ -34,7 +33,7 @@ public class NCHorizontalListView extends AdapterView<ListAdapter> {
 	private GestureDetector gesture;
 	private Queue<View> removedViewQueue = new LinkedList<View>();
 	private OnItemSelectedListener onItemSelected;
-	private OnItemClickListener onItemClicked;
+	private OnItemClickListener onItemClickListener;
 
 	boolean isFling = false;
 	boolean isFinished = false;
@@ -65,6 +64,7 @@ public class NCHorizontalListView extends AdapterView<ListAdapter> {
 		gesture = new GestureDetector(getContext(), mOnGesture);
 	}
 
+	
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 
@@ -96,7 +96,7 @@ public class NCHorizontalListView extends AdapterView<ListAdapter> {
 
 	@Override
 	public void setOnItemClickListener(AdapterView.OnItemClickListener listener) {
-		onItemClicked = listener;
+		onItemClickListener = listener;
 	}
 
 	private DataSetObserver mDataObserver = new DataSetObserver() {
@@ -143,7 +143,7 @@ public class NCHorizontalListView extends AdapterView<ListAdapter> {
 
 	@Override
 	public void setSelection(int position) {
-		// TODO: implement
+		Log.d("park", "setSelection : " + position);
 	}
 
 	private void addAndMeasureChild(final View child, int viewPos) {
@@ -532,8 +532,8 @@ public class NCHorizontalListView extends AdapterView<ListAdapter> {
 				int bottom = child.getBottom();
 				viewRect.set(left, top, right, bottom);
 				if (viewRect.contains((int) e.getX(), (int) e.getY())) {
-					if (onItemClicked != null) {
-						onItemClicked.onItemClick(NCHorizontalListView.this,
+					if (onItemClickListener != null) {
+						onItemClickListener.onItemClick(NCHorizontalListView.this,
 								child, leftViewIndex + 1 + i, 0);
 					}
 					if (onItemSelected != null) {

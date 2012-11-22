@@ -10,6 +10,7 @@ import org.our.android.ouracademy.dao.CategoryDAO;
 import org.our.android.ouracademy.dao.DAOException;
 import org.our.android.ouracademy.model.OurCategory;
 import org.our.android.ouracademy.ui.adapter.CategoryListAdapter;
+import org.our.android.ouracademy.ui.pages.MainActivity;
 import org.our.android.ouracademy.ui.pages.SettingActivity;
 import org.our.android.ouracademy.util.NetworkState;
 
@@ -198,7 +199,7 @@ public class MainMenuView extends FrameLayout implements OnClickListener {
 			Intent intent = new Intent(getContext(), SettingActivity.class);
 			intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
 			Activity activity = (Activity) getContext();
-			activity.startActivityForResult(intent, 1);
+			activity.startActivityForResult(intent, MainActivity.SETTING_ACTIVITY);
 			break;
 		}
 	}

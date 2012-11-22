@@ -14,6 +14,7 @@ import org.our.android.ouracademy.model.OurCategory;
 import org.our.android.ouracademy.model.OurContents;
 import org.our.android.ouracademy.ui.view.MainDetailView;
 import org.our.android.ouracademy.ui.view.MainMenuView;
+import org.our.android.ouracademy.ui.view.MainDetailView.MenuStatus;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -49,6 +50,8 @@ public class MainActivity extends BaseActivity {
 	private HashMap<String, OurCategory> selectedCategories = new HashMap<String, OurCategory>();
 	private HashMap<String, ArrayList<OurContents>> contentsHashMap = new HashMap<String, ArrayList<OurContents>>();
 
+	public static final int SETTING_ACTIVITY = 101;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -308,6 +311,15 @@ public class MainActivity extends BaseActivity {
 
 	private void reloadContents() {
 		ArrayList<OurContents> contents = detailView.getContentList();
+		
+		// deleteMode일 때는 DB데이터를 업데이트 안 한다.
+		// @author Sung-Chul Park
+		for (OurContents content : contents) {
+			if (content.isDeleteMode()) {
+				return;
+			}
+		}
+		
 		if (contents != null) {
 			try {
 				ArrayList<OurContents> contentsFromDB = new ContentDAO()
@@ -343,6 +355,19 @@ public class MainActivity extends BaseActivity {
 				}
 			} catch (DAOException e) {
 				e.printStackTrace();
+			}
+		}
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == SETTING_ACTIVITY) {
+			if (resultCode == RESULT_OK) {
+				boolean isDeleteMode = data.getBooleanExtra(SettingActivity.INTENTKEY_DELETE_MODE, false);
+				
+				if (isDeleteMode == true) {
+					detailView.goIntoDeleteMode();
+				}
 			}
 		}
 	}

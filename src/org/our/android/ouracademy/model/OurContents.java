@@ -38,6 +38,8 @@ public class OurContents implements OurJSONModel {
 	private String descriptionEng;
 	private String descriptionKmr;
 	
+	private boolean isDeleteMode = false;
+	
 	public OurCategory selectedCategory;
 	
 	public enum FileStatus {
@@ -47,6 +49,14 @@ public class OurContents implements OurJSONModel {
 
 	public OurContents() {
 		super();
+	}
+	
+	public void setDeleteMode(boolean isDeleteMode) {
+		this.isDeleteMode = isDeleteMode;
+	}
+	
+	public boolean isDeleteMode() {
+		return this.isDeleteMode;
 	}
 
 	public String getId() {
