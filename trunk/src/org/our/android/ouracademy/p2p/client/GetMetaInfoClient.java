@@ -1,5 +1,6 @@
 package org.our.android.ouracademy.p2p.client;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -39,38 +40,38 @@ public class GetMetaInfoClient extends P2PClientJSON {
 	}
 
 	@Override
-	protected void parseResponse(String jsonResponse) throws IOException,
-			JSONException {
-		JSONObject jsonObject = new JSONObject(jsonResponse);
-		OurMetaInfo metaInfo = new OurMetaInfo();
-		metaInfo.setFromJSONObject(jsonObject);
-
-		try {
-			GetMetaInfoFromMetaFile.getMetaInfoProcesses(metaInfo, context);
-			
-			if (metaInfo.getResponseCode() == OurMetaInfo.RES_CODE_SUCCESS) {
-				FileWriter wr = null;
-				try {
-					wr = new FileWriter(FileManager.STRSAVEPATH+CommonConstants.META_FILE_NAME);
-					wr.write(metaInfo.getJSONObject().toString());
-					wr.flush();
-				} catch (IOException e) {
-					e.printStackTrace();
-				} catch (JSONException e) {
-					e.printStackTrace();
-				} finally{
-					P2PManager.close(wr);
-				}
-				
-				new SyncAndReloadNoti(context).run();
-			}
-		} catch (DAOException e) {
-			e.printStackTrace();
-		}
+	public void onInterrupted() {
 	}
 
 	@Override
-	public void onInterrupted() {
-		
+	protected void onSuccess(JSONObject jsonResponse) throws IOException,
+			JSONException {
+		OurMetaInfo metaInfo = new OurMetaInfo();
+		metaInfo.setFromJSONObject(jsonResponse);
+
+		try {
+			GetMetaInfoFromMetaFile.getMetaInfoProcesses(metaInfo, context);
+
+			FileWriter wr = null;
+			File metaFile = FileManager.getFile(CommonConstants.META_FILE_NAME);
+			if(metaFile.exists() == false)
+				if(metaFile.createNewFile() == false)
+					return ;
+			try {
+				wr = new FileWriter(metaFile.getAbsolutePath());
+				wr.write(metaInfo.getJSONObject().toString());
+				wr.flush();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (JSONException e) {
+				e.printStackTrace();
+			} finally {
+				P2PManager.close(wr);
+			}
+
+			new SyncAndReloadNoti(context).run();
+		} catch (DAOException e) {
+			e.printStackTrace();
+		}
 	}
 }

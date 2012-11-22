@@ -11,6 +11,7 @@ import android.util.Log;
  * 
  */
 public abstract class WifiDirectDefaultListener implements WifiDirectListener {
+	private static final String TAG = "WifiDirectDefaultListener";
 	private boolean connnect = false;
 	protected WifiP2pManager manager;
 	protected Channel channel;
@@ -26,18 +27,25 @@ public abstract class WifiDirectDefaultListener implements WifiDirectListener {
 
 	@Override
 	public void onDisableP2p() {
-		Log.d("Test", "onDisableP2p");
+		WifiDirectWrapper.getInstance().isWifidirectEnable = false;
+		Log.d(TAG, "onDisableP2p");
+	}
+	
+	@Override
+	public void onEnableP2p(){
+		WifiDirectWrapper.getInstance().isWifidirectEnable = true;
+		Log.d(TAG, "onEnableP2p");
 	}
 
 	@Override
 	public void onConnected() {
-		Log.d("Test", "onConnected");
+		Log.d(TAG, "onConnected");
 		connnect = true;
 	}
 
 	@Override
 	public void onDisConnected() {
-		Log.d("Test", "onDisConnected");
+		Log.d(TAG, "onDisConnected");
 		connnect = false;
 	}
 
@@ -47,6 +55,6 @@ public abstract class WifiDirectDefaultListener implements WifiDirectListener {
 
 	@Override
 	public void onDeviceInfoChanged() {
-		Log.d("Test", "onDeviceInfoChanged");
+		Log.d(TAG, "onDeviceInfoChanged");
 	}
 }

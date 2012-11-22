@@ -65,13 +65,40 @@ public class ContentDAO {
 
 		dbManager = DbManager.getInstance();
 	}
+	
+	
+	public ArrayList<OurContents> getDownloadedContents() throws DAOException{
+		return getOnlyContents(DOWNLOADED_SIZE_KEY + " = " + SIZE_KEY, null);
+	}
+	
+	public ArrayList<OurContents> getExistingContents(ArrayList<OurContents> contents) throws DAOException {
+		StringBuffer contentIdQuery = new StringBuffer(ID_KEY);
+		contentIdQuery.append(" IN (");
+		for(OurContents content : contents){
+			contentIdQuery.append('\'');
+			contentIdQuery.append(content.getId());
+			contentIdQuery.append("',");
+		}
+		int lastComma = contentIdQuery.lastIndexOf(",");
+		if(lastComma == -1){
+			return null;
+		}
+		contentIdQuery.setCharAt(lastComma, ')');
+		contentIdQuery.append(" AND ");
+		contentIdQuery.append(DOWNLOADED_SIZE_KEY);
+		contentIdQuery.append(" != ");
+		contentIdQuery.append(SIZE_KEY);
+		
+		return getOnlyContents(contentIdQuery.toString(), null);
+	}
 
-	public ArrayList<OurContents> getOnlyContents() throws DAOException {
+	public ArrayList<OurContents> getOnlyContents(String selection,
+			String[] selectionArgs) throws DAOException {
 		ArrayList<OurContents> contents = new ArrayList<OurContents>();
 		try {
 			SQLiteDatabase db = dbManager.getDB();
-			Cursor cursor = db.query(CONTENT_TABLE_NAME, CONTENT_FIELDS, null,
-					null, null, null, null);
+			Cursor cursor = db.query(CONTENT_TABLE_NAME, CONTENT_FIELDS,
+					selection, selectionArgs, null, null, null);
 
 			while (cursor.moveToNext()) {
 				OurContents content = new OurContents();
@@ -173,7 +200,7 @@ public class ContentDAO {
 	public ArrayList<OurContents> getContents() throws DAOException {
 		HashMap<String, Integer> contentIdMap = new HashMap<String, Integer>();
 
-		ArrayList<OurContents> contents = getOnlyContents();
+		ArrayList<OurContents> contents = getOnlyContents(null, null);
 		for (int i = 0; i < contents.size(); i++) {
 			contentIdMap.put(contents.get(i).getId(), i);
 		}
@@ -257,17 +284,17 @@ public class ContentDAO {
 
 		return contents;
 	}
-	
+
 	public ArrayList<OurContents> getUndownloadedContents() throws DAOException {
 
 		ArrayList<OurContents> contents = new ArrayList<OurContents>();
 
 		SQLiteDatabase db = dbManager.getDB();
 
-		Cursor cursor = db.query(CONTENT_TABLE_NAME,
-				CONTENT_FIELDS, DOWNLOADED_SIZE_KEY + "!=" + SIZE_KEY, null, null, null, null);
-		
-		OurContents content; 
+		Cursor cursor = db.query(CONTENT_TABLE_NAME, CONTENT_FIELDS,
+				DOWNLOADED_SIZE_KEY + "!=" + SIZE_KEY, null, null, null, null);
+
+		OurContents content;
 		while (cursor.moveToNext()) {
 			content = new OurContents();
 

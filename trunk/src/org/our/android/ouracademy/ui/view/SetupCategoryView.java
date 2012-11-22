@@ -9,6 +9,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -49,7 +50,10 @@ public class SetupCategoryView extends LinearLayout implements View.OnClickListe
 	LinearLayout passwordView;
 
 //	boolean isPermission = false;
-
+	RoundProgress progress;
+	TextView progressPercent, syncText;
+	ImageView syncComplete;
+	
 	SetupCategoryViewListener listener;
 
 	public SetupCategoryView(Context context) {
@@ -99,6 +103,11 @@ public class SetupCategoryView extends LinearLayout implements View.OnClickListe
 		deleteBtn.setOnClickListener(this);
 
 		dataSyncView = (RelativeLayout)findViewById(R.id.data_sync_view);
+		progress = (RoundProgress)dataSyncView.findViewById(R.id.progress);
+		progressPercent = (TextView)dataSyncView.findViewById(R.id.percent);
+		syncText = (TextView)dataSyncView.findViewById(R.id.sync_text);
+		syncComplete = (ImageView)dataSyncView.findViewById(R.id.complete);
+		
 		cancelBtn = (LinearLayout)findViewById(R.id.cancel);
 		cancelBtn.setOnClickListener(this);
 
@@ -158,8 +167,6 @@ public class SetupCategoryView extends LinearLayout implements View.OnClickListe
 				break;
 
 			case R.id.datasyncBtn:
-				studentView.setVisibility(View.GONE);
-				dataSyncView.setVisibility(View.VISIBLE);
 			case R.id.networkBtn:
 			case R.id.connectedStudentBtn:
 			case R.id.deleteBtn:
@@ -256,6 +263,24 @@ public class SetupCategoryView extends LinearLayout implements View.OnClickListe
 					initPasswordView();
 				}
 			}, 1000);
+		}
+	}
+	
+	public void viewDataSync(){
+		setProgress(0);
+		studentView.setVisibility(View.GONE);
+		dataSyncView.setVisibility(View.VISIBLE);
+	}
+	
+	public void setProgress(int percent){
+		progress.setProgress(percent);
+		
+		if(percent == 100){
+			progressPercent.setVisibility(View.GONE);
+			syncComplete.setVisibility(View.VISIBLE);
+			syncText.setText(R.string.close);
+		}else{
+			progressPercent.setText(percent+"%");
 		}
 	}
 

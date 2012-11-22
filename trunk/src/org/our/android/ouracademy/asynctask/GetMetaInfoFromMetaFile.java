@@ -6,6 +6,7 @@ import org.our.android.ouracademy.dao.ContentDAO;
 import org.our.android.ouracademy.dao.DAOException;
 import org.our.android.ouracademy.dao.FSIDAO;
 import org.our.android.ouracademy.model.OurMetaInfo;
+import org.our.android.ouracademy.model.OurResponse;
 import org.our.android.ouracademy.util.DbManager;
 
 import android.content.Context;
@@ -33,7 +34,7 @@ public class GetMetaInfoFromMetaFile extends SyncAndReloadNoti{
 	
 	public static void getMetaInfoProcesses(OurMetaInfo metaInfo, Context context) throws DAOException{
 		switch (metaInfo.getResponseCode()) {
-		case OurMetaInfo.RES_CODE_SUCCESS:
+		case OurResponse.RES_CODE_SUCCESS:
 			DbManager dbManager = DbManager.getInstance();
 			CategoryDAO categoryDao = new CategoryDAO();
 			ContentDAO contentDao = new ContentDAO();
@@ -55,7 +56,7 @@ public class GetMetaInfoFromMetaFile extends SyncAndReloadNoti{
 			}
 			OurPreferenceManager.getInstance().setVersion(metaInfo.getVersion());
 			break;
-		case OurMetaInfo.RES_CODE_DONT_NEED_UPDATE:
+		case OurResponse.RES_CODE_DONT_NEED_UPDATE:
 			break;
 		default:
 			throw new DAOException("ResponseCode : "+metaInfo.getResponseCode());

@@ -7,6 +7,8 @@ import org.our.android.ouracademy.asynctask.CallbackTask;
 import org.our.android.ouracademy.asynctask.CallbackTask.OurCallback;
 import org.our.android.ouracademy.model.OurContents;
 import org.our.android.ouracademy.p2p.client.DownloadClient;
+import org.our.android.ouracademy.p2p.client.GetExistingContentsClient;
+import org.our.android.ouracademy.p2p.client.GetExistingContentsClient.GetExistingContentsListener;
 import org.our.android.ouracademy.p2p.client.GetMetaInfoClient;
 import org.our.android.ouracademy.ui.pages.MainActivity.OurDataChangeReceiver;
 import org.our.android.ouracademy.util.NetworkState;
@@ -42,6 +44,14 @@ public class StudentDataManager extends DataManager {
 	@Override
 	public void cancelDownload(OurContents content) {
 		downloadManager.cancelDownload(content);
+	}
+	
+	public void getTeacherContents(GetExistingContentsListener listener){
+		String ownerIp = WifiDirectWrapper.getInstance().getOwnerIP();
+		
+		if (ownerIp != null) {
+			executeRunnable(new GetExistingContentsClient(ownerIp, listener));
+		}
 	}
 
 	private class DownloadManager {

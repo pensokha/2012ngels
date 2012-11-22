@@ -17,6 +17,9 @@
     <string name="menu_ok">OK</string>
     <string name="ok">OK</string>
     
+    <string name="cancel">Cancel</string>
+    <string name="close">Close</string>
+    
     <string name="category_upper_case">CATEGORY</string>
     <string name="apply">Apply</string>
     
@@ -33,9 +36,22 @@
     <string name="student">Student</string>
     
     <!-- SettingActivity -->
+    <string name="finding_syncdata">Finding syncdata</string>
 	<string name="finding_student">Finding connected student</string>
 	<string name="finding_teacher">Finding teacher</string>
-	<string name="finding">Finding...</string>
+	<string name="finding">Finding..</string>
+	
+	<string name="error">error</string>
+	<string name="error_datasync">fail datasync!!!</string>
+	
+	<string name="datasync">datasync</string>
+	<string name="dontneed_datasync">don\'t need datasync</string>
+	
+	<string name="error_wifi_direct_disable_title">WifiDirect</string>
+	<string name="error_wifi_direct_disable_message">WifiDirect is disable</string>
+	
+	<string name="error_wifi_direct_disconnected_title">Disconnected</string>
+	<string name="error_wifi_direct_disconnected_message">You must connect to teacher</string>
 	
 	<!-- SetupMainView -->
 	<string name="wi_fi">WI-FI</string>
