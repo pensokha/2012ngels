@@ -31,6 +31,7 @@ public class ContentDAO {
 	public final static String DESCRIPTION_ENG_KEY = "description_eng";
 	public final static String DESCRIPTION_KMR_KEY = "description_kmr";
 	public final static String DOWNLOADED_SIZE_KEY = "downloaded_size";
+	public final static String FILE_STATUS = "";	// 데이터베이스 테이블에서 파일 상태 표시하는 이름 넣어야 함. -sung-chul park.
 
 	public final static String CONTENT_ID_KEY = "content_id";
 	public final static String CATEGORY_ID_KEY = "category_id";
@@ -126,6 +127,23 @@ public class ContentDAO {
 			throw new DAOException("Error update downloaded size");
 		}
 	}
+	
+	/**
+	 * @author Sung-Chul Park
+	 * @param content
+	 * @throws DAOException
+	 */
+//	public void updateFileStatus(OurContents content) throws DAOException {
+//		try {
+//			SQLiteDatabase db = dbManager.getDB();
+//			ContentValues values = new ContentValues();
+//			
+//			values.put(DOWNLOADED_SIZE_KEY, OurContents.FileStatus.NONE);
+//			db.update(CONTENT_TABLE_NAME, values, ID_KEY + "= ?", new String[] { content.getId() });
+//		} catch (SQLException err) {
+//			throw new DAOException("Error update downloaded size");
+//		}
+//	}
 
 	public ArrayList<OurContentCategory> getContentCategories()
 			throws DAOException {

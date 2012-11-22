@@ -175,9 +175,7 @@ public class MainDetailView extends RelativeLayout implements OnItemClickListene
 	 */
 	public void changeToMenuIcon() {
 		for (OurContents contents : contentsList) {
-			if (contents.fileStatus == OurContents.FileStatus.DOWNLOADED) {
-				contents.setDeleteMode(false);
-			}
+			contents.setDeleteMode(false);
 		}
 		
 		contentsListAdapter.notifyDataSetChanged(contentsList);

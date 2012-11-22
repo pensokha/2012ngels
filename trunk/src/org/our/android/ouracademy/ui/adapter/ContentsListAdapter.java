@@ -135,13 +135,19 @@ public class ContentsListAdapter extends BaseAdapter  {
 		return convertView;
 	}
 	
+	/**
+	 * @author Sung-Chul Park
+	 */
 	ContentsView.DeleteCallBack deletCallBack = new ContentsView.DeleteCallBack() {
 		@Override
 		public void onDeleteSuccessfully(OurContents ourContent) {
 			ourContent.fileStatus = OurContents.FileStatus.NONE;
+			// Todo : DB update하는 로직 필요.
+//			new ContentDAO().updateFileStatus(ourContent);
 			notifyDataSetChanged();	
 		}
 	};
+	
 	@Override
 	public void notifyDataSetChanged() {
 		checkItemList();
