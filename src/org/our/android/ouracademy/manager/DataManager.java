@@ -22,6 +22,8 @@ import android.content.Intent;
 import android.util.Log;
 
 public abstract class DataManager {
+	private static final String TAG = "DataManager";
+	
 	private ArrayList<ExecutorPair> taskList = new ArrayList<DataManager.ExecutorPair>();
 	protected Context context;
 	protected boolean started = false;
@@ -47,11 +49,11 @@ public abstract class DataManager {
 			executeRunnable(syncAndContentNoti);
 		}
 		
-		Log.d("Service~~~", "started : " + started);
+		Log.d(TAG, "started : " + started);
 	}
 
 	public void startOnlyService() {
-		Log.d("Service~~~", "Started!!!" + serviceName);
+		Log.d(TAG, "Started!!!" + serviceName);
 		if (serviceName == null) {
 			serviceName = context.startService(new Intent(context,
 					OurP2PService.class));
@@ -114,7 +116,7 @@ public abstract class DataManager {
 	abstract public void cancelDownload(OurContents content);
 
 	public ExecutorPair executeRunnable(CallbackTask task) {
-		Log.d("Test", "executeRunnable : " + task.getClass().getName());
+		Log.d(TAG, "executeRunnable : " + task.getClass().getName());
 
 		ExecutorPair pair = new ExecutorPair();
 

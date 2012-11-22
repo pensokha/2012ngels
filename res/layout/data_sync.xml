@@ -35,15 +35,24 @@
             link:track="@drawable/setup_datasync_progress01" />
 
         <TextView
+            android:id="@+id/percent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15.02dp"
             android:shadowColor="#ffffff"
             android:shadowDy="1"
             android:shadowRadius="1"
-            android:text="23%"
             android:textColor="#9b8770"
             android:textSize="22.54dp" />
+        
+        <ImageView 
+            android:id="@+id/complete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15.02dp"
+            android:src="@drawable/setup_icon_complete"
+            android:visibility="gone"/>
+        
     </LinearLayout>
 
     <LinearLayout
@@ -63,13 +72,14 @@
             android:src="@drawable/setup_icon_cancel" />
 
         <TextView
+            android:id="@+id/sync_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="7.51dp"
             android:shadowColor="#ffffff"
             android:shadowDy="1"
             android:shadowRadius="1"
-            android:text="Cancel"
+            android:text="@string/cancel"
             android:textColor="#9b8770"
             android:textSize="24dp" />
     </LinearLayout>

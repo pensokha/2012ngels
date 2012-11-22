@@ -119,4 +119,8 @@ public class NetworkState {
 			return info.groupOwnerAddress != null ? true : false; 
 		}
 	}
+	
+	static public boolean isWifiDirectEnabled(){
+		return WifiDirectWrapper.getInstance().isWifidirectEnable;
+	}
 }

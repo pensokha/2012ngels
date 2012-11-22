@@ -57,7 +57,7 @@ public class DownloadClient extends P2PClient {
 		byte buf[] = new byte[CommonConstants.SOCKET_BUFFER_SIZE];
 		long totalSize = content.getDownloadedSize();
 		int len;
-		while ((len = inputStream.read(buf)) != -1 || (Thread.currentThread().isInterrupted() == false)) {
+		while ((len = inputStream.read(buf)) != -1 && (Thread.currentThread().isInterrupted() == false)) {
 			rand.write(buf, 0, len);
 			totalSize += len;
 			content.setDownloadedSize(totalSize);

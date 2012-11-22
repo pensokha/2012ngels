@@ -38,6 +38,8 @@ public class SetupMainView extends LinearLayout {
 		void onClickFindConnectedStudent();
 		
 		void onClickFindTeacher();
+		
+		void onClickCacelSync();
 	};
 
 	ViewFlipper viewFlipper;
@@ -132,17 +134,11 @@ public class SetupMainView extends LinearLayout {
 					}
 					break;
 				case R.id.networkBtn:
-					wifiListView.setTitleText(getContext().getResources().getString(R.string.wi_fi));
-					wifiListView.setTitleImgResource(R.drawable.setup_icon_title02);
-					nextView();
 					if(listener != null){
 						listener.onClickFindTeacher();
 					}
 					break;
 				case R.id.connectedStudentBtn:
-					wifiListView.setTitleText(getContext().getResources().getString(R.string.connected_student));
-					wifiListView.setTitleImgResource(R.drawable.setup_icon_tab01_nor);
-					nextView();
 					if(listener != null){
 						listener.onClickFindConnectedStudent();
 					}
@@ -157,6 +153,11 @@ public class SetupMainView extends LinearLayout {
 						listener.onClickDataSyncCell();
 					}
 					break;
+				case R.id.cancel:
+					if (listener != null) {
+						listener.onClickCacelSync();
+					}
+					break;
 			}
 		}
 
@@ -167,6 +168,22 @@ public class SetupMainView extends LinearLayout {
 			}
 		}
 	};
+	
+	public void viewTeacherOnNetwork(){
+		wifiListView.setTitleText(getContext().getResources().getString(R.string.wi_fi));
+		wifiListView.setTitleImgResource(R.drawable.setup_icon_title02);
+		nextView();
+	}
+	
+	public void viewConnectedStudent(){
+		wifiListView.setTitleText(getContext().getResources().getString(R.string.connected_student));
+		wifiListView.setTitleImgResource(R.drawable.setup_icon_tab01_nor);
+		nextView();
+	}
+	
+	public void viewDataSync(){
+		categoryView.viewDataSync();
+	}
 
 	SetupWiFiListViewListener wifiListViewListener = new SetupWiFiListViewListener() {
 
@@ -185,5 +202,9 @@ public class SetupMainView extends LinearLayout {
 
 	public void setOnSetupMainViewListener(SetupMainViewListener callback) {
 		listener = callback;
+	}
+	
+	public void setProgress(int percent){
+		categoryView.setProgress(percent);
 	}
 }

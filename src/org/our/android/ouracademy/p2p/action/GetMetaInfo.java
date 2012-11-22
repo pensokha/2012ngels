@@ -7,6 +7,7 @@ import org.our.android.ouracademy.dao.CategoryDAO;
 import org.our.android.ouracademy.dao.ContentDAO;
 import org.our.android.ouracademy.dao.DAOException;
 import org.our.android.ouracademy.model.OurMetaInfo;
+import org.our.android.ouracademy.model.OurResponse;
 
 public class GetMetaInfo extends OurJSONAction {
 
@@ -18,12 +19,13 @@ public class GetMetaInfo extends OurJSONAction {
 			clientVersion = data.getInt(OurMetaInfo.VERSION_JSON_KEY);
 		} catch (JSONException e) {
 			responseMetaInfo
-					.setResponseCode(OurMetaInfo.RES_CODE_INVALID_REQUEST);
+					.setResponseCode(OurResponse.RES_CODE_INVALID_REQUEST);
 		}
 
 		int serverVersion = OurPreferenceManager.getInstance().getVersion();
 		if (serverVersion > clientVersion) {
-			responseMetaInfo.setResponseCode(OurMetaInfo.RES_CODE_SUCCESS);
+			responseMetaInfo.setVersion(serverVersion);
+			responseMetaInfo.setResponseCode(OurResponse.RES_CODE_SUCCESS);
 			CategoryDAO categoryDao = new CategoryDAO();
 			ContentDAO contentDao = new ContentDAO();
 			try {
@@ -31,12 +33,12 @@ public class GetMetaInfo extends OurJSONAction {
 				responseMetaInfo.setContents(contentDao.getContents());
 			} catch (DAOException e) {
 				responseMetaInfo
-						.setResponseCode(OurMetaInfo.RES_CODE_GET_DATA_FAIL);
+						.setResponseCode(OurResponse.RES_CODE_GET_DATA_FAIL);
 			}
 
 		} else {
 			responseMetaInfo
-					.setResponseCode(OurMetaInfo.RES_CODE_DONT_NEED_UPDATE);
+					.setResponseCode(OurResponse.RES_CODE_DONT_NEED_UPDATE);
 		}
 
 		return responseMetaInfo.getJSONObject().toString();

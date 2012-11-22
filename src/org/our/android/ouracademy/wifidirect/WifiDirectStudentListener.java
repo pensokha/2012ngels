@@ -52,14 +52,6 @@ public class WifiDirectStudentListener extends WifiDirectDefaultListener
 	}
 
 	@Override
-	public void onEnableP2p() {
-		Log.d(TAG, "onEnableP2p");
-//		if (manager != null) {
-//			manager.discoverPeers(channel, new DiscoverListener());
-//		}
-	}
-
-	@Override
 	public void onPeerChanged() {
 		Log.d(TAG, "onPeerChange");
 		if (manager != null) {

@@ -60,10 +60,11 @@ public class MainActivity extends BaseActivity {
 		reciever = new OurDataChangeReceiver();
 		intentFilter.addAction(OurDataChangeReceiver.OUR_DATA_CHANGED);
 		registerReceiver(reciever, intentFilter);
-		
+
 		wifiReciever = new WifiStatusReceiver(getBaseContext());
 		wifiReciever.setOnChangeNetworkStatusListener(networkSatusListener);
-		registerReceiver(wifiReciever, new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
+		registerReceiver(wifiReciever, new IntentFilter(
+				WifiManager.WIFI_STATE_CHANGED_ACTION));
 	}
 
 	@Override
@@ -95,8 +96,8 @@ public class MainActivity extends BaseActivity {
 
 		initMenuLayout();
 		initContentsLayout();
-		
-		//road saved last selected category.
+
+		// road saved last selected category.
 		applyBtnClickListener.onClick(null);
 	}
 
@@ -180,7 +181,7 @@ public class MainActivity extends BaseActivity {
 				}
 			}
 			reloadContents();
-//			detailView.onClickMenu();
+			// detailView.onClickMenu();
 		}
 	};
 
@@ -223,7 +224,7 @@ public class MainActivity extends BaseActivity {
 					cancelDownloading(intent.getStringExtra(CONTENT_ID));
 					break;
 				case ACTION_SYNC_DATA:
-					syncData();
+					syncData(intent.getStringArrayListExtra(CONTENT_ID));
 					break;
 				default:
 					break;
@@ -231,16 +232,17 @@ public class MainActivity extends BaseActivity {
 			}
 		}
 	}
-	
-	private void syncData(){
+
+	private void syncData(ArrayList<String> contentId) {
 		ArrayList<OurContents> contents = detailView.getContentList();
-		if(contents != null){
-			for(OurContents content : contents){
-				if(content.fileStatus == OurContents.FileStatus.NONE){
+		if (contents != null) {
+			for (OurContents content : contents) {
+				if (content.fileStatus == OurContents.FileStatus.NONE
+						&& contentId.contains(content.getId())) {
 					content.fileStatus = OurContents.FileStatus.DOWNLOADING;
 				}
 			}
-			
+
 			if (detailView.getListAdapter() != null) {
 				detailView.getList().setAdapter(detailView.getListAdapter());
 				detailView.getListAdapter().notifyDataSetChanged();
@@ -261,7 +263,7 @@ public class MainActivity extends BaseActivity {
 			for (OurContents content : contents) {
 				content.fileStatus = OurContents.FileStatus.NONE;
 			}
-			
+
 			if (detailView.getListAdapter() != null) {
 				detailView.getListAdapter().notifyDataSetChanged();
 			}
@@ -273,7 +275,7 @@ public class MainActivity extends BaseActivity {
 		if (contents != null) {
 			for (OurContents content : contents) {
 				content.fileStatus = OurContents.FileStatus.DOWNLOADING;
-
+				
 				if (content.getDownloadedSize() <= downloadedSize) {
 					content.setDownloadedSize(downloadedSize);
 
@@ -282,7 +284,7 @@ public class MainActivity extends BaseActivity {
 					}
 				}
 			}
-			
+
 			if (detailView.getListAdapter() != null) {
 				detailView.getListAdapter().notifyDataSetChanged();
 			}
@@ -300,8 +302,8 @@ public class MainActivity extends BaseActivity {
 				if (menuView.getAdapter() != null) {
 					menuView.getAdapter().notifyDataSetChanged();
 				}
-				
-				//road last selected category.
+
+				// road last selected category.
 				applyBtnClickListener.onClick(null);
 			} catch (DAOException e) {
 				e.printStackTrace();
@@ -348,7 +350,8 @@ public class MainActivity extends BaseActivity {
 				}
 
 				if (detailView.getListAdapter() != null) {
-					detailView.getList().setAdapter(detailView.getListAdapter());
+					detailView.getList()
+							.setAdapter(detailView.getListAdapter());
 					detailView.getListAdapter().notifyDataSetChanged();
 				}
 			} catch (DAOException e) {
@@ -356,7 +359,7 @@ public class MainActivity extends BaseActivity {
 			}
 		}
 	}
-	
+
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == SETTING_ACTIVITY) {

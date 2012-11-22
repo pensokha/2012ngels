@@ -28,30 +28,33 @@ public class WifiDirectTeacherListener extends WifiDirectDefaultListener {
 
 	@Override
 	public void onEnableP2p() {
+		super.onEnableP2p();
+
 		manager.createGroup(channel, new TeacherCreateGroupListener());
 	}
 
 	@Override
 	public void onPeerChanged() {
 		Log.d("Test", "onPeerChanged");
-		
-		if(manager != null){
+
+		if (manager != null) {
 			manager.requestPeers(channel, new PeerListListener() {
-				
+
 				@Override
 				public void onPeersAvailable(WifiP2pDeviceList peers) {
 					Collection<WifiP2pDevice> devices = peers.getDeviceList();
-					
+
 					int connected_count = 0;
-					for(WifiP2pDevice device : devices){
-						if(device.status == WifiP2pDevice.CONNECTED){
+					for (WifiP2pDevice device : devices) {
+						if (device.status == WifiP2pDevice.CONNECTED) {
 							connected_count++;
 						}
 					}
-					
-					WifiDirectWrapper.getInstance().startRegistration(connected_count);
+
+					WifiDirectWrapper.getInstance().startRegistration(
+							connected_count);
 				}
-				
+
 			});
 		}
 	}
@@ -64,54 +67,56 @@ public class WifiDirectTeacherListener extends WifiDirectDefaultListener {
 	private class TeacherCreateGroupListener implements ActionListener {
 		private static final int MAX_RETRY_COUNT = 10;
 		private int retry = 0;
-		
+
 		private ActionListener removeListener = new ActionListener() {
-			
+
 			@Override
 			public void onSuccess() {
 				manager.createGroup(channel, new ActionListener() {
-					
+
 					@Override
 					public void onSuccess() {
 						Log.d(TAG, "Success Create Group");
 						WifiDirectWrapper.getInstance().startRegistration(0);
 					}
-					
+
 					@Override
 					public void onFailure(int reason) {
-						if(retry < MAX_RETRY_COUNT){
+						if (retry < MAX_RETRY_COUNT) {
 							retry++;
-							manager.createGroup(channel, TeacherCreateGroupListener.this);
+							manager.createGroup(channel,
+									TeacherCreateGroupListener.this);
 						}
 					}
 				});
 			}
-			
+
 			@Override
 			public void onFailure(int reason) {
-				if(retry < MAX_RETRY_COUNT){
+				if (retry < MAX_RETRY_COUNT) {
 					retry--;
 					manager.removeGroup(channel, removeListener);
 				}
 			}
 		};
-		
+
 		@Override
 		public void onSuccess() {
 			Log.d(TAG, "Success Create Group");
 			WifiDirectWrapper.getInstance().startRegistration(0);
 		}
-		
+
 		@Override
 		public void onFailure(int reason) {
-			manager.requestConnectionInfo(channel, new ConnectionInfoListener() {
-				@Override
-				public void onConnectionInfoAvailable(WifiP2pInfo info) {
-					if(info.isGroupOwner == false){
-						manager.removeGroup(channel, removeListener);
-					}
-				}
-			});
+			manager.requestConnectionInfo(channel,
+					new ConnectionInfoListener() {
+						@Override
+						public void onConnectionInfoAvailable(WifiP2pInfo info) {
+							if (info.isGroupOwner == false) {
+								manager.removeGroup(channel, removeListener);
+							}
+						}
+					});
 		}
 	}
 }

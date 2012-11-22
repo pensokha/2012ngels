@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.Socket;
 
 import org.json.JSONException;
+import org.json.JSONObject;
+import org.our.android.ouracademy.model.OurResponse;
 
 public abstract class P2PClientJSON extends P2PClient {
 
@@ -14,10 +16,19 @@ public abstract class P2PClientJSON extends P2PClient {
 	
 	@Override
 	protected void responseProcess(Socket socket) throws IOException {
+		OurResponse response = new OurResponse();
 		try {
 			String jsonResponse = JSONProtocol.read(socket);
 			
-			parseResponse(jsonResponse);
+			JSONObject jsonObject = new JSONObject(jsonResponse);
+			
+			response.setFromJSONObject(jsonObject);
+			
+			if(response.getResponseCode() == OurResponse.RES_CODE_SUCCESS){
+				onSuccess(jsonObject);
+			}else{
+				onFailure(jsonObject);
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (JSONException e) {
@@ -26,5 +37,6 @@ public abstract class P2PClientJSON extends P2PClient {
 		
 	}
 
-	protected abstract void parseResponse(String jsonResponse) throws IOException, JSONException;
+	protected abstract void onSuccess(JSONObject jsonResponse) throws IOException, JSONException;
+	protected void onFailure(JSONObject jsonResponse){}
 }

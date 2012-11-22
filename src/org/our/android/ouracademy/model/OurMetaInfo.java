@@ -6,20 +6,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class OurMetaInfo implements OurJSONModel {
-	public static final int RES_CODE_SUCCESS = 0;
-	public static final int RES_CODE_DONT_NEED_UPDATE = -100;
-	public static final int RES_CODE_INVALID_REQUEST = -200;
-	public static final int RES_CODE_GET_DATA_FAIL = -300;
-
+public class OurMetaInfo extends OurResponse {
 	public static final String VERSION_JSON_KEY = "Version";
-	public static final String RESPONSE_JSON_KEY = "ResponseCode";
 	public static final String CONTENTS_JSON_KEY = "Contents";
 	public static final String CATEGORIES_JSON_KEY = "Categories";
 
 	private ArrayList<OurContents> contents;
 	private ArrayList<OurCategory> categories;
-	private int responseCode;
 	private int version;
 
 	public ArrayList<OurContents> getContents() {
@@ -38,14 +31,6 @@ public class OurMetaInfo implements OurJSONModel {
 		this.categories = categories;
 	}
 
-	public int getResponseCode() {
-		return responseCode;
-	}
-
-	public void setResponseCode(int responseCode) {
-		this.responseCode = responseCode;
-	}
-
 	public int getVersion() {
 		return version;
 	}
@@ -56,10 +41,9 @@ public class OurMetaInfo implements OurJSONModel {
 
 	@Override
 	public JSONObject getJSONObject() throws JSONException {
-		JSONObject jsonObject = new JSONObject();
+		JSONObject jsonObject = super.getJSONObject();
 
-		jsonObject.put(RESPONSE_JSON_KEY, responseCode);
-		if (responseCode == RES_CODE_SUCCESS) {
+		if (getResponseCode() == OurResponse.RES_CODE_SUCCESS) {
 			jsonObject.put(VERSION_JSON_KEY, version);
 			
 			JSONArray jsonCatogories = new JSONArray();
@@ -82,7 +66,8 @@ public class OurMetaInfo implements OurJSONModel {
 
 	@Override
 	public void setFromJSONObject(JSONObject json) throws JSONException {
-		responseCode = json.getInt(RESPONSE_JSON_KEY);
+		super.setFromJSONObject(json);
+		
 		if (json.has(VERSION_JSON_KEY)) {
 			version = json.getInt(VERSION_JSON_KEY);
 		}
@@ -114,7 +99,6 @@ public class OurMetaInfo implements OurJSONModel {
 		builder.append(", categories=");
 		builder.append(categories);
 		builder.append(", responseCode=");
-		builder.append(responseCode);
 		builder.append(", version=");
 		builder.append(version);
 		builder.append("]");

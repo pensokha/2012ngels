@@ -42,6 +42,8 @@ public class OurContents implements OurJSONModel {
 	
 	public OurCategory selectedCategory;
 	
+	private long prevDownloadedSize = 0;
+	
 	public enum FileStatus {
 		NONE, DOWNLOADING, DOWNLOADED
 	}
@@ -173,6 +175,18 @@ public class OurContents implements OurJSONModel {
 		} else {
 			fileStatus = FileStatus.NONE;
 		}
+	}
+	
+	public long getPrevDownloadedSize(){
+		return prevDownloadedSize;
+	}
+	
+	public long getCurrentDownloadedSize(long downloadedSize){
+		long diff = downloadedSize - prevDownloadedSize;
+		if(diff >= 0){
+			prevDownloadedSize = downloadedSize;
+		}
+		return diff;
 	}
 	
 	public String getSubject() {

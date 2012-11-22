@@ -50,6 +50,8 @@ public class WifiDirectWrapper {
 	private WrapperChannelListener channelListener = new WrapperChannelListener();
 	private WiFiDirectBroadcastReceiver receiver;
 	private WifiDirectDefaultListener wifidirectListener;
+	
+	public boolean isWifidirectEnable = false;
 
 	private WifiDirectWrapper() {
 		intentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
