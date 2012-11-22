@@ -336,13 +336,11 @@ public class MainActivity extends BaseActivity {
 
 				for (OurContents content : contentsFromDB) {
 					if (contentsHashMap.containsKey(content.getId()) == false) {
-						contentsHashMap.put(content.getId(),
-								new ArrayList<OurContents>());
+						contentsHashMap.put(content.getId(), new ArrayList<OurContents>());
 					}
 					if (downloadingContents.containsKey(content.getId())) {
 						content.fileStatus = OurContents.FileStatus.DOWNLOADING;
-						content.setDownloadedSize(downloadingContents
-								.get(content.getId()));
+						content.setDownloadedSize(downloadingContents.get(content.getId()));
 					}
 
 					contentsHashMap.get(content.getId()).add(content);
