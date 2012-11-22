@@ -180,13 +180,6 @@ public class MainDetailView extends RelativeLayout implements OnItemClickListene
 		
 		contentsListAdapter.notifyDataSetChanged(contentsList);
 		
-//		// contentsView 변경.
-//        contentsListAdapter = new ContentsListAdapter(getContext(), contentsList);
-//        contentsListAdapter.setEmptyView(emptyView);
-//        contentsListAdapter.setHorizontalListView(horizontalListView);
-//        horizontalListView.setAdapter(contentsListAdapter);
-//        horizontalListView.setOnItemClickListener(this);
-		
 		// 메뉴 아이콘 변경.
 		menuStatus = MenuStatus.INVISIBLE_MENU;
 		setDetailLayoutXPosition(CommonConstants.DETAIL_ANI_START_X);
@@ -212,13 +205,7 @@ public class MainDetailView extends RelativeLayout implements OnItemClickListene
 				contents.setDeleteMode(true);
 			}
 		}
-		
-//		contentsListAdapter = new ContentsListAdapter(getContext(), contentsList);
-//		contentsListAdapter.setEmptyView(emptyView);
-//		contentsListAdapter.setHorizontalListView(horizontalListView);
-//		horizontalListView.setAdapter(contentsListAdapter);
-//		horizontalListView.setOnItemClickListener(this);
-		
+
 		contentsListAdapter.notifyDataSetChanged(contentsList);
 		
 		hideManuAnimationOnDeleteMode(CommonConstants.DETAIL_ANI_WIDTH);
