@@ -10,6 +10,7 @@ import org.our.android.ouracademy.ui.widget.NCHorizontalListView;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,6 +20,8 @@ import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationSet;
 import android.view.animation.TranslateAnimation;
 import android.widget.AbsoluteLayout;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -29,7 +32,7 @@ import android.widget.TextView;
 *
 */
 @SuppressWarnings("deprecation")
-public class MainDetailView extends RelativeLayout {
+public class MainDetailView extends RelativeLayout implements OnItemClickListener {
 	private ViewGroup detailRootLayout;
 	private ViewGroup detailLayout;
 	private ImageView decoyImage;
@@ -63,7 +66,8 @@ public class MainDetailView extends RelativeLayout {
 	public enum MenuStatus {
 		INVISIBLE_MENU,
 		MOVING_MENU,
-		VISIBLE_MENU
+		VISIBLE_MENU,
+		DELETE_MODE_VIEW
 	}
 
 	public MenuStatus menuStatus = MenuStatus.INVISIBLE_MENU;
@@ -126,6 +130,7 @@ public class MainDetailView extends RelativeLayout {
         contentsListAdapter.setEmptyView(emptyView);
         contentsListAdapter.setHorizontalListView(horizontalListView);
         horizontalListView.setAdapter(contentsListAdapter);
+        horizontalListView.setOnItemClickListener(this);
         
         setDetailLayoutXPosition(CommonConstants.DETAIL_ANI_END_X);
         menuStatus = MenuStatus.VISIBLE_MENU;
@@ -159,7 +164,66 @@ public class MainDetailView extends RelativeLayout {
 			hideManuAnimation(CommonConstants.DETAIL_ANI_WIDTH);
 		} else if (menuStatus == MenuStatus.INVISIBLE_MENU) {
 			openMenuAnimation(CommonConstants.DETAIL_ANI_WIDTH);
+		} else if (menuStatus == MenuStatus.DELETE_MODE_VIEW) {
+			changeToMenuIcon();
 		}
+	}
+	
+	/**
+	 * @author Sung-Chul Park
+	 * ok버튼 아이콘을 메뉴 아이콘으로 변경
+	 */
+	public void changeToMenuIcon() {
+		for (OurContents contents : contentsList) {
+			if (contents.fileStatus == OurContents.FileStatus.DOWNLOADED) {
+				contents.setDeleteMode(false);
+			}
+		}
+		
+		contentsListAdapter.notifyDataSetChanged(contentsList);
+		
+//		// contentsView 변경.
+//        contentsListAdapter = new ContentsListAdapter(getContext(), contentsList);
+//        contentsListAdapter.setEmptyView(emptyView);
+//        contentsListAdapter.setHorizontalListView(horizontalListView);
+//        horizontalListView.setAdapter(contentsListAdapter);
+//        horizontalListView.setOnItemClickListener(this);
+		
+		// 메뉴 아이콘 변경.
+		menuStatus = MenuStatus.INVISIBLE_MENU;
+		setDetailLayoutXPosition(CommonConstants.DETAIL_ANI_START_X);
+		detailRootLayout.removeView(decoyImage);
+
+		hideMenuBtn.setClickable(false);
+		changeDragLayoutIcon();
+	}
+	
+	/**
+	 * 셋팅 화면 선생님 모드에서 삭제 버튼 클릭 후 삭제 모드로 전환할 때 호출.
+	 * @author Sung-Chul Park
+	 */
+	public void goIntoDeleteMode() {
+		if (menuStatus == MenuStatus.MOVING_MENU) {
+			return;
+		}
+		AbsoluteLayout.LayoutParams params = (AbsoluteLayout.LayoutParams)detailLayout.getLayoutParams();
+		setDetailLayoutImageCache(params);
+		
+		for (OurContents contents : contentsList) {
+			if (contents.fileStatus == OurContents.FileStatus.DOWNLOADED) {
+				contents.setDeleteMode(true);
+			}
+		}
+		
+//		contentsListAdapter = new ContentsListAdapter(getContext(), contentsList);
+//		contentsListAdapter.setEmptyView(emptyView);
+//		contentsListAdapter.setHorizontalListView(horizontalListView);
+//		horizontalListView.setAdapter(contentsListAdapter);
+//		horizontalListView.setOnItemClickListener(this);
+		
+		contentsListAdapter.notifyDataSetChanged(contentsList);
+		
+		hideManuAnimationOnDeleteMode(CommonConstants.DETAIL_ANI_WIDTH);
 	}
 	
 	private void setDetailLayoutImageCache(android.widget.AbsoluteLayout.LayoutParams params) {
@@ -235,6 +299,35 @@ public class MainDetailView extends RelativeLayout {
 		});
 	}
 	
+	public void hideManuAnimationOnDeleteMode(final int aniWidth) {
+		final AnimationSet set = new AnimationSet(true);
+		set.setInterpolator(getContext(), android.R.anim.decelerate_interpolator);
+		Animation ani = new TranslateAnimation(0, -aniWidth, 0.0f, 0.0f);
+		ani.setDuration(aniDuration);
+		set.addAnimation(ani);
+		decoyImage.startAnimation(set);
+
+		set.setAnimationListener(new AnimationListener() {
+			@Override
+			public void onAnimationStart(Animation animation) {
+				menuStatus = MenuStatus.MOVING_MENU;
+				detailLayout.setVisibility(View.INVISIBLE);
+			}
+			@Override
+			public void onAnimationRepeat(Animation animation) {
+			}
+			@Override
+			public void onAnimationEnd(Animation animation) {
+				menuStatus = MenuStatus.DELETE_MODE_VIEW;
+				setDetailLayoutXPosition(CommonConstants.DETAIL_ANI_START_X);
+				detailRootLayout.removeView(decoyImage);
+
+				hideMenuBtn.setClickable(false);
+				changeDragLayoutIcon();
+			}
+		});
+	}
+	
 	private void changeDragLayoutIcon() {
 		if (dragLayoutTxt == null) {
 			return;
@@ -246,6 +339,9 @@ public class MainDetailView extends RelativeLayout {
 		} else if (menuStatus == MenuStatus.INVISIBLE_MENU) {
 			dragLayoutTxt.setText(R.string.menu);
 			dragLayoutTxt.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.list_icon_menu01, 0, 0);
+		} else if (menuStatus == MenuStatus.DELETE_MODE_VIEW) {
+			dragLayoutTxt.setText(R.string.menu_ok);
+			dragLayoutTxt.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.list_icon_menu03, 0, 0);
 		}
 	}
 	
@@ -313,4 +409,9 @@ public class MainDetailView extends RelativeLayout {
 			return true;
 		}
 	};
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		Log.d("park", "onItem: " + position);
+	}
 }

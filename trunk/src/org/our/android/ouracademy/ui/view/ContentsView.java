@@ -1,6 +1,9 @@
 package org.our.android.ouracademy.ui.view;
 
+import java.io.File;
+
 import org.our.android.ouracademy.R;
+import org.our.android.ouracademy.constants.CommonConstants;
 import org.our.android.ouracademy.constants.MatchCategoryColor;
 import org.our.android.ouracademy.handler.WeakRefHandler;
 import org.our.android.ouracademy.manager.DataManagerFactory;
@@ -11,7 +14,9 @@ import org.our.android.ouracademy.ui.pages.MediaPlayerPage;
 import org.our.android.ouracademy.util.NetworkState;
 import org.our.android.ouracademy.youtubedownloader.YoutubeContentsTask;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -24,6 +29,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * 
@@ -48,6 +54,16 @@ public class ContentsView extends RelativeLayout implements OnClickListener {
 	WeakRefHandler progressUpdateHandler;
 
 	Context context;
+	
+	DeleteCallBack deleteCallBack;
+	
+	public interface DeleteCallBack {
+		abstract void onDeleteSuccessfully(OurContents ourContent);
+	}
+	
+	public void setCallBack(DeleteCallBack listener) {
+		this.deleteCallBack = listener;
+	}
 
 	public ContentsView(Context context) {
 		super(context);
@@ -93,10 +109,17 @@ public class ContentsView extends RelativeLayout implements OnClickListener {
 		reset();
 		this.ourContents = ourContents_;
 		if (ourContents.fileStatus == FileStatus.DOWNLOADED) { // 파일이 존재
-			contentsLayout.setBackgroundResource(MatchCategoryColor.getCategoryMatchColorId(ourContents.selectedCategory == null ? "" : ourContents.selectedCategory.getCategoryId()));
-			setProgressLayoutVisible(false);
-			cancelBtn.setVisibility(View.INVISIBLE);
-			downloadText.setVisibility(View.INVISIBLE);
+			if (ourContents.isDeleteMode()) {
+				contentsLayout.setBackgroundResource(MatchCategoryColor.getCategoryMatchColorId(ourContents.selectedCategory == null ? "" : ourContents.selectedCategory.getCategoryId()));
+				setProgressLayoutVisible(false);
+				cancelBtn.setVisibility(View.VISIBLE);
+				downloadText.setVisibility(View.INVISIBLE);
+			} else {
+				contentsLayout.setBackgroundResource(MatchCategoryColor.getCategoryMatchColorId(ourContents.selectedCategory == null ? "" : ourContents.selectedCategory.getCategoryId()));
+				setProgressLayoutVisible(false);
+				cancelBtn.setVisibility(View.INVISIBLE);
+				downloadText.setVisibility(View.INVISIBLE);
+			}
 		} else if (ourContents.fileStatus == FileStatus.DOWNLOADING) { 
 			contentsLayout.setBackgroundResource(R.drawable.book_download02);
 			setProgressLayoutVisible(true);
@@ -104,7 +127,6 @@ public class ContentsView extends RelativeLayout implements OnClickListener {
 			downloadText.setVisibility(View.INVISIBLE);
 			progressBar.setProgress((int) (ourContents.getDownloadedSize() * 100 / ourContents.getSize()));
 			progressText.setText((ourContents.getDownloadedSize() * 100 / ourContents.getSize()) + "%");
-			
 		} else { // 파일이 없는 경우
 			contentsLayout.setBackgroundResource(R.drawable.btn_main_book_download_selector);
 			setProgressLayoutVisible(false);
@@ -173,8 +195,55 @@ public class ContentsView extends RelativeLayout implements OnClickListener {
 			}
 			break;
 		case R.id.cancel_btn:
-			DataManagerFactory.getDataManager().cancelDownload(ourContents);
+			if (ourContents.isDeleteMode()) {
+				showDeleteConfirmDialog(ourContents);
+			} else {
+				DataManagerFactory.getDataManager().cancelDownload(ourContents);
+			}
 			break;
 		}
+	}
+	
+	/**
+	 * 삭제 확인 다이어로그창.
+	 * @author Sung-Chul Park.
+	 */
+	void showDeleteConfirmDialog(final OurContents deleteContents) {
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		builder.setMessage(R.string.delete_dialog_body);
+		builder.setPositiveButton(R.string.delete_ok, new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				//실제 데이터 지움.
+				if (!deleteFile(deleteContents.getId())) {
+					Toast.makeText(context, "Delete operation failed", Toast.LENGTH_LONG).show();
+					return;
+				}
+				
+				if (deleteCallBack != null) {
+					deleteCallBack.onDeleteSuccessfully(deleteContents);
+				}
+			}
+		});
+		builder.setNegativeButton(R.string.delete_cancel, new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+
+			}
+		});
+		
+		AlertDialog dialog = builder.create();
+		dialog.show();
+	}
+	
+	boolean deleteFile(String deleteFileId) {
+		//실제 데이터 지움.
+		String deleteFilePath = CommonConstants.getContentFilePathPlusMP4(deleteFileId);
+		File deleteFile = new File(deleteFilePath);
+		
+		return deleteFile.delete();
 	}
 }

@@ -104,6 +104,7 @@ public class ContentsListAdapter extends BaseAdapter  {
 			
 			for (int idx = 0; idx < CELL_PER_ITEM; idx++) {
 				ContentsView contentsView = new ContentsView(context);
+				contentsView.setCallBack(deletCallBack);
 				holder.itemHolderList[idx] = contentsView;
 				
 				ViewGroup viewGroup = (ViewGroup)convertView.findViewById(layoutIds[idx]);
@@ -130,9 +131,17 @@ public class ContentsListAdapter extends BaseAdapter  {
 				contentsView.setAllVisibility(contentsView, View.GONE);
 			}
 		}
+		
 		return convertView;
 	}
 	
+	ContentsView.DeleteCallBack deletCallBack = new ContentsView.DeleteCallBack() {
+		@Override
+		public void onDeleteSuccessfully(OurContents ourContent) {
+			ourContent.fileStatus = OurContents.FileStatus.NONE;
+			notifyDataSetChanged();	
+		}
+	};
 	@Override
 	public void notifyDataSetChanged() {
 		checkItemList();

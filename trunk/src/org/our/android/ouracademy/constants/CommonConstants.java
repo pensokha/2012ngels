@@ -1,5 +1,7 @@
 package org.our.android.ouracademy.constants;
 
+import java.io.File;
+
 import android.os.Environment;
 
 
@@ -25,8 +27,26 @@ public class CommonConstants {
 	
 	public static final String getContentFilePath(String fileName) {
 		String path = Environment.getExternalStorageDirectory().getAbsolutePath() + 
-		"/" + CONTENTS_FOLDER_NAME + "/" + fileName;
+		File.separator + CONTENTS_FOLDER_NAME + File.separator + fileName;
 		return path;
+	}
+	
+	/**
+	 * @author Sung-Chul Park
+	 * @param fileName
+	 * @return mp4 확장자가 붙은 파일명.
+	 */
+	public static final String getContentFilePathPlusMP4(String fileName) {
+		StringBuilder path = new StringBuilder();
+	
+		path.append(Environment.getExternalStorageDirectory().getAbsolutePath());
+		path.append(File.separator);
+		path.append(CONTENTS_FOLDER_NAME);
+		path.append(File.separator);
+		path.append(fileName);
+		path.append(".mp4");
+		
+		return path.toString();
 	}
 	
 	public static final int MAX_CONNECTION = 7;
