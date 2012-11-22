@@ -341,6 +341,9 @@ public class MainDetailView extends RelativeLayout implements OnItemClickListene
 	OnTouchListener dargTouchListener = new OnTouchListener() {
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
+			if (menuStatus == MenuStatus.DELETE_MODE_VIEW) {
+				return true;
+			}
 			if (event.getAction() == MotionEvent.ACTION_DOWN) {
 				touchStatus = TouchStatus.START_DRAGGING;
 

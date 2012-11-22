@@ -3,6 +3,8 @@ package org.our.android.ouracademy.ui.adapter;
 import java.util.ArrayList;
 
 import org.our.android.ouracademy.R;
+import org.our.android.ouracademy.dao.ContentDAO;
+import org.our.android.ouracademy.dao.DAOException;
 import org.our.android.ouracademy.model.OurContents;
 import org.our.android.ouracademy.ui.view.ContentsView;
 import org.our.android.ouracademy.ui.widget.NCHorizontalListView;
@@ -142,8 +144,14 @@ public class ContentsListAdapter extends BaseAdapter  {
 		@Override
 		public void onDeleteSuccessfully(OurContents ourContent) {
 			ourContent.fileStatus = OurContents.FileStatus.NONE;
+			ourContent.setDownloadedSize(0);
 			// Todo : DB update하는 로직 필요.
-//			new ContentDAO().updateFileStatus(ourContent);
+			ContentDAO contentDao = new ContentDAO();
+			try {
+				contentDao.updateDownloadedSize(ourContent);
+			} catch (DAOException e) {
+				e.printStackTrace();
+			}
 			notifyDataSetChanged();	
 		}
 	};
