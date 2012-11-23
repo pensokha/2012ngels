@@ -64,7 +64,6 @@ public class NCHorizontalListView extends AdapterView<ListAdapter> {
 		gesture = new GestureDetector(getContext(), mOnGesture);
 	}
 
-	
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 
@@ -294,20 +293,6 @@ public class NCHorizontalListView extends AdapterView<ListAdapter> {
 			edge = child.getRight();
 		}
 
-		if (edge == 0 && rightViewIndex > 0) {
-			for (int i = 0; i < rightViewIndex; i++) {
-				View view = listAdapter.getView(i, null, this);
-				if (view != null) {
-					Log.d("TEST", "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" + view.toString());
-					int widthMeasureSpec = MeasureSpec.makeMeasureSpec(getWidth(),	MeasureSpec.AT_MOST); 
-					int heightMaesureSpec =MeasureSpec.makeMeasureSpec(getHeight(), MeasureSpec.AT_MOST);
-					view.measure(widthMeasureSpec, heightMaesureSpec);
-
-					edge += view.getMeasuredWidth();
-				}
-			}
-		}
-
 		fillListRight(edge, dx);
 
 		edge = 0;
@@ -479,7 +464,7 @@ public class NCHorizontalListView extends AdapterView<ListAdapter> {
 			float velocityY) {
 
 		synchronized (NCHorizontalListView.this) {
-			scroller.fling(nextX, 0, (int) -velocityX, 0, 0, maxX, 0, 0);
+			scroller.fling(nextX, 0, (int)-velocityX, 0, 0, maxX, 0, 0);
 		}
 		requestLayout();
 
@@ -513,7 +498,7 @@ public class NCHorizontalListView extends AdapterView<ListAdapter> {
 			completeFinishAction = false;
 
 			synchronized (NCHorizontalListView.this) {
-				nextX += (int) distanceX;
+				nextX += (int)distanceX;
 			}
 			requestLayout();
 
@@ -531,7 +516,7 @@ public class NCHorizontalListView extends AdapterView<ListAdapter> {
 				int top = child.getTop();
 				int bottom = child.getBottom();
 				viewRect.set(left, top, right, bottom);
-				if (viewRect.contains((int) e.getX(), (int) e.getY())) {
+				if (viewRect.contains((int)e.getX(), (int)e.getY())) {
 					if (onItemClickListener != null) {
 						onItemClickListener.onItemClick(NCHorizontalListView.this,
 								child, leftViewIndex + 1 + i, 0);
