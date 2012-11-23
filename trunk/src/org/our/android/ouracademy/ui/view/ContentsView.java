@@ -18,6 +18,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -120,6 +121,10 @@ public class ContentsView extends RelativeLayout implements OnClickListener {
 				cancelBtn.setVisibility(View.INVISIBLE);
 				downloadText.setVisibility(View.INVISIBLE);
 			}
+			final String existingFile = CommonConstants.getContentImagePath(ourContents.getId());
+			if (new File(existingFile).exists()) {
+				thumbnail.setImageBitmap(BitmapFactory.decodeFile(existingFile));
+			}
 		} else if (ourContents.fileStatus == FileStatus.DOWNLOADING) { 
 			contentsLayout.setBackgroundResource(R.drawable.book_download02);
 			setProgressLayoutVisible(true);
@@ -141,6 +146,7 @@ public class ContentsView extends RelativeLayout implements OnClickListener {
 	private void reset() {
 		ourContents = null;
 		progressBar.setProgress(0);
+		thumbnail.setImageDrawable(null);
 		if (progressUpdateHandler != null) {
 			progressUpdateHandler.removeMessages(0);
 		}
