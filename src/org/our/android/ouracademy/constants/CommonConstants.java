@@ -31,6 +31,13 @@ public class CommonConstants {
 		return path;
 	}
 	
+	public static final String getContentImagePath(String fileName) {
+		String path = Environment.getExternalStorageDirectory().getAbsolutePath() + 
+		File.separator + CONTENTS_FOLDER_NAME + File.separator + "Images" + File.separator + 
+		fileName;
+		return path;
+	}
+	
 	/**
 	 * @author Sung-Chul Park
 	 * @param fileName
