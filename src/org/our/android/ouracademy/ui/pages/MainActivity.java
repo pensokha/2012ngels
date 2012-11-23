@@ -82,6 +82,8 @@ public class MainActivity extends BaseActivity {
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
+		
+		closeFlag = false;
 
 		unregisterReceiver(reciever);
 		unregisterReceiver(wifiReciever);
