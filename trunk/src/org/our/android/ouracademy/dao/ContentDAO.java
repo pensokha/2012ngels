@@ -31,7 +31,7 @@ public class ContentDAO {
 	public final static String DESCRIPTION_ENG_KEY = "description_eng";
 	public final static String DESCRIPTION_KMR_KEY = "description_kmr";
 	public final static String DOWNLOADED_SIZE_KEY = "downloaded_size";
-	public final static String FILE_STATUS = "";	// 데이터베이스 테이블에서 파일 상태 표시하는 이름 넣어야 함. -sung-chul park.
+	public final static String FILE_STATUS = ""; // 데이터베이스 테이블에서 파일 상태 표시하는 이름 넣어야 함. -sung-chul park.
 
 	public final static String CONTENT_ID_KEY = "content_id";
 	public final static String CATEGORY_ID_KEY = "category_id";
@@ -50,13 +50,13 @@ public class ContentDAO {
 			+ CATEGORY_ID_KEY + " VARCHAR, PRIMARY KEY(" + CATEGORY_ID_KEY
 			+ " ASC," + CONTENT_ID_KEY + ")); ";
 
-	private static final String[] CONTENT_FIELDS = { ID_KEY, SUBJECT_ENG_KEY,
+	private static final String[] CONTENT_FIELDS = {ID_KEY, SUBJECT_ENG_KEY,
 			SUBJECT_KMR_KEY, CONTENT_URL_KEY, SUBTITLE_URL_KEY, SIZE_KEY,
 			DOWNLOADED_SIZE_KEY, TOPIC_ID_KEY, TOPIC_TITLE_ENG_KEY,
-			TOPIC_TITLE_KMR_KEY, DESCRIPTION_ENG_KEY, DESCRIPTION_KMR_KEY };
+			TOPIC_TITLE_KMR_KEY, DESCRIPTION_ENG_KEY, DESCRIPTION_KMR_KEY};
 
-	private static final String[] CONTENT_CATEGORY_FIELDS = { CONTENT_ID_KEY,
-			CATEGORY_ID_KEY };
+	private static final String[] CONTENT_CATEGORY_FIELDS = {CONTENT_ID_KEY,
+			CATEGORY_ID_KEY};
 
 	private DbManager dbManager;
 
@@ -65,22 +65,21 @@ public class ContentDAO {
 
 		dbManager = DbManager.getInstance();
 	}
-	
-	
-	public ArrayList<OurContents> getDownloadedContents() throws DAOException{
+
+	public ArrayList<OurContents> getDownloadedContents() throws DAOException {
 		return getOnlyContents(DOWNLOADED_SIZE_KEY + " = " + SIZE_KEY, null);
 	}
-	
+
 	public ArrayList<OurContents> getExistingContents(ArrayList<OurContents> contents) throws DAOException {
 		StringBuffer contentIdQuery = new StringBuffer(ID_KEY);
 		contentIdQuery.append(" IN (");
-		for(OurContents content : contents){
+		for (OurContents content : contents) {
 			contentIdQuery.append('\'');
 			contentIdQuery.append(content.getId());
 			contentIdQuery.append("',");
 		}
 		int lastComma = contentIdQuery.lastIndexOf(",");
-		if(lastComma == -1){
+		if (lastComma == -1) {
 			return null;
 		}
 		contentIdQuery.setCharAt(lastComma, ')');
@@ -88,7 +87,7 @@ public class ContentDAO {
 		contentIdQuery.append(DOWNLOADED_SIZE_KEY);
 		contentIdQuery.append(" != ");
 		contentIdQuery.append(SIZE_KEY);
-		
+
 		return getOnlyContents(contentIdQuery.toString(), null);
 	}
 
@@ -149,12 +148,12 @@ public class ContentDAO {
 			ContentValues values = new ContentValues();
 			values.put(DOWNLOADED_SIZE_KEY, content.getDownloadedSize());
 			db.update(CONTENT_TABLE_NAME, values, ID_KEY + "= ?",
-					new String[] { content.getId() });
+					new String[] {content.getId()});
 		} catch (SQLException err) {
 			throw new DAOException("Error update downloaded size");
 		}
 	}
-	
+
 	/**
 	 * @author Sung-Chul Park
 	 * @param content
@@ -267,19 +266,31 @@ public class ContentDAO {
 			return contents;
 		}
 
-		SQLiteDatabase db = dbManager.getDB();
+		Cursor cursor = null;
+		try {
+			SQLiteDatabase db = dbManager.getDB();
 
-		Cursor cursor = db.rawQuery(
+			cursor = db.rawQuery(
 				getDuplicatedContentsQuery(selectedCategories), null);
-		while (cursor.moveToNext()) {
-			OurContents content = new OurContents();
 
-			setContentDataFromCursor(cursor, content);
+			if (cursor != null) {
+				while (cursor.moveToNext()) {
+					OurContents content = new OurContents();
 
-			content.selectedCategory = selectedCategories.get(cursor
-					.getString(cursor.getColumnIndex(CATEGORY_ID_KEY)));
+					setContentDataFromCursor(cursor, content);
 
-			contents.add(content);
+					content.selectedCategory = selectedCategories.get(cursor
+						.getString(cursor.getColumnIndex(CATEGORY_ID_KEY)));
+
+					contents.add(content);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (cursor != null) {
+				cursor.close();
+			}
 		}
 
 		return contents;
@@ -350,7 +361,7 @@ public class ContentDAO {
 		long result = 0;
 		try {
 			result = dbManager.delete(CONTENT_CATEGORY_TABLE_NAME,
-					CONTENT_ID_KEY + " = ?", new String[] { contentId });
+					CONTENT_ID_KEY + " = ?", new String[] {contentId});
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new DAOException("Delete content_categories Error");
