@@ -32,7 +32,7 @@
                 android:shadowColor="#ffffff"
                 android:shadowDy="1"
                 android:shadowRadius="1"
-                android:text="Student"
+                android:text="@string/str_student"
                 android:textColor="@color/setup_tap_textcolor"
                 android:textSize="25.54dp" />
         </LinearLayout>
@@ -57,7 +57,7 @@
                 android:shadowColor="#ffffff"
                 android:shadowDy="1"
                 android:shadowRadius="1"
-                android:text="Teacher"
+                android:text="@string/str_teacher"
                 android:textColor="@color/setup_tap_textcolor"
                 android:textSize="25.54dp" />
         </LinearLayout>
@@ -105,7 +105,7 @@
                 android:shadowColor="#ffffff"
                 android:shadowDy="1"
                 android:shadowRadius="1"
-                android:text="Network"
+                android:text="@string/str_network"
                 android:textColor="#887257"
                 android:textSize="19.53dp" />
         </LinearLayout>
@@ -132,7 +132,7 @@
                 android:shadowColor="#ffffff"
                 android:shadowDy="1"
                 android:shadowRadius="1"
-                android:text="Data Sync"
+                android:text="@string/str_data_sync"
                 android:textColor="#887257"
                 android:textSize="19.53dp" />
         </LinearLayout>
@@ -165,7 +165,7 @@
                 android:shadowColor="#ffffff"
                 android:shadowDy="1"
                 android:shadowRadius="1"
-                android:text="Connected Student"
+                android:text="@string/str_connected_student"
                 android:textColor="#887257"
                 android:textSize="19.53dp" />
         </LinearLayout>
@@ -190,7 +190,7 @@
                 android:shadowColor="#ffffff"
                 android:shadowDy="1"
                 android:shadowRadius="1"
-                android:text="Delete"
+                android:text="@string/str_delete"
                 android:textColor="#887257"
                 android:textSize="19.53dp" />
         </LinearLayout>

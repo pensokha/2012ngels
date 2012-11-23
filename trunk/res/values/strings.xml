@@ -64,4 +64,13 @@
 	<string name="delete_ok">Yes</string>
 	<string name="delete_cancel">No</string>
 	<string name="delete_dialog_body">Do you really delete this file?</string>
+	<string name="str_password">Password</string>
+	<string name="str_student">Student</string>
+	<string name="str_teacher">Teacher</string>
+	<string name="str_network">Network</string>
+	<string name="str_data_sync">Data Sync</string>
+	<string name="str_connected_student">Connected Student</string>
+	<string name="str_delete">Delete</string>
+	<string name="str_back">Back</string>
+	<string name="str_category">CATEGORY</string>
 </resources>
