@@ -21,7 +21,7 @@
             android:shadowColor="#f6f3ee"
             android:shadowDy="1"
             android:shadowRadius="1"
-            android:text="Back"
+            android:text="@string/str_back"
             android:textColor="#8a775f"
             android:textSize="16dp" />
     </LinearLayout>
@@ -47,7 +47,7 @@
             android:shadowColor="#f8f6f2"
             android:shadowDy="1"
             android:shadowRadius="1"
-            android:text="CATEGORY"
+            android:text="@string/str_category"
             android:textColor="#534535"
             android:textSize="22.67dp" />
     </LinearLayout>
