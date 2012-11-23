@@ -12,7 +12,6 @@ import org.our.android.ouracademy.model.OurCategory;
 import org.our.android.ouracademy.ui.adapter.CategoryListAdapter;
 import org.our.android.ouracademy.ui.pages.MainActivity;
 import org.our.android.ouracademy.ui.pages.SettingActivity;
-import org.our.android.ouracademy.util.NetworkState;
 
 import android.app.Activity;
 import android.content.ComponentName;
@@ -87,11 +86,6 @@ public class MainMenuView extends FrameLayout implements OnClickListener {
 		header.setTag(false);
 		listView.addHeaderView(header);
 
-		// View footer =
-		// LayoutInflater.from(getContext()).inflate(R.layout.main_menu_dummy_item,
-		// null);
-		// listView.addFooterView(footer);
-
 		adapter = new CategoryListAdapter(getContext(),	R.layout.layout_category_list_item, getCategoryListData());
 
 		listView.setAdapter(adapter);
@@ -133,6 +127,15 @@ public class MainMenuView extends FrameLayout implements OnClickListener {
 		guideBtn.setOnClickListener(this);
 		refreshBtn.setOnClickListener(this);
 		settingBtn.setOnClickListener(this);
+		
+		//set selection saved cateogory
+		String laseSeletedCategoryId = OurPreferenceManager.getInstance().getSelecetedCategory();
+		for(int i = 0; i < categoryList.size(); i ++) {
+			if (categoryList.get(i).getCategoryId().equals(laseSeletedCategoryId)) {
+				listView.setSelection(i);
+				break;
+			}
+		}
 	}
 
 	public void setRefreshBtnStatus(int status) {

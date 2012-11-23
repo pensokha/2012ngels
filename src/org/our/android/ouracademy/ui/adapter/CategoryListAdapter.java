@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 /**
@@ -23,6 +24,8 @@ import android.widget.TextView;
 */
 public class CategoryListAdapter extends ArrayAdapter<OurCategory> {
 	public Context context = null;
+	
+	ListView listView;
 	
 	class ItemHolder {
     	TextView txt;
