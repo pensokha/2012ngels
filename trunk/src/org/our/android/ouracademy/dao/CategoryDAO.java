@@ -70,10 +70,14 @@ public class CategoryDAO {
 	public ArrayList<OurCategory> getOnlyCategories() throws DAOException {
 		ArrayList<OurCategory> categories = new ArrayList<OurCategory>();
 
+		Cursor cursor = null;
 		try {
 			SQLiteDatabase db = dbManager.getDB();
-			Cursor cursor = db.query(CATEGORY_TABLE_NAME, CATEGORY_FIELDS,
+			cursor = db.query(CATEGORY_TABLE_NAME, CATEGORY_FIELDS,
 					null, null, null, null, null);
+			
+			if(cursor == null)
+				throw new DAOException("Error get contents");
 			
 			//get last Selected category
 			String laseSeletedCategoryId = OurPreferenceManager.getInstance().getSelecetedCategory();
@@ -104,6 +108,10 @@ public class CategoryDAO {
 			cursor.close();
 		} catch (SQLException err) {
 			throw new DAOException("Error get contents");
+		} finally{
+			if(cursor != null){
+				cursor.close();
+			}
 		}
 		return categories;
 	}
