@@ -31,7 +31,8 @@ public class ContentDAO {
 	public final static String DESCRIPTION_ENG_KEY = "description_eng";
 	public final static String DESCRIPTION_KMR_KEY = "description_kmr";
 	public final static String DOWNLOADED_SIZE_KEY = "downloaded_size";
-	public final static String FILE_STATUS = ""; // 데이터베이스 테이블에서 파일 상태 표시하는 이름 넣어야 함. -sung-chul park.
+	public final static String FILE_STATUS = ""; // 데이터베이스 테이블에서 파일 상태 표시하는 이름
+													// 넣어야 함. -sung-chul park.
 
 	public final static String CONTENT_ID_KEY = "content_id";
 	public final static String CATEGORY_ID_KEY = "category_id";
@@ -50,13 +51,13 @@ public class ContentDAO {
 			+ CATEGORY_ID_KEY + " VARCHAR, PRIMARY KEY(" + CATEGORY_ID_KEY
 			+ " ASC," + CONTENT_ID_KEY + ")); ";
 
-	private static final String[] CONTENT_FIELDS = {ID_KEY, SUBJECT_ENG_KEY,
+	private static final String[] CONTENT_FIELDS = { ID_KEY, SUBJECT_ENG_KEY,
 			SUBJECT_KMR_KEY, CONTENT_URL_KEY, SUBTITLE_URL_KEY, SIZE_KEY,
 			DOWNLOADED_SIZE_KEY, TOPIC_ID_KEY, TOPIC_TITLE_ENG_KEY,
-			TOPIC_TITLE_KMR_KEY, DESCRIPTION_ENG_KEY, DESCRIPTION_KMR_KEY};
+			TOPIC_TITLE_KMR_KEY, DESCRIPTION_ENG_KEY, DESCRIPTION_KMR_KEY };
 
-	private static final String[] CONTENT_CATEGORY_FIELDS = {CONTENT_ID_KEY,
-			CATEGORY_ID_KEY};
+	private static final String[] CONTENT_CATEGORY_FIELDS = { CONTENT_ID_KEY,
+			CATEGORY_ID_KEY };
 
 	private DbManager dbManager;
 
@@ -70,7 +71,8 @@ public class ContentDAO {
 		return getOnlyContents(DOWNLOADED_SIZE_KEY + " = " + SIZE_KEY, null);
 	}
 
-	public ArrayList<OurContents> getExistingContents(ArrayList<OurContents> contents) throws DAOException {
+	public ArrayList<OurContents> getExistingContents(
+			ArrayList<OurContents> contents) throws DAOException {
 		StringBuffer contentIdQuery = new StringBuffer(ID_KEY);
 		contentIdQuery.append(" IN (");
 		for (OurContents content : contents) {
@@ -94,10 +96,15 @@ public class ContentDAO {
 	public ArrayList<OurContents> getOnlyContents(String selection,
 			String[] selectionArgs) throws DAOException {
 		ArrayList<OurContents> contents = new ArrayList<OurContents>();
+		Cursor cursor = null;
 		try {
 			SQLiteDatabase db = dbManager.getDB();
-			Cursor cursor = db.query(CONTENT_TABLE_NAME, CONTENT_FIELDS,
-					selection, selectionArgs, null, null, null);
+			cursor = db.query(CONTENT_TABLE_NAME, CONTENT_FIELDS, selection,
+					selectionArgs, null, null, null);
+
+			if (cursor == null) {
+				throw new DAOException("Error get contents");
+			}
 
 			while (cursor.moveToNext()) {
 				OurContents content = new OurContents();
@@ -106,9 +113,11 @@ public class ContentDAO {
 
 				contents.add(content);
 			}
-			cursor.close();
 		} catch (SQLException err) {
 			throw new DAOException("Error get contents");
+		} finally {
+			if (cursor != null)
+				cursor.close();
 		}
 
 		return contents;
@@ -148,7 +157,7 @@ public class ContentDAO {
 			ContentValues values = new ContentValues();
 			values.put(DOWNLOADED_SIZE_KEY, content.getDownloadedSize());
 			db.update(CONTENT_TABLE_NAME, values, ID_KEY + "= ?",
-					new String[] {content.getId()});
+					new String[] { content.getId() });
 		} catch (SQLException err) {
 			throw new DAOException("Error update downloaded size");
 		}
@@ -159,25 +168,30 @@ public class ContentDAO {
 	 * @param content
 	 * @throws DAOException
 	 */
-//	public void updateFileStatus(OurContents content) throws DAOException {
-//		try {
-//			SQLiteDatabase db = dbManager.getDB();
-//			ContentValues values = new ContentValues();
-//			
-//			values.put(DOWNLOADED_SIZE_KEY, OurContents.FileStatus.NONE);
-//			db.update(CONTENT_TABLE_NAME, values, ID_KEY + "= ?", new String[] { content.getId() });
-//		} catch (SQLException err) {
-//			throw new DAOException("Error update downloaded size");
-//		}
-//	}
+	// public void updateFileStatus(OurContents content) throws DAOException {
+	// try {
+	// SQLiteDatabase db = dbManager.getDB();
+	// ContentValues values = new ContentValues();
+	//
+	// values.put(DOWNLOADED_SIZE_KEY, OurContents.FileStatus.NONE);
+	// db.update(CONTENT_TABLE_NAME, values, ID_KEY + "= ?", new String[] {
+	// content.getId() });
+	// } catch (SQLException err) {
+	// throw new DAOException("Error update downloaded size");
+	// }
+	// }
 
 	public ArrayList<OurContentCategory> getContentCategories()
 			throws DAOException {
 		ArrayList<OurContentCategory> contentCategories = new ArrayList<OurContentCategory>();
+		Cursor cursor = null;
 		try {
 			SQLiteDatabase db = dbManager.getDB();
-			Cursor cursor = db.query(CONTENT_CATEGORY_TABLE_NAME,
+			cursor = db.query(CONTENT_CATEGORY_TABLE_NAME,
 					CONTENT_CATEGORY_FIELDS, null, null, null, null, null);
+
+			if (cursor == null)
+				throw new DAOException("Error get contents");
 
 			while (cursor.moveToNext()) {
 				OurContentCategory contentCategory = new OurContentCategory();
@@ -188,9 +202,11 @@ public class ContentDAO {
 
 				contentCategories.add(contentCategory);
 			}
-			cursor.close();
 		} catch (SQLException err) {
 			throw new DAOException("Error get contents");
+		} finally {
+			if (cursor != null)
+				cursor.close();
 		}
 
 		return contentCategories;
@@ -271,22 +287,24 @@ public class ContentDAO {
 			SQLiteDatabase db = dbManager.getDB();
 
 			cursor = db.rawQuery(
-				getDuplicatedContentsQuery(selectedCategories), null);
+					getDuplicatedContentsQuery(selectedCategories), null);
 
-			if (cursor != null) {
-				while (cursor.moveToNext()) {
-					OurContents content = new OurContents();
+			if (cursor == null)
+				throw new DAOException("Error get contents");
 
-					setContentDataFromCursor(cursor, content);
+			while (cursor.moveToNext()) {
+				OurContents content = new OurContents();
 
-					content.selectedCategory = selectedCategories.get(cursor
+				setContentDataFromCursor(cursor, content);
+
+				content.selectedCategory = selectedCategories.get(cursor
 						.getString(cursor.getColumnIndex(CATEGORY_ID_KEY)));
 
-					contents.add(content);
-				}
+				contents.add(content);
 			}
+
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new DAOException("Error get contents");
 		} finally {
 			if (cursor != null) {
 				cursor.close();
@@ -302,16 +320,30 @@ public class ContentDAO {
 
 		SQLiteDatabase db = dbManager.getDB();
 
-		Cursor cursor = db.query(CONTENT_TABLE_NAME, CONTENT_FIELDS,
-				DOWNLOADED_SIZE_KEY + "!=" + SIZE_KEY, null, null, null, null);
+		Cursor cursor = null;
 
-		OurContents content;
-		while (cursor.moveToNext()) {
-			content = new OurContents();
+		try {
+			cursor = db.query(CONTENT_TABLE_NAME, CONTENT_FIELDS,
+					DOWNLOADED_SIZE_KEY + "!=" + SIZE_KEY, null, null, null,
+					null);
 
-			setContentDataFromCursor(cursor, content);
+			if (cursor == null) {
+				throw new DAOException("Error get contents");
+			}
 
-			contents.add(content);
+			OurContents content;
+			while (cursor.moveToNext()) {
+				content = new OurContents();
+
+				setContentDataFromCursor(cursor, content);
+
+				contents.add(content);
+			}
+		} catch (SQLException e) {
+			throw new DAOException("Error get contents");
+		} finally {
+			if (cursor != null)
+				cursor.close();
 		}
 
 		return contents;
@@ -361,7 +393,7 @@ public class ContentDAO {
 		long result = 0;
 		try {
 			result = dbManager.delete(CONTENT_CATEGORY_TABLE_NAME,
-					CONTENT_ID_KEY + " = ?", new String[] {contentId});
+					CONTENT_ID_KEY + " = ?", new String[] { contentId });
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new DAOException("Delete content_categories Error");
@@ -382,6 +414,5 @@ public class ContentDAO {
 				throw new DAOException("Insert content_category Error");
 			}
 		}
-
 	}
 }
