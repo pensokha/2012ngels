@@ -86,19 +86,24 @@ public class ContentsListAdapter extends BaseAdapter  {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		Log.d("TEST", "!!!!!!!!!!!!!! : " + position + " getCount() : " + getCount() + " contentsList.size() : " + contentsList.size());
-		//footer
-		if (position == getCount() - 1) {
-			convertView = inflater.inflate(R.layout.layout_contents_list_footer, null);
-			convertView.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					if (horizontalListView != null) {
-						horizontalListView.smoothScrollToFirstView();
+		//footer 
+		//Temporary~~!!
+		//add back button if contents list number more than 9 
+		if (getCount() > 9) {
+			if (position == getCount() - 1) {
+				convertView = inflater.inflate(R.layout.layout_contents_list_footer, null);
+				convertView.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						if (horizontalListView != null) {
+							horizontalListView.smoothScrollToFirstView();
+						}
 					}
-				}
-			});
-			return convertView;
+				});
+				return convertView;
+			}
 		}
+		
 		//set view holder pattern
 		ObjViewHolder holder = new ObjViewHolder();;
 		if (convertView == null || convertView.getTag() == null) {
