@@ -2,6 +2,7 @@ package org.our.android.ouracademy.ui.adapter;
 
 import java.util.ArrayList;
 
+import org.our.android.ouracademy.model.OurWifiDirectDevice;
 import org.our.android.ouracademy.ui.view.SetupWifiListItemView;
 
 import android.net.wifi.p2p.WifiP2pDevice;
@@ -17,25 +18,25 @@ import android.widget.BaseAdapter;
  */
 public class WiFiListAdapter extends BaseAdapter {
 	
-	public ArrayList<WifiP2pDevice> deviceList;
+	public ArrayList<OurWifiDirectDevice> deviceList;
 	
 	public WiFiListAdapter() {
 		super();
 		
-		this.deviceList = new ArrayList<WifiP2pDevice>();
+		this.deviceList = new ArrayList<OurWifiDirectDevice>();
 	}
 	
-	public WiFiListAdapter(ArrayList<WifiP2pDevice> deviceList) {
+	public WiFiListAdapter(ArrayList<OurWifiDirectDevice> deviceList) {
 		super();
 		
 		if(deviceList == null){
-			this.deviceList = new ArrayList<WifiP2pDevice>();
+			this.deviceList = new ArrayList<OurWifiDirectDevice>();
 		}else{
 			this.deviceList = deviceList;
 		}
 	}
 	
-	public ArrayList<WifiP2pDevice> getDeviceList() {
+	public ArrayList<OurWifiDirectDevice> getDeviceList() {
 		return deviceList;
 	}
 
@@ -67,7 +68,9 @@ public class WiFiListAdapter extends BaseAdapter {
 
 		if (convertView instanceof SetupWifiListItemView) {
 			SetupWifiListItemView view = (SetupWifiListItemView)convertView;
-			view.setData(true, deviceList.get(position).deviceName, (deviceList.get(position).status == WifiP2pDevice.CONNECTED ? 0 : 3));
+			WifiP2pDevice device = deviceList.get(position).device;
+			
+			view.setData(true, device.deviceName, deviceList.get(position).connectingState);
 		}
 
 		return convertView;

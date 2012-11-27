@@ -8,33 +8,32 @@ import org.our.android.ouracademy.p2p.P2PServer;
 import org.our.android.ouracademy.wifidirect.WifiDirectWrapper;
 
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
-import android.net.wifi.WifiManager;
 import android.os.IBinder;
 
 public class OurP2PService extends Service {
 	private P2PServer sever;
 
 	private WifiDirectWrapper wifiDirect;
+	private OurPreferenceManager pref;
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
 
-		if(OurPreferenceManager.getInstance().isStudent()){
-			WifiManager wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-			wifi.disconnect();
+		pref = OurPreferenceManager.getInstance();
+		pref.initPreferenceData(this);
+
+		if (pref.isTeacher()) {
+			sever = new P2PServer();
+			Executor executor = Executors.newSingleThreadExecutor();
+			executor.execute(sever);
 		}
-		
+
 		wifiDirect = WifiDirectWrapper.getInstance();
 		wifiDirect.setService(this);
-		
-		sever = new P2PServer();
-		Executor executor = Executors.newSingleThreadExecutor();
-		executor.execute(sever);
 	}
-	
+
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		super.onStartCommand(intent, flags, startId);
@@ -46,8 +45,8 @@ public class OurP2PService extends Service {
 		super.onDestroy();
 
 		wifiDirect.unsetService(null);
-		
-		if(sever != null){
+
+		if (sever != null) {
 			sever.stopServer();
 		}
 	}
