@@ -57,7 +57,7 @@ public class SettingActivity extends BaseActivity {
 	WiFiListAdapter listAdapter;
 
 	ProgressDialog progressDialog = null;
-	
+
 	private long totalSize = 0;
 	private long totalDownloadedSize = 0;
 	private HashMap<String, OurContents> downloadMap = new HashMap<String, OurContents>();
@@ -70,9 +70,17 @@ public class SettingActivity extends BaseActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		initUI();
 
 		context = this;
+
+		initUI();
+
+		OurPreferenceManager pref = OurPreferenceManager.getInstance();
+		if (pref.isStudent()) {
+			processFindTeacher();
+		} else {
+			processFindConnectedStudent();
+		}
 
 		reciever = new BroadcastReceiver() {
 
@@ -83,13 +91,13 @@ public class SettingActivity extends BaseActivity {
 					OurContents content;
 					switch (intent
 							.getIntExtra(OurDataChangeReceiver.ACTION, -1)) {
-					case OurDataChangeReceiver.ACTION_DOWNLOADING:
+						case OurDataChangeReceiver.ACTION_DOWNLOADING:
 						content = downloadMap.get(intent.getStringExtra(OurDataChangeReceiver.CONTENT_ID));
-						if(content != null){
+						if (content != null) {
 							long downloadedSize = intent.getLongExtra(OurDataChangeReceiver.DOWNLAD_SIZE, 0);
-							if(downloadedSize != 0){
+							if (downloadedSize != 0) {
 								downloadedSize = content.getCurrentDownloadedSize(downloadedSize);
-								if(downloadedSize > 0){
+								if (downloadedSize > 0) {
 									totalDownloadedSize += downloadedSize;
 								}
 							}
@@ -98,17 +106,17 @@ public class SettingActivity extends BaseActivity {
 					case OurDataChangeReceiver.ACTION_ERROR_DOWNLOADING:
 					case OurDataChangeReceiver.ACTION_CANCEL_DOWNLOADING:
 						content = downloadMap.get(intent.getStringExtra(OurDataChangeReceiver.CONTENT_ID));
-						if(content != null){
+						if (content != null) {
 							totalDownloadedSize += content.getSize() - content.getPrevDownloadedSize();
 						}
 						break;
-					}
-					
-					if(totalSize != 0){
-						mainView.setProgress((int)(totalDownloadedSize*100/totalSize));
-					}
+				}
+
+				if (totalSize != 0) {
+					mainView.setProgress((int)(totalDownloadedSize * 100 / totalSize));
 				}
 			}
+		}
 		};
 		intentFilter.addAction(OurDataChangeReceiver.OUR_DATA_CHANGED);
 	}
@@ -229,7 +237,7 @@ public class SettingActivity extends BaseActivity {
 							totalSize = 0;
 							totalDownloadedSize = 0;
 							downloadMap.clear();
-							
+
 							ContentDAO contentDao = new ContentDAO();
 
 							try {
@@ -244,11 +252,11 @@ public class SettingActivity extends BaseActivity {
 									OurContents downloadContent;
 									for (int i = 0; i < downloadContents.size(); i++) {
 										downloadContent = downloadContents.get(i);
-										
+
 										downloadMap.put(downloadContent.getId(), downloadContent);
 										contentId.add(downloadContent.getId());
 										dataManager.download(downloadContent);
-										
+
 										totalSize += downloadContent.getSize();
 										totalDownloadedSize += downloadContent.getDownloadedSize();
 									}
@@ -313,7 +321,7 @@ public class SettingActivity extends BaseActivity {
 							});
 						}
 					};
-					((StudentDataManager) dataManager)
+					((StudentDataManager)dataManager)
 							.getTeacherContents(existingContentsListener);
 				}
 			} else {
@@ -348,44 +356,52 @@ public class SettingActivity extends BaseActivity {
 
 		@Override
 		public void onClickFindConnectedStudent() {
-			if (NetworkState.isWifiDirectEnabled()) {
-				showProgress(R.string.finding_student);
-
-				WifiDirectWrapper.getInstance().findConnectedStudent();
-
-				mainView.viewConnectedStudent();
-			} else {
-				showAlert(R.string.error_wifi_direct_disable_title,
-						R.string.error_wifi_direct_disable_message);
-			}
+			processFindConnectedStudent();
 		}
 
 		@Override
 		public void onClickFindTeacher() {
-			if (NetworkState.isWifiDirectEnabled()) {
-				showProgress(R.string.finding_teacher);
-
-				WifiDirectWrapper.getInstance().findTeacher();
-
-				mainView.viewTeacherOnNetwork();
-			} else {
-				showAlert(R.string.error_wifi_direct_disable_title,
-						R.string.error_wifi_direct_disable_message);
-			}
+			processFindTeacher();
 		}
 
 		@Override
 		public void onClickCacelSync() {
-			if(downloadMap != null){
+			if (downloadMap != null) {
 				Collection<OurContents> contents = downloadMap.values();
-				
+
 				DataManager dataManager = DataManagerFactory.getDataManager();
-				for(OurContents content : contents){
+				for (OurContents content : contents) {
 					dataManager.cancelDownload(content);
 				}
 			}
 		}
 	};
+
+	private void processFindTeacher() {
+		if (NetworkState.isWifiDirectEnabled()) {
+			showProgress(R.string.finding_teacher);
+
+			WifiDirectWrapper.getInstance().findTeacher();
+
+			mainView.viewTeacherOnNetwork();
+		} else {
+			showAlert(R.string.error_wifi_direct_disable_title,
+					R.string.error_wifi_direct_disable_message);
+		}
+	}
+
+	private void processFindConnectedStudent() {
+		if (NetworkState.isWifiDirectEnabled()) {
+			showProgress(R.string.finding_student);
+
+			WifiDirectWrapper.getInstance().findConnectedStudent();
+
+			mainView.viewConnectedStudent();
+		} else {
+			showAlert(R.string.error_wifi_direct_disable_title,
+					R.string.error_wifi_direct_disable_message);
+		}
+	}
 
 	private void showAlert(int titleResourceId, int messageResourceId) {
 		Builder alertBuilder = new Builder(context);
