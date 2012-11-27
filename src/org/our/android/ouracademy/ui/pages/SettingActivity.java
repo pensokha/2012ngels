@@ -12,6 +12,7 @@ import org.our.android.ouracademy.manager.DataManager;
 import org.our.android.ouracademy.manager.DataManagerFactory;
 import org.our.android.ouracademy.manager.StudentDataManager;
 import org.our.android.ouracademy.model.OurContents;
+import org.our.android.ouracademy.model.OurWifiDirectDevice;
 import org.our.android.ouracademy.p2p.client.GetExistingContentsClient.GetExistingContentsListener;
 import org.our.android.ouracademy.ui.adapter.WiFiListAdapter;
 import org.our.android.ouracademy.ui.pages.MainActivity.OurDataChangeReceiver;
@@ -67,12 +68,11 @@ public class SettingActivity extends BaseActivity {
 
 	final Handler handler = new Handler();
 
+	private OurWifiDirectDevice connectingDevice;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		context = this;
-
 		initUI();
 
 		OurPreferenceManager pref = OurPreferenceManager.getInstance();
@@ -82,42 +82,7 @@ public class SettingActivity extends BaseActivity {
 			processFindConnectedStudent();
 		}
 
-		reciever = new BroadcastReceiver() {
-
-			@Override
-			public void onReceive(Context context, Intent intent) {
-				if (OurDataChangeReceiver.OUR_DATA_CHANGED.equals(intent
-						.getAction())) {
-					OurContents content;
-					switch (intent
-							.getIntExtra(OurDataChangeReceiver.ACTION, -1)) {
-						case OurDataChangeReceiver.ACTION_DOWNLOADING:
-						content = downloadMap.get(intent.getStringExtra(OurDataChangeReceiver.CONTENT_ID));
-						if (content != null) {
-							long downloadedSize = intent.getLongExtra(OurDataChangeReceiver.DOWNLAD_SIZE, 0);
-							if (downloadedSize != 0) {
-								downloadedSize = content.getCurrentDownloadedSize(downloadedSize);
-								if (downloadedSize > 0) {
-									totalDownloadedSize += downloadedSize;
-								}
-							}
-						}
-						break;
-					case OurDataChangeReceiver.ACTION_ERROR_DOWNLOADING:
-					case OurDataChangeReceiver.ACTION_CANCEL_DOWNLOADING:
-						content = downloadMap.get(intent.getStringExtra(OurDataChangeReceiver.CONTENT_ID));
-						if (content != null) {
-							totalDownloadedSize += content.getSize() - content.getPrevDownloadedSize();
-						}
-						break;
-				}
-
-				if (totalSize != 0) {
-					mainView.setProgress((int)(totalDownloadedSize * 100 / totalSize));
-				}
-			}
-		}
-		};
+		reciever = new SettingBroadCastReciever();
 		intentFilter.addAction(OurDataChangeReceiver.OUR_DATA_CHANGED);
 	}
 
@@ -153,42 +118,6 @@ public class SettingActivity extends BaseActivity {
 
 		createListView();
 	}
-
-	private OnItemClickListener wifiListClickListener = new OnItemClickListener() {
-
-		@Override
-		public void onItemClick(AdapterView<?> parent, View view, int position,
-				long id) {
-			if (view instanceof SetupWifiListItemView) {
-				WifiP2pDevice device = listAdapter.getDeviceList()
-						.get(position);
-
-				if (NetworkState.isWifiDirectConnected()) {
-					if (device.status == WifiP2pDevice.CONNECTED) {
-						WifiDirectWrapper.getInstance().disconnect(
-								new ActionListener() {
-									@Override
-									public void onSuccess() {
-										WifiDirectWrapper.getInstance()
-												.findTeacher();
-									}
-
-									@Override
-									public void onFailure(int reason) {
-
-									}
-								});
-					}
-				} else {
-					if (device.status != WifiP2pDevice.CONNECTED
-							&& device.status == WifiP2pDevice.AVAILABLE) {
-						WifiDirectWrapper.getInstance().connectAfterCancel(
-								device);
-					}
-				}
-			}
-		}
-	};
 
 	private void createListView() {
 		wifiListView = mainView.getListView();
@@ -229,99 +158,7 @@ public class SettingActivity extends BaseActivity {
 				DataManager dataManager = DataManagerFactory.getDataManager();
 
 				if (dataManager instanceof StudentDataManager) {
-					GetExistingContentsListener existingContentsListener = new GetExistingContentsListener() {
-
-						@Override
-						public void onSuccess(
-								ArrayList<OurContents> existingContents) {
-							totalSize = 0;
-							totalDownloadedSize = 0;
-							downloadMap.clear();
-
-							ContentDAO contentDao = new ContentDAO();
-
-							try {
-								ArrayList<OurContents> downloadContents = contentDao
-										.getExistingContents(existingContents);
-
-								if (downloadContents != null) {
-									DataManager dataManager = DataManagerFactory
-											.getDataManager();
-
-									ArrayList<String> contentId = new ArrayList<String>();
-									OurContents downloadContent;
-									for (int i = 0; i < downloadContents.size(); i++) {
-										downloadContent = downloadContents.get(i);
-
-										downloadMap.put(downloadContent.getId(), downloadContent);
-										contentId.add(downloadContent.getId());
-										dataManager.download(downloadContent);
-
-										totalSize += downloadContent.getSize();
-										totalDownloadedSize += downloadContent.getDownloadedSize();
-									}
-
-									if (downloadContents.size() == 0) {
-										handler.post(new Runnable() {
-
-											@Override
-											public void run() {
-												if (progressDialog != null
-														&& progressDialog
-																.isShowing())
-													progressDialog.dismiss();
-
-												showAlert(
-														R.string.datasync,
-														R.string.dontneed_datasync);
-											}
-										});
-									} else {
-										Intent intent = new Intent(
-												OurDataChangeReceiver.OUR_DATA_CHANGED);
-										intent.putExtra(
-												OurDataChangeReceiver.ACTION,
-												OurDataChangeReceiver.ACTION_SYNC_DATA);
-										intent.putExtra(
-												OurDataChangeReceiver.CONTENT_ID,
-												contentId);
-										context.sendBroadcast(intent);
-
-										handler.post(new Runnable() {
-
-											@Override
-											public void run() {
-												if (progressDialog != null
-														&& progressDialog
-																.isShowing())
-													progressDialog.dismiss();
-												mainView.viewDataSync();
-											}
-										});
-									}
-								}
-							} catch (DAOException e) {
-								e.printStackTrace();
-							}
-						}
-
-						@Override
-						public void onFailure() {
-							handler.post(new Runnable() {
-
-								@Override
-								public void run() {
-									if (progressDialog != null
-											&& progressDialog.isShowing())
-										progressDialog.dismiss();
-
-									showAlert(R.string.error,
-											R.string.error_datasync);
-								}
-							});
-						}
-					};
-					((StudentDataManager)dataManager)
+					((StudentDataManager) dataManager)
 							.getTeacherContents(existingContentsListener);
 				}
 			} else {
@@ -409,6 +246,7 @@ public class SettingActivity extends BaseActivity {
 				.setTitle(context.getResources().getString(titleResourceId));
 		alertBuilder.setMessage(context.getResources().getString(
 				messageResourceId));
+		alertBuilder.setPositiveButton(R.string.ok, null);
 		alertBuilder.create().show();
 	}
 
@@ -438,7 +276,29 @@ public class SettingActivity extends BaseActivity {
 		public void onFindDevice(HashMap<String, WifiP2pDevice> devices) {
 			if (listAdapter.deviceList != null && devices != null) {
 				listAdapter.deviceList.clear();
-				listAdapter.deviceList.addAll(devices.values());
+				OurWifiDirectDevice ourDevice;
+				for (WifiP2pDevice device : devices.values()) {
+					ourDevice = new OurWifiDirectDevice();
+					ourDevice.device = device;
+
+					if (connectingDevice != null
+							&& connectingDevice.device.deviceAddress
+									.equals(device.deviceAddress)) {
+						if (device.status == WifiP2pDevice.CONNECTED) {
+							ourDevice.connectingState = OurWifiDirectDevice.STATE_CONNECTED;
+							connectingDevice = null;
+						}else if(device.status == WifiP2pDevice.INVITED){
+							ourDevice.connectingState = OurWifiDirectDevice.STATE_CONNECTING;
+						}else{
+							ourDevice.connectingState = OurWifiDirectDevice.STATE_DISCONNECTED;
+						}
+					} else {
+						ourDevice.connectingState = device.status == WifiP2pDevice.CONNECTED ? OurWifiDirectDevice.STATE_CONNECTED
+								: OurWifiDirectDevice.STATE_DISCONNECTED;
+					}
+
+					listAdapter.deviceList.add(ourDevice);
+				}
 				listAdapter.notifyDataSetChanged();
 			}
 			if (progressDialog != null && progressDialog.isShowing()) {
@@ -454,4 +314,188 @@ public class SettingActivity extends BaseActivity {
 		}
 		super.onBackPressed();
 	};
+
+	private OnItemClickListener wifiListClickListener = new OnItemClickListener() {
+
+		@Override
+		public void onItemClick(AdapterView<?> parent, View view, int position,
+				long id) {
+			if (view instanceof SetupWifiListItemView) {
+				OurWifiDirectDevice ourDevice = listAdapter.getDeviceList()
+						.get(position);
+
+				WifiDirectWrapper wifidirectWrapper = WifiDirectWrapper
+						.getInstance();
+				switch (ourDevice.connectingState) {
+				case OurWifiDirectDevice.STATE_CONNECTED:
+					wifidirectWrapper.disconnect(new ActionListener() {
+						@Override
+						public void onSuccess() {
+							handler.postDelayed(new Runnable() {
+
+								@Override
+								public void run() {
+									WifiDirectWrapper.getInstance()
+											.findTeacher();
+								}
+							}, 2500);
+						}
+
+						@Override
+						public void onFailure(int reason) {
+
+						}
+					});
+					ourDevice.connectingState = OurWifiDirectDevice.STATE_DISCONNECTED;
+					break;
+				case OurWifiDirectDevice.STATE_DISCONNECTED:
+					ourDevice.connectingState = OurWifiDirectDevice.STATE_CONNECTING;
+					wifidirectWrapper.connectAfterChecking(ourDevice.device);
+
+					if (connectingDevice != null) {
+						connectingDevice.connectingState = OurWifiDirectDevice.STATE_DISCONNECTED;
+					}
+					connectingDevice = ourDevice;
+					break;
+				case OurWifiDirectDevice.STATE_CONNECTING:
+					wifidirectWrapper.cancelConnect();
+
+					ourDevice.connectingState = OurWifiDirectDevice.STATE_DISCONNECTED;
+					break;
+				default:
+					break;
+				}
+
+				listAdapter.notifyDataSetChanged();
+			}
+		}
+	};
+
+	private GetExistingContentsListener existingContentsListener = new GetExistingContentsListener() {
+
+		@Override
+		public void onSuccess(ArrayList<OurContents> existingContents) {
+			totalSize = 0;
+			totalDownloadedSize = 0;
+			downloadMap.clear();
+
+			ContentDAO contentDao = new ContentDAO();
+
+			try {
+				ArrayList<OurContents> downloadContents = contentDao
+						.getExistingContents(existingContents);
+
+				if (downloadContents != null) {
+					DataManager dataManager = DataManagerFactory
+							.getDataManager();
+
+					ArrayList<String> contentId = new ArrayList<String>();
+					OurContents downloadContent;
+					for (int i = 0; i < downloadContents.size(); i++) {
+						downloadContent = downloadContents.get(i);
+
+						downloadMap.put(downloadContent.getId(),
+								downloadContent);
+						contentId.add(downloadContent.getId());
+						dataManager.download(downloadContent);
+
+						totalSize += downloadContent.getSize();
+						totalDownloadedSize += downloadContent
+								.getDownloadedSize();
+					}
+
+					if (downloadContents.size() == 0) {
+						handler.post(new Runnable() {
+
+							@Override
+							public void run() {
+								if (progressDialog != null
+										&& progressDialog.isShowing())
+									progressDialog.dismiss();
+
+								showAlert(R.string.datasync,
+										R.string.dontneed_datasync);
+							}
+						});
+					} else {
+						Intent intent = new Intent(
+								OurDataChangeReceiver.OUR_DATA_CHANGED);
+						intent.putExtra(OurDataChangeReceiver.ACTION,
+								OurDataChangeReceiver.ACTION_SYNC_DATA);
+						intent.putExtra(OurDataChangeReceiver.CONTENT_ID,
+								contentId);
+						context.sendBroadcast(intent);
+
+						handler.post(new Runnable() {
+
+							@Override
+							public void run() {
+								if (progressDialog != null
+										&& progressDialog.isShowing())
+									progressDialog.dismiss();
+								mainView.viewDataSync();
+							}
+						});
+					}
+				}
+			} catch (DAOException e) {
+				e.printStackTrace();
+			}
+		}
+
+		@Override
+		public void onFailure() {
+			handler.post(new Runnable() {
+
+				@Override
+				public void run() {
+					if (progressDialog != null && progressDialog.isShowing())
+						progressDialog.dismiss();
+
+					showAlert(R.string.error, R.string.error_datasync);
+				}
+			});
+		}
+	};
+
+	private class SettingBroadCastReciever extends BroadcastReceiver {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			if (OurDataChangeReceiver.OUR_DATA_CHANGED.equals(intent
+					.getAction())) {
+				OurContents content;
+				switch (intent.getIntExtra(OurDataChangeReceiver.ACTION, -1)) {
+				case OurDataChangeReceiver.ACTION_DOWNLOADING:
+					content = downloadMap.get(intent
+							.getStringExtra(OurDataChangeReceiver.CONTENT_ID));
+					if (content != null) {
+						long downloadedSize = intent.getLongExtra(
+								OurDataChangeReceiver.DOWNLAD_SIZE, 0);
+						if (downloadedSize != 0) {
+							downloadedSize = content
+									.getCurrentDownloadedSize(downloadedSize);
+							if (downloadedSize > 0) {
+								totalDownloadedSize += downloadedSize;
+							}
+						}
+					}
+					break;
+				case OurDataChangeReceiver.ACTION_ERROR_DOWNLOADING:
+				case OurDataChangeReceiver.ACTION_CANCEL_DOWNLOADING:
+					content = downloadMap.get(intent
+							.getStringExtra(OurDataChangeReceiver.CONTENT_ID));
+					if (content != null) {
+						totalDownloadedSize += content.getSize()
+								- content.getPrevDownloadedSize();
+					}
+					break;
+				}
+
+				if (totalSize != 0) {
+					mainView.setProgress((int) (totalDownloadedSize * 100 / totalSize));
+				}
+			}
+		}
+	}
 }
