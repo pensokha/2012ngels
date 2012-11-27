@@ -352,8 +352,7 @@ public class MainActivity extends BaseActivity {
 				}
 
 				if (detailView.getListAdapter() != null) {
-					detailView.getList()
-							.setAdapter(detailView.getListAdapter());
+//					detailView.getList().setAdapter(detailView.getListAdapter());
 					detailView.getListAdapter().notifyDataSetChanged();
 				}
 			} catch (DAOException e) {
