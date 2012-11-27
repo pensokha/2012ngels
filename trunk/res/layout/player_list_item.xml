@@ -3,17 +3,17 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@drawable/player_bg04"
-    android:paddingLeft="12.67dp"
-    android:paddingRight="12.67dp"	
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"	
     android:paddingTop="20dp">
     
     <ImageView 
         android:id="@+id/thumb"        
-		android:layout_width="188.67dp"
+		android:layout_width="202.33dp"
 		android:layout_height="fill_parent"
-		android:minHeight="100dp"
-		android:layout_marginTop="23.67dp"
-		android:layout_marginLeft="69.33dp"
+		android:minHeight="96dp"
+		android:layout_marginTop="22.29dp"
+		android:layout_marginLeft="61.35dp"
 		android:background="#000000"	/>    
     
     <RelativeLayout
@@ -28,10 +28,9 @@
 			android:layout_height="wrap_content"
 			android:layout_alignParentTop="true"
 			android:layout_alignParentLeft="true"
-			android:layout_marginLeft="22dp"
+			android:layout_marginLeft="13dp"
 			android:layout_marginTop="20dp"
-			android:text = "English"
-			android:textSize="13.33dp"
+			android:textSize="15.02dp"
 			android:textColor="#333333"
 			android:textStyle="bold"
 			android:shadowColor="#33ffffff"
@@ -48,7 +47,6 @@
 			android:layout_alignParentLeft="true"
 			android:layout_marginLeft="70dp"
 			android:layout_marginTop="125.67dp"
-			android:text = "PSY-GANGNAM_STYLE_M_V"
 			android:textSize="16dp"
 			android:textColor="#444444"
 			android:shadowColor="#88ffffff"
