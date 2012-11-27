@@ -1,13 +1,16 @@
 package org.our.android.ouracademy.ui.view;
 
 import org.our.android.ouracademy.R;
+import org.our.android.ouracademy.model.OurWifiDirectDevice;
 
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 /**
@@ -19,6 +22,7 @@ public class SetupWifiListItemView extends LinearLayout {
 
 	ImageView userIcon, wifiIcon;
 	TextView directId;
+	ProgressBar connectingIcon;
 
 	String id;
 
@@ -42,12 +46,13 @@ public class SetupWifiListItemView extends LinearLayout {
 		userIcon = (ImageView)findViewById(R.id.userIcon);
 		wifiIcon = (ImageView)findViewById(R.id.wifiIcon);
 		directId = (TextView)findViewById(R.id.directId);
+		connectingIcon = (ProgressBar)findViewById(R.id.wifiConnecting);
 	}
 
-	public void setData(boolean teacherMode, String id, int intensity) {
+	public void setData(boolean teacherMode, String id, int connectedState) {
 		setUserIconImg(teacherMode);
 		setDirectIdText(id);
-		setWifiIconImg(intensity);
+		setWifiIconImg(connectedState);
 	}
 
 	private void setUserIconImg(boolean teacher) {
@@ -58,25 +63,21 @@ public class SetupWifiListItemView extends LinearLayout {
 		}
 	}
 
-	private void setWifiIconImg(int intensity) {
-		int resId = R.drawable.setup_icon_wifi02;
-
-		switch (intensity) {
-			case 1:
-				resId = R.drawable.setup_icon_wifi03;
-				break;
-			case 2:
-				resId = R.drawable.setup_icon_wifi04;
-				break;
-			case 3:
-				resId = R.drawable.setup_icon_wifi05;
-				break;
-			default:
-				resId = R.drawable.setup_icon_wifi02;
-				break;
+	private void setWifiIconImg(int connectedState) {
+		
+		
+		if(connectedState == OurWifiDirectDevice.STATE_CONNECTING){
+			connectingIcon.setVisibility(View.VISIBLE);
+			wifiIcon.setVisibility(View.GONE);
+		}else{
+			int resId = R.drawable.setup_icon_wifi05;
+			if(connectedState == OurWifiDirectDevice.STATE_CONNECTED){
+				resId = R.drawable.setup_icon_wifi01;
+			}
+			connectingIcon.setVisibility(View.GONE);
+			wifiIcon.setVisibility(View.VISIBLE);
+			wifiIcon.setImageResource(resId);
 		}
-
-		wifiIcon.setImageResource(resId);
 	}
 
 	private void setDirectIdText(String id) {

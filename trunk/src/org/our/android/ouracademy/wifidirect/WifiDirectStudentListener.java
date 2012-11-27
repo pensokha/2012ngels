@@ -82,19 +82,19 @@ public class WifiDirectStudentListener extends WifiDirectDefaultListener
 
 	@Override
 	public void onPeersAvailable(WifiP2pDeviceList peers) {
-		Log.d(TAG, "onPeersAvailable :" +peers.toString());
+		Log.d(TAG, "onPeersAvailable :" + peers.toString());
 		Collection<WifiP2pDevice> devices = peers.getDeviceList();
 
 		HashMap<String, WifiP2pDevice> groupOwnerDevices = new HashMap<String, WifiP2pDevice>();
 		for (WifiP2pDevice device : devices) {
-			if (device.isGroupOwner()) {
-				groupOwnerDevices.put(device.deviceAddress, device);
-			}
+			// if (device.isGroupOwner()) {
+			groupOwnerDevices.put(device.deviceAddress, device);
+			// }
 		}
 
 		if (foundListener != null) {
 			foundListener.onFindDevice(groupOwnerDevices);
-		} 
+		}
 	}
 
 	@Override

@@ -50,7 +50,7 @@ public class WifiDirectWrapper {
 	private WrapperChannelListener channelListener = new WrapperChannelListener();
 	private WiFiDirectBroadcastReceiver receiver;
 	private WifiDirectDefaultListener wifidirectListener;
-	
+
 	public boolean isWifidirectEnable = false;
 
 	private WifiDirectWrapper() {
@@ -142,22 +142,15 @@ public class WifiDirectWrapper {
 					@Override
 					public void onDnsSdTxtRecordAvailable(String fullDomain,
 							Map<String, String> record, WifiP2pDevice device) {
-						if (device.isGroupOwner()) {
-							Log.d("Service",
-									device.toString() + ":" + record.toString());
-							int connected_count = Integer.parseInt(record
-									.get(CONNECTED_COUNT_KEY));
-							if (CommonConstants.MAX_CONNECTION >= connected_count) {
-								if (teacherMap
-										.containsKey(device.deviceAddress) == false) {
-									teacherMap
-											.put(device.deviceAddress, device);
-								}
-							} else {
-								if (teacherMap
-										.containsKey(device.deviceAddress)) {
-									teacherMap.remove(device.deviceAddress);
-								}
+						int connected_count = Integer.parseInt(record
+								.get(CONNECTED_COUNT_KEY));
+						if (CommonConstants.MAX_CONNECTION >= connected_count) {
+							if (teacherMap.containsKey(device.deviceAddress) == false) {
+								teacherMap.put(device.deviceAddress, device);
+							}
+						} else {
+							if (teacherMap.containsKey(device.deviceAddress)) {
+								teacherMap.remove(device.deviceAddress);
 							}
 						}
 						notiListener(teacherMap);
@@ -237,10 +230,6 @@ public class WifiDirectWrapper {
 					}
 
 					notiListener(teacherMap);
-
-					if (teacherMap.size() != devices.size()) {
-						// findTeacher();
-					}
 				}
 			});
 			wifidirectListener = studentListener;
@@ -262,18 +251,20 @@ public class WifiDirectWrapper {
 			disconnect(new ActionListener() {
 				@Override
 				public void onSuccess() {
-					Log.d("Test", "remove success");
-					connect(device);
+					connectAfterCancel(device);
 				}
 
 				@Override
 				public void onFailure(int reason) {
-					Log.d("Test", "remove false");
 				}
 			});
 		} else {
-			connect(device);
+			connectAfterCancel(device);
 		}
+	}
+	
+	public void cancelConnect() {
+		manager.cancelConnect(channel, null);
 	}
 
 	public void connectAfterCancel(final WifiP2pDevice device) {
@@ -281,13 +272,11 @@ public class WifiDirectWrapper {
 
 			@Override
 			public void onSuccess() {
-				Log.d("Cancle", "success");
 				connect(device);
 			}
 
 			@Override
 			public void onFailure(int reason) {
-				Log.d("Cancle", "failur");
 				connect(device);
 			}
 		});
@@ -297,19 +286,20 @@ public class WifiDirectWrapper {
 		WifiP2pConfig config = new WifiP2pConfig();
 		config.deviceAddress = device.deviceAddress;
 		config.wps.setup = WpsInfo.PBC;
+		config.groupOwnerIntent = 0;
 
 		manager.connect(channel, config, new ActionListener() {
 
 			@Override
 			public void onSuccess() {
-				Log.d("Test", "Success Connect Group");
 				manager.requestConnectionInfo(channel,
 						(WifiDirectStudentListener) wifidirectListener);
+				if(OurPreferenceManager.getInstance().isStudent())
+					findTeacher();
 			}
 
 			@Override
 			public void onFailure(int reason) {
-				Log.d("Test", "False Connect Group");
 			}
 		});
 	}
@@ -370,7 +360,6 @@ public class WifiDirectWrapper {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void startRegistration(final int connected_count) {
-		Log.d("Test", "startRegistration");
 		manager.clearLocalServices(channel, new ActionListener() {
 
 			@Override

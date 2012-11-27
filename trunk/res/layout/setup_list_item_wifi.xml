@@ -30,4 +30,11 @@
         android:layout_height="wrap_content"
         android:src="@drawable/setup_icon_wifi02" />
 
+    <ProgressBar
+        android:id="@+id/wifiConnecting"
+        style="@android:style/Widget.ProgressBar.Small"
+        android:layout_width="24.04dp"
+        android:layout_height="24.04dp"
+        android:visibility="gone" />
+
 </LinearLayout>

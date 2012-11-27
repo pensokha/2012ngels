@@ -45,10 +45,10 @@ public class StudentDataManager extends DataManager {
 	public void cancelDownload(OurContents content) {
 		downloadManager.cancelDownload(content);
 	}
-	
-	public void getTeacherContents(GetExistingContentsListener listener){
+
+	public void getTeacherContents(GetExistingContentsListener listener) {
 		String ownerIp = WifiDirectWrapper.getInstance().getOwnerIP();
-		
+
 		if (ownerIp != null) {
 			executeRunnable(new GetExistingContentsClient(ownerIp, listener));
 		}
@@ -76,24 +76,28 @@ public class StudentDataManager extends DataManager {
 		}
 
 		public synchronized void cancelDownload(OurContents content) {
-			if (contentIdList.size() > 0 && content != null) {
-				if (contentIdList.get(0).equals(content.getId())) {
-					if (pair != null) {
-						if (pair.future.isDone()) {
-							pair = null;
+			if (content != null) {
+				if (contentIdList.size() > 0) {
+					if (contentIdList.get(0).equals(content.getId())) {
+						if (pair != null) {
+							if (pair.future.isDone()) {
+								pair = null;
 
-							downloadCotents.remove(content.getId());
-							contentIdList.remove(0);
+								downloadCotents.remove(content.getId());
+								contentIdList.remove(0);
 
-							notiCancel(content.getId());
-						} else {
-							pair.executor.shutdownNow();
+								notiCancel(content.getId());
+							} else {
+								pair.executor.shutdownNow();
+							}
 						}
-					}
-				} else {
-					downloadCotents.remove(content.getId());
-					contentIdList.remove(content.getId());
+					} else {
+						downloadCotents.remove(content.getId());
+						contentIdList.remove(content.getId());
 
+						notiCancel(content.getId());
+					}
+				}else{
 					notiCancel(content.getId());
 				}
 			}
@@ -118,24 +122,24 @@ public class StudentDataManager extends DataManager {
 							content, context);
 					downloadTask.addCallback(new ExecutorCallbackTask(content));
 					pair = executeRunnable(downloadTask);
-				}else{
+				} else {
 					contentIdList.remove(0);
 				}
 			}
 		}
-		
-		public synchronized void endDownload(OurContents content){
-			if(contentIdList.size() > 0){
+
+		public synchronized void endDownload(OurContents content) {
+			if (contentIdList.size() > 0) {
 				contentIdList.remove(content.getId());
 				downloadCotents.remove(content.getId());
 			}
 			pair = null;
-			
+
 			if (NetworkState.isWifiDirectConnected()) {
 				executeDownload();
 			}
 		}
-		
+
 		private class ExecutorCallbackTask implements OurCallback {
 			private OurContents content;
 

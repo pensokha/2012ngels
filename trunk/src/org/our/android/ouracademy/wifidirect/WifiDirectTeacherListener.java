@@ -1,15 +1,15 @@
 package org.our.android.ouracademy.wifidirect;
 
 import java.util.Collection;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import android.content.Context;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
-import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.ActionListener;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
-import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener;
 import android.net.wifi.p2p.WifiP2pManager.PeerListListener;
 import android.util.Log;
 
@@ -20,6 +20,19 @@ import android.util.Log;
  */
 public class WifiDirectTeacherListener extends WifiDirectDefaultListener {
 	private static final String TAG = "WifiDirectTeacherListener";
+	private Timer timerDiscover;
+	private ActionListener discoverPeerListener = new ActionListener() {
+
+		@Override
+		public void onSuccess() {
+			Log.d(TAG, "discoverPeers onSuccess");
+		}
+
+		@Override
+		public void onFailure(int reason) {
+			Log.d(TAG, "discoverPeers onFailure");
+		}
+	};
 
 	public WifiDirectTeacherListener(Context context, WifiP2pManager manager,
 			Channel channel) {
@@ -30,7 +43,34 @@ public class WifiDirectTeacherListener extends WifiDirectDefaultListener {
 	public void onEnableP2p() {
 		super.onEnableP2p();
 
-		manager.createGroup(channel, new TeacherCreateGroupListener());
+		if (timerDiscover == null) {
+			timerDiscover = new Timer();
+			timerDiscover.schedule(new TimerTask() {
+				@Override
+				public void run() {
+					manager.stopPeerDiscovery(channel, new ActionListener() {
+						
+						@Override
+						public void onSuccess() {
+							manager.discoverPeers(channel, discoverPeerListener);
+						}
+						
+						@Override
+						public void onFailure(int reason) {
+							manager.discoverPeers(channel, discoverPeerListener);
+						}
+					});
+				}
+			}, 0, 15000);
+		}
+	}
+
+	@Override
+	public void onDisableP2p() {
+		super.onDisableP2p();
+		
+		if(timerDiscover != null)
+			timerDiscover.purge();
 	}
 
 	@Override
@@ -56,67 +96,6 @@ public class WifiDirectTeacherListener extends WifiDirectDefaultListener {
 				}
 
 			});
-		}
-	}
-
-	/********
-	 * 
-	 * @author hyeongseokLim
-	 * 
-	 */
-	private class TeacherCreateGroupListener implements ActionListener {
-		private static final int MAX_RETRY_COUNT = 10;
-		private int retry = 0;
-
-		private ActionListener removeListener = new ActionListener() {
-
-			@Override
-			public void onSuccess() {
-				manager.createGroup(channel, new ActionListener() {
-
-					@Override
-					public void onSuccess() {
-						Log.d(TAG, "Success Create Group");
-						WifiDirectWrapper.getInstance().startRegistration(0);
-					}
-
-					@Override
-					public void onFailure(int reason) {
-						if (retry < MAX_RETRY_COUNT) {
-							retry++;
-							manager.createGroup(channel,
-									TeacherCreateGroupListener.this);
-						}
-					}
-				});
-			}
-
-			@Override
-			public void onFailure(int reason) {
-				if (retry < MAX_RETRY_COUNT) {
-					retry--;
-					manager.removeGroup(channel, removeListener);
-				}
-			}
-		};
-
-		@Override
-		public void onSuccess() {
-			Log.d(TAG, "Success Create Group");
-			WifiDirectWrapper.getInstance().startRegistration(0);
-		}
-
-		@Override
-		public void onFailure(int reason) {
-			manager.requestConnectionInfo(channel,
-					new ConnectionInfoListener() {
-						@Override
-						public void onConnectionInfoAvailable(WifiP2pInfo info) {
-							if (info.isGroupOwner == false) {
-								manager.removeGroup(channel, removeListener);
-							}
-						}
-					});
 		}
 	}
 }
