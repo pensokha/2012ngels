@@ -1,8 +1,18 @@
 package org.our.android.ouracademy.ui.pages;
 
+import java.util.ArrayList;
+
+import org.our.android.ouracademy.OurPreferenceManager;
 import org.our.android.ouracademy.R;
+import org.our.android.ouracademy.dao.CategoryDAO;
+import org.our.android.ouracademy.dao.ContentDAO;
+import org.our.android.ouracademy.dao.DAOException;
+import org.our.android.ouracademy.manager.FileManager;
+import org.our.android.ouracademy.model.OurCategory;
+import org.our.android.ouracademy.model.OurContents;
 import org.our.android.ouracademy.ui.adapter.PlayListAdapter;
 import org.our.android.ouracademy.ui.view.MediaPlayerView;
+import org.our.android.ouracademy.ui.view.PlayerListItemView.PlayerListItemViewListener;
 import org.our.android.ouracademy.ui.widget.NCHorizontalListView;
 
 import android.app.Activity;
@@ -31,6 +41,7 @@ public class MediaPlayerPage extends Activity implements MediaPlayer.OnPreparedL
 
 	public static final String INTENTKEY_STR_VIDEO_FILE_PATH = "videoFilePath";
 	public static final String INTENTKEY_STR_VIDEO_FILE_NAME = "videoFileName";
+//	public static final String INTENTKEY_STR_SELECTED_CATEGORY = "selectedCategories";
 
 	private MediaPlayerView mediaView;
 
@@ -48,6 +59,8 @@ public class MediaPlayerPage extends Activity implements MediaPlayer.OnPreparedL
 	boolean wasPlaying;
 
 	String filePath;
+
+//	String selectedCategories;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -81,12 +94,15 @@ public class MediaPlayerPage extends Activity implements MediaPlayer.OnPreparedL
 		listView.setAdapter(playListAdapter);
 
 		getIntentData();
+
+		loadContents();
 	}
 
 	private void getIntentData() {
 		Intent intent = getIntent();
 		filePath = intent.getStringExtra(INTENTKEY_STR_VIDEO_FILE_PATH);
 		String title = intent.getStringExtra(INTENTKEY_STR_VIDEO_FILE_NAME);
+//		selectedCategories = intent.getStringExtra(INTENTKEY_STR_SELECTED_CATEGORY);
 		if (mediaView != null) {
 			mediaView.setTitleText(title);
 		}
@@ -118,6 +134,7 @@ public class MediaPlayerPage extends Activity implements MediaPlayer.OnPreparedL
 		}
 
 		public void onStartTrackingTouch(SeekBar seekBar) {
+			mediaView.removeFullScreenCallback();
 			wasPlaying = player.isPlaying();
 			if (wasPlaying) {
 				player.pause();
@@ -153,7 +170,7 @@ public class MediaPlayerPage extends Activity implements MediaPlayer.OnPreparedL
 			player.stop();
 		}
 	}
-	
+
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
@@ -199,23 +216,28 @@ public class MediaPlayerPage extends Activity implements MediaPlayer.OnPreparedL
 	}
 
 	public void surfaceCreated(SurfaceHolder holder) {
-
 		if (player == null) {
 			player = new MediaPlayer();
-		} else {
-			player.reset();
 		}
 
+		player.setDisplay(holder);
+		player.setOnCompletionListener(complete);
+		player.setOnVideoSizeChangedListener(sizeChange);
+
+		preparePlayer();
+
+		startPlayer();
+	}
+
+	private void preparePlayer() {
 		if (filePath == null) {
 			return;
 		}
 
 		try {
+			player.reset();
 			player.setDataSource(filePath);
-			player.setDisplay(holder);
 			player.prepare();
-			player.setOnCompletionListener(complete);
-			player.setOnVideoSizeChangedListener(sizeChange);
 
 		} catch (Exception e) {
 			Toast.makeText(this, "error : " + e.getMessage(),
@@ -226,8 +248,6 @@ public class MediaPlayerPage extends Activity implements MediaPlayer.OnPreparedL
 		mediaView.setRemainingTimeText(player.getDuration());
 		videoSeekBar.setProgress(0);
 		videoSeekBar.setMax(player.getDuration());
-
-		startPlayer();
 	}
 
 	MediaPlayer.OnCompletionListener complete = new MediaPlayer.OnCompletionListener() {
@@ -280,4 +300,67 @@ public class MediaPlayerPage extends Activity implements MediaPlayer.OnPreparedL
 			mediaView.setPlayerResource(true);
 		}
 	}
+
+	private void loadContents() {
+		String selectedCategoryId = OurPreferenceManager.getInstance().getSelecetedCategory();
+		if (selectedCategoryId == null) {
+			return;
+		}
+
+		OurCategory selectedCategory = null;
+		ArrayList<OurCategory> categoryList = null;
+		try {
+			categoryList = new CategoryDAO().getCategories();
+		} catch (DAOException e) {
+			e.printStackTrace();
+		}
+
+		for (OurCategory category : categoryList) {
+			if (category.getCategoryId().compareTo(selectedCategoryId) == 0) {
+				selectedCategory = category;
+				break;
+			}
+		}
+
+		ArrayList<OurContents> contents = new ArrayList<OurContents>();
+
+		try {
+
+			ArrayList<OurContents> contentsFromDB = new ContentDAO().getDuplicatedContents(selectedCategoryId);
+
+			for (OurContents content : contentsFromDB) {
+				if (content.fileStatus == OurContents.FileStatus.DOWNLOADED) {
+					if (selectedCategory != null) {
+						content.selectedCategory = selectedCategory;
+					}
+					contents.add(content);
+				}
+			}
+
+			if (playListAdapter != null) {
+				playListAdapter.setData(contents);
+				playListAdapter.setOnPlayerListViewListener(listListener);
+			}
+
+		} catch (DAOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	PlayerListItemViewListener listListener = new PlayerListItemViewListener() {
+
+		@Override
+		public void onClickBook(OurContents contents) {
+			if (contents != null) {
+				pausePlayer();
+				filePath = FileManager.getRealPathFromContentId(contents.getId());
+				if (mediaView != null) {
+					mediaView.setTitleText(contents.getSubject());
+					mediaView.showVideoList(false);
+				}
+				preparePlayer();
+				startPlayer();
+			}
+		}
+	};
 }

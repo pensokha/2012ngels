@@ -1,6 +1,10 @@
 package org.our.android.ouracademy.ui.adapter;
 
+import java.util.ArrayList;
+
+import org.our.android.ouracademy.model.OurContents;
 import org.our.android.ouracademy.ui.view.PlayerListItemView;
+import org.our.android.ouracademy.ui.view.PlayerListItemView.PlayerListItemViewListener;
 
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,15 +18,25 @@ import android.widget.BaseAdapter;
  */
 public class PlayListAdapter extends BaseAdapter {
 
+	ArrayList<OurContents> contentsList = null;
+
+	private PlayerListItemViewListener listener;
+
 	@Override
 	public int getCount() {
-		// test code
-		return 20;
+		if (contentsList == null || contentsList.isEmpty()) {
+			return 0;
+		}
+
+		return contentsList.size();
 	}
 
 	@Override
 	public Object getItem(int position) {
-		return null;
+		if (contentsList == null) {
+			return null;
+		}
+		return contentsList.get(position);
 	}
 
 	@Override
@@ -36,7 +50,21 @@ public class PlayListAdapter extends BaseAdapter {
 			convertView = new PlayerListItemView(parent.getContext());
 		}
 
+		if (convertView instanceof PlayerListItemView) {
+			PlayerListItemView item = (PlayerListItemView)convertView;
+			item.setData(contentsList.get(position));
+			item.setOnPlayerListViewListener(listener);
+		}
+
 		return convertView;
+	}
+
+	public void setData(ArrayList<OurContents> contentsList) {
+		this.contentsList = contentsList;
+	}
+
+	public void setOnPlayerListViewListener(PlayerListItemViewListener listener) {
+		this.listener = listener;
 	}
 
 }

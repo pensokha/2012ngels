@@ -51,13 +51,13 @@ public class ContentDAO {
 			+ CATEGORY_ID_KEY + " VARCHAR, PRIMARY KEY(" + CATEGORY_ID_KEY
 			+ " ASC," + CONTENT_ID_KEY + ")); ";
 
-	private static final String[] CONTENT_FIELDS = { ID_KEY, SUBJECT_ENG_KEY,
+	private static final String[] CONTENT_FIELDS = {ID_KEY, SUBJECT_ENG_KEY,
 			SUBJECT_KMR_KEY, CONTENT_URL_KEY, SUBTITLE_URL_KEY, SIZE_KEY,
 			DOWNLOADED_SIZE_KEY, TOPIC_ID_KEY, TOPIC_TITLE_ENG_KEY,
-			TOPIC_TITLE_KMR_KEY, DESCRIPTION_ENG_KEY, DESCRIPTION_KMR_KEY };
+			TOPIC_TITLE_KMR_KEY, DESCRIPTION_ENG_KEY, DESCRIPTION_KMR_KEY};
 
-	private static final String[] CONTENT_CATEGORY_FIELDS = { CONTENT_ID_KEY,
-			CATEGORY_ID_KEY };
+	private static final String[] CONTENT_CATEGORY_FIELDS = {CONTENT_ID_KEY,
+			CATEGORY_ID_KEY};
 
 	private DbManager dbManager;
 
@@ -157,7 +157,7 @@ public class ContentDAO {
 			ContentValues values = new ContentValues();
 			values.put(DOWNLOADED_SIZE_KEY, content.getDownloadedSize());
 			db.update(CONTENT_TABLE_NAME, values, ID_KEY + "= ?",
-					new String[] { content.getId() });
+					new String[] {content.getId()});
 		} catch (SQLException err) {
 			throw new DAOException("Error update downloaded size");
 		}
@@ -314,6 +314,67 @@ public class ContentDAO {
 		return contents;
 	}
 
+	public String getDuplicatedContentsQuery(String selectedCategories) {
+		StringBuffer sql = new StringBuffer();
+		sql.append(" SELECT ");
+		for (int i = 0; i < CONTENT_FIELDS.length; i++) {
+			sql.append(CONTENT_FIELDS[i]);
+			sql.append(",");
+		}
+		sql.append(CATEGORY_ID_KEY);
+		sql.append(" FROM ");
+		sql.append(CONTENT_TABLE_NAME);
+		sql.append(" LEFT JOIN ");
+		sql.append(CONTENT_CATEGORY_TABLE_NAME);
+		sql.append(" ON ");
+		sql.append(ID_KEY);
+		sql.append("=");
+		sql.append(CONTENT_ID_KEY);
+		if (selectedCategories != null) {
+			sql.append(" WHERE ");
+			sql.append(CATEGORY_ID_KEY);
+			sql.append(" IN ('");
+			sql.append(selectedCategories);
+			sql.append("'");
+			sql.append(")");
+		}
+		sql.append(" ORDER BY ");
+		sql.append(CATEGORY_ID_KEY);
+		sql.append(" ASC");
+
+		return sql.toString();
+	}
+
+	public ArrayList<OurContents> getDuplicatedContents(String selectedCategory) throws DAOException {
+
+		ArrayList<OurContents> contents = new ArrayList<OurContents>();
+
+		Cursor cursor = null;
+		try {
+			SQLiteDatabase db = dbManager.getDB();
+
+			cursor = db.rawQuery(getDuplicatedContentsQuery(selectedCategory), null);
+
+			if (cursor == null)
+				throw new DAOException("Error get contents");
+
+			while (cursor.moveToNext()) {
+				OurContents content = new OurContents();
+				setContentDataFromCursor(cursor, content);
+				contents.add(content);
+			}
+
+		} catch (Exception e) {
+			throw new DAOException("Error get contents");
+		} finally {
+			if (cursor != null) {
+				cursor.close();
+			}
+		}
+
+		return contents;
+	}
+
 	public ArrayList<OurContents> getUndownloadedContents() throws DAOException {
 
 		ArrayList<OurContents> contents = new ArrayList<OurContents>();
@@ -393,7 +454,7 @@ public class ContentDAO {
 		long result = 0;
 		try {
 			result = dbManager.delete(CONTENT_CATEGORY_TABLE_NAME,
-					CONTENT_ID_KEY + " = ?", new String[] { contentId });
+					CONTENT_ID_KEY + " = ?", new String[] {contentId});
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new DAOException("Delete content_categories Error");

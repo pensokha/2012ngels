@@ -209,7 +209,7 @@ public class MediaPlayerView extends LinearLayout implements View.OnClickListene
 		}
 	}
 
-	private void showVideoList(boolean show) {
+	public void showVideoList(boolean show) {
 		if (show) {
 			listView.setVisibility(View.VISIBLE);
 		} else {
@@ -269,7 +269,7 @@ public class MediaPlayerView extends LinearLayout implements View.OnClickListene
 		return listView;
 	}
 
-	private void removeFullScreenCallback() {
+	public void removeFullScreenCallback() {
 		if (fullScreen != null) {
 			handler.removeCallbacks(fullScreen);
 			fullScreen = null;
