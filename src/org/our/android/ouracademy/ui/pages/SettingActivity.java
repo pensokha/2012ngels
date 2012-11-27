@@ -75,6 +75,8 @@ public class SettingActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		initUI();
 
+		context = this;
+		
 		OurPreferenceManager pref = OurPreferenceManager.getInstance();
 		if (pref.isStudent()) {
 			processFindTeacher();
