@@ -3,7 +3,6 @@ package org.our.android.ouracademy.ui.widget;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
-import android.widget.TextView;
 
 /**
  * 
@@ -11,7 +10,7 @@ import android.widget.TextView;
  * @author jyeon
  *
  */
-public class VerticalTextView extends TextView {
+public class VerticalTextView extends NCTextView {
 
 	public VerticalTextView(Context context) {
 		super(context);

@@ -12,6 +12,7 @@ import org.our.android.ouracademy.model.OurCategory;
 import org.our.android.ouracademy.ui.adapter.CategoryListAdapter;
 import org.our.android.ouracademy.ui.pages.MainActivity;
 import org.our.android.ouracademy.ui.pages.SettingActivity;
+import org.our.android.ouracademy.ui.widget.NCTextView;
 
 import android.app.Activity;
 import android.content.ComponentName;
@@ -25,7 +26,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.FrameLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 
 /**
  * 
@@ -35,14 +35,14 @@ import android.widget.TextView;
 public class MainMenuView extends FrameLayout implements OnClickListener {
 	ArrayList<OurCategory> categoryList = null;
 	ListView listView;
-	TextView categoryTxtView;
+	NCTextView categoryTxtView;
 	// View applyButton;
 	View refreshBtn;
 
 	int aniResId = -1;
 
 	CategoryListAdapter adapter;
-	
+
 	private int wifiStatus;
 
 	public MainMenuView(Context context) {
@@ -79,14 +79,14 @@ public class MainMenuView extends FrameLayout implements OnClickListener {
 	private void initUI() {
 		LayoutInflater.from(getContext()).inflate(R.layout.layout_main_menu, this, true);
 
-		listView = (ListView) findViewById(R.id.category_listview);
+		listView = (ListView)findViewById(R.id.category_listview);
 
 		View header = LayoutInflater.from(getContext()).inflate(
 				R.layout.layout_category_header_item, null);
 		header.setTag(false);
 		listView.addHeaderView(header);
 
-		adapter = new CategoryListAdapter(getContext(),	R.layout.layout_category_list_item, getCategoryListData());
+		adapter = new CategoryListAdapter(getContext(), R.layout.layout_category_list_item, getCategoryListData());
 
 		listView.setAdapter(adapter);
 		listView.setOnItemClickListener(new OnItemClickListener() {
@@ -127,10 +127,10 @@ public class MainMenuView extends FrameLayout implements OnClickListener {
 		guideBtn.setOnClickListener(this);
 		refreshBtn.setOnClickListener(this);
 		settingBtn.setOnClickListener(this);
-		
+
 		//set selection saved cateogory
 		String laseSeletedCategoryId = OurPreferenceManager.getInstance().getSelecetedCategory();
-		for(int i = 0; i < categoryList.size(); i ++) {
+		for (int i = 0; i < categoryList.size(); i++) {
 			if (categoryList.get(i).getCategoryId().equals(laseSeletedCategoryId)) {
 				listView.setSelection(i);
 				break;
@@ -140,43 +140,45 @@ public class MainMenuView extends FrameLayout implements OnClickListener {
 
 	public void setRefreshBtnStatus(int status) {
 		switch (status) {
-		case WifiStatusReceiver.WIFI_STATE_DISABLED:
-		case WifiStatusReceiver.WIFI_STATE_DISABLING:
-			refreshBtn.setBackgroundResource(R.drawable.btn_main_refresh_selector_02);
-			break;
-		case WifiStatusReceiver.WIFI_STATE_ENABLED:
-		case WifiStatusReceiver.WIFI_STATE_ENABLING:
-			refreshBtn.setBackgroundResource(R.drawable.btn_main_refresh_selector_01);
-			break;
-		case WifiStatusReceiver.WIFI_STATE_UNKNOWN:
-		default:
-			refreshBtn.setBackgroundResource(R.drawable.btn_main_refresh_selector_01);
-			break;
+			case WifiStatusReceiver.WIFI_STATE_DISABLED:
+			case WifiStatusReceiver.WIFI_STATE_DISABLING:
+				refreshBtn.setBackgroundResource(R.drawable.btn_main_refresh_selector_02);
+				break;
+			case WifiStatusReceiver.WIFI_STATE_ENABLED:
+			case WifiStatusReceiver.WIFI_STATE_ENABLING:
+				refreshBtn.setBackgroundResource(R.drawable.btn_main_refresh_selector_01);
+				break;
+			case WifiStatusReceiver.WIFI_STATE_UNKNOWN:
+			default:
+				refreshBtn.setBackgroundResource(R.drawable.btn_main_refresh_selector_01);
+				break;
 		}
 		wifiStatus = status;
 	}
-	
+
 	private void onClickRefreshBtnStatus(int status) {
 		switch (status) {
-		case WifiStatusReceiver.WIFI_STATE_DISABLED:
-		case WifiStatusReceiver.WIFI_STATE_DISABLING:
-			Intent wifiIntent = new Intent("android.settings.WIFI_SETTINGS");
-			wifiIntent.addCategory("android.intent.category.DEFAULT");
-			wifiIntent.setFlags(0x30800000);
-			wifiIntent.setComponent(new ComponentName("com.android.settings", "com.android.settings.wifi.WifiSettings"));
-			getContext().startActivity(wifiIntent);
-			break;
-		case WifiStatusReceiver.WIFI_STATE_ENABLED:
-		case WifiStatusReceiver.WIFI_STATE_ENABLING:
-			Intent intent = new Intent(getContext(), SettingActivity.class);
-			intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-			Activity activity = (Activity) getContext();
-			activity.startActivityForResult(intent, 1);
-			break;
-		case WifiStatusReceiver.WIFI_STATE_UNKNOWN:
-			break;
-		default:
-			break;
+			case WifiStatusReceiver.WIFI_STATE_DISABLED:
+			case WifiStatusReceiver.WIFI_STATE_DISABLING:
+				Intent wifiIntent = new Intent("android.settings.WIFI_SETTINGS");
+				wifiIntent.addCategory("android.intent.category.DEFAULT");
+				wifiIntent.setFlags(0x30800000);
+				wifiIntent.setComponent(new ComponentName("com.android.settings",
+					"com.android.settings.wifi.WifiSettings"));
+				getContext().startActivity(wifiIntent);
+				break;
+			case WifiStatusReceiver.WIFI_STATE_ENABLED:
+			case WifiStatusReceiver.WIFI_STATE_ENABLING:
+				Intent intent = new Intent(getContext(), SettingActivity.class);
+				intent.putExtra(SettingActivity.INTENTKEY_WIFI_MODE, true);
+				intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+				Activity activity = (Activity)getContext();
+				activity.startActivityForResult(intent, 1);
+				break;
+			case WifiStatusReceiver.WIFI_STATE_UNKNOWN:
+				break;
+			default:
+				break;
 		}
 	}
 
@@ -193,17 +195,17 @@ public class MainMenuView extends FrameLayout implements OnClickListener {
 	public void onClick(View v) {
 		int id = v.getId();
 		switch (id) {
-		case R.id.guide_btn:
-			break;
-		case R.id.refresh_btn:
-			onClickRefreshBtnStatus(wifiStatus);
-			break;
-		case R.id.setting_btn:
-			Intent intent = new Intent(getContext(), SettingActivity.class);
-			intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-			Activity activity = (Activity) getContext();
-			activity.startActivityForResult(intent, MainActivity.SETTING_ACTIVITY);
-			break;
+			case R.id.guide_btn:
+				break;
+			case R.id.refresh_btn:
+				onClickRefreshBtnStatus(wifiStatus);
+				break;
+			case R.id.setting_btn:
+				Intent intent = new Intent(getContext(), SettingActivity.class);
+				intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+				Activity activity = (Activity)getContext();
+				activity.startActivityForResult(intent, MainActivity.SETTING_ACTIVITY);
+				break;
 		}
 	}
 

@@ -7,6 +7,7 @@ import org.our.android.ouracademy.constants.CommonConstants;
 import org.our.android.ouracademy.model.OurContents;
 import org.our.android.ouracademy.ui.adapter.ContentsListAdapter;
 import org.our.android.ouracademy.ui.widget.NCHorizontalListView;
+import org.our.android.ouracademy.ui.widget.NCTextView;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -24,7 +25,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 /**
 *
@@ -36,25 +36,25 @@ public class MainDetailView extends RelativeLayout implements OnItemClickListene
 	private ViewGroup detailRootLayout;
 	private ViewGroup detailLayout;
 	private ImageView decoyImage;
-	
+
 	private ViewGroup hideMenuBtn;
-	
-	private TextView dragLayoutTxt;
-	
+
+	private NCTextView dragLayoutTxt;
+
 	private View emptyView;
 
 	private int moveStart;
 	private int moveEnd;
 
 	private int aniDuration = 200;
-	
+
 	NCHorizontalListView horizontalListView;
 	ContentsListAdapter contentsListAdapter;
-	
+
 	private boolean isFristLoad = true;
-	
+
 	ArrayList<OurContents> contentsList = new ArrayList<OurContents>();
-	
+
 	public enum TouchStatus {
 		START_DRAGGING,
 		DRAGGING,
@@ -71,7 +71,7 @@ public class MainDetailView extends RelativeLayout implements OnItemClickListene
 	}
 
 	public MenuStatus menuStatus = MenuStatus.INVISIBLE_MENU;
-	
+
 	public MainDetailView(Context context) {
 		super(context);
 		initUI();
@@ -81,61 +81,61 @@ public class MainDetailView extends RelativeLayout implements OnItemClickListene
 		super(context, attrs);
 		initUI();
 	}
-	
-	public ArrayList<OurContents> getContentList(){
+
+	public ArrayList<OurContents> getContentList() {
 		return contentsList;
 	}
-	
-	public NCHorizontalListView getList(){
+
+	public NCHorizontalListView getList() {
 		return horizontalListView;
 	}
-	
-	public ContentsListAdapter getListAdapter(){
+
+	public ContentsListAdapter getListAdapter() {
 		return contentsListAdapter;
 	}
-	
+
 	private void initUI() {
 		LayoutInflater.from(getContext()).inflate(R.layout.layout_main_detail, this, true);
-		
+
 		emptyView = findViewById(R.id.empty_guide_text);
-		
+
 		detailRootLayout = (ViewGroup)findViewById(R.id.layout_root_detail);
 		detailLayout = (ViewGroup)findViewById(R.id.layout_detail);
-		
+
 		ViewGroup dragLayout = (ViewGroup)findViewById(R.id.drag_layout);
-        dragLayout.setOnTouchListener(dargTouchListener);
-        
-        dragLayoutTxt = (TextView) dragLayout.findViewById(R.id.drag_layout_txt);
-        dragLayoutTxt.setOnClickListener(new OnClickListener() {
+		dragLayout.setOnTouchListener(dargTouchListener);
+
+		dragLayoutTxt = (NCTextView)dragLayout.findViewById(R.id.drag_layout_txt);
+		dragLayoutTxt.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				onClickMenu();
 			}
 		});
-        
-        hideMenuBtn = (ViewGroup)(ViewGroup)findViewById(R.id.hide_menu_btn);
-        hideMenuBtn.setOnClickListener(new OnClickListener() {
+
+		hideMenuBtn = (ViewGroup)(ViewGroup)findViewById(R.id.hide_menu_btn);
+		hideMenuBtn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				onClickMenu();
 			}
 		});
-        
-        hideMenuBtn.setClickable(true);
-		
-        decoyImage = new ImageView(getContext());
-        
-        horizontalListView = (NCHorizontalListView) findViewById(R.id.horizontal_listview);
-        contentsListAdapter = new ContentsListAdapter(getContext(), contentsList);
-        contentsListAdapter.setEmptyView(emptyView);
-        contentsListAdapter.setHorizontalListView(horizontalListView);
-        horizontalListView.setAdapter(contentsListAdapter);
-        horizontalListView.setOnItemClickListener(this);
-        
-        setDetailLayoutXPosition(CommonConstants.DETAIL_ANI_END_X);
-        menuStatus = MenuStatus.VISIBLE_MENU;
+
+		hideMenuBtn.setClickable(true);
+
+		decoyImage = new ImageView(getContext());
+
+		horizontalListView = (NCHorizontalListView)findViewById(R.id.horizontal_listview);
+		contentsListAdapter = new ContentsListAdapter(getContext(), contentsList);
+		contentsListAdapter.setEmptyView(emptyView);
+		contentsListAdapter.setHorizontalListView(horizontalListView);
+		horizontalListView.setAdapter(contentsListAdapter);
+		horizontalListView.setOnItemClickListener(this);
+
+		setDetailLayoutXPosition(CommonConstants.DETAIL_ANI_END_X);
+		menuStatus = MenuStatus.VISIBLE_MENU;
 	}
-	
+
 //	@Override
 //	public void onWindowFocusChanged(boolean hasFocus) {
 //		super.onWindowFocusChanged(hasFocus);
@@ -152,7 +152,7 @@ public class MainDetailView extends RelativeLayout implements OnItemClickListene
 //			}, 300);
 //	    }
 //	}
-	
+
 	public void onClickMenu() {
 		if (menuStatus == MenuStatus.MOVING_MENU) {
 			return;
@@ -168,7 +168,7 @@ public class MainDetailView extends RelativeLayout implements OnItemClickListene
 			changeToMenuIcon();
 		}
 	}
-	
+
 	/**
 	 * @author Sung-Chul Park
 	 * ok버튼 아이콘을 메뉴 아이콘으로 변경
@@ -177,9 +177,9 @@ public class MainDetailView extends RelativeLayout implements OnItemClickListene
 		for (OurContents contents : contentsList) {
 			contents.setDeleteMode(false);
 		}
-		
+
 		contentsListAdapter.notifyDataSetChanged(contentsList);
-		
+
 		// 메뉴 아이콘 변경.
 		menuStatus = MenuStatus.INVISIBLE_MENU;
 		setDetailLayoutXPosition(CommonConstants.DETAIL_ANI_START_X);
@@ -188,7 +188,7 @@ public class MainDetailView extends RelativeLayout implements OnItemClickListene
 		hideMenuBtn.setClickable(false);
 		changeDragLayoutIcon();
 	}
-	
+
 	/**
 	 * 셋팅 화면 선생님 모드에서 삭제 버튼 클릭 후 삭제 모드로 전환할 때 호출.
 	 * @author Sung-Chul Park
@@ -199,7 +199,7 @@ public class MainDetailView extends RelativeLayout implements OnItemClickListene
 		}
 		AbsoluteLayout.LayoutParams params = (AbsoluteLayout.LayoutParams)detailLayout.getLayoutParams();
 		setDetailLayoutImageCache(params);
-		
+
 		for (OurContents contents : contentsList) {
 			if (contents.fileStatus == OurContents.FileStatus.DOWNLOADED) {
 				contents.setDeleteMode(true);
@@ -207,10 +207,10 @@ public class MainDetailView extends RelativeLayout implements OnItemClickListene
 		}
 
 		contentsListAdapter.notifyDataSetChanged(contentsList);
-		
+
 		hideManuAnimationOnDeleteMode(CommonConstants.DETAIL_ANI_WIDTH);
 	}
-	
+
 	private void setDetailLayoutImageCache(android.widget.AbsoluteLayout.LayoutParams params) {
 		if (menuStatus == MenuStatus.MOVING_MENU) {
 			return;
@@ -222,7 +222,7 @@ public class MainDetailView extends RelativeLayout implements OnItemClickListene
 
 		detailRootLayout.addView(decoyImage);
 	}
-	
+
 	public void openMenuAnimation(final int aniWidth) {
 		if (menuStatus == MenuStatus.MOVING_MENU) {
 			return;
@@ -240,9 +240,11 @@ public class MainDetailView extends RelativeLayout implements OnItemClickListene
 				menuStatus = MenuStatus.MOVING_MENU;
 				detailLayout.setVisibility(View.INVISIBLE);
 			}
+
 			@Override
 			public void onAnimationRepeat(Animation animation) {
 			}
+
 			@Override
 			public void onAnimationEnd(Animation animation) {
 				menuStatus = MenuStatus.VISIBLE_MENU;
@@ -269,9 +271,11 @@ public class MainDetailView extends RelativeLayout implements OnItemClickListene
 				menuStatus = MenuStatus.MOVING_MENU;
 				detailLayout.setVisibility(View.INVISIBLE);
 			}
+
 			@Override
 			public void onAnimationRepeat(Animation animation) {
 			}
+
 			@Override
 			public void onAnimationEnd(Animation animation) {
 				menuStatus = MenuStatus.INVISIBLE_MENU;
@@ -283,7 +287,7 @@ public class MainDetailView extends RelativeLayout implements OnItemClickListene
 			}
 		});
 	}
-	
+
 	public void hideManuAnimationOnDeleteMode(final int aniWidth) {
 		final AnimationSet set = new AnimationSet(true);
 		set.setInterpolator(getContext(), android.R.anim.decelerate_interpolator);
@@ -298,9 +302,11 @@ public class MainDetailView extends RelativeLayout implements OnItemClickListene
 				menuStatus = MenuStatus.MOVING_MENU;
 				detailLayout.setVisibility(View.INVISIBLE);
 			}
+
 			@Override
 			public void onAnimationRepeat(Animation animation) {
 			}
+
 			@Override
 			public void onAnimationEnd(Animation animation) {
 				menuStatus = MenuStatus.DELETE_MODE_VIEW;
@@ -312,12 +318,12 @@ public class MainDetailView extends RelativeLayout implements OnItemClickListene
 			}
 		});
 	}
-	
+
 	private void changeDragLayoutIcon() {
 		if (dragLayoutTxt == null) {
 			return;
 		}
-		
+
 		if (menuStatus == MenuStatus.VISIBLE_MENU) {
 			dragLayoutTxt.setText(R.string.list);
 			dragLayoutTxt.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.list_icon_menu02, 0, 0);
@@ -329,7 +335,7 @@ public class MainDetailView extends RelativeLayout implements OnItemClickListene
 			dragLayoutTxt.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.list_icon_menu03, 0, 0);
 		}
 	}
-	
+
 	private void setDetailLayoutXPosition(int XPoint) {
 		detailLayout.setVisibility(View.VISIBLE);
 		AbsoluteLayout.LayoutParams params;
@@ -337,7 +343,7 @@ public class MainDetailView extends RelativeLayout implements OnItemClickListene
 		params.x = XPoint;
 		detailLayout.setLayoutParams(params);
 	}
-	
+
 	OnTouchListener dargTouchListener = new OnTouchListener() {
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {

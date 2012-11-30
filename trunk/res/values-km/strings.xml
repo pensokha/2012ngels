@@ -2,16 +2,37 @@
 
     <string name="app_name">OurAcademy</string>
     <string name="hello_world">Hello world!</string>
-    <string name="menu_settings">Settings</string>
-    <string name="title_activity_main">MainActivity</string>
-    
-    <string name="finish_application">Please press BACK again to exit.</string>
-    
+    <string name="menu_settings">ការកំណត់</string>
+    <string name="dialog_link_save">រក្សាទុកទំនាក់ទំនង</string>
+    <string name="download_complete">ការទាញយកឯកសារទទួលបានជោគជ័យ</string>
+    <string name="download_unsuccessful">ការទាញយកឯកសារមិនទទួលបានជោគជ័យ</string>
+    <string name="finish_application">សូមចុច ពាក្យ BACK ម្ដងទៀតដើម្បីចាកចេញ</string>
+
     <!-- main -->
-    <string name="menu">MENU</string>
-    <string name="list">LIST</string>
-    
-    <string name="category_upper_case">CATEGORY</string>
-    <string name="apply">Apply</string>
+    <string name="menu">ម៊ឺនុយ</string>
+    <string name="list">បញ្ជី</string>
+    <string name="back">ថយក្រោយ</string>
+    <string name="menu_ok">ព្រម</string>
+    <string name="ok">ព្រម</string>
+    <string name="cancel">បោះបង់</string>
+    <string name="close">បិទ</string>
+    <string name="category_upper_case">ប្រភេទ</string>
+    <string name="apply">អនុវត្</string>
+    <string name="contents_empty_guide">អត់មានឯកសារសម្រាប់ទាញយក រឺ ចាក់</string>
+
+    <!-- DataManager -->
+    <string name="start_service">សេវាចាប់ផ្ដើម</string>
+    <string name="stop_service">សេវាបញ្ចប់</string>
+    <string name="tearche">គ្រូបង្រៀន</string>
+    <string name="student">សិស្</string>
+    <string name="str_password">Password</string>
+    <string name="str_student">សិស្ស</string>
+    <string name="str_teacher">គ្រូបង្រៀន</string>
+    <string name="str_network">Network</string>
+    <string name="str_data_sync">Data Sync</string>
+    <string name="str_connected_student">Connected Student</string>
+    <string name="str_delete">Delete</string>
+    <string name="str_back">ថយក្រោយ</string>
+    <string name="str_category">ប្រភេទ</string>
 
 </resources>

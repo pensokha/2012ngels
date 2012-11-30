@@ -1,6 +1,7 @@
 package org.our.android.ouracademy.ui.view;
 
 import org.our.android.ouracademy.R;
+import org.our.android.ouracademy.ui.widget.NCTextView;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -11,7 +12,6 @@ import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 public class PlayerTopView extends LinearLayout {
 
@@ -19,7 +19,7 @@ public class PlayerTopView extends LinearLayout {
 
 	int aniResId = INVALID_ANIMATION_RESOURCE_ID;
 
-	TextView title;
+	NCTextView title;
 
 	public PlayerTopView(Context context) {
 		super(context);
@@ -38,7 +38,7 @@ public class PlayerTopView extends LinearLayout {
 		LayoutInflater li = (LayoutInflater)getContext().getSystemService(infService);
 		li.inflate(R.layout.media_player_top, this, true);
 
-		title = (TextView)findViewById(R.id.title);
+		title = (NCTextView)findViewById(R.id.title);
 	}
 
 	public void setTitleText(String text) {

@@ -2,6 +2,7 @@ package org.our.android.ouracademy.ui.pages;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 
 import org.our.android.ouracademy.R;
 import org.our.android.ouracademy.broadreceiver.WifiStatusReceiver;
@@ -14,17 +15,20 @@ import org.our.android.ouracademy.model.OurCategory;
 import org.our.android.ouracademy.model.OurContents;
 import org.our.android.ouracademy.ui.view.MainDetailView;
 import org.our.android.ouracademy.ui.view.MainMenuView;
-import org.our.android.ouracademy.ui.view.MainDetailView.MenuStatus;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Configuration;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -51,26 +55,34 @@ public class MainActivity extends BaseActivity {
 	private HashMap<String, ArrayList<OurContents>> contentsHashMap = new HashMap<String, ArrayList<OurContents>>();
 
 	public static final int SETTING_ACTIVITY = 101;
-	
+
+	public static boolean isKhmerLanguage = false;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
 		initUI();
 
-		reciever = new OurDataChangeReceiver();
-		intentFilter.addAction(OurDataChangeReceiver.OUR_DATA_CHANGED);
-		registerReceiver(reciever, intentFilter);
+		if (reciever == null) {
+			reciever = new OurDataChangeReceiver();
+			intentFilter.addAction(OurDataChangeReceiver.OUR_DATA_CHANGED);
+			registerReceiver(reciever, intentFilter);
+		}
 
-		wifiReciever = new WifiStatusReceiver(getBaseContext());
-		wifiReciever.setOnChangeNetworkStatusListener(networkSatusListener);
-		registerReceiver(wifiReciever, new IntentFilter(
+		if (wifiReciever == null) {
+			wifiReciever = new WifiStatusReceiver(getBaseContext());
+			wifiReciever.setOnChangeNetworkStatusListener(networkSatusListener);
+			registerReceiver(wifiReciever, new IntentFilter(
 				WifiManager.WIFI_STATE_CHANGED_ACTION));
+		}
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
 		DataManagerFactory.getDataManager().syncFileAndDatabase();
+
 	}
 
 	@Override
@@ -82,7 +94,7 @@ public class MainActivity extends BaseActivity {
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		
+
 		closeFlag = false;
 
 		unregisterReceiver(reciever);
@@ -92,9 +104,9 @@ public class MainActivity extends BaseActivity {
 	private void initUI() {
 		setContentView(R.layout.activity_main);
 
-		menuLayout = (ViewGroup) findViewById(R.id.layout_main_menu);
+		menuLayout = (ViewGroup)findViewById(R.id.layout_main_menu);
 
-		detailLayout = (ViewGroup) findViewById(R.id.layout_main_detail);
+		detailLayout = (ViewGroup)findViewById(R.id.layout_main_detail);
 
 		initMenuLayout();
 		initContentsLayout();
@@ -207,29 +219,29 @@ public class MainActivity extends BaseActivity {
 		public void onReceive(Context context, Intent intent) {
 			if (OUR_DATA_CHANGED.equals(intent.getAction())) {
 				switch (intent.getIntExtra(ACTION, -1)) {
-				case ACTION_RELOAD:
-					reloadContents();
-					reloadCategories();
-					break;
-				case ACTION_CATEGORY_CHANGED:
-					reloadCategories();
-					break;
-				case ACTION_CONTENT_CHANGED:
-					reloadContents();
-					break;
-				case ACTION_DOWNLOADING:
-					updateDownloadSize(intent.getStringExtra(CONTENT_ID),
+					case ACTION_RELOAD:
+						reloadContents();
+						reloadCategories();
+						break;
+					case ACTION_CATEGORY_CHANGED:
+						reloadCategories();
+						break;
+					case ACTION_CONTENT_CHANGED:
+						reloadContents();
+						break;
+					case ACTION_DOWNLOADING:
+						updateDownloadSize(intent.getStringExtra(CONTENT_ID),
 							intent.getLongExtra(DOWNLAD_SIZE, 0));
-					break;
-				case ACTION_CANCEL_DOWNLOADING:
-				case ACTION_ERROR_DOWNLOADING:
-					cancelDownloading(intent.getStringExtra(CONTENT_ID));
-					break;
-				case ACTION_SYNC_DATA:
-					syncData(intent.getStringArrayListExtra(CONTENT_ID));
-					break;
-				default:
-					break;
+						break;
+					case ACTION_CANCEL_DOWNLOADING:
+					case ACTION_ERROR_DOWNLOADING:
+						cancelDownloading(intent.getStringExtra(CONTENT_ID));
+						break;
+					case ACTION_SYNC_DATA:
+						syncData(intent.getStringArrayListExtra(CONTENT_ID));
+						break;
+					default:
+						break;
 				}
 			}
 		}
@@ -277,7 +289,7 @@ public class MainActivity extends BaseActivity {
 		if (contents != null) {
 			for (OurContents content : contents) {
 				content.fileStatus = OurContents.FileStatus.DOWNLOADING;
-				
+
 				if (content.getDownloadedSize() <= downloadedSize) {
 					content.setDownloadedSize(downloadedSize);
 
@@ -315,7 +327,7 @@ public class MainActivity extends BaseActivity {
 
 	private void reloadContents() {
 		ArrayList<OurContents> contents = detailView.getContentList();
-		
+
 		// deleteMode일 때는 DB데이터를 업데이트 안 한다.
 		// @author Sung-Chul Park
 		for (OurContents content : contents) {
@@ -323,7 +335,7 @@ public class MainActivity extends BaseActivity {
 				return;
 			}
 		}
-		
+
 		if (contents != null) {
 			try {
 				ArrayList<OurContents> contentsFromDB = new ContentDAO()
@@ -366,14 +378,14 @@ public class MainActivity extends BaseActivity {
 		if (requestCode == SETTING_ACTIVITY) {
 			if (resultCode == RESULT_OK) {
 				boolean isDeleteMode = data.getBooleanExtra(SettingActivity.INTENTKEY_DELETE_MODE, false);
-				
+
 				if (isDeleteMode == true) {
 					detailView.goIntoDeleteMode();
 				}
 			}
 		}
 	}
-	
+
 	OnChangeNetworkStatusListener networkSatusListener = new OnChangeNetworkStatusListener() {
 		@Override
 		public void OnChanged(int status) {
@@ -381,4 +393,44 @@ public class MainActivity extends BaseActivity {
 		}
 	};
 
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.activity_main, menu);
+
+		return true;
+	}
+
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		return super.onPrepareOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case R.id.language:
+				isKhmerLanguage = !isKhmerLanguage;
+				if (isKhmerLanguage) {
+					callSwitchLang("km");
+				} else {
+					callSwitchLang("en");
+				}
+
+				initUI();
+
+				return true;
+
+			default:
+				return super.onOptionsItemSelected(item);
+		}
+	}
+
+	private void callSwitchLang(String langCode) {
+		Locale locale = new Locale(langCode);
+		Locale.setDefault(locale);
+		Configuration config = new Configuration();
+		config.locale = locale;
+		getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+	}
 }

@@ -49,8 +49,9 @@ import android.widget.ListView;
 public class SettingActivity extends BaseActivity {
 	private Context context;
 
-	public static String INTENTKEY_DELETE_MODE = "delete";
-	public static String INTENTKEY_ACTION_DATA_SYNC = "dataSync";
+	public static final String INTENTKEY_DELETE_MODE = "delete";
+	public static final String INTENTKEY_ACTION_DATA_SYNC = "dataSync";
+	public static final String INTENTKEY_WIFI_MODE = "wifiMode";
 
 	SetupMainView mainView;
 
@@ -58,6 +59,8 @@ public class SettingActivity extends BaseActivity {
 	WiFiListAdapter listAdapter;
 
 	ProgressDialog progressDialog = null;
+
+	boolean introWifiMode;
 
 	private long totalSize = 0;
 	private long totalDownloadedSize = 0;
@@ -73,19 +76,30 @@ public class SettingActivity extends BaseActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		initUI();
 
 		context = this;
-		
-		OurPreferenceManager pref = OurPreferenceManager.getInstance();
-		if (pref.isStudent()) {
-			processFindTeacher();
-		} else {
-			processFindConnectedStudent();
+
+		initUI();
+
+		getIntentData();
+
+		if (introWifiMode) {
+			OurPreferenceManager pref = OurPreferenceManager.getInstance();
+			if (pref.isStudent()) {
+				processFindTeacher();
+			} else {
+				processFindConnectedStudent();
+			}
 		}
 
 		reciever = new SettingBroadCastReciever();
 		intentFilter.addAction(OurDataChangeReceiver.OUR_DATA_CHANGED);
+
+	}
+
+	private void getIntentData() {
+		Intent intent = getIntent();
+		introWifiMode = intent.getBooleanExtra(INTENTKEY_WIFI_MODE, false);
 	}
 
 	@Override
@@ -160,7 +174,7 @@ public class SettingActivity extends BaseActivity {
 				DataManager dataManager = DataManagerFactory.getDataManager();
 
 				if (dataManager instanceof StudentDataManager) {
-					((StudentDataManager) dataManager)
+					((StudentDataManager)dataManager)
 							.getTeacherContents(existingContentsListener);
 				}
 			} else {
@@ -289,13 +303,14 @@ public class SettingActivity extends BaseActivity {
 						if (device.status == WifiP2pDevice.CONNECTED) {
 							ourDevice.connectingState = OurWifiDirectDevice.STATE_CONNECTED;
 							connectingDevice = null;
-						}else if(device.status == WifiP2pDevice.INVITED){
+						} else if (device.status == WifiP2pDevice.INVITED) {
 							ourDevice.connectingState = OurWifiDirectDevice.STATE_CONNECTING;
-						}else{
+						} else {
 							ourDevice.connectingState = OurWifiDirectDevice.STATE_DISCONNECTED;
 						}
 					} else {
-						ourDevice.connectingState = device.status == WifiP2pDevice.CONNECTED ? OurWifiDirectDevice.STATE_CONNECTED
+						ourDevice.connectingState = device.status == WifiP2pDevice.CONNECTED
+							? OurWifiDirectDevice.STATE_CONNECTED
 								: OurWifiDirectDevice.STATE_DISCONNECTED;
 					}
 
@@ -329,7 +344,7 @@ public class SettingActivity extends BaseActivity {
 				WifiDirectWrapper wifidirectWrapper = WifiDirectWrapper
 						.getInstance();
 				switch (ourDevice.connectingState) {
-				case OurWifiDirectDevice.STATE_CONNECTED:
+					case OurWifiDirectDevice.STATE_CONNECTED:
 					wifidirectWrapper.disconnect(new ActionListener() {
 						@Override
 						public void onSuccess() {
@@ -366,11 +381,11 @@ public class SettingActivity extends BaseActivity {
 					break;
 				default:
 					break;
-				}
-
-				listAdapter.notifyDataSetChanged();
 			}
+
+			listAdapter.notifyDataSetChanged();
 		}
+	}
 	};
 
 	private GetExistingContentsListener existingContentsListener = new GetExistingContentsListener() {
@@ -468,34 +483,34 @@ public class SettingActivity extends BaseActivity {
 					.getAction())) {
 				OurContents content;
 				switch (intent.getIntExtra(OurDataChangeReceiver.ACTION, -1)) {
-				case OurDataChangeReceiver.ACTION_DOWNLOADING:
-					content = downloadMap.get(intent
+					case OurDataChangeReceiver.ACTION_DOWNLOADING:
+						content = downloadMap.get(intent
 							.getStringExtra(OurDataChangeReceiver.CONTENT_ID));
-					if (content != null) {
-						long downloadedSize = intent.getLongExtra(
+						if (content != null) {
+							long downloadedSize = intent.getLongExtra(
 								OurDataChangeReceiver.DOWNLAD_SIZE, 0);
-						if (downloadedSize != 0) {
-							downloadedSize = content
+							if (downloadedSize != 0) {
+								downloadedSize = content
 									.getCurrentDownloadedSize(downloadedSize);
-							if (downloadedSize > 0) {
-								totalDownloadedSize += downloadedSize;
+								if (downloadedSize > 0) {
+									totalDownloadedSize += downloadedSize;
+								}
 							}
 						}
-					}
-					break;
-				case OurDataChangeReceiver.ACTION_ERROR_DOWNLOADING:
-				case OurDataChangeReceiver.ACTION_CANCEL_DOWNLOADING:
-					content = downloadMap.get(intent
+						break;
+					case OurDataChangeReceiver.ACTION_ERROR_DOWNLOADING:
+					case OurDataChangeReceiver.ACTION_CANCEL_DOWNLOADING:
+						content = downloadMap.get(intent
 							.getStringExtra(OurDataChangeReceiver.CONTENT_ID));
-					if (content != null) {
-						totalDownloadedSize += content.getSize()
+						if (content != null) {
+							totalDownloadedSize += content.getSize()
 								- content.getPrevDownloadedSize();
-					}
-					break;
+						}
+						break;
 				}
 
 				if (totalSize != 0) {
-					mainView.setProgress((int) (totalDownloadedSize * 100 / totalSize));
+					mainView.setProgress((int)(totalDownloadedSize * 100 / totalSize));
 				}
 			}
 		}

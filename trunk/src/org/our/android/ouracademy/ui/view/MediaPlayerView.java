@@ -3,6 +3,7 @@ package org.our.android.ouracademy.ui.view;
 import org.our.android.ouracademy.R;
 import org.our.android.ouracademy.ui.view.PlayerSurfaceView.OnPlayerSurfaceViewListener;
 import org.our.android.ouracademy.ui.widget.NCHorizontalListView;
+import org.our.android.ouracademy.ui.widget.NCTextView;
 import org.our.android.ouracademy.ui.widget.VerticalSeekBar;
 
 import android.content.Context;
@@ -17,7 +18,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
-import android.widget.TextView;
 
 /**
  * Media Player View
@@ -44,7 +44,7 @@ public class MediaPlayerView extends LinearLayout implements View.OnClickListene
 	LinearLayout closeBtn, soundBtn, moreBtn, soundControll;
 	RelativeLayout playerCenter;
 
-	TextView runTime, remainingTime;
+	NCTextView runTime, remainingTime;
 
 	MediaPlayerViewListener listener;
 
@@ -94,8 +94,8 @@ public class MediaPlayerView extends LinearLayout implements View.OnClickListene
 		moreBtn = (LinearLayout)findViewById(R.id.moreBtn);
 		moreBtn.setOnClickListener(this);
 
-		runTime = (TextView)findViewById(R.id.runTime);
-		remainingTime = (TextView)findViewById(R.id.remainingTime);
+		runTime = (NCTextView)findViewById(R.id.runTime);
+		remainingTime = (NCTextView)findViewById(R.id.remainingTime);
 
 		listView = (NCHorizontalListView)findViewById(R.id.list);
 		soundControll = (LinearLayout)findViewById(R.id.soundControll);
