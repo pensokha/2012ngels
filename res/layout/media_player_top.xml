@@ -5,7 +5,7 @@
     android:background="@drawable/player_bg01"
     android:gravity="center_vertical" >
 
-    <TextView
+    <org.our.android.ouracademy.ui.widget.NCTextView
         android:id="@+id/title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

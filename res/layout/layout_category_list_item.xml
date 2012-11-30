@@ -29,13 +29,13 @@
         android:layout_toRightOf="@id/category_icon"
         android:orientation="horizontal" >
 
-        <TextView
+        <org.our.android.ouracademy.ui.widget.NCTextView
             android:id="@+id/category_txt"
             style="@style/fontstyle_txt_main_category_item"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <TextView
+        <org.our.android.ouracademy.ui.widget.NCTextView
             android:id="@+id/category_num_txt"
             style="@style/fontstyle_txt_main_category_item_num"
  			android:layout_marginLeft="7dp"

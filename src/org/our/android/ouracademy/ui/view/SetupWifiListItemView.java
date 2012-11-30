@@ -2,6 +2,7 @@ package org.our.android.ouracademy.ui.view;
 
 import org.our.android.ouracademy.R;
 import org.our.android.ouracademy.model.OurWifiDirectDevice;
+import org.our.android.ouracademy.ui.widget.NCTextView;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -11,7 +12,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 /**
  * 
@@ -21,7 +21,7 @@ import android.widget.TextView;
 public class SetupWifiListItemView extends LinearLayout {
 
 	ImageView userIcon, wifiIcon;
-	TextView directId;
+	NCTextView directId;
 	ProgressBar connectingIcon;
 
 	String id;
@@ -45,7 +45,7 @@ public class SetupWifiListItemView extends LinearLayout {
 
 		userIcon = (ImageView)findViewById(R.id.userIcon);
 		wifiIcon = (ImageView)findViewById(R.id.wifiIcon);
-		directId = (TextView)findViewById(R.id.directId);
+		directId = (NCTextView)findViewById(R.id.directId);
 		connectingIcon = (ProgressBar)findViewById(R.id.wifiConnecting);
 	}
 
@@ -64,14 +64,13 @@ public class SetupWifiListItemView extends LinearLayout {
 	}
 
 	private void setWifiIconImg(int connectedState) {
-		
-		
-		if(connectedState == OurWifiDirectDevice.STATE_CONNECTING){
+
+		if (connectedState == OurWifiDirectDevice.STATE_CONNECTING) {
 			connectingIcon.setVisibility(View.VISIBLE);
 			wifiIcon.setVisibility(View.GONE);
-		}else{
+		} else {
 			int resId = R.drawable.setup_icon_wifi05;
-			if(connectedState == OurWifiDirectDevice.STATE_CONNECTED){
+			if (connectedState == OurWifiDirectDevice.STATE_CONNECTED) {
 				resId = R.drawable.setup_icon_wifi01;
 			}
 			connectingIcon.setVisibility(View.GONE);

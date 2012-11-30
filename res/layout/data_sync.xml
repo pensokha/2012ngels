@@ -34,7 +34,7 @@
             link:progressDrawable="@drawable/round_progress_clip"
             link:track="@drawable/setup_datasync_progress01" />
 
-        <TextView
+        <org.our.android.ouracademy.ui.widget.NCTextView
             android:id="@+id/percent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -71,7 +71,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/setup_icon_cancel" />
 
-        <TextView
+        <org.our.android.ouracademy.ui.widget.NCTextView
             android:id="@+id/sync_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

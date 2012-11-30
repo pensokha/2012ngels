@@ -7,6 +7,7 @@ import org.our.android.ouracademy.constants.CommonConstants;
 import org.our.android.ouracademy.constants.MatchCategoryColor;
 import org.our.android.ouracademy.model.OurCategory;
 import org.our.android.ouracademy.model.OurContents;
+import org.our.android.ouracademy.ui.widget.NCTextView;
 import org.our.android.ouracademy.ui.widget.VerticalTextView;
 
 import android.content.Context;
@@ -21,7 +22,6 @@ import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 public class PlayerListItemView extends LinearLayout implements OnClickListener {
 
@@ -33,7 +33,7 @@ public class PlayerListItemView extends LinearLayout implements OnClickListener 
 
 	RelativeLayout book;
 	VerticalTextView subject;
-	TextView title;
+	NCTextView title;
 	ImageView thumbnail;
 
 	private PlayerListItemViewListener listener;
@@ -57,7 +57,7 @@ public class PlayerListItemView extends LinearLayout implements OnClickListener 
 
 		book = (RelativeLayout)findViewById(R.id.book);
 		subject = (VerticalTextView)findViewById(R.id.subject);
-		title = (TextView)findViewById(R.id.title);
+		title = (NCTextView)findViewById(R.id.title);
 		thumbnail = (ImageView)findViewById(R.id.thumb);
 
 		this.setOnClickListener(this);

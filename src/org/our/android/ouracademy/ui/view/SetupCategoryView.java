@@ -4,6 +4,7 @@ import org.our.android.ouracademy.OurPreferenceManager;
 import org.our.android.ouracademy.R;
 import org.our.android.ouracademy.ui.view.PasswordEditText.EditTextListener;
 import org.our.android.ouracademy.ui.view.PasswordEditText.PointColor;
+import org.our.android.ouracademy.ui.widget.NCTextView;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -12,7 +13,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 /**
  * 
@@ -29,13 +29,13 @@ public class SetupCategoryView extends LinearLayout implements View.OnClickListe
 	 */
 	public interface SetupCategoryViewListener {
 		void onClickBtn(View view);
-		
+
 		void onClickModeBtn(boolean teacher);
 	};
 
 	LinearLayout closeBtn;
 
-	TextView textLeft, textRight;
+	NCTextView textLeft, textRight;
 
 	LinearLayout teacherBtn, studentBtn;
 	LinearLayout networkBtn, datasyncBtn;
@@ -51,9 +51,9 @@ public class SetupCategoryView extends LinearLayout implements View.OnClickListe
 
 //	boolean isPermission = false;
 	RoundProgress progress;
-	TextView progressPercent, syncText;
+	NCTextView progressPercent, syncText;
 	ImageView syncComplete;
-	
+
 	SetupCategoryViewListener listener;
 
 	public SetupCategoryView(Context context) {
@@ -82,12 +82,12 @@ public class SetupCategoryView extends LinearLayout implements View.OnClickListe
 
 		studentView = (LinearLayout)findViewById(R.id.studentView);
 		teacheView = (LinearLayout)findViewById(R.id.teacheView);
-		
-		if(OurPreferenceManager.getInstance().isTeacher()){
+
+		if (OurPreferenceManager.getInstance().isTeacher()) {
 			studentView.setVisibility(View.GONE);
 			teacheView.setVisibility(View.VISIBLE);
 			teacherBtn.setSelected(true);
-		}else{
+		} else {
 			studentView.setVisibility(View.VISIBLE);
 			teacheView.setVisibility(View.GONE);
 			studentBtn.setSelected(true);
@@ -104,10 +104,10 @@ public class SetupCategoryView extends LinearLayout implements View.OnClickListe
 
 		dataSyncView = (RelativeLayout)findViewById(R.id.data_sync_view);
 		progress = (RoundProgress)dataSyncView.findViewById(R.id.progress);
-		progressPercent = (TextView)dataSyncView.findViewById(R.id.percent);
-		syncText = (TextView)dataSyncView.findViewById(R.id.sync_text);
+		progressPercent = (NCTextView)dataSyncView.findViewById(R.id.percent);
+		syncText = (NCTextView)dataSyncView.findViewById(R.id.sync_text);
 		syncComplete = (ImageView)dataSyncView.findViewById(R.id.complete);
-		
+
 		cancelBtn = (LinearLayout)findViewById(R.id.cancel);
 		cancelBtn.setOnClickListener(this);
 
@@ -153,13 +153,12 @@ public class SetupCategoryView extends LinearLayout implements View.OnClickListe
 				studentBtn.setSelected(false);
 				teacherBtn.setSelected(true);
 
-				
 				studentView.setVisibility(View.GONE);
 				dataSyncView.setVisibility(View.GONE);
-				if(OurPreferenceManager.getInstance().isTeacher()){
+				if (OurPreferenceManager.getInstance().isTeacher()) {
 					passwordView.setVisibility(View.GONE);
 					teacheView.setVisibility(View.VISIBLE);
-				}else{
+				} else {
 					passwordView.setVisibility(View.VISIBLE);
 					teacheView.setVisibility(View.GONE);
 					initPasswordView();
@@ -265,22 +264,22 @@ public class SetupCategoryView extends LinearLayout implements View.OnClickListe
 			}, 1000);
 		}
 	}
-	
-	public void viewDataSync(){
+
+	public void viewDataSync() {
 		setProgress(0);
 		studentView.setVisibility(View.GONE);
 		dataSyncView.setVisibility(View.VISIBLE);
 	}
-	
-	public void setProgress(int percent){
+
+	public void setProgress(int percent) {
 		progress.setProgress(percent);
-		
-		if(percent == 100){
+
+		if (percent == 100) {
 			progressPercent.setVisibility(View.GONE);
 			syncComplete.setVisibility(View.VISIBLE);
 			syncText.setText(R.string.close);
-		}else{
-			progressPercent.setText(percent+"%");
+		} else {
+			progressPercent.setText(percent + "%");
 		}
 	}
 

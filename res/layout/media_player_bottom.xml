@@ -19,7 +19,7 @@
             android:orientation="horizontal"
             android:paddingTop="4dp" >
 
-            <TextView
+            <org.our.android.ouracademy.ui.widget.NCTextView
                 android:id="@+id/runTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -40,7 +40,7 @@
                 android:layout_weight="1"
                 android:padding="10dp" />
 
-            <TextView
+            <org.our.android.ouracademy.ui.widget.NCTextView
                 android:id="@+id/remainingTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

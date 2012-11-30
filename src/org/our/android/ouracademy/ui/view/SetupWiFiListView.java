@@ -1,6 +1,7 @@
 package org.our.android.ouracademy.ui.view;
 
 import org.our.android.ouracademy.R;
+import org.our.android.ouracademy.ui.widget.NCTextView;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -10,7 +11,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 
 /**
  * 
@@ -28,7 +28,7 @@ public class SetupWiFiListView extends LinearLayout implements View.OnClickListe
 	};
 
 	ImageView closeBtn;
-	TextView titleText;
+	NCTextView titleText;
 	ImageView titleIcon;
 	LinearLayout backBtn;
 
@@ -58,7 +58,7 @@ public class SetupWiFiListView extends LinearLayout implements View.OnClickListe
 		backBtn.setOnClickListener(this);
 		closeBtn = (ImageView)findViewById(R.id.closeBtn);
 		closeBtn.setOnClickListener(this);
-		titleText = (TextView)findViewById(R.id.titleText);
+		titleText = (NCTextView)findViewById(R.id.titleText);
 		titleText.setText(getContext().getResources().getString(R.string.wi_fi));
 		titleIcon = (ImageView)findViewById(R.id.titleIcon);
 		titleIcon.setImageResource(R.drawable.setup_icon_title02);
