@@ -30,7 +30,7 @@ public class SetupWiFiListView extends LinearLayout implements View.OnClickListe
 	ImageView closeBtn;
 	NCTextView titleText;
 	ImageView titleIcon;
-	LinearLayout backBtn;
+	LinearLayout backBtn, noList;
 
 	ListView listView;
 
@@ -64,10 +64,23 @@ public class SetupWiFiListView extends LinearLayout implements View.OnClickListe
 		titleIcon.setImageResource(R.drawable.setup_icon_title02);
 
 		listView = (ListView)findViewById(R.id.list);
+		listView.setVisibility(View.GONE);
+		noList = (LinearLayout)findViewById(R.id.no_list);
+		noList.setVisibility(View.VISIBLE);
 	}
 
 	public ListView getListView() {
 		return listView;
+	}
+	
+	public void viewNoList(){
+		listView.setVisibility(View.GONE);
+		noList.setVisibility(View.VISIBLE);
+	}
+	
+	public void viewList(){
+		listView.setVisibility(View.VISIBLE);
+		noList.setVisibility(View.GONE);
 	}
 
 	@Override

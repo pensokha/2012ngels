@@ -199,6 +199,14 @@ public class SetupMainView extends LinearLayout {
 			}
 		}
 	};
+	
+	public void viewList(){
+		wifiListView.viewList();
+	}
+	
+	public void viewNoList(){
+		wifiListView.viewNoList();
+	}
 
 	public void setOnSetupMainViewListener(SetupMainViewListener callback) {
 		listener = callback;

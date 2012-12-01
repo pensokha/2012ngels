@@ -71,8 +71,6 @@ public class SettingActivity extends BaseActivity {
 
 	final Handler handler = new Handler();
 
-	private OurWifiDirectDevice connectingDevice;
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -144,6 +142,16 @@ public class SettingActivity extends BaseActivity {
 		wifiListView.setAdapter(listAdapter);
 		wifiListView.setDividerHeight(0);
 		wifiListView.setOnItemClickListener(wifiListClickListener);
+	}
+	
+	private void notifyToAdapter(){
+		listAdapter.notifyDataSetChanged();
+		
+		if(listAdapter.getCount() == 0){
+			mainView.viewNoList();
+		}else{
+			mainView.viewList();
+		}
 	}
 
 	// public void onClickMode(View view) {
@@ -297,26 +305,18 @@ public class SettingActivity extends BaseActivity {
 					ourDevice = new OurWifiDirectDevice();
 					ourDevice.device = device;
 
-					if (connectingDevice != null
-							&& connectingDevice.device.deviceAddress
-									.equals(device.deviceAddress)) {
-						if (device.status == WifiP2pDevice.CONNECTED) {
-							ourDevice.connectingState = OurWifiDirectDevice.STATE_CONNECTED;
-							connectingDevice = null;
-						} else if (device.status == WifiP2pDevice.INVITED) {
-							ourDevice.connectingState = OurWifiDirectDevice.STATE_CONNECTING;
-						} else {
-							ourDevice.connectingState = OurWifiDirectDevice.STATE_DISCONNECTED;
-						}
-					} else {
-						ourDevice.connectingState = device.status == WifiP2pDevice.CONNECTED
-							? OurWifiDirectDevice.STATE_CONNECTED
-								: OurWifiDirectDevice.STATE_DISCONNECTED;
+					if (device.status == WifiP2pDevice.CONNECTED) {
+						ourDevice.connectingState = OurWifiDirectDevice.STATE_CONNECTED;
+					}else if(device.status == WifiP2pDevice.INVITED){
+						ourDevice.connectingState = OurWifiDirectDevice.STATE_CONNECTING;
+					}else{
+						ourDevice.connectingState = OurWifiDirectDevice.STATE_DISCONNECTED;
 					}
 
 					listAdapter.deviceList.add(ourDevice);
 				}
-				listAdapter.notifyDataSetChanged();
+
+				notifyToAdapter();
 			}
 			if (progressDialog != null && progressDialog.isShowing()) {
 				progressDialog.dismiss();
@@ -368,11 +368,6 @@ public class SettingActivity extends BaseActivity {
 				case OurWifiDirectDevice.STATE_DISCONNECTED:
 					ourDevice.connectingState = OurWifiDirectDevice.STATE_CONNECTING;
 					wifidirectWrapper.connectAfterChecking(ourDevice.device);
-
-					if (connectingDevice != null) {
-						connectingDevice.connectingState = OurWifiDirectDevice.STATE_DISCONNECTED;
-					}
-					connectingDevice = ourDevice;
 					break;
 				case OurWifiDirectDevice.STATE_CONNECTING:
 					wifidirectWrapper.cancelConnect();
@@ -381,11 +376,11 @@ public class SettingActivity extends BaseActivity {
 					break;
 				default:
 					break;
-			}
+				}
 
-			listAdapter.notifyDataSetChanged();
+				notifyToAdapter();
+			}
 		}
-	}
 	};
 
 	private GetExistingContentsListener existingContentsListener = new GetExistingContentsListener() {
