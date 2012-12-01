@@ -21,7 +21,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.NetworkInfo;
 import android.net.wifi.p2p.WifiP2pManager;
-import android.util.Log;
 
 /**
  * A BroadcastReceiver that notifies of important wifi p2p events.
@@ -76,8 +75,6 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
             }
         } else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action)) {
         	actionListener.onDeviceInfoChanged();
-        } else{
-        	Log.d("Test", "????");
         }
     }
 }

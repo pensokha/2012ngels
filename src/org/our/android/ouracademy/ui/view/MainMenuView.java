@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import org.our.android.ouracademy.OurPreferenceManager;
 import org.our.android.ouracademy.R;
-import org.our.android.ouracademy.broadreceiver.WifiStatusReceiver;
 import org.our.android.ouracademy.constants.MatchCategoryColor;
 import org.our.android.ouracademy.dao.CategoryDAO;
 import org.our.android.ouracademy.dao.DAOException;
@@ -43,7 +42,7 @@ public class MainMenuView extends FrameLayout implements OnClickListener {
 
 	CategoryListAdapter adapter;
 
-	private int wifiStatus;
+	private boolean isEnabled = false;
 
 	public MainMenuView(Context context) {
 		super(context);
@@ -137,48 +136,31 @@ public class MainMenuView extends FrameLayout implements OnClickListener {
 			}
 		}
 	}
-
-	public void setRefreshBtnStatus(int status) {
-		switch (status) {
-			case WifiStatusReceiver.WIFI_STATE_DISABLED:
-			case WifiStatusReceiver.WIFI_STATE_DISABLING:
-				refreshBtn.setBackgroundResource(R.drawable.btn_main_refresh_selector_02);
-				break;
-			case WifiStatusReceiver.WIFI_STATE_ENABLED:
-			case WifiStatusReceiver.WIFI_STATE_ENABLING:
-				refreshBtn.setBackgroundResource(R.drawable.btn_main_refresh_selector_01);
-				break;
-			case WifiStatusReceiver.WIFI_STATE_UNKNOWN:
-			default:
-				refreshBtn.setBackgroundResource(R.drawable.btn_main_refresh_selector_01);
-				break;
+	
+	public void setRefreshBtnStatus(boolean isConnected, boolean isEnabled) {
+		this.isEnabled = isEnabled;
+		
+		if(isEnabled && isConnected){
+			refreshBtn.setBackgroundResource(R.drawable.btn_main_refresh_selector_01);
+		}else{
+			refreshBtn.setBackgroundResource(R.drawable.btn_main_refresh_selector_02);
 		}
-		wifiStatus = status;
 	}
 
-	private void onClickRefreshBtnStatus(int status) {
-		switch (status) {
-			case WifiStatusReceiver.WIFI_STATE_DISABLED:
-			case WifiStatusReceiver.WIFI_STATE_DISABLING:
-				Intent wifiIntent = new Intent("android.settings.WIFI_SETTINGS");
-				wifiIntent.addCategory("android.intent.category.DEFAULT");
-				wifiIntent.setFlags(0x30800000);
-				wifiIntent.setComponent(new ComponentName("com.android.settings",
-					"com.android.settings.wifi.WifiSettings"));
-				getContext().startActivity(wifiIntent);
-				break;
-			case WifiStatusReceiver.WIFI_STATE_ENABLED:
-			case WifiStatusReceiver.WIFI_STATE_ENABLING:
-				Intent intent = new Intent(getContext(), SettingActivity.class);
-				intent.putExtra(SettingActivity.INTENTKEY_WIFI_MODE, true);
-				intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-				Activity activity = (Activity)getContext();
-				activity.startActivityForResult(intent, 1);
-				break;
-			case WifiStatusReceiver.WIFI_STATE_UNKNOWN:
-				break;
-			default:
-				break;
+	private void onClickRefreshBtnStatus() {
+		if(isEnabled){
+			Intent intent = new Intent(getContext(), SettingActivity.class);
+			intent.putExtra(SettingActivity.INTENTKEY_WIFI_MODE, true);
+			intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+			Activity activity = (Activity)getContext();
+			activity.startActivityForResult(intent, 1);
+		}else{
+			Intent wifiIntent = new Intent("android.settings.WIFI_SETTINGS");
+			wifiIntent.addCategory("android.intent.category.DEFAULT");
+			wifiIntent.setFlags(0x30800000);
+			wifiIntent.setComponent(new ComponentName("com.android.settings",
+				"com.android.settings.wifi.WifiSettings"));
+			getContext().startActivity(wifiIntent);
 		}
 	}
 
@@ -198,7 +180,7 @@ public class MainMenuView extends FrameLayout implements OnClickListener {
 			case R.id.guide_btn:
 				break;
 			case R.id.refresh_btn:
-				onClickRefreshBtnStatus(wifiStatus);
+				onClickRefreshBtnStatus();
 				break;
 			case R.id.setting_btn:
 				Intent intent = new Intent(getContext(), SettingActivity.class);

@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.Locale;
 
 import org.our.android.ouracademy.R;
-import org.our.android.ouracademy.broadreceiver.WifiStatusReceiver;
-import org.our.android.ouracademy.broadreceiver.WifiStatusReceiver.OnChangeNetworkStatusListener;
 import org.our.android.ouracademy.dao.CategoryDAO;
 import org.our.android.ouracademy.dao.ContentDAO;
 import org.our.android.ouracademy.dao.DAOException;
@@ -15,16 +13,19 @@ import org.our.android.ouracademy.model.OurCategory;
 import org.our.android.ouracademy.model.OurContents;
 import org.our.android.ouracademy.ui.view.MainDetailView;
 import org.our.android.ouracademy.ui.view.MainMenuView;
+import org.our.android.ouracademy.wifidirect.WiFiDirectBroadcastReceiver;
+import org.our.android.ouracademy.wifidirect.WifiDirectListener;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
-import android.net.wifi.WifiManager;
+import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -46,7 +47,7 @@ public class MainActivity extends BaseActivity {
 	MainMenuView menuView;
 
 	private OurDataChangeReceiver reciever;
-	private WifiStatusReceiver wifiReciever;
+	private WiFiDirectBroadcastReceiver wifiReciever;
 	private final IntentFilter intentFilter = new IntentFilter();
 
 	private static boolean closeFlag = false;
@@ -71,10 +72,17 @@ public class MainActivity extends BaseActivity {
 		}
 
 		if (wifiReciever == null) {
-			wifiReciever = new WifiStatusReceiver(getBaseContext());
-			wifiReciever.setOnChangeNetworkStatusListener(networkSatusListener);
-			registerReceiver(wifiReciever, new IntentFilter(
-				WifiManager.WIFI_STATE_CHANGED_ACTION));
+			IntentFilter intentFilter = new IntentFilter();
+			intentFilter
+					.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
+			intentFilter
+					.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
+			intentFilter
+					.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
+			intentFilter
+					.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
+			wifiReciever = new WiFiDirectBroadcastReceiver(wifidirectListener);
+			registerReceiver(wifiReciever, intentFilter);
 		}
 	}
 
@@ -104,9 +112,9 @@ public class MainActivity extends BaseActivity {
 	private void initUI() {
 		setContentView(R.layout.activity_main);
 
-		menuLayout = (ViewGroup)findViewById(R.id.layout_main_menu);
+		menuLayout = (ViewGroup) findViewById(R.id.layout_main_menu);
 
-		detailLayout = (ViewGroup)findViewById(R.id.layout_main_detail);
+		detailLayout = (ViewGroup) findViewById(R.id.layout_main_detail);
 
 		initMenuLayout();
 		initContentsLayout();
@@ -219,29 +227,29 @@ public class MainActivity extends BaseActivity {
 		public void onReceive(Context context, Intent intent) {
 			if (OUR_DATA_CHANGED.equals(intent.getAction())) {
 				switch (intent.getIntExtra(ACTION, -1)) {
-					case ACTION_RELOAD:
-						reloadContents();
-						reloadCategories();
-						break;
-					case ACTION_CATEGORY_CHANGED:
-						reloadCategories();
-						break;
-					case ACTION_CONTENT_CHANGED:
-						reloadContents();
-						break;
-					case ACTION_DOWNLOADING:
-						updateDownloadSize(intent.getStringExtra(CONTENT_ID),
+				case ACTION_RELOAD:
+					reloadContents();
+					reloadCategories();
+					break;
+				case ACTION_CATEGORY_CHANGED:
+					reloadCategories();
+					break;
+				case ACTION_CONTENT_CHANGED:
+					reloadContents();
+					break;
+				case ACTION_DOWNLOADING:
+					updateDownloadSize(intent.getStringExtra(CONTENT_ID),
 							intent.getLongExtra(DOWNLAD_SIZE, 0));
-						break;
-					case ACTION_CANCEL_DOWNLOADING:
-					case ACTION_ERROR_DOWNLOADING:
-						cancelDownloading(intent.getStringExtra(CONTENT_ID));
-						break;
-					case ACTION_SYNC_DATA:
-						syncData(intent.getStringArrayListExtra(CONTENT_ID));
-						break;
-					default:
-						break;
+					break;
+				case ACTION_CANCEL_DOWNLOADING:
+				case ACTION_ERROR_DOWNLOADING:
+					cancelDownloading(intent.getStringExtra(CONTENT_ID));
+					break;
+				case ACTION_SYNC_DATA:
+					syncData(intent.getStringArrayListExtra(CONTENT_ID));
+					break;
+				default:
+					break;
 				}
 			}
 		}
@@ -352,11 +360,13 @@ public class MainActivity extends BaseActivity {
 
 				for (OurContents content : contentsFromDB) {
 					if (contentsHashMap.containsKey(content.getId()) == false) {
-						contentsHashMap.put(content.getId(), new ArrayList<OurContents>());
+						contentsHashMap.put(content.getId(),
+								new ArrayList<OurContents>());
 					}
 					if (downloadingContents.containsKey(content.getId())) {
 						content.fileStatus = OurContents.FileStatus.DOWNLOADING;
-						content.setDownloadedSize(downloadingContents.get(content.getId()));
+						content.setDownloadedSize(downloadingContents
+								.get(content.getId()));
 					}
 
 					contentsHashMap.get(content.getId()).add(content);
@@ -364,7 +374,7 @@ public class MainActivity extends BaseActivity {
 				}
 
 				if (detailView.getListAdapter() != null) {
-//					detailView.getList().setAdapter(detailView.getListAdapter());
+					// detailView.getList().setAdapter(detailView.getListAdapter());
 					detailView.getListAdapter().notifyDataSetChanged();
 				}
 			} catch (DAOException e) {
@@ -377,7 +387,8 @@ public class MainActivity extends BaseActivity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == SETTING_ACTIVITY) {
 			if (resultCode == RESULT_OK) {
-				boolean isDeleteMode = data.getBooleanExtra(SettingActivity.INTENTKEY_DELETE_MODE, false);
+				boolean isDeleteMode = data.getBooleanExtra(
+						SettingActivity.INTENTKEY_DELETE_MODE, false);
 
 				if (isDeleteMode == true) {
 					detailView.goIntoDeleteMode();
@@ -385,13 +396,6 @@ public class MainActivity extends BaseActivity {
 			}
 		}
 	}
-
-	OnChangeNetworkStatusListener networkSatusListener = new OnChangeNetworkStatusListener() {
-		@Override
-		public void OnChanged(int status) {
-			menuView.setRefreshBtnStatus(status);
-		}
-	};
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -409,20 +413,20 @@ public class MainActivity extends BaseActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-			case R.id.language:
-				isKhmerLanguage = !isKhmerLanguage;
-				if (isKhmerLanguage) {
-					callSwitchLang("km");
-				} else {
-					callSwitchLang("en");
-				}
+		case R.id.language:
+			isKhmerLanguage = !isKhmerLanguage;
+			if (isKhmerLanguage) {
+				callSwitchLang("km");
+			} else {
+				callSwitchLang("en");
+			}
 
-				initUI();
+			initUI();
 
-				return true;
+			return true;
 
-			default:
-				return super.onOptionsItemSelected(item);
+		default:
+			return super.onOptionsItemSelected(item);
 		}
 	}
 
@@ -431,6 +435,50 @@ public class MainActivity extends BaseActivity {
 		Locale.setDefault(locale);
 		Configuration config = new Configuration();
 		config.locale = locale;
-		getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+		getBaseContext().getResources().updateConfiguration(config,
+				getBaseContext().getResources().getDisplayMetrics());
 	}
+
+	public WifiDirectListener wifidirectListener = new WifiDirectListener() {
+		public boolean isConnected = false;
+		public boolean isEnabled = false;
+
+		@Override
+		public void onEnableP2p() {
+			Log.d("wifidirectListener", "onEnableP2p");
+			isEnabled = true;
+			menuView.setRefreshBtnStatus(isConnected, isEnabled);
+		}
+
+		@Override
+		public void onDisableP2p() {
+			Log.d("wifidirectListener", "onDisableP2p");
+			isEnabled = false;
+			menuView.setRefreshBtnStatus(isConnected, isEnabled);
+		}
+
+		@Override
+		public void onConnected() {
+			Log.d("wifidirectListener", "onConnected");
+			isConnected = true;
+			menuView.setRefreshBtnStatus(isConnected, isEnabled);
+		}
+
+		@Override
+		public void onDisConnected() {
+			Log.d("wifidirectListener", "onDisConnected");
+			isConnected = false;
+			menuView.setRefreshBtnStatus(isConnected, isEnabled);
+		}
+
+		@Override
+		public void onDeviceInfoChanged() {
+
+		}
+
+		@Override
+		public void onPeerChanged() {
+
+		}
+	};
 }
