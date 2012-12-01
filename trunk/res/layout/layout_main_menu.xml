@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:background="@drawable/btn_main_refresh_selector" />
+            android:background="@drawable/btn_main_refresh_selector_02" />
     </RelativeLayout>
 
     <ListView
