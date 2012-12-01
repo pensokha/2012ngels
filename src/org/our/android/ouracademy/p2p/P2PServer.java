@@ -7,19 +7,22 @@
 
 package org.our.android.ouracademy.p2p;
 
-import java.io.*;
-import java.net.*;
-import java.util.concurrent.*;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import org.our.android.ouracademy.constants.CommonConstants;
 
-import android.util.*;
+import android.util.Log;
 
 public class P2PServer implements Runnable {
 	private static final String TAG = "P2PServerService";
-	private static final int SERVER_NUM = CommonConstants.P2P_SERVER_PORT.length;
-
+	private static final int MAX_CONNECTION_PER_SERVER_THREAD = 10;
 	private ServerSocket serverSock;
+	
+	private Executor executor = Executors.newFixedThreadPool(MAX_CONNECTION_PER_SERVER_THREAD);
 	
 	/**
 	 * 
@@ -51,7 +54,6 @@ public class P2PServer implements Runnable {
 			}
 			Log.d(TAG, "Client Accepted : " + clientSock.toString());
 
-			Executor executor = Executors.newFixedThreadPool(SERVER_NUM);
 			executor.execute(new P2PSession(clientSock));
 		}
 	}

@@ -1,5 +1,6 @@
 package org.our.android.ouracademy.service;
 
+import java.util.ArrayList;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -12,7 +13,9 @@ import android.content.Intent;
 import android.os.IBinder;
 
 public class OurP2PService extends Service {
-	private P2PServer sever;
+	private final int SERVER_THREAD_POOL_COUNT = 5;
+	private Executor executor = Executors.newFixedThreadPool(SERVER_THREAD_POOL_COUNT);
+	private ArrayList<P2PServer> serverPool = new ArrayList<P2PServer>();
 
 	private WifiDirectWrapper wifiDirect;
 	private OurPreferenceManager pref;
@@ -25,9 +28,13 @@ public class OurP2PService extends Service {
 		pref.initPreferenceData(this);
 
 		if (pref.isTeacher()) {
-			sever = new P2PServer();
-			Executor executor = Executors.newSingleThreadExecutor();
-			executor.execute(sever);
+			serverPool.clear();
+			P2PServer server;
+			for(int i = 0; i < SERVER_THREAD_POOL_COUNT; i ++){
+				server = new P2PServer();
+				serverPool.add(server);
+				executor.execute(server);
+			}
 		}
 
 		wifiDirect = WifiDirectWrapper.getInstance();
@@ -46,8 +53,9 @@ public class OurP2PService extends Service {
 
 		wifiDirect.unsetService(null);
 
-		if (sever != null) {
-			sever.stopServer();
+		if (serverPool != null) {
+			for(P2PServer server : serverPool)
+				server.stopServer();
 		}
 	}
 
