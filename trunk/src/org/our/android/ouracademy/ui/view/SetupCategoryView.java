@@ -175,6 +175,8 @@ public class SetupCategoryView extends LinearLayout implements
 		case R.id.studentBtn:
 			if (OurPreferenceManager.getInstance().isTeacher()) {
 				modeChangeDialog.show();
+			}else{
+				modeChangeToStudent();
 			}
 			break;
 

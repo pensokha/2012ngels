@@ -23,6 +23,8 @@ public class FileManager {
 	public static final String TAG = "FileManager";
 	public static final String STRSAVEPATH = Environment
 			.getExternalStorageDirectory().getAbsolutePath() + "/OurAcademy/";
+	
+	public static final String STR_IMAGE_PATH = STRSAVEPATH + "Images/";
 
 	/**
 	 * get Files from Directory
@@ -125,6 +127,15 @@ public class FileManager {
 			return false;
 		}
 		return true;
+	}
+	
+	public static File getImageFile(String contentId) throws FileNotFoundException{
+		File file = new File(STR_IMAGE_PATH + contentId);
+
+		File dirs = new File(file.getParent());
+		if (!dirs.exists())
+			dirs.mkdirs();
+		return file;
 	}
 
 	/**

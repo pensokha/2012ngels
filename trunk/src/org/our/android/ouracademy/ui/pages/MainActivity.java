@@ -25,7 +25,6 @@ import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -445,40 +444,34 @@ public class MainActivity extends BaseActivity {
 
 		@Override
 		public void onEnableP2p() {
-			Log.d("wifidirectListener", "onEnableP2p");
 			isEnabled = true;
 			menuView.setRefreshBtnStatus(isConnected, isEnabled);
 		}
 
 		@Override
 		public void onDisableP2p() {
-			Log.d("wifidirectListener", "onDisableP2p");
 			isEnabled = false;
 			menuView.setRefreshBtnStatus(isConnected, isEnabled);
 		}
 
 		@Override
 		public void onConnected() {
-			Log.d("wifidirectListener", "onConnected");
 			isConnected = true;
 			menuView.setRefreshBtnStatus(isConnected, isEnabled);
 		}
 
 		@Override
 		public void onDisConnected() {
-			Log.d("wifidirectListener", "onDisConnected");
 			isConnected = false;
 			menuView.setRefreshBtnStatus(isConnected, isEnabled);
 		}
 
 		@Override
 		public void onDeviceInfoChanged() {
-
 		}
 
 		@Override
 		public void onPeerChanged() {
-
 		}
 	};
 }
