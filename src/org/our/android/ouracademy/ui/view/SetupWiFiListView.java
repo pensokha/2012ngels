@@ -62,6 +62,7 @@ public class SetupWiFiListView extends LinearLayout implements View.OnClickListe
 		titleText.setText(getContext().getResources().getString(R.string.wi_fi));
 		titleIcon = (ImageView)findViewById(R.id.titleIcon);
 		titleIcon.setImageResource(R.drawable.setup_icon_title02);
+		titleIcon.setOnClickListener(this);
 
 		listView = (ListView)findViewById(R.id.list);
 		listView.setVisibility(View.GONE);
