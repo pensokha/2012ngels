@@ -1,5 +1,6 @@
 package org.our.android.ouracademy.ui.view;
 
+import org.our.android.ouracademy.OurPreferenceManager;
 import org.our.android.ouracademy.R;
 import org.our.android.ouracademy.ui.view.SetupCategoryView.SetupCategoryViewListener;
 import org.our.android.ouracademy.ui.view.SetupWiFiListView.SetupWiFiListViewListener;
@@ -37,9 +38,9 @@ public class SetupMainView extends LinearLayout {
 		
 		void onClickFindConnectedStudent();
 		
-		void onClickFindTeacher();
-		
 		void onClickCacelSync();
+
+		void onClickFindTeacher(boolean isViewChange);
 	};
 
 	ViewFlipper viewFlipper;
@@ -135,7 +136,7 @@ public class SetupMainView extends LinearLayout {
 					break;
 				case R.id.networkBtn:
 					if(listener != null){
-						listener.onClickFindTeacher();
+						listener.onClickFindTeacher(true);
 					}
 					break;
 				case R.id.connectedStudentBtn:
@@ -195,6 +196,11 @@ public class SetupMainView extends LinearLayout {
 					break;
 				case R.id.closeBtn:
 					listener.onClickCloseBtn();
+					break;
+				case R.id.titleIcon:
+					if(OurPreferenceManager.getInstance().isStudent()){
+						listener.onClickFindTeacher(false);
+					}
 					break;
 			}
 		}

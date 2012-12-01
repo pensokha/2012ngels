@@ -84,7 +84,7 @@ public class SettingActivity extends BaseActivity {
 		if (introWifiMode) {
 			OurPreferenceManager pref = OurPreferenceManager.getInstance();
 			if (pref.isStudent()) {
-				processFindTeacher();
+				processFindTeacher(true);
 			} else {
 				processFindConnectedStudent();
 			}
@@ -221,8 +221,8 @@ public class SettingActivity extends BaseActivity {
 		}
 
 		@Override
-		public void onClickFindTeacher() {
-			processFindTeacher();
+		public void onClickFindTeacher(boolean isViewChange) {
+			processFindTeacher(isViewChange);
 		}
 
 		@Override
@@ -238,13 +238,15 @@ public class SettingActivity extends BaseActivity {
 		}
 	};
 
-	private void processFindTeacher() {
+	private void processFindTeacher(boolean isViewChange) {
 		if (NetworkState.isWifiDirectEnabled()) {
 			showProgress(R.string.finding_teacher);
 
 			WifiDirectWrapper.getInstance().findTeacher();
 
-			mainView.viewTeacherOnNetwork();
+			if(isViewChange){
+				mainView.viewTeacherOnNetwork();
+			}
 		} else {
 			showAlert(R.string.error_wifi_direct_disable_title,
 					R.string.error_wifi_direct_disable_message);
