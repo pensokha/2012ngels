@@ -11,6 +11,7 @@ import org.our.android.ouracademy.model.OurCategory;
 import org.our.android.ouracademy.ui.adapter.CategoryListAdapter;
 import org.our.android.ouracademy.ui.pages.MainActivity;
 import org.our.android.ouracademy.ui.pages.SettingActivity;
+import org.our.android.ouracademy.ui.pages.TutorialActivity;
 import org.our.android.ouracademy.ui.widget.NCTextView;
 
 import android.app.Activity;
@@ -176,14 +177,19 @@ public class MainMenuView extends FrameLayout implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		int id = v.getId();
+		Intent intent;
+		
 		switch (id) {
 			case R.id.guide_btn:
+				intent = new Intent(getContext(), TutorialActivity.class);
+				intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+				getContext().startActivity(intent);
 				break;
 			case R.id.refresh_btn:
 				onClickRefreshBtnStatus();
 				break;
 			case R.id.setting_btn:
-				Intent intent = new Intent(getContext(), SettingActivity.class);
+				intent = new Intent(getContext(), SettingActivity.class);
 				intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
 				Activity activity = (Activity)getContext();
 				activity.startActivityForResult(intent, MainActivity.SETTING_ACTIVITY);
