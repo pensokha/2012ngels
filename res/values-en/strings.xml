@@ -1,76 +1,71 @@
 <resources>
 
-    <string name="app_name">OurAcademy</string>
+    <string name="app_name">Our Academy</string>
     <string name="menu_settings">Settings</string>
-    
     <string name="dialog_link_save">Save link</string>
     <string name="download_complete">Download complete</string>
     <string name="download_unsuccessful">Download unsuccessful</string>
-    
     <string name="finish_application">Please press BACK again to exit.</string>
-    
+
     <!-- main -->
     <string name="menu">MENU</string>
     <string name="list">LIST</string>
     <string name="back">BACK</string>
     <string name="menu_ok">OK</string>
     <string name="ok">OK</string>
-    
     <string name="cancel">Cancel</string>
     <string name="close">Close</string>
-    
     <string name="category_upper_case">CATEGORY</string>
     <string name="apply">Apply</string>
-    
     <string name="contents_download">DOWNLOAD</string>
     <string name="contents_empty_guide">There is no contents\nto download or play.</string>
-    
+    <!-- 
     <string name="category_name_num">%1$s &lt;font color=&quot;#c9f31f&quot;&gt;%2$s&lt;/font&gt;</string>
     <string name="category_name_num1">%1$s &lt;img src=&quot;icon&quot;/img&gt;</string>
-    
+ 	-->
+ 
     <!-- DataManager -->
     <string name="start_service">Start Service</string>
     <string name="stop_service">Stop Service</string>
     <string name="tearche">Teacher</string>
     <string name="student">Student</string>
-    
+
     <!-- SettingActivity -->
     <string name="finding_syncdata">Finding syncdata</string>
-	<string name="finding_student">Finding connected student</string>
-	<string name="finding_teacher">Finding teacher</string>
-	<string name="finding">Finding..</string>
-	
-	<string name="error">error</string>
-	<string name="error_datasync">fail datasync!!!</string>
-	
-	<string name="datasync">datasync</string>
-	<string name="dontneed_datasync">don\'t need datasync</string>
-	
-	<string name="error_wifi_direct_disable_title">WifiDirect</string>
-	<string name="error_wifi_direct_disable_message">WifiDirect is disable</string>
-	
-	<string name="error_wifi_direct_disconnected_title">Disconnected</string>
-	<string name="error_wifi_direct_disconnected_message">You must connect to teacher</string>
-	
-	<!-- SetupMainView -->
-	<string name="wi_fi">WI-FI</string>
-	<string name="connected_student">Connected Student</string>
-	
-	<!-- SepupWifiListItemView -->
-	<string name="wi_fi_direct_id">WI-FI Direct ID</string>
-	<!-- WifiDirectWrapper -->
-	<string name="channerl_disconnected_message">Severe! Channel is probably lost premanently. Try Disable/Re-Enable P2P.</string>
-	<string name="delete_ok">Yes</string>
-	<string name="delete_cancel">No</string>
-	<string name="delete_dialog_body">Do you really delete this file?</string>
-	<string name="str_password">Password</string>
-	<string name="str_student">Student</string>
-	<string name="str_teacher">Teacher</string>
-	<string name="str_network">Network</string>
-	<string name="str_data_sync">Data Sync</string>
-	<string name="str_connected_student">Connected Student</string>
-	<string name="str_delete">Delete</string>
-	<string name="str_back">Back</string>
-	<string name="str_category">CATEGORY</string>
-	<string name="str_language">Language</string>
+    <string name="finding_student">Finding connected student</string>
+    <string name="finding_teacher">Finding teacher</string>
+    <string name="finding">Finding..</string>
+    <string name="error">error</string>
+    <string name="error_datasync">fail datasync!!!</string>
+    <string name="datasync">datasync</string>
+    <string name="dontneed_datasync">don\'t need datasync</string>
+    <string name="error_wifi_direct_disable_title">WifiDirect</string>
+    <string name="error_wifi_direct_disable_message">WifiDirect is disable</string>
+    <string name="error_wifi_direct_disconnected_title">Disconnected</string>
+    <string name="error_wifi_direct_disconnected_message">You must connect to teacher</string>
+
+    <!-- SetupMainView -->
+    <string name="wi_fi">WI-FI</string>
+    <string name="connected_student">Connected Student</string>
+
+    <!-- SepupWifiListItemView -->
+    <string name="wi_fi_direct_id">WI-FI Direct ID</string>
+    <!-- WifiDirectWrapper -->
+    <string name="channerl_disconnected_message">Severe! Channel is probably lost premanently. Try Disable/Re-Enable P2P.</string>
+    <string name="delete_ok">Yes</string>
+    <string name="delete_cancel">No</string>
+    <string name="delete_dialog_body">Do you really delete this file?</string>
+    <string name="str_password">Password</string>
+    <string name="str_student">Student</string>
+    <string name="str_teacher">Teacher</string>
+    <string name="str_network">Network</string>
+    <string name="str_data_sync">Data Sync</string>
+    <string name="str_connected_student">Connected Students</string>
+    <string name="str_delete">Delete</string>
+    <string name="str_back">Back</string>
+    <string name="str_category">CATEGORY</string>
+    <string name="str_language">Language</string>
+    <string name="no_device">There is no device</string>
+	<string name="mode_change">Mode Change</string>
+
 </resources>

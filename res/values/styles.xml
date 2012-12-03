@@ -6,7 +6,7 @@
 
     <style name="fontstyle_txt_main_menu" parent="Common_Font_Style">
         <item name="android:textColor">#714611</item>
-        <item name="android:textSize">14dp</item>
+        <item name="android:textSize">14sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:singleLine">true</item>
         <item name="android:ellipsize">end</item>
@@ -18,7 +18,7 @@
 
     <style name="fontstyle_txt_main_list_tag" parent="Common_Font_Style">
         <item name="android:textColor">#638908</item>
-        <item name="android:textSize">18dp</item>
+        <item name="android:textSize">18sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:singleLine">true</item>
         <item name="android:ellipsize">end</item>
@@ -30,7 +30,7 @@
 
     <style name="fontstyle_txt_main_contenst_txt" parent="Common_Font_Style">
         <item name="android:textColor">#333333</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">17.5sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:ellipsize">end</item>
         <item name="android:shadowColor">#ccffffff</item>
@@ -39,8 +39,8 @@
         <item name="android:shadowRadius">1</item>
     </style>
     <style name="fontstyle_txt_main_contenst_title" parent="Common_Font_Style">
-        <item name="android:textColor">#333333</item>
-        <item name="android:textSize">13.33dp</item>
+        <item name="android:textColor">#99333333</item>
+        <item name="android:textSize">13.33sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:maxLines">2</item>
         <item name="android:ellipsize">end</item>
@@ -52,7 +52,7 @@
 
     <style name="fontstyle_txt_main_category_title" parent="Common_Font_Style">
         <item name="android:textColor">#c9f31f</item>
-        <item name="android:textSize">22.67dp</item>
+        <item name="android:textSize">22.67sp</item>
         <item name="android:singleLine">true</item>
         <item name="android:ellipsize">end</item>
         <item name="android:shadowColor">#333333</item>
@@ -63,7 +63,7 @@
 
     <style name="fontstyle_txt_main_category_item" parent="Common_Font_Style">
         <item name="android:textColor">#ffffff</item>
-        <item name="android:textSize">20dp</item>
+        <item name="android:textSize">21.5sp</item>
         <item name="android:shadowColor">#333333</item>
         <item name="android:shadowDx">0</item>
         <item name="android:shadowDy">1</item>
@@ -71,7 +71,7 @@
     </style>
     <style name="fontstyle_txt_main_category_item_num" parent="Common_Font_Style">
         <item name="android:textColor">#222222</item>
-        <item name="android:textSize">18.03dp</item>
+        <item name="android:textSize">18.03sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:shadowColor">#777777</item>
         <item name="android:shadowDx">0</item>
@@ -80,7 +80,7 @@
     </style>
     <style name="fontstyle_txt_main_apply_btn" parent="Common_Font_Style">
         <item name="android:textColor">#ffffff</item>
-        <item name="android:textSize">22.67dp</item>
+        <item name="android:textSize">22.67sp</item>
         <item name="android:singleLine">true</item>
         <item name="android:ellipsize">end</item>
         <item name="android:shadowColor">#9e5402</item>
@@ -90,7 +90,7 @@
     </style>
     <style name="fontstyle_txt_main_progress_txt" parent="Common_Font_Style">
         <item name="android:textColor">#2cb000</item>
-        <item name="android:textSize">26.27dp</item>
+        <item name="android:textSize">26.27sp</item>
         <item name="android:shadowColor">#ffffff</item>
         <item name="android:shadowDx">0</item>
         <item name="android:shadowDy">1</item>
@@ -98,7 +98,7 @@
     </style>
     <style name="fontstyle_txt_main_download_txt" parent="Common_Font_Style">
         <item name="android:textColor">#2cb000</item>
-        <item name="android:textSize">16dp</item>
+        <item name="android:textSize">16sp</item>
         <item name="android:shadowColor">#ffffff</item>
         <item name="android:shadowDx">0</item>
         <item name="android:shadowDy">1</item>
@@ -107,7 +107,7 @@
     
     <style name="fontstyle_txt_main_empty_guide_txt" parent="Common_Font_Style">
         <item name="android:textColor">#726758</item>
-        <item name="android:textSize">22.54dp</item>
+        <item name="android:textSize">22.54sp</item>
         <item name="android:shadowColor">#ffffff</item>
         <item name="android:shadowDx">0</item>
         <item name="android:shadowDy">1</item>
@@ -125,17 +125,17 @@
     </style>
 
     <style name="Widget.SeekBar.Sound" parent="@android:style/Widget.SeekBar">
-        <item name="android:maxHeight">11.33dp</item>
+        <item name="android:maxHeight">11.33sp</item>
         <item name="android:indeterminateOnly">false</item>
         <item name="android:indeterminateDrawable">@android:drawable/progress_indeterminate_horizontal</item>
         <item name="android:progressDrawable">@drawable/custom_seek_bar</item>
-        <item name="android:minHeight">11.33dp</item>
+        <item name="android:minHeight">11.33sp</item>
         <item name="android:thumb">@drawable/player_ctrl_sound03</item>
         <item name="android:thumbOffset">10dip</item>
     </style>
     
     <style name="Widget.Pogressbar" parent="@android:style/Widget.ProgressBar.Horizontal">
-        <item name="android:maxHeight">10dp</item>
+        <item name="android:maxHeight">10sp</item>
         <item name="android:indeterminateOnly">false</item>
         <item name="android:indeterminateDrawable">@android:drawable/progress_indeterminate_horizontal</item>
         <item name="android:progressDrawable">@drawable/custom_progressbar</item>

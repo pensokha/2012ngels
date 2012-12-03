@@ -85,7 +85,7 @@ public class ContentsListAdapter extends BaseAdapter  {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		Log.d("TEST", "!!!!!!!!!!!!!! : " + position + " getCount() : " + getCount() + " contentsList.size() : " + contentsList.size());
+//		Log.d("TEST", "!!!!!!!!!!!!!! : " + position + " getCount() : " + getCount() + " contentsList.size() : " + contentsList.size());
 		//footer 
 		//Temporary~~!!
 		//add back button if contents list number more than 9 

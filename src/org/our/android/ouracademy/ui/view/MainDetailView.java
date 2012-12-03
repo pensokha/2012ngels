@@ -6,8 +6,8 @@ import org.our.android.ouracademy.R;
 import org.our.android.ouracademy.constants.CommonConstants;
 import org.our.android.ouracademy.model.OurContents;
 import org.our.android.ouracademy.ui.adapter.ContentsListAdapter;
+import org.our.android.ouracademy.ui.widget.NCBoldTextView;
 import org.our.android.ouracademy.ui.widget.NCHorizontalListView;
-import org.our.android.ouracademy.ui.widget.NCTextView;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -39,7 +39,7 @@ public class MainDetailView extends RelativeLayout implements OnItemClickListene
 
 	private ViewGroup hideMenuBtn;
 
-	private NCTextView dragLayoutTxt;
+	private NCBoldTextView dragLayoutTxt;
 
 	private View emptyView;
 
@@ -105,7 +105,7 @@ public class MainDetailView extends RelativeLayout implements OnItemClickListene
 		ViewGroup dragLayout = (ViewGroup)findViewById(R.id.drag_layout);
 		dragLayout.setOnTouchListener(dargTouchListener);
 
-		dragLayoutTxt = (NCTextView)dragLayout.findViewById(R.id.drag_layout_txt);
+		dragLayoutTxt = (NCBoldTextView)dragLayout.findViewById(R.id.drag_layout_txt);
 		dragLayoutTxt.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {

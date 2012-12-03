@@ -58,7 +58,7 @@ public class OurApplication extends Application {
 	}
 	
 	public void updateLocaleLangueage() {
-		localeLangueage = getResources().getConfiguration().locale.getDisplayLanguage();
+		localeLangueage = getResources().getConfiguration().locale.getLanguage();
 //		Locale.getDefault().getCountry();
 //		Locale.getDefault().getLanguage();
 		

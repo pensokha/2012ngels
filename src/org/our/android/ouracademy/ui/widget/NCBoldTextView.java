@@ -5,23 +5,23 @@ import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
-public class NCTextView extends TextView {
+public class NCBoldTextView extends TextView {
 	private static Typeface typeface = null; 
 	Context context;
 	
-	public NCTextView(Context context) {
+	public NCBoldTextView(Context context) {
 		super(context);
 		this.context = context;
 		init();
 	}
 
-	public NCTextView(Context context, AttributeSet attrs) {
+	public NCBoldTextView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		this.context = context;
 		init();
 	}
 	
-	public NCTextView(Context context, AttributeSet attrs, int defStyle) {
+	public NCBoldTextView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		this.context = context;
 		
@@ -30,7 +30,7 @@ public class NCTextView extends TextView {
 
 	private void init() {
 		if (typeface == null) {
-			typeface = Typeface.createFromAsset(context.getAssets(), "Khmer.ttf");
+			typeface = Typeface.createFromAsset(context.getAssets(), "Khmerb.ttf");
 		}
 		this.setTypeface(typeface);
 		

@@ -84,8 +84,8 @@ public class TutorialActivity extends BaseActivity {
 	private void initPageMark() {
 		pageMark = (LinearLayout)findViewById(R.id.page_mark);
 		
-		inactivePoint = getResources().getDrawable(R.drawable.tutorial_point1);
-		activePoint = getResources().getDrawable(R.drawable.tutorial_point2);
+		activePoint = getResources().getDrawable(R.drawable.tutorial_point1);
+		inactivePoint = getResources().getDrawable(R.drawable.tutorial_point2);
 		
 		pageMark.removeAllViews();
 		

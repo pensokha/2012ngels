@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 
+import org.our.android.ouracademy.OurApplication;
 import org.our.android.ouracademy.R;
 import org.our.android.ouracademy.dao.CategoryDAO;
 import org.our.android.ouracademy.dao.ContentDAO;
@@ -61,6 +62,10 @@ public class MainActivity extends BaseActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		//force set khmer
+		callSwitchLang("km");
+		OurApplication.getInstance().updateLocaleLangueage();
 
 		initUI();
 
@@ -83,6 +88,7 @@ public class MainActivity extends BaseActivity {
 			wifiReciever = new WiFiDirectBroadcastReceiver(wifidirectListener);
 			registerReceiver(wifiReciever, intentFilter);
 		}
+		
 	}
 
 	@Override
