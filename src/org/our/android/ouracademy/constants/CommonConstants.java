@@ -19,7 +19,10 @@ public class CommonConstants {
 	public static final int DETAIL_ANI_END_X = 513;
 	public static final int DETAIL_ANI_WIDTH = DETAIL_ANI_END_X - DETAIL_ANI_START_X;
 	
+	public static final String LOCALE_LANGUAGE_ENG = "en";
 	public static final String LOCALE_LANGUAGE_KHMER = "km";
+	public static final String KHMER_FONT_FILE = "Khmer.ttf";
+	public static final String KHMER_FONT_BOLD_FILE = "Khmerb.ttf";
 	
 	public static final String META_FILE_NAME = "our.txt";
 	

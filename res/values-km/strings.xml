@@ -5,7 +5,7 @@
     <string name="dialog_link_save">រក្សាទុកទំនាក់ទំនង</string>
     <string name="download_complete">ការទាញយកឯកសារទទួលបានជោគជ័យ</string>
     <string name="download_unsuccessful">ការទាញយកឯកសារមិនទទួលបានជោគជ័យ</string>
-    <string name="finish_application">សូមចុច ពាក្យ BACK ម្ដងទៀតដើម្បីចាកចេញ</string>
+    <string name="finish_application">សូមចុច ពាក្យ \'ថយក្រោយ\' ម្ដងទៀតដើម្បីចាកចេញ</string>
 
     <!-- main -->
     <string name="menu">ម៊ឺនុយ</string>
@@ -18,7 +18,7 @@
     <string name="category_upper_case">ប្រភេទ</string>
     <string name="apply">អនុវត្</string>
     <string name="contents_download">ទាញយក</string>
-    <string name="contents_empty_guide">អត់មានឯកសារសម្រាប់ទាញយក រឺ ចាក់</string>
+    <string name="contents_empty_guide">អត់មានឯកសារសម្រាប់ទាញយក\nរឺ ចាក់</string>
 
     <!-- DataManager -->
     <string name="start_service">សេវាចាប់ផ្ដើម</string>

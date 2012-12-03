@@ -5,7 +5,7 @@
     <string name="dialog_link_save">Save link</string>
     <string name="download_complete">Download complete</string>
     <string name="download_unsuccessful">Download unsuccessful</string>
-    <string name="finish_application">Please press BACK again to exit.</string>
+    <string name="finish_application">Please press \'BACK\' again to exit.</string>
 
     <!-- main -->
     <string name="menu">MENU</string>

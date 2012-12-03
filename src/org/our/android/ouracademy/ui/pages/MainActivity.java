@@ -6,6 +6,7 @@ import java.util.Locale;
 
 import org.our.android.ouracademy.OurApplication;
 import org.our.android.ouracademy.R;
+import org.our.android.ouracademy.constants.CommonConstants;
 import org.our.android.ouracademy.dao.CategoryDAO;
 import org.our.android.ouracademy.dao.ContentDAO;
 import org.our.android.ouracademy.dao.DAOException;
@@ -22,6 +23,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
+import android.graphics.Typeface;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -33,6 +35,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * 
@@ -64,7 +68,7 @@ public class MainActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		
 		//force set khmer
-		callSwitchLang("km");
+		callSwitchLang(CommonConstants.LOCALE_LANGUAGE_KHMER);
 		OurApplication.getInstance().updateLocaleLangueage();
 
 		initUI();
@@ -156,8 +160,12 @@ public class MainActivity extends BaseActivity {
 				detailView.onClickMenu();
 				return true;
 			} else if (closeFlag == false) {
-				showShortToast(getResources().getString(
-						R.string.finish_application));
+//				String message = getResources().getString(R.string.finish_application); 
+//				showShortToast(message);
+				Toast toast = Toast.makeText(this, R.string.finish_application, Toast.LENGTH_SHORT);
+				TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+				v.setTypeface(Typeface.createFromAsset(getAssets(), CommonConstants.KHMER_FONT_FILE));
+				toast.show();
 				closeFlag = true;
 				closeHandler.sendEmptyMessageDelayed(0, 3000);
 				return true;
@@ -202,8 +210,7 @@ public class MainActivity extends BaseActivity {
 				selectedCategories.clear();
 				for (OurCategory category : categories) {
 					if (category.isChecked) {
-						selectedCategories.put(category.getCategoryId(),
-								category);
+						selectedCategories.put(category.getCategoryId(), category);
 					}
 				}
 			}
@@ -381,6 +388,7 @@ public class MainActivity extends BaseActivity {
 				if (detailView.getListAdapter() != null) {
 					// detailView.getList().setAdapter(detailView.getListAdapter());
 					detailView.getListAdapter().notifyDataSetChanged();
+					detailView.getList().smoothScrollToFirstView();
 				}
 			} catch (DAOException e) {
 				e.printStackTrace();
@@ -421,9 +429,9 @@ public class MainActivity extends BaseActivity {
 		case R.id.language:
 			isKhmerLanguage = !isKhmerLanguage;
 			if (isKhmerLanguage) {
-				callSwitchLang("km");
+				callSwitchLang(CommonConstants.LOCALE_LANGUAGE_KHMER);
 			} else {
-				callSwitchLang("en");
+				callSwitchLang(CommonConstants.LOCALE_LANGUAGE_ENG);
 			}
 
 			initUI();

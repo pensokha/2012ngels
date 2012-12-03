@@ -142,6 +142,7 @@ public class ContentsView extends RelativeLayout implements OnClickListener {
 		}
 		categoryText.setText(ourContents.selectedCategory == null ? ""
 			: ourContents.selectedCategory.getCategoryTitle());
+		categoryText.setAlpha(0.6f);
 		subjectText.setText(ourContents.getSubject());
 	}
 
