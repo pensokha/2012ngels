@@ -11,10 +11,10 @@
 
         <ImageView
             android:id="@+id/thumbnail"
-            android:layout_width="200.00dp"
-            android:layout_height="95.00dp"
-            android:layout_marginLeft="64.00dp"
-            android:layout_marginTop="24.33dp"
+            android:layout_width="202.00dp"
+            android:layout_height="97.00dp"
+            android:layout_marginLeft="63.00dp"
+            android:layout_marginTop="23.33dp"
             android:background="@android:color/black"
             android:scaleType="fitXY" />
 

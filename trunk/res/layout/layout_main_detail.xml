@@ -20,12 +20,13 @@
                 android:layout_height="fill_parent"
                 android:background="@drawable/list_bg02" >
 
-                <org.our.android.ouracademy.ui.widget.NCTextView
+                <org.our.android.ouracademy.ui.widget.NCBoldTextView
                     android:id="@+id/drag_layout_txt"
                     style="@style/fontstyle_txt_main_menu"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
+                    android:paddingBottom="6.01dp"
                     android:drawableTop="@drawable/list_icon_menu01"
                     android:gravity="center"
                     android:text="@string/menu" />

@@ -13,7 +13,7 @@
 		android:layout_height="97dp"
 		android:layout_marginTop="22.29dp"
 		android:layout_marginLeft="61.65dp"
-		android:background="#000000"	/>    
+		android:background="@android:color/black"	/>    
     
     <RelativeLayout
         android:id="@+id/book"
@@ -29,12 +29,7 @@
 			android:layout_alignParentLeft="true"
 			android:layout_marginLeft="13dp"
 			android:layout_marginTop="20dp"
-			android:textSize="15.02dp"
-			android:textColor="#333333"
-			android:textStyle="bold"
-			android:shadowColor="#33ffffff"
-	        android:shadowDy="1"
-	        android:shadowRadius="1"
+			style="@style/fontstyle_txt_main_contenst_txt"
             />
 
 		<org.our.android.ouracademy.ui.widget.NCTextView 
@@ -46,11 +41,7 @@
 			android:layout_alignParentLeft="true"
 			android:layout_marginLeft="70dp"
 			android:layout_marginTop="125.67dp"
-			android:textSize="16dp"
-			android:textColor="#444444"
-			android:shadowColor="#88ffffff"
-	        android:shadowDy="1"
-	        android:shadowRadius="1"		/>
+			style="@style/fontstyle_txt_main_contenst_txt"		/>
         
     </RelativeLayout>
 </FrameLayout>

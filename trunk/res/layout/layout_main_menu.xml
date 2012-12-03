@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="37dp"
+            android:layout_marginLeft="31.74dp"
             android:background="@drawable/btn_main_guide_selector" />
 
         <ImageButton
@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="37dp"
+            android:layout_marginRight="31.74dp"
             android:background="@drawable/btn_main_setting_selector" />
 
         <ImageButton
@@ -34,6 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:layout_marginBottom="2.25dp"
             android:background="@drawable/btn_main_refresh_selector_02" />
     </RelativeLayout>
 
