@@ -17,35 +17,37 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginRight="11dp"
         android:src="@drawable/menu_icon_check" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginRight="12dp"
         android:layout_toLeftOf="@id/category_check"
-        android:layout_toRightOf="@id/category_icon"
-        android:orientation="horizontal" >
+        android:layout_toRightOf="@id/category_icon" >
 
         <org.our.android.ouracademy.ui.widget.NCTextView
             android:id="@+id/category_txt"
             style="@style/fontstyle_txt_main_category_item"
+            android:maxWidth="188dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true" />
 
-        <org.our.android.ouracademy.ui.widget.NCTextView
+        <TextView
             android:id="@+id/category_num_txt"
             style="@style/fontstyle_txt_main_category_item_num"
  			android:layout_marginLeft="7dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/category_txt"
+            android:layout_centerVertical="true"
             android:paddingLeft="6dp"
-            android:paddingRight="6.55dp"
+            android:paddingRight="6dp"
             android:paddingTop="3.2dp"
             android:gravity="center"
             android:background="@drawable/menu_icon_num01" />
-    </LinearLayout>
+    </RelativeLayout>
 
 </RelativeLayout>

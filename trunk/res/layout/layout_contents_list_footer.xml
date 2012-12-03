@@ -25,7 +25,7 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_centerInParent="true"
-	        android:paddingBottom="6.01dp"
+	        android:drawablePadding="5.26dp"
 	        android:drawableTop="@drawable/list_icon_menu04"
 	        android:gravity="center"
 	        android:text="@string/back" />

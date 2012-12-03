@@ -1,5 +1,7 @@
 package org.our.android.ouracademy.ui.widget;
 
+import org.our.android.ouracademy.constants.CommonConstants;
+
 import android.content.Context;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
@@ -30,7 +32,7 @@ public class NCBoldTextView extends TextView {
 
 	private void init() {
 		if (typeface == null) {
-			typeface = Typeface.createFromAsset(context.getAssets(), "Khmerb.ttf");
+			typeface = Typeface.createFromAsset(context.getAssets(), CommonConstants.KHMER_FONT_BOLD_FILE);
 		}
 		this.setTypeface(typeface);
 		
