@@ -215,12 +215,13 @@ public class MainActivity extends BaseActivity {
 				}
 			}
 			reloadContents();
+			//(Temporary)listview position set First
+			detailView.getList().setAdapter(detailView.getListAdapter());
 			// detailView.onClickMenu();
 		}
 	};
 
 	public class OurDataChangeReceiver extends BroadcastReceiver {
-
 		public static final String OUR_DATA_CHANGED = "org.our.android.ouracademy.broadreceiver.OurDataChanged";
 
 		public static final String ACTION = "action";
@@ -386,9 +387,8 @@ public class MainActivity extends BaseActivity {
 				}
 
 				if (detailView.getListAdapter() != null) {
-					// detailView.getList().setAdapter(detailView.getListAdapter());
+//					detailView.getList().setAdapter(detailView.getListAdapter());
 					detailView.getListAdapter().notifyDataSetChanged();
-					detailView.getList().smoothScrollToFirstView();
 				}
 			} catch (DAOException e) {
 				e.printStackTrace();
