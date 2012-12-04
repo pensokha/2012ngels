@@ -6,7 +6,7 @@
 
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="63.33dp"
+        android:layout_height="71.59dp"
         android:gravity="center_vertical"
         android:orientation="horizontal" >
 
@@ -24,6 +24,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="22dp"
+                android:layout_marginRight="3.76dp"
+                android:layout_marginTop="2.25dp"
                 android:gravity="center_vertical"
                 android:shadowColor="#e6e3e1"
                 android:shadowDy="1"
@@ -45,6 +47,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="20dp"
+                android:layout_marginTop="2.25dp"
                 android:gravity="center_vertical"
                 android:shadowColor="#e6e3e1"
                 android:shadowDy="1"
@@ -80,6 +83,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="1.50dp"
                 android:src="@drawable/player_icon_more" />
         </LinearLayout>
     </LinearLayout>
@@ -87,7 +91,7 @@
     <org.our.android.ouracademy.ui.widget.NCHorizontalListView
         android:id="@+id/list"
         android:layout_width="fill_parent"
-        android:layout_height="230.67dp"
+        android:layout_height="253.21dp"
         android:background="@drawable/list_bottom_bg_drawable"
         android:visibility="gone" >
     </org.our.android.ouracademy.ui.widget.NCHorizontalListView>

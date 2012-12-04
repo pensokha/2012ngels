@@ -23,18 +23,19 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="9dp"
+                android:layout_marginRight="11.25dp"
                 android:src="@drawable/setup_icon_tab_student" />
 
             <org.our.android.ouracademy.ui.widget.NCTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="2.25dp"
                 android:shadowColor="#ffffff"
                 android:shadowDy="1"
                 android:shadowRadius="1"
                 android:text="@string/str_student"
                 android:textColor="@color/setup_tap_textcolor"
-                android:textSize="25.54dp" />
+                android:textSize="23.29dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -48,18 +49,19 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="9dp"
+                android:layout_marginRight="11.25dp"
                 android:src="@drawable/setup_icon_tab_teacher" />
 
             <org.our.android.ouracademy.ui.widget.NCTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="2.25dp"
                 android:shadowColor="#ffffff"
                 android:shadowDy="1"
                 android:shadowRadius="1"
                 android:text="@string/str_teacher"
                 android:textColor="@color/setup_tap_textcolor"
-                android:textSize="25.54dp" />
+                android:textSize="23.29dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -71,6 +73,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="4.51dp"
                 android:src="@drawable/setup_btn_close" />
         </LinearLayout>
     </LinearLayout>
@@ -80,8 +83,8 @@
         android:layout_width="525.82dp"
         android:layout_height="223.85dp"
         android:background="@drawable/setup_bg02"
-        android:orientation="horizontal" 
-        android:visibility="gone">
+        android:orientation="horizontal"
+        android:visibility="gone" >
 
         <LinearLayout
             android:id="@+id/networkBtn"
@@ -150,12 +153,13 @@
             android:id="@+id/connectedStudentBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-               android:orientation="vertical"
+            android:orientation="vertical"
             android:paddingTop="31dp" >
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="15.02dp"
                 android:src="@drawable/setup_btn_connectmem" />
 
             <org.our.android.ouracademy.ui.widget.NCTextView
@@ -174,7 +178,7 @@
             android:id="@+id/deleteBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="103.66dp"
+            android:layout_marginLeft="88.64dp"
             android:orientation="vertical"
             android:paddingTop="31dp" >
 

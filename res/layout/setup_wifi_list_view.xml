@@ -21,7 +21,7 @@
         android:id="@+id/no_list"
         android:layout_width="match_parent"
         android:layout_height="295.33dp"
-        android:background="@drawable/setup_bg023"
+        android:background="@drawable/setup_bg02"
         android:orientation="vertical"
         android:gravity="center_horizontal" >
         
@@ -36,6 +36,8 @@
             android:layout_height="wrap_content"
             android:text="@string/no_device"
             android:layout_marginTop="18.78dp"
+            android:textSize="22.54dp"
+            android:textColor="#887257"
             android:textStyle="bold"/>
     </LinearLayout>
 
