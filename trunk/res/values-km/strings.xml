@@ -12,8 +12,12 @@
     <string name="list">បញ្ជី</string>
     <string name="back">ថយក្រោយ</string>
     <string name="menu_ok">ព្រម</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <!-- 
     <string name="ok">ព្រម</string>
     <string name="cancel">បោះបង់</string>
+     -->
     <string name="close">បិទ</string>
     <string name="category_upper_case">ប្រភេទ</string>
     <string name="apply">អនុវត្</string>
@@ -63,5 +67,7 @@
     <string name="str_language">កញ្ចប់​ភាសា</string>
     <string name="no_device">There is no device</string>
 	<string name="mode_change">Mode Change</string>
+	
+	<string name="connect_to_teacher">You have to Connect to the Teacher.</string>
 
 </resources>
