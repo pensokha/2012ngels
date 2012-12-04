@@ -16,20 +16,25 @@ import org.our.android.ouracademy.util.NetworkState;
 import org.our.android.ouracademy.youtubedownloader.YoutubeContentsTask;
 
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.TextureView;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -191,9 +196,8 @@ public class ContentsView extends RelativeLayout implements OnClickListener {
 					return;
 					// else empty file
 				} else {
-					Log.d("Test", "Click");
+//					Log.d("Test", "Click");
 					if (NetworkState.isWifiDirectConnected()) {
-
 						ourContents.fileStatus = FileStatus.DOWNLOADING;
 						contentsLayout.setBackgroundResource(R.drawable.book_download02);
 						setProgressLayoutVisible(true);
@@ -201,6 +205,13 @@ public class ContentsView extends RelativeLayout implements OnClickListener {
 						progressBar.setProgress((int)(ourContents.getDownloadedSize() * 100 / ourContents.getSize()));
 
 						DataManagerFactory.getDataManager().download(ourContents);
+					} else {
+						ViewGroup layout = (LinearLayout) LayoutInflater.from(getContext()).inflate(R.layout.layout_connect_teacher, null);;
+						Builder builder = new AlertDialog.Builder(getContext());
+						builder.setView(layout);
+						builder.setPositiveButton(R.string.ok, null);
+						builder.setCancelable(true);
+						builder.create().show();
 					}
 				}
 				break;

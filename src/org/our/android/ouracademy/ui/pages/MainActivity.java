@@ -163,8 +163,8 @@ public class MainActivity extends BaseActivity {
 //				String message = getResources().getString(R.string.finish_application); 
 //				showShortToast(message);
 				Toast toast = Toast.makeText(this, R.string.finish_application, Toast.LENGTH_SHORT);
-				TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
-				v.setTypeface(Typeface.createFromAsset(getAssets(), CommonConstants.KHMER_FONT_FILE));
+				TextView textView = (TextView) toast.getView().findViewById(android.R.id.message);
+				textView.setTypeface(Typeface.createFromAsset(getAssets(), CommonConstants.KHMER_FONT_FILE));
 				toast.show();
 				closeFlag = true;
 				closeHandler.sendEmptyMessageDelayed(0, 3000);
