@@ -35,7 +35,7 @@ import android.widget.RelativeLayout;
 public class MainDetailView extends RelativeLayout implements OnItemClickListener {
 	private ViewGroup detailRootLayout;
 	private ViewGroup detailLayout;
-	private ImageView decoyImage;
+	private ImageView decoyImage, textModeBtn;
 
 	private ViewGroup hideMenuBtn;
 
@@ -52,6 +52,7 @@ public class MainDetailView extends RelativeLayout implements OnItemClickListene
 	ContentsListAdapter contentsListAdapter;
 
 	private boolean isFristLoad = true;
+	private boolean isFullTextMode = false;
 
 	ArrayList<OurContents> contentsList = new ArrayList<OurContents>();
 
@@ -113,11 +114,26 @@ public class MainDetailView extends RelativeLayout implements OnItemClickListene
 			}
 		});
 
-		hideMenuBtn = (ViewGroup)(ViewGroup)findViewById(R.id.hide_menu_btn);
+		hideMenuBtn = (ViewGroup)findViewById(R.id.hide_menu_btn);
 		hideMenuBtn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				onClickMenu();
+			}
+		});
+
+		textModeBtn = (ImageView)findViewById(R.id.textModeBtn);
+		textModeBtn.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				isFullTextMode = !isFullTextMode;
+
+				if (isFullTextMode) {
+					textModeBtn.setBackgroundResource(R.drawable.btn_state_book_title_view_mode);
+				} else {
+					textModeBtn.setBackgroundResource(R.drawable.btn_state_book_thumb_view_mode);
+				}
+				changeTextMode(isFullTextMode);
 			}
 		});
 
@@ -407,5 +423,23 @@ public class MainDetailView extends RelativeLayout implements OnItemClickListene
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		Log.d("park", "onItem: " + position);
+	}
+
+	public void changeTextMode(boolean isFullTextMode) {
+		if (menuStatus == MenuStatus.MOVING_MENU) {
+			return;
+		}
+//		AbsoluteLayout.LayoutParams params = (AbsoluteLayout.LayoutParams)detailLayout.getLayoutParams();
+//		setDetailLayoutImageCache(params);
+
+		for (OurContents contents : contentsList) {
+			if (contents.fileStatus == OurContents.FileStatus.DOWNLOADED) {
+				contents.setFullTextMode(isFullTextMode);
+			}
+		}
+
+		contentsListAdapter.notifyDataSetChanged(contentsList);
+
+//		hideManuAnimationOnDeleteMode(CommonConstants.DETAIL_ANI_WIDTH);
 	}
 }

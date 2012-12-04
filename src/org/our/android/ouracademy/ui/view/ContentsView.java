@@ -21,11 +21,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
-import android.graphics.Typeface;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.TextureView;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -34,7 +31,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -52,6 +48,7 @@ public class ContentsView extends RelativeLayout implements OnClickListener {
 	NCTextView progressText;
 	Button cancelBtn;
 	NCTextView downloadText;
+	NCTextView fullText;
 
 	OurContents ourContents = null;
 
@@ -94,6 +91,7 @@ public class ContentsView extends RelativeLayout implements OnClickListener {
 		progressBar = (ProgressBar)findViewById(R.id.progressbar);
 		cancelBtn = (Button)findViewById(R.id.cancel_btn);
 		downloadText = (NCTextView)findViewById(R.id.download_text);
+		fullText = (NCTextView)findViewById(R.id.fullText);
 
 		contentsLayout.setOnClickListener(this);
 		cancelBtn.setOnClickListener(this);
@@ -128,6 +126,12 @@ public class ContentsView extends RelativeLayout implements OnClickListener {
 				cancelBtn.setVisibility(View.INVISIBLE);
 				downloadText.setVisibility(View.INVISIBLE);
 			}
+
+			if (ourContents.isFullTextMode()) {
+				fullText.setVisibility(View.VISIBLE);
+				fullText.setText(ourContents.getSubject());
+			}
+
 			final String existingFile = CommonConstants.getContentImagePath(ourContents.getId());
 			if (new File(existingFile).exists()) {
 				thumbnail.setImageBitmap(BitmapFactory.decodeFile(existingFile));
@@ -162,6 +166,7 @@ public class ContentsView extends RelativeLayout implements OnClickListener {
 		if (contentsTask != null) {
 			contentsTask.cancel(true);
 		}
+		fullText.setVisibility(View.GONE);
 	}
 
 	private void setProgressLayoutVisible(boolean setVisible) {
@@ -206,7 +211,9 @@ public class ContentsView extends RelativeLayout implements OnClickListener {
 
 						DataManagerFactory.getDataManager().download(ourContents);
 					} else {
-						ViewGroup layout = (LinearLayout) LayoutInflater.from(getContext()).inflate(R.layout.layout_connect_teacher, null);;
+						ViewGroup layout = (LinearLayout)LayoutInflater.from(getContext()).inflate(
+							R.layout.layout_connect_teacher, null);
+						;
 						Builder builder = new AlertDialog.Builder(getContext());
 						builder.setView(layout);
 						builder.setPositiveButton(R.string.ok, null);

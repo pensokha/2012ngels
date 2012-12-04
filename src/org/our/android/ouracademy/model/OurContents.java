@@ -31,32 +31,36 @@ public class OurContents implements OurJSONModel {
 	private long size;
 	private ArrayList<String> categoryIdList;
 	private long downloadedSize;
-	
+
 	private String topicId;
 	private String topicTitleEng;
 	private String topicTitleKmr;
 	private String descriptionEng;
 	private String descriptionKmr;
-	
+
 	private boolean isDeleteMode = false;
-	
+	private boolean isFullTextMode = false;
+
 	public OurCategory selectedCategory;
-	
+
 	private long prevDownloadedSize = 0;
-	
+
 	public enum FileStatus {
-		NONE, DOWNLOADING, DOWNLOADED
+		NONE,
+		DOWNLOADING,
+		DOWNLOADED
 	}
+
 	public FileStatus fileStatus = FileStatus.NONE;
 
 	public OurContents() {
 		super();
 	}
-	
+
 	public void setDeleteMode(boolean isDeleteMode) {
 		this.isDeleteMode = isDeleteMode;
 	}
-	
+
 	public boolean isDeleteMode() {
 		return this.isDeleteMode;
 	}
@@ -108,7 +112,7 @@ public class OurContents implements OurJSONModel {
 	public void setSize(long size) {
 		this.size = size;
 	}
-	
+
 	public String getTopicId() {
 		return topicId;
 	}
@@ -150,10 +154,10 @@ public class OurContents implements OurJSONModel {
 	}
 
 	public ArrayList<String> getCategoryIdList() {
-		if(categoryIdList == null){
+		if (categoryIdList == null) {
 			categoryIdList = new ArrayList<String>();
 		}
-		
+
 		return categoryIdList;
 	}
 
@@ -168,7 +172,7 @@ public class OurContents implements OurJSONModel {
 	public void setDownloadedSize(long downloadedSize) {
 		this.downloadedSize = downloadedSize;
 	}
-	
+
 	public void setDownloaded(boolean isDownloaded) {
 		if (isDownloaded) {
 			fileStatus = FileStatus.DOWNLOADED;
@@ -176,26 +180,26 @@ public class OurContents implements OurJSONModel {
 			fileStatus = FileStatus.NONE;
 		}
 	}
-	
-	public long getPrevDownloadedSize(){
+
+	public long getPrevDownloadedSize() {
 		return prevDownloadedSize;
 	}
-	
-	public long getCurrentDownloadedSize(long downloadedSize){
+
+	public long getCurrentDownloadedSize(long downloadedSize) {
 		long diff = downloadedSize - prevDownloadedSize;
-		if(diff >= 0){
+		if (diff >= 0) {
 			prevDownloadedSize = downloadedSize;
 		}
 		return diff;
 	}
-	
+
 	public String getSubject() {
 		if (CommonConstants.LOCALE_LANGUAGE_KHMER.equals(OurApplication.getInstance().getLocaleLangueage())) {
 			return subjectKmr;
 		}
 		return subjectEng;
 	}
-	
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -209,7 +213,7 @@ public class OurContents implements OurJSONModel {
 		builder.append(contentUrl);
 		builder.append(", subtitleUrl=");
 		builder.append(subtitleUrl);
-		
+
 		builder.append(", topicId=");
 		builder.append(topicId);
 		builder.append(", topicTitleEng=");
@@ -220,7 +224,7 @@ public class OurContents implements OurJSONModel {
 		builder.append(descriptionEng);
 		builder.append(", descriptionKmr=");
 		builder.append(descriptionKmr);
-		
+
 		builder.append(", size=");
 		builder.append(size);
 		builder.append(", categoryIdList=");
@@ -239,13 +243,13 @@ public class OurContents implements OurJSONModel {
 		jsonObject.put(CONTENTS_ID_JSON_KEY, id);
 		jsonObject.put(SUBJECT_ENG_JSON_KEY, subjectEng);
 		jsonObject.put(SUBJECT_KMR_JSON_KEY, subjectKmr);
-		
+
 		jsonObject.put(TOPIC_ID_JSON_KEY, topicId);
 		jsonObject.put(TOPIC_TITLE_ENG_JSON_KEY, topicTitleEng);
 		jsonObject.put(TOPIC_TITLE_KMR_JSON_KEY, topicTitleKmr);
 		jsonObject.put(CONTENTS_DESCRIPTION_ENG_JSON_KEY, descriptionEng);
 		jsonObject.put(CONTENTS_DESCRIPTION_KMR_JSON_KEY, descriptionKmr);
-		
+
 		jsonObject.put(CONTENT_URL_JSON_KEY, contentUrl);
 		jsonObject.put(SUBTITLE_URL_JSON_KEY, subtitleUrl);
 		jsonObject.put(SIZE_JSON_KEY, size);
@@ -266,13 +270,13 @@ public class OurContents implements OurJSONModel {
 		id = json.getString(CONTENTS_ID_JSON_KEY);
 		subjectEng = json.getString(SUBJECT_ENG_JSON_KEY);
 		subjectKmr = json.getString(SUBJECT_KMR_JSON_KEY);
-		
+
 		topicId = json.getString(TOPIC_ID_JSON_KEY);
 		topicTitleEng = json.getString(TOPIC_TITLE_ENG_JSON_KEY);
 		topicTitleKmr = json.getString(TOPIC_TITLE_KMR_JSON_KEY);
 		descriptionEng = json.getString(CONTENTS_DESCRIPTION_ENG_JSON_KEY);
 		descriptionKmr = json.getString(CONTENTS_DESCRIPTION_KMR_JSON_KEY);
-		
+
 		contentUrl = json.getString(CONTENT_URL_JSON_KEY);
 		subtitleUrl = json.getString(SUBTITLE_URL_JSON_KEY);
 		size = json.getLong(SIZE_JSON_KEY);
@@ -283,5 +287,13 @@ public class OurContents implements OurJSONModel {
 		for (int i = 0; i < jsonCategoryIdList.length(); i++) {
 			categoryIdList.add(jsonCategoryIdList.getString(i));
 		}
+	}
+
+	public void setFullTextMode(boolean isFullTextMode) {
+		this.isFullTextMode = isFullTextMode;
+	}
+
+	public boolean isFullTextMode() {
+		return isFullTextMode;
 	}
 }

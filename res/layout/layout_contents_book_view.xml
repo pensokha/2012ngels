@@ -25,16 +25,6 @@
             android:background="@drawable/btn_main_book_selector" >
         </RelativeLayout>
 
-<!--         <org.our.android.ouracademy.ui.widget.NCTextView
-            android:id="@+id/fullText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:maxHeight="157dp"
-            android:layout_marginLeft="62.35dp"
-            android:layout_marginTop="21.54dp"
-            android:background="@drawable/book_bg01"
-            android:visibility="gone" /> -->
-
         <org.our.android.ouracademy.ui.widget.NCTextView
             android:id="@+id/download_text"
             style="@style/fontstyle_txt_main_download_txt"
@@ -53,6 +43,18 @@
             android:layout_marginLeft="62.35dp"
             android:layout_marginTop="123.19dp"
             android:gravity="center" />
+
+        <org.our.android.ouracademy.ui.widget.NCTextView
+            android:id="@+id/fullText"
+            style="@style/fontstyle_txt_main_contenst_txt"
+            android:layout_width="202.07dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="62.35dp"
+            android:layout_marginTop="21.54dp"
+            android:padding="2dp"
+            android:background="@drawable/book_bg01"
+            android:maxHeight="157dp"
+            android:visibility="gone" />
 
         <org.our.android.ouracademy.ui.widget.VerticalTextView
             android:id="@+id/category_text"
