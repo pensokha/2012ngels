@@ -13,7 +13,7 @@
             android:id="@+id/layout_detail"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent" >
-			
+
             <RelativeLayout
                 android:id="@+id/drag_layout"
                 android:layout_width="wrap_content"
@@ -30,6 +30,13 @@
                     android:drawableTop="@drawable/list_icon_menu01"
                     android:gravity="center"
                     android:text="@string/menu" />
+
+                <ImageView
+                    android:id="@+id/textModeBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:background="@drawable/btn_state_book_thumb_view_mode" />
             </RelativeLayout>
 
             <org.our.android.ouracademy.ui.widget.NCHorizontalListView
@@ -38,9 +45,10 @@
                 android:layout_height="fill_parent"
                 android:layout_toRightOf="@id/drag_layout"
                 android:background="@drawable/list_bg" />
-            
-            <org.our.android.ouracademy.ui.widget.NCTextView 
+
+            <org.our.android.ouracademy.ui.widget.NCTextView
                 android:id="@+id/empty_guide_text"
+                style="@style/fontstyle_txt_main_empty_guide_txt"
                 android:layout_width="362.82dp"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
@@ -48,7 +56,6 @@
                 android:background="@drawable/list_bg_nocontent"
                 android:gravity="center_horizontal"
                 android:paddingTop="110dp"
-                style="@style/fontstyle_txt_main_empty_guide_txt"
                 android:text="@string/contents_empty_guide" />
 
             <LinearLayout
@@ -67,11 +74,12 @@
         </RelativeLayout>
     </AbsoluteLayout>
     <!-- Right shadow Image -->
-<!-- 
+    <!--
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:layout_alignParentRight="true"
-        android:background="@drawable/list_bg04" />
- -->
+        android:background="@drawable/list_bg04" />
+    -->
+
 </RelativeLayout>
