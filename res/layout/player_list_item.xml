@@ -30,7 +30,8 @@
             android:layout_alignParentTop="true"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="18dp" 
-            android:textColor="#9A000000"/>
+            android:textColor="#9A000000"
+            android:shadowColor="#4Affffff"/>
 
         <org.our.android.ouracademy.ui.widget.NCTextView
             android:id="@+id/title"
