@@ -66,7 +66,7 @@ public class MainActivity extends BaseActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		//force set khmer
 		callSwitchLang(CommonConstants.LOCALE_LANGUAGE_KHMER);
 		OurApplication.getInstance().updateLocaleLangueage();
@@ -92,7 +92,7 @@ public class MainActivity extends BaseActivity {
 			wifiReciever = new WiFiDirectBroadcastReceiver(wifidirectListener);
 			registerReceiver(wifiReciever, intentFilter);
 		}
-		
+
 	}
 
 	@Override
@@ -121,9 +121,9 @@ public class MainActivity extends BaseActivity {
 	private void initUI() {
 		setContentView(R.layout.activity_main);
 
-		menuLayout = (ViewGroup) findViewById(R.id.layout_main_menu);
+		menuLayout = (ViewGroup)findViewById(R.id.layout_main_menu);
 
-		detailLayout = (ViewGroup) findViewById(R.id.layout_main_detail);
+		detailLayout = (ViewGroup)findViewById(R.id.layout_main_detail);
 
 		initMenuLayout();
 		initContentsLayout();
@@ -163,7 +163,7 @@ public class MainActivity extends BaseActivity {
 //				String message = getResources().getString(R.string.finish_application); 
 //				showShortToast(message);
 				Toast toast = Toast.makeText(this, R.string.finish_application, Toast.LENGTH_SHORT);
-				TextView textView = (TextView) toast.getView().findViewById(android.R.id.message);
+				TextView textView = (TextView)toast.getView().findViewById(android.R.id.message);
 				textView.setTypeface(Typeface.createFromAsset(getAssets(), CommonConstants.KHMER_FONT_FILE));
 				toast.show();
 				closeFlag = true;
@@ -240,29 +240,29 @@ public class MainActivity extends BaseActivity {
 		public void onReceive(Context context, Intent intent) {
 			if (OUR_DATA_CHANGED.equals(intent.getAction())) {
 				switch (intent.getIntExtra(ACTION, -1)) {
-				case ACTION_RELOAD:
-					reloadContents();
-					reloadCategories();
-					break;
-				case ACTION_CATEGORY_CHANGED:
-					reloadCategories();
-					break;
-				case ACTION_CONTENT_CHANGED:
-					reloadContents();
-					break;
-				case ACTION_DOWNLOADING:
-					updateDownloadSize(intent.getStringExtra(CONTENT_ID),
+					case ACTION_RELOAD:
+						reloadContents();
+						reloadCategories();
+						break;
+					case ACTION_CATEGORY_CHANGED:
+						reloadCategories();
+						break;
+					case ACTION_CONTENT_CHANGED:
+						reloadContents();
+						break;
+					case ACTION_DOWNLOADING:
+						updateDownloadSize(intent.getStringExtra(CONTENT_ID),
 							intent.getLongExtra(DOWNLAD_SIZE, 0));
-					break;
-				case ACTION_CANCEL_DOWNLOADING:
-				case ACTION_ERROR_DOWNLOADING:
-					cancelDownloading(intent.getStringExtra(CONTENT_ID));
-					break;
-				case ACTION_SYNC_DATA:
-					syncData(intent.getStringArrayListExtra(CONTENT_ID));
-					break;
-				default:
-					break;
+						break;
+					case ACTION_CANCEL_DOWNLOADING:
+					case ACTION_ERROR_DOWNLOADING:
+						cancelDownloading(intent.getStringExtra(CONTENT_ID));
+						break;
+					case ACTION_SYNC_DATA:
+						syncData(intent.getStringArrayListExtra(CONTENT_ID));
+						break;
+					default:
+						break;
 				}
 			}
 		}
@@ -382,6 +382,10 @@ public class MainActivity extends BaseActivity {
 								.get(content.getId()));
 					}
 
+					if (content.fileStatus == OurContents.FileStatus.DOWNLOADED) {
+						content.setFullTextMode(detailView.isFullTextMode());
+					}
+
 					contentsHashMap.get(content.getId()).add(content);
 					contents.add(content);
 				}
@@ -426,20 +430,20 @@ public class MainActivity extends BaseActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.language:
-			isKhmerLanguage = !isKhmerLanguage;
-			if (isKhmerLanguage) {
-				callSwitchLang(CommonConstants.LOCALE_LANGUAGE_KHMER);
-			} else {
-				callSwitchLang(CommonConstants.LOCALE_LANGUAGE_ENG);
-			}
+			case R.id.language:
+				isKhmerLanguage = !isKhmerLanguage;
+				if (isKhmerLanguage) {
+					callSwitchLang(CommonConstants.LOCALE_LANGUAGE_KHMER);
+				} else {
+					callSwitchLang(CommonConstants.LOCALE_LANGUAGE_ENG);
+				}
 
-			initUI();
+				initUI();
 
-			return true;
+				return true;
 
-		default:
-			return super.onOptionsItemSelected(item);
+			default:
+				return super.onOptionsItemSelected(item);
 		}
 	}
 
