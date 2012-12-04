@@ -55,7 +55,7 @@
                 android:layout_marginTop="27.04dp"
                 android:background="@drawable/list_bg_nocontent"
                 android:gravity="center_horizontal"
-                android:paddingTop="110dp"
+                android:paddingTop="117dp"
                 android:text="@string/contents_empty_guide" />
 
             <LinearLayout
