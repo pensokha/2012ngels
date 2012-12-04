@@ -442,4 +442,8 @@ public class MainDetailView extends RelativeLayout implements OnItemClickListene
 
 //		hideManuAnimationOnDeleteMode(CommonConstants.DETAIL_ANI_WIDTH);
 	}
+
+	public boolean isFullTextMode() {
+		return isFullTextMode;
+	}
 }
